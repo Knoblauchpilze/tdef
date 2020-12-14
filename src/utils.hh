@@ -16,9 +16,6 @@ template <typename CoordinateType>
 std::ostream&
 operator<<(const olc::v2d_generic<CoordinateType>& vec, std::ostream& out) noexcept;
 
-std::string
-toString(const olc::Pixel& p) noexcept;
-
 # include "utils.hxx"
 
 #endif    /* UTILS_HH */

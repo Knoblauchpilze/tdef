@@ -1,5 +1,6 @@
 
 # include "PGEApp.hh"
+# include "ColorUtils.hh"
 # include "utils.hh"
 
 namespace tdef {
@@ -16,11 +17,21 @@ namespace tdef {
     m_uiOn(true),
 
     m_state(State::Running),
-    m_first(true)
+    m_first(true),
+
+    m_frame(desc.frame)
   {
     // Initialize the application settings.
     sAppName = desc.name;
     setService("app");
+
+    // Make sure that a coordinate frame is provided.
+    if (m_frame == nullptr) {
+      error(
+        std::string("Unable to create PGE application"),
+        std::string("Invalid null coordinate frame provided")
+      );
+    }
 
     // Generate and construct the window.
     initialize(desc.dims, desc.pixRatio);
@@ -54,17 +65,53 @@ namespace tdef {
 
   void
   PGEApp::draw() {
-    // Nothing to do yet.
+    // Clear rendering target.
+    SetPixelMode(olc::Pixel::ALPHA);
+    Clear(olc::BLACK);
+
+    // Fetch the visible cells.
+    Viewport v = m_frame->cellsViewport();
+
+    int xMin = std::floor(v.p.x);
+    int yMin = std::floor(v.p.y);
+    int xMax = std::floor(v.p.x + v.dims.x);
+    int yMax = std::floor(v.p.y + v.dims.y);
+
+    SpriteDesc desc;
+
+    for (int y = yMin ; y <= yMax ; ++y) {
+      for (int x = xMin ; x <= xMax ; ++x) {
+        desc.x = x;
+        desc.y = y;
+
+        int g = std::rand() % 255;
+        desc.color = olc::Pixel(g, g, g);
+
+        drawSprite(desc, *m_frame);
+      }
+    }
+
+    SetPixelMode(olc::Pixel::NORMAL);
   }
 
   void
   PGEApp::drawUI() {
+    SetPixelMode(olc::Pixel::ALPHA);
+    Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
+
     // Nothing to do yet.
+
+    SetPixelMode(olc::Pixel::NORMAL);
   }
 
   void
   PGEApp::drawDebug() {
+    SetPixelMode(olc::Pixel::ALPHA);
+    Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
+
     // Nothing to do yet.
+
+    SetPixelMode(olc::Pixel::NORMAL);
   }
 
   void
@@ -81,6 +128,26 @@ namespace tdef {
     if (esc.bReleased) {
       ic.quit = true;
       return ic;
+    }
+
+    // In case we're dragging the right mouse button we
+    // will update the world's position (panning). What
+    // we want is to remember the position at the moment
+    // of the click and then continuously move the world
+    // to match the current displacement.
+    if (GetMouse(1).bPressed) {
+      m_frame->beginTranslation(GetMousePos());
+    }
+    if (GetMouse(1).bHeld) {
+      m_frame->translate(GetMousePos());
+    }
+
+    int scroll = GetMouseWheel();
+    if (scroll > 0) {
+      m_frame->zoomIn(GetMousePos());
+    }
+    if (scroll < 0) {
+      m_frame->zoomOut(GetMousePos());
     }
 
     // De/activate the debug mode if needed and

@@ -2,6 +2,7 @@
 # define   PGE_APP_HXX
 
 # include "PGEApp.hh"
+# include "utils.hh"
 
 namespace tdef {
 
@@ -113,54 +114,22 @@ namespace tdef {
   }
 
   inline
-  olc::Pixel
-  PGEApp::redToGreenGradient(float ratio, int alpha) const noexcept {
-    // Go from red to orange to yellow to green
-    // based on the value of the ratio. It fits
-    // nicely in the range `[0; 1]` where each
-    // `0.33` we have a new color.
-    ratio = std::min(std::max(ratio, 0.0f), 1.0f);
-
-    float t = 0.0f;
-    olc::Pixel l, h;
-
-    if (ratio <= 0.33f) {
-      // Red to orange.
-      t = ratio / 0.33f;
-
-      l = olc::Pixel(255u, 0u, 0u);
-      h = olc::Pixel(255u, 128u, 0u);
-    }
-    else if (ratio <= 0.66f) {
-      // Orange to yellow.
-      t = (ratio - 0.33f) / 0.33f;
-
-      l = olc::Pixel(255u, 128u, 0u);
-      h = olc::Pixel(255u, 255u, 0u);
-    }
-    else {
-      // Yellow to green
-      t = (ratio - 0.66f) / 0.34f;
-
-      l = olc::Pixel(255u, 255u, 0u);
-      h = olc::Pixel(0u, 255u, 0u);
-    }
-
-    return olc::Pixel(
-      static_cast<int>((1.0f - t) * l.r + t * h.r),
-      static_cast<int>((1.0f - t) * l.g + t * h.g),
-      static_cast<int>((1.0f - t) * l.b + t * h.b),
-      alpha
-    );
-  }
-
-  inline
   void
   PGEApp::clearLayer() {
     // Clear the canvas with a neutral fully transparent color.
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
     SetPixelMode(olc::Pixel::NORMAL);
+  }
+
+  inline
+  void
+  PGEApp::drawSprite(const SpriteDesc& tile, const CoordinateFrame& cf) {
+    FillRectDecal(
+      cf.tileCoordsToPixels(tile.x, tile.y),
+      cf.tileSize(),
+      tile.color
+    );
   }
 
   inline

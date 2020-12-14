@@ -25,18 +25,4 @@ operator<<(const olc::v2d_generic<CoordinateType>& vec, std::ostream& out) noexc
   return operator<<(out, vec);
 }
 
-inline
-std::string
-toString(const olc::Pixel& p) noexcept {
-  return
-    std::string("[r: ") +
-    std::to_string(p.r) +
-    ", g: " + std::to_string(p.g) +
-    ", b: " + std::to_string(p.b) +
-    ", a: " + std::to_string(p.a) +
-    "]"
-  ;
-}
-
-
 #endif    /* UTILS_HXX */

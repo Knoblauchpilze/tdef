@@ -4,6 +4,7 @@
 # include <core_utils/CoreObject.hh>
 # include "olcPixelGameEngine.h"
 # include "AppDesc.hh"
+# include "coordinates/CoordinateFrame.hh"
 
 namespace tdef {
 
@@ -104,29 +105,13 @@ namespace tdef {
       hasUI() const noexcept;
 
       /**
-       * @brief - Used to compute a valid color based on the input ratio.
-       *          The color is taken from a range going from pure green
-       *          to yellow, then orange and finally red for decreasing
-       *          values of the ratio in the range `[0; 1]`.
-       * @param ratio - a value in the range `[0; 1]` (clamped if it is
-       *                not the case).
-       * @param alpha - additional alpha channel information to generate
-       *                the color.
-       * @return - a color representing the ratio.
-       */
-      olc::Pixel
-      redToGreenGradient(float ratio, int alpha = ALPHA_SEMI_OPAQUE) const noexcept;
-
-      /**
        * @brief - Convenience structure regrouping needed props
        *          to draw a sprite.
        */
       struct SpriteDesc {
         float x;
         float y;
-        float radius;
-        int type;
-        int alpha;
+        olc::Pixel color;
       };
 
       /**
@@ -172,6 +157,17 @@ namespace tdef {
        */
       virtual void
       clearLayer();
+
+      /**
+       * @brief - Used to draw the tile referenced by the input
+       *          struct to the screen using the corresponding
+       *          visual representation.
+       * @param tile - the description of the tile to draw.
+       * @param cf - the coordinate frame to use to perform the
+       *             conversion from tile position to pixels.
+       */
+      void
+      drawSprite(const SpriteDesc& tile, const CoordinateFrame& cf);
 
     private:
 
@@ -284,6 +280,14 @@ namespace tdef {
        *          time upon rendering the first frame.
        */
       bool m_first;
+
+      /**
+       * @brief - Holds an object allowing to convert between the
+       *          various coordinate frames handled by the app. It
+       *          handles conversion between cells coordinate and
+       *          screen coordinates and conversely.
+       */
+      CoordinateFrameShPtr m_frame;
   };
 
 }

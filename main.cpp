@@ -10,6 +10,7 @@
 # include <core_utils/LoggerLocator.hh>
 # include <core_utils/CoreException.hh>
 # include "AppDesc.hh"
+# include "coordinates/TopViewFrame.hh"
 # include "PGEApp.hh"
 
 int main(int /*argc*/, char** /*argv*/) {
@@ -30,7 +31,16 @@ int main(int /*argc*/, char** /*argv*/) {
       service
     );
 
-    tdef::AppDesc ad = tdef::newDesc(olc::vi2d(640, 480), "tower defense");
+    tdef::CoordinateFrameShPtr cf = std::make_shared<tdef::TopViewFrame>(
+      tdef::Viewport{olc::vf2d(0.0f, 0.0f), olc::vf2d(10.0f, 10.0f)},
+      tdef::Viewport{olc::vf2d(10.0f, 50.0f), olc::vf2d(640.0f, 480.0f)},
+      olc::vi2d(64, 32)
+    );
+    tdef::AppDesc ad = tdef::newDesc(
+      olc::vi2d(640, 480),
+      cf,
+      "tower defense"
+    );
     tdef::PGEApp demo(ad);
 
     demo.Start();

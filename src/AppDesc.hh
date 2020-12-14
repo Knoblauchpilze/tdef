@@ -3,6 +3,7 @@
 
 # include <string>
 # include "olcPixelGameEngine.h"
+# include "coordinates/CoordinateFrame.hh"
 
 namespace tdef {
 
@@ -16,17 +17,22 @@ namespace tdef {
     olc::vi2d pixRatio;
 
     std::string name;
+
+    CoordinateFrameShPtr frame;
   };
 
   /**
    * @brief - Creates a default app description.
    * @param dims - the dimensions of the application's main
    *               canvas in pixels.
+   * @param cf - the coordinate frame to associate to the
+   *             application.
    * @param name - the name of the application.
    * @return - the default description of an app.
    */
   AppDesc
   newDesc(const olc::vi2d& dims,
+          CoordinateFrameShPtr cf,
           const std::string& name = "pge_app") noexcept;
 
 }

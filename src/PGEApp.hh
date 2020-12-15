@@ -5,6 +5,7 @@
 # include "olcPixelGameEngine.h"
 # include "AppDesc.hh"
 # include "coordinates/CoordinateFrame.hh"
+# include "world/World.hh"
 
 namespace tdef {
 
@@ -288,6 +289,11 @@ namespace tdef {
        *          screen coordinates and conversely.
        */
       CoordinateFrameShPtr m_frame;
+
+      /**
+       * @brief - The world managed by this application.
+       */
+      WorldShPtr m_world;
   };
 
 }

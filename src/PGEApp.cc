@@ -39,6 +39,13 @@ namespace tdef {
 
   bool
   PGEApp::OnUserCreate() {
+// # define WORLD_FROM_FILE
+# ifdef WORLD_FROM_FILE
+    m_world = std::make_shared<World>(100, std::string("data/worlds/level_1.lvl"));
+# else
+    m_world = std::make_shared<World>(100, 15, 15);
+# endif
+
     // Load the menu resources.
     loadMenuResources();
 

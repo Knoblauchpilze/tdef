@@ -1,0 +1,7 @@
+
+set (SOURCES
+  ${SOURCES}
+  ${CMAKE_CURRENT_SOURCE_DIR}/World.cc
+  PARENT_SCOPE
+  )
+

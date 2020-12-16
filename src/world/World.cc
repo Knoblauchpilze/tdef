@@ -67,6 +67,14 @@ namespace tdef {
     r.x = 0;
     r.y = 0;
 
+    m_w = sk_regionSize;
+    m_h = sk_regionSize;
+
+    // Initialize with empty cells.
+    for (int id = 0 ; id < sk_regionSize * sk_regionSize ; ++id) {
+      r.cells[id] = world::State::Empty;
+    }
+
     // Generate random colonies and deposits.
     static constexpr int sk_colonies = 10;
     static constexpr int sk_deposits = 5;

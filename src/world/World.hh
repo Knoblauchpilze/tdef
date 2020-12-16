@@ -8,6 +8,24 @@
 
 namespace tdef {
 
+  namespace world {
+
+    /**
+     * @brief - Convenience enumeration defining the state for
+     *          a cell. It represents the main type of elements
+     *          handled by the world.
+     */
+    enum class State {
+      Empty,
+      Colony,
+      Deposit,
+      Worker,
+      Warrior,
+      Count
+    };
+
+  }
+
   class World: public utils::CoreObject {
     public:
 
@@ -39,6 +57,19 @@ namespace tdef {
 
       unsigned
       h() const noexcept;
+
+      /**
+       * @brief- Fetch the state of a cell assuming it exists.
+       *         In case the coordinates are outside of the
+       *         world the `Empty` value is returned.
+       * @param x - the abscissa of the cell to get.
+       * @param t - the ordinate of the cell to get.
+       * @param valid- `true` in case the coordinates are valid.
+       * @return - the state of the cell or empty if the coords
+       *           are invalid.
+       */
+      world::State
+      cell(int x, int y, bool& valid) const noexcept;
 
       /**
        * @brief - Used to move one step ahead in time in this
@@ -103,6 +134,25 @@ namespace tdef {
     private:
 
       /**
+       * @brief - Defines the block size for each individual
+       *          regions of the world.
+       */
+      static constexpr int sk_regionSize = 100;
+
+      /**
+       * @brief - A convenience structur representing a block
+       *          (or a region) containing some information
+       *          about the world. Allows to speed up empty
+       *          regions by simulating them quickly.
+       */
+      struct Region {
+        int x;
+        int y;
+
+        world::State cells[sk_regionSize * sk_regionSize];
+      };
+
+      /**
        * @brief - Width of the world in cells.
        */
       int m_w;
@@ -118,6 +168,11 @@ namespace tdef {
        *          randomness in a single place.
        */
       utils::RNG m_rng;
+
+      /**
+       * @brief - Defines the list of regions created for this world.
+       */
+      std::vector<Region> m_regions;
   };
 
   using WorldShPtr = std::shared_ptr<World>;

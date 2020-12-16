@@ -3,6 +3,28 @@
 # include "ColorUtils.hh"
 # include "utils.hh"
 
+namespace {
+
+  olc::Pixel
+  colorFromState(tdef::world::State s) {
+    switch (s) {
+      case tdef::world::State::Empty:
+        return olc::VERY_DARK_GREY;
+      case tdef::world::State::Colony:
+        return olc::DARK_GREEN;
+      case tdef::world::State::Deposit:
+        return olc::DARK_YELLOW;
+      case tdef::world::State::Worker:
+        return olc::DARK_BLUE;
+      case tdef::world::State::Warrior:
+        return olc::VERY_DARK_BLUE;
+      default:
+        return olc::RED;
+    }
+  }
+
+}
+
 namespace tdef {
 
   PGEApp::PGEApp(const AppDesc& desc):
@@ -85,14 +107,19 @@ namespace tdef {
     int yMax = std::floor(v.p.y + v.dims.y);
 
     SpriteDesc desc;
+    bool valid;
 
     for (int y = yMin ; y <= yMax ; ++y) {
       for (int x = xMin ; x <= xMax ; ++x) {
+        world::State s = m_world->cell(x, y, valid);
+
+        if (!valid) {
+          continue;
+        }
+
         desc.x = x;
         desc.y = y;
-
-        int g = std::rand() % 255;
-        desc.color = olc::Pixel(g, g, g);
+        desc.color = colorFromState(s);
 
         drawSprite(desc, *m_frame);
       }

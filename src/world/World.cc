@@ -14,7 +14,9 @@ namespace tdef {
 
     m_rng(seed),
 
-    m_regions()
+    m_portal(0.0f, 0.0f),
+    m_spawners(),
+    m_mobs()
   {
     setService("world");
 
@@ -30,7 +32,9 @@ namespace tdef {
 
     m_rng(seed),
 
-    m_regions()
+    m_portal(0.0f, 0.0f),
+    m_spawners(),
+    m_mobs()
   {
     // Check dimensions.
     setService("world");
@@ -38,101 +42,49 @@ namespace tdef {
     loadFromFile(file);
   }
 
-  world::State
-  World::cell(int x, int y, bool& valid) const noexcept {
-    valid = false;
-
-    if (x < 0 || x >= m_w) {
-      return world::State::Empty;
-    }
-    if (y < 0 || y >= m_h) {
-      return world::State::Empty;
-    }
-
-    valid = true;
-
-    // TODO: Assume a single region.
-    return m_regions[0].cells[y * sk_regionSize + x];
-  }
-
   void
-  World::step(float /*tDelta*/) {
-    // TODO: Handle this.
+  World::step(float tDelta) {
+    StepInfo si{
+      m_rng,                   // rng
+
+      utils::now(),            // moment
+      tDelta,                  // elapsed
+
+      std::vector<MobShPtr>(), // mSpawned
+      std::vector<Mob*>(),     // mRemoved
+    };
+
+    // Make elements evolve.
+    for (unsigned id = 0u ; id < m_spawners.size() ; ++id) {
+      m_spawners[id]->step(si);
+    }
+
+    for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
+      m_mobs[id]->step(si);
+    }
+
+    // Process influences.
+    for (unsigned id = 0u ; id < si.mSpawned.size() ; ++id) {
+      m_mobs.push_back(si.mSpawned[id]);
+    }
+
+    for (unsigned id = 0u ; id < si.mRemoved.size() ; ++id) {
+      auto toRm = std::find_if(
+        m_mobs.cbegin(),
+        m_mobs.cend(),
+        [&si, &id](const MobShPtr& m) {
+          return m != nullptr && m.get() == si.mRemoved[id];
+        }
+      );
+      if (toRm != m_mobs.end()) {
+        m_mobs.erase(toRm);
+      }
+    }
   }
 
   void
   World::generate() {
-    // Generate a single block.
-    Region r;
-    r.x = 0;
-    r.y = 0;
-
-    m_w = sk_regionSize;
-    m_h = sk_regionSize;
-
-    // Initialize with empty cells.
-    for (int id = 0 ; id < sk_regionSize * sk_regionSize ; ++id) {
-      r.cells[id] = world::State::Empty;
-    }
-
-    // Generate random colonies and deposits.
-    static constexpr int sk_colonies = 10;
-    static constexpr int sk_deposits = 5;
-
-    int id = sk_colonies;
-    while (id > 0) {
-      int x = m_rng.rndInt(0, sk_regionSize - 1);
-      int y = m_rng.rndInt(0, sk_regionSize - 1);
-
-      if (r.cells[y * sk_regionSize + x] == world::State::Empty) {
-        r.cells[y * sk_regionSize + x] = world::State::Colony;
-
-        --id;
-      }
-    }
-
-    id = sk_deposits;
-    while (id > 0) {
-      int x = m_rng.rndInt(0, sk_regionSize - 1);
-      int y = m_rng.rndInt(0, sk_regionSize - 1);
-
-      if (r.cells[y * sk_regionSize + x] == world::State::Empty) {
-        r.cells[y * sk_regionSize + x] = world::State::Deposit;
-
-        --id;
-      }
-    }
-
-
-    // Generate random workers and warriors.
-    static constexpr int sk_workers = 3;
-    static constexpr int sk_warriors = 2;
-
-    id = sk_workers;
-    while (id > 0) {
-      int x = m_rng.rndInt(0, sk_regionSize - 1);
-      int y = m_rng.rndInt(0, sk_regionSize - 1);
-
-      if (r.cells[y * sk_regionSize + x] == world::State::Empty) {
-        r.cells[y * sk_regionSize + x] = world::State::Worker;
-
-        --id;
-      }
-    }
-
-    id = sk_warriors;
-    while (id > 0) {
-      int x = m_rng.rndInt(0, sk_regionSize - 1);
-      int y = m_rng.rndInt(0, sk_regionSize - 1);
-
-      if (r.cells[y * sk_regionSize + x] == world::State::Empty) {
-        r.cells[y * sk_regionSize + x] = world::State::Warrior;
-
-        --id;
-      }
-    }
-
-    m_regions.push_back(r);
+    // TODO: Restore this.
   }
 
   void

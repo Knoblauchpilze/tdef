@@ -116,15 +116,6 @@ namespace tdef {
       };
 
       /**
-       * @brief - Describe a possible orientation for the health
-       *          bar.
-       */
-      enum class Orientation {
-        Horizontal,
-        Vertical
-      };
-
-      /**
        * @brief - Interface method to display the main content
        *          of the app. This method is called first and
        *          that means that it will be overriden by all

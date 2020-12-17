@@ -1,10 +1,14 @@
 #ifndef    WORLD_HH
 # define   WORLD_HH
 
+# include <vector>
 # include <memory>
 # include <fstream>
 # include <core_utils/CoreObject.hh>
 # include <core_utils/RNG.hh>
+# include <maths_utils/Point2.hh>
+# include "Mob.hh"
+# include "Spawner.hh"
 
 namespace tdef {
 
@@ -57,19 +61,6 @@ namespace tdef {
 
       unsigned
       h() const noexcept;
-
-      /**
-       * @brief- Fetch the state of a cell assuming it exists.
-       *         In case the coordinates are outside of the
-       *         world the `Empty` value is returned.
-       * @param x - the abscissa of the cell to get.
-       * @param t - the ordinate of the cell to get.
-       * @param valid- `true` in case the coordinates are valid.
-       * @return - the state of the cell or empty if the coords
-       *           are invalid.
-       */
-      world::State
-      cell(int x, int y, bool& valid) const noexcept;
 
       /**
        * @brief - Used to move one step ahead in time in this
@@ -134,25 +125,6 @@ namespace tdef {
     private:
 
       /**
-       * @brief - Defines the block size for each individual
-       *          regions of the world.
-       */
-      static constexpr int sk_regionSize = 100;
-
-      /**
-       * @brief - A convenience structur representing a block
-       *          (or a region) containing some information
-       *          about the world. Allows to speed up empty
-       *          regions by simulating them quickly.
-       */
-      struct Region {
-        int x;
-        int y;
-
-        world::State cells[sk_regionSize * sk_regionSize];
-      };
-
-      /**
        * @brief - Width of the world in cells.
        */
       int m_w;
@@ -170,9 +142,20 @@ namespace tdef {
       utils::RNG m_rng;
 
       /**
-       * @brief - Defines the list of regions created for this world.
+       * @brief - Defines the position of the exit portal for this
+       *          world.
        */
-      std::vector<Region> m_regions;
+      utils::Point2f m_portal;
+
+      /**
+       * @brief - The list of spawners for this world.
+       */
+      std::vector<SpawnerShPtr> m_spawners;
+
+      /**
+       * @brief - The list of mobs available in this world.
+       */
+      std::vector<MobShPtr> m_mobs;
   };
 
   using WorldShPtr = std::shared_ptr<World>;

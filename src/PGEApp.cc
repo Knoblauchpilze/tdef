@@ -3,28 +3,6 @@
 # include "ColorUtils.hh"
 # include "utils.hh"
 
-namespace {
-
-  olc::Pixel
-  colorFromState(tdef::world::State s) {
-    switch (s) {
-      case tdef::world::State::Empty:
-        return olc::VERY_DARK_GREY;
-      case tdef::world::State::Colony:
-        return olc::DARK_GREEN;
-      case tdef::world::State::Deposit:
-        return olc::DARK_YELLOW;
-      case tdef::world::State::Worker:
-        return olc::DARK_BLUE;
-      case tdef::world::State::Warrior:
-        return olc::VERY_DARK_BLUE;
-      default:
-        return olc::RED;
-    }
-  }
-
-}
-
 namespace tdef {
 
   PGEApp::PGEApp(const AppDesc& desc):
@@ -99,31 +77,9 @@ namespace tdef {
     Clear(olc::BLACK);
 
     // Fetch the visible cells.
-    Viewport v = m_frame->cellsViewport();
+    // Viewport v = m_frame->cellsViewport();
 
-    int xMin = std::floor(v.p.x);
-    int yMin = std::floor(v.p.y);
-    int xMax = std::floor(v.p.x + v.dims.x);
-    int yMax = std::floor(v.p.y + v.dims.y);
-
-    SpriteDesc desc;
-    bool valid;
-
-    for (int y = yMin ; y <= yMax ; ++y) {
-      for (int x = xMin ; x <= xMax ; ++x) {
-        world::State s = m_world->cell(x, y, valid);
-
-        if (!valid) {
-          continue;
-        }
-
-        desc.x = x;
-        desc.y = y;
-        desc.color = colorFromState(s);
-
-        drawSprite(desc, *m_frame);
-      }
-    }
+    // TODO: Handle rendering.
 
     SetPixelMode(olc::Pixel::NORMAL);
   }

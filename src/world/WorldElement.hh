@@ -13,6 +13,13 @@ namespace tdef {
     public:
 
       /**
+       * @brief - Retrieve the position of this element.
+       * @return - the position for this element.
+       */
+      const utils::Point2f&
+      getPos() const noexcept;
+
+      /**
        * @brief - Interrogate the internal identifier for the
        *          owner of this entity and return `true` if
        *          it is valid.

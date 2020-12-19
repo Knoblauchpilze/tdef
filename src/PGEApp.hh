@@ -285,6 +285,16 @@ namespace tdef {
        * @brief - The world managed by this application.
        */
       WorldShPtr m_world;
+
+      /**
+       * @brief - An element to use to interact with elements from
+       *          the world. This object provide convenience methods
+       *          to access in an efficient way elements that are
+       *          within a particular region or in a way that allow
+       *          efficient drawing on screen (such as in ascending
+       *          `z` order).
+       */
+      LocatorShPtr m_loc;
   };
 
 }

@@ -6,6 +6,12 @@
 namespace tdef {
 
   inline
+  const utils::Point2f&
+  WorldElement::getPos() const noexcept {
+    return m_pos;
+  }
+
+  inline
   bool
   WorldElement::isOwned() const noexcept {
     return m_owner.valid();

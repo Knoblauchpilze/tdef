@@ -21,6 +21,12 @@ namespace tdef {
   }
 
   inline
+  LocatorShPtr
+  World::locator() const noexcept {
+    return m_loc;
+  }
+
+  inline
   void
   World::pause(float /*tDelta*/) {
     // Nothing to do for now.

@@ -8,7 +8,7 @@
 # include <core_utils/RNG.hh>
 # include <maths_utils/Point2.hh>
 # include "Mob.hh"
-# include "Spawner.hh"
+# include "Block.hh"
 
 namespace tdef {
 
@@ -148,9 +148,9 @@ namespace tdef {
       utils::Point2f m_portal;
 
       /**
-       * @brief - The list of spawners for this world.
+       * @brief - The list of blocks for this world.
        */
-      std::vector<SpawnerShPtr> m_spawners;
+      std::vector<BlockShPtr> m_blocks;
 
       /**
        * @brief - The list of mobs available in this world.

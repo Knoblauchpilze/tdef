@@ -3,6 +3,8 @@
 # include <algorithm>
 # include <unordered_set>
 # include <core_utils/TimeUtils.hh>
+# include "Spawner.hh"
+# include "Wall.hh"
 
 namespace tdef {
 
@@ -15,7 +17,7 @@ namespace tdef {
     m_rng(seed),
 
     m_portal(0.0f, 0.0f),
-    m_spawners(),
+    m_blocks(),
     m_mobs()
   {
     setService("world");
@@ -33,7 +35,7 @@ namespace tdef {
     m_rng(seed),
 
     m_portal(0.0f, 0.0f),
-    m_spawners(),
+    m_blocks(),
     m_mobs()
   {
     // Check dimensions.
@@ -55,8 +57,8 @@ namespace tdef {
     };
 
     // Make elements evolve.
-    for (unsigned id = 0u ; id < m_spawners.size() ; ++id) {
-      m_spawners[id]->step(si);
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      m_blocks[id]->step(si);
     }
 
     for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
@@ -84,7 +86,41 @@ namespace tdef {
 
   void
   World::generate() {
-    // TODO: Restore this.
+    static constexpr int sk_spawners = 5;
+    static constexpr int sk_walls = 10;
+
+    utils::Point2f p;
+
+    int id = sk_spawners;
+    while (id > 0) {
+      p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
+      p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
+
+      // TODO: Restore this.
+      if (true) {
+        m_blocks.push_back(
+          std::make_shared<Spawner>(
+            p,    // position
+            1.0f, // threshold
+            0.9f, // reserve
+            0.0f, // refill
+            4.0f  // (spawn) radius
+          )
+        );
+        --id;
+      }
+    }
+
+    id = sk_walls;
+    while (id > 0) {
+      p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
+      p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
+
+      if (true) {
+        m_blocks.push_back(newWall(p));
+        --id;
+      }
+    }
   }
 
   void

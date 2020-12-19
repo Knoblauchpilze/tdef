@@ -46,6 +46,8 @@ namespace tdef {
     m_world = std::make_shared<World>(100, 100, 50);
 # endif
 
+    m_loc = m_world->locator();
+
     // Load the menu resources.
     loadMenuResources();
 

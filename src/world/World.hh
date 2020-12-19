@@ -9,6 +9,7 @@
 # include <maths_utils/Point2.hh>
 # include "Mob.hh"
 # include "Block.hh"
+# include "Locator.hh"
 
 namespace tdef {
 
@@ -61,6 +62,15 @@ namespace tdef {
 
       unsigned
       h() const noexcept;
+
+      /**
+       * @brief - Used to return a locator object to allow easy
+       *          access to elements of this world.
+       * @return - a locator allowing to filter and efficiently
+       *           access objects of this world.
+       */
+      LocatorShPtr
+      locator() const noexcept;
 
       /**
        * @brief - Used to move one step ahead in time in this
@@ -156,6 +166,12 @@ namespace tdef {
        * @brief - The list of mobs available in this world.
        */
       std::vector<MobShPtr> m_mobs;
+
+      /**
+       * @brief - The locator to use to organize objects and
+       *          mobs based on their position.
+       */
+      LocatorShPtr m_loc;
   };
 
   using WorldShPtr = std::shared_ptr<World>;

@@ -18,7 +18,9 @@ namespace tdef {
 
     m_portal(0.0f, 0.0f),
     m_blocks(),
-    m_mobs()
+    m_mobs(),
+
+    m_loc(nullptr)
   {
     setService("world");
 
@@ -36,7 +38,9 @@ namespace tdef {
 
     m_portal(0.0f, 0.0f),
     m_blocks(),
-    m_mobs()
+    m_mobs(),
+
+    m_loc(nullptr)
   {
     // Check dimensions.
     setService("world");
@@ -121,6 +125,8 @@ namespace tdef {
         --id;
       }
     }
+
+    m_loc = std::make_shared<Locator>(m_w, m_h, m_blocks, m_mobs);
   }
 
   void

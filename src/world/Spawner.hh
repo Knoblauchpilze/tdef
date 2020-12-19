@@ -3,12 +3,12 @@
 
 # include <memory>
 # include <maths_utils/Point2.hh>
-# include "WorldElement.hh"
+# include "Block.hh"
 # include "Mob.hh"
 
 namespace tdef {
 
-  class Spawner: public WorldElement {
+  class Spawner: public Block {
     public:
 
       /**

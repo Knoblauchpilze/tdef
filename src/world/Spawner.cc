@@ -9,7 +9,7 @@ namespace tdef {
                    float refill,
                    float radius,
                    const utils::Uuid& owner):
-    WorldElement(pos, 1.0f, 1.0f, "spawner", owner),
+    Block(pos, "spawner", owner),
 
     m_spawnRadius(std::max(radius, 0.0f)),
 

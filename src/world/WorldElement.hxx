@@ -6,6 +6,9 @@
 namespace tdef {
 
   inline
+  WorldElement::Props::~Props() {}
+
+  inline
   const utils::Point2f&
   WorldElement::getPos() const noexcept {
     return m_pos;
@@ -46,19 +49,16 @@ namespace tdef {
   }
 
   inline
-  WorldElement::WorldElement(const utils::Point2f& pos,
-                             float radius,
-                             float health,
-                             const std::string& name,
-                             const utils::Uuid& owner):
+  WorldElement::WorldElement(const Props& props,
+                             const std::string& name):
     utils::CoreObject(name),
 
-    m_owner(owner),
-    m_pos(pos),
+    m_owner(props.owner),
+    m_pos(props.pos),
 
-    m_radius(radius <= 0.0f ? 1.0f : radius),
+    m_radius(props.radius <= 0.0f ? 1.0f : props.radius),
 
-    m_totalHealth(std::max(health, 0.0f)),
+    m_totalHealth(std::max(props.health, 0.0f)),
     m_health(m_totalHealth)
   {
     setService("element");

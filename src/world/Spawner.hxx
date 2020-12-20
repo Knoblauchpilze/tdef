@@ -6,6 +6,29 @@
 namespace tdef {
 
   inline
+  Spawner::SProps
+  Spawner::newProps(const utils::Point2f& p,
+                    const utils::Uuid& owner) noexcept
+  {
+    Spawner::SProps pp;
+
+    pp.pos = p;
+    pp.radius = 1.0f;
+
+    pp.health = 1.0f;
+
+    pp.owner = owner;
+
+    pp.spawnRadius = 4.0f;
+
+    pp.threshold = 1.0f;
+    pp.reserve = 0.9f;
+    pp.refill = 0.0f;
+
+    return pp;
+  }
+
+  inline
   float
   Spawner::refill(float delta, bool force) {
     // In case the `delta` is positive the operation

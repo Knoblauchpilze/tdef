@@ -3,16 +3,16 @@
 
 namespace tdef {
 
-  Mob::Mob(const utils::Point2f& pos,
-           float energy,
-           float maxEnergy,
-           float refill,
-           const utils::Uuid& owner):
-    WorldElement(pos, 1.0f, 1.0f, "mob", owner),
+  Mob::Mob(const MProps& props):
+    WorldElement(props, "mob"),
 
-    m_energy(energy),
-    m_maxEnergy(maxEnergy),
-    m_energyRefill(refill)
+    m_energy(props.energy),
+    m_maxEnergy(props.maxEnergy),
+    m_energyRefill(props.refill),
+
+    m_rArrival(props.arrival),
+    m_speed(props.speed),
+    m_path(path::newPath(m_pos))
   {
     setService("mob");
   }

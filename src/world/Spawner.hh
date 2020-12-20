@@ -12,22 +12,26 @@ namespace tdef {
     public:
 
       /**
-       * @brief - Defines a new spawner with the specified props.
-       * @param pos - the position of this spawner.
-       * @param threshold - the cost of spawning a single entity
-       *                    or wave.
-       * @param reserve - the initial value of the stock.
-       * @param refill - the amount of stock refilled each second.
-       * @param radius - the radius around the spawner where mobs
-       *                 are spawned.
-       * @param owner - the owner of the mob.
+       * @brief - Definition of new props to define a spawner.
        */
-      Spawner(const utils::Point2f& pos,
-              float threshold,
-              float reserve,
-              float refill,
-              float radius,
-              const utils::Uuid& owner = utils::Uuid());
+      struct SProps: public Block::BProps {
+        float spawnRadius;
+
+        float threshold;
+        float reserve;
+        float refill;
+      };
+
+      static
+      SProps
+      newProps(const utils::Point2f& p,
+               const utils::Uuid& owner = utils::Uuid()) noexcept;
+
+      /**
+       * @brief - Defines a new spawner with the specified props.
+       * @param props - the properties to define this spawner.
+       */
+      Spawner(const SProps& props);
 
       void
       step(StepInfo& info) override;

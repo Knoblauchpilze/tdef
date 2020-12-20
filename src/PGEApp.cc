@@ -11,7 +11,7 @@ namespace {
       case tdef::world::BlockType::Spawner:
         return olc::Pixel(255, 128, 0);
       case tdef::world::BlockType::Wall:
-        return olc::DARK_GREY;
+        return olc::GREY;
       default:
         break;
     }
@@ -94,7 +94,7 @@ namespace tdef {
   PGEApp::draw(const RenderDesc& res) {
     // Clear rendering target.
     SetPixelMode(olc::Pixel::ALPHA);
-    Clear(olc::BLACK);
+    Clear(olc::VERY_DARK_GREY);
 
     // Fetch elements to display.
     Viewport v = res.cf.cellsViewport();
@@ -127,7 +127,7 @@ namespace tdef {
 
         sd.radius = 1.0f;
 
-        sd.color = olc::VERY_DARK_GREY;
+        sd.color = olc::DARK_GREY;
 
         drawSprite(sd, res.cf);
       }

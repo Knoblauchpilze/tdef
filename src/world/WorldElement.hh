@@ -13,6 +13,29 @@ namespace tdef {
     public:
 
       /**
+       * @brief - Convenience structure to regroup the info
+       *          needed to create a world element. It is
+       *          meant as a way to reduce the number of
+       *          arguments provided to the constructor of
+       *          this class.
+       */
+      struct Props {
+        utils::Point2f pos;
+        float radius;
+
+        float health;
+
+        utils::Uuid owner;
+
+        /**
+         * @brief - Used to make the compiler consider this
+         *          structure as polymorphic and thus allow
+         *          dynamic_cast operator on derived elems.
+         */
+        virtual ~Props();
+      };
+
+      /**
        * @brief - Retrieve the position of this element.
        * @return - the position for this element.
        */
@@ -114,23 +137,12 @@ namespace tdef {
       /**
        * @brief - Build a new world element with the specified
        *          position and name.
-       * @param pos - the position of this world element at the
-       *              moment of its creation.
-       * @param radius - the radius for this entity expressed
-       *                 in blocks.
-       * @param health - the health pool for this element.
-       * @param name - the name of the object (mainly used for
-       *               logging purposes).
-       * @param owner - the identifier of the owner of this
-       *                element. It is assigned to a null value
-       *                by default, meaning that the element is
-       *                not owned.
+       * @param props - the properties to use to define this
+       *                world element.
+       * @param name - the name of the element.
        */
-      WorldElement(const utils::Point2f& pos,
-                   float radius,
-                   float health,
-                   const std::string& name,
-                   const utils::Uuid& owner = utils::Uuid());
+      WorldElement(const Props& props,
+                   const std::string& name);
 
       /**
        * @brief - Used to define a new owner for this element.

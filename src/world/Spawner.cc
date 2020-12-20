@@ -3,19 +3,14 @@
 
 namespace tdef {
 
-  Spawner::Spawner(const utils::Point2f& pos,
-                   float threshold,
-                   float reserve,
-                   float refill,
-                   float radius,
-                   const utils::Uuid& owner):
-    Block(pos, "spawner", owner),
+  Spawner::Spawner(const SProps& props):
+    Block(props, "spawner"),
 
-    m_spawnRadius(std::max(radius, 0.0f)),
+    m_spawnRadius(std::max(props.spawnRadius, 0.0f)),
 
-    m_stock(reserve),
-    m_threshold(threshold),
-    m_refill(refill)
+    m_stock(props.reserve),
+    m_threshold(props.threshold),
+    m_refill(props.refill)
   {
     setService("spawner");
   }
@@ -58,13 +53,9 @@ namespace tdef {
     y += (m_pos.y() + 0.5f);
 
     // Create the mob and return it.
-    return std::make_shared<Mob>(
-      utils::Point2f(x, y),
-      0.5f,
-      1.0f,
-      0.01f,
-      getOwner()
-    );
+    Mob::MProps props = Mob::newProps(utils::Point2f(x, y), getOwner());
+
+    return std::make_shared<Mob>(props);
   }
 
 }

@@ -3,12 +3,10 @@
 
 namespace tdef {
 
-  Wall::Wall(const utils::Point2f& pos,
-             float height,
-             const utils::Uuid& owner):
-    Block(pos, "wall", owner),
+  Wall::Wall(const WProps& props):
+    Block(props, "wall"),
 
-    m_height(height)
+    m_height(props.height)
   {}
 
 }

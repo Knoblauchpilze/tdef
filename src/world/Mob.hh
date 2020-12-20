@@ -4,6 +4,7 @@
 # include <memory>
 # include <maths_utils/Point2.hh>
 # include "WorldElement.hh"
+# include "Path.hh"
 
 namespace tdef {
 
@@ -11,19 +12,43 @@ namespace tdef {
     public:
 
       /**
-       * @brief - Creates a new mob with the specified position.
-       * @param pos - the position of this mob.
-       * @param energy - the initial energy for this mob.
-       * @param maxEnergy - the maximum energy for this mob.
-       * @param refill - the amount of energy refilled at each
-       *                 second.
-       * @param owner - the owner of the mob.
+       * @brief - Definition of new props to define a mob.
        */
-      Mob(const utils::Point2f& pos,
-          float energy,
-          float maxEnergy,
-          float refill,
-          const utils::Uuid& owner = utils::Uuid());
+      struct MProps: public WorldElement::Props {
+        float energy;
+        float maxEnergy;
+        float refill;
+
+        float speed;
+        float arrival;
+      };
+
+      static
+      MProps
+      newProps(const utils::Point2f& p,
+               const utils::Uuid& owner = utils::Uuid()) noexcept;
+
+      /**
+       * @brief - Creates a new mob with the specified props
+       * @param props - the properties defining this mob.
+       */
+      Mob(const MProps& props);
+
+      /**
+       * @brief - Returns the current path followed by the entity.
+       * @return - the current path followed by the entity.
+       */
+      const path::Path&
+      getPath() const noexcept;
+
+      /**
+       * @brief - Convenience wrapper to determine whether this
+       *          entity is still en route on its current path.
+       * @return - `true` if the entity is still moving along
+       *           its path.
+       */
+      bool
+      isEnRoute() const noexcept;
 
       /**
        * @brief - Implementation of the interface method to evolve
@@ -74,6 +99,22 @@ namespace tdef {
        *          can take more decisions.
        */
       float m_energyRefill;
+
+      /**
+       * @brief - Defines the arrival radius for this mob when
+       *          approaching its destination.
+       */
+      float m_rArrival;
+
+      /**
+       * @brief - Speed of the entity in cells per second.
+       */
+      float m_speed;
+
+      /**
+       * @brief - The current path followed by this mob.
+       */
+      path::Path m_path;
   };
 
   using MobShPtr = std::shared_ptr<Mob>;

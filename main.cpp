@@ -11,7 +11,7 @@
 # include <core_utils/CoreException.hh>
 # include "AppDesc.hh"
 # include "coordinates/TopViewFrame.hh"
-# include "PGEApp.hh"
+# include "TDefApp.hh"
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.
@@ -41,7 +41,7 @@ int main(int /*argc*/, char** /*argv*/) {
       cf,
       "tower defense"
     );
-    tdef::PGEApp demo(ad);
+    tdef::TDefApp demo(ad);
 
     demo.Start();
   }

@@ -10,7 +10,6 @@ set (CMAKE_POSITION_INDEPENDENT_CODE ON)
 set (SOURCES
   ${SOURCES}
   olcEngine.cc
-  PGEApp.cc
   )
 
 add_subdirectory(
@@ -19,6 +18,10 @@ add_subdirectory(
 
 add_subdirectory(
   ${CMAKE_CURRENT_SOURCE_DIR}/world
+  )
+
+add_subdirectory(
+  ${CMAKE_CURRENT_SOURCE_DIR}/app
   )
 
 add_library (tdef_lib SHARED
@@ -38,4 +41,5 @@ target_link_libraries(tdef_lib
 
 target_include_directories (tdef_lib PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/app
   )

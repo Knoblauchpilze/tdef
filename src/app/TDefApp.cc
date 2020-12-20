@@ -79,6 +79,7 @@ namespace tdef {
     );
 
     SpriteDesc sd;
+    sd.loc = RelativePosition::BottomRight;
 
     // Render background.
     int xMin = std::floor(v.p.x);
@@ -115,6 +116,7 @@ namespace tdef {
         sd.y = t.p.y();
 
         sd.radius = t.radius;
+        sd.loc = RelativePosition::BottomRight;
 
         // TODO: Restore health.
         sd.color = colorFromBlockType(t.type);
@@ -130,6 +132,7 @@ namespace tdef {
         sd.y = t.p.y();
 
         sd.radius = t.radius;
+        sd.loc = RelativePosition::CenterTop;
 
         // TODO: Restore health.
         sd.color = colorFromMobType(t.type);

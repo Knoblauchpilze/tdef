@@ -13,29 +13,6 @@ namespace tdef {
     public:
 
       /**
-       * @brief - Convenience structure to regroup the info
-       *          needed to create a world element. It is
-       *          meant as a way to reduce the number of
-       *          arguments provided to the constructor of
-       *          this class.
-       */
-      struct Props {
-        utils::Point2f pos;
-        float radius;
-
-        float health;
-
-        utils::Uuid owner;
-
-        /**
-         * @brief - Used to make the compiler consider this
-         *          structure as polymorphic and thus allow
-         *          dynamic_cast operator on derived elems.
-         */
-        virtual ~Props();
-      };
-
-      /**
        * @brief - Retrieve the position of this element.
        * @return - the position for this element.
        */
@@ -133,6 +110,35 @@ namespace tdef {
       resume(const utils::TimeStamp& t) = 0;
 
     protected:
+
+      /**
+       * @brief - Convenience structure to regroup the info
+       *          needed to create a world element. It is
+       *          meant as a way to reduce the number of
+       *          arguments provided to the constructor of
+       *          this class.
+       */
+      struct Props {
+        utils::Point2f pos;
+        float radius;
+
+        float health;
+
+        utils::Uuid owner;
+
+        /**
+         * @brief - Used to make the compiler consider this
+         *          structure as polymorphic and thus allow
+         *          dynamic_cast operator on derived elems.
+         */
+        virtual ~Props();
+      };
+
+      static
+      void
+      assignProps(Props& pp,
+                  const utils::Point2f& p,
+                  const utils::Uuid& owner = utils::Uuid()) noexcept;
 
       /**
        * @brief - Build a new world element with the specified

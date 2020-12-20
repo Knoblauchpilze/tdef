@@ -49,6 +49,20 @@ namespace tdef {
   }
 
   inline
+  void
+  WorldElement::assignProps(Props& pp,
+                            const utils::Point2f& p,
+                            const utils::Uuid& owner) noexcept
+  {
+    pp.pos = p;
+    pp.radius = 1.0f;
+
+    pp.health = 1.0f;
+
+    pp.owner = owner;
+  }
+
+  inline
   WorldElement::WorldElement(const Props& props,
                              const std::string& name):
     utils::CoreObject(name),

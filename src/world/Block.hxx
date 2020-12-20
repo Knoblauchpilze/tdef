@@ -7,6 +7,15 @@ namespace tdef {
 
   inline
   void
+  Block::assignProps(BProps& pp,
+                     const utils::Point2f& p,
+                     const utils::Uuid& owner) noexcept
+  {
+    WorldElement::assignProps(pp, p, owner);
+  }
+
+  inline
+  void
   Block::step(StepInfo& /*info*/) {
     // Nothing to do.
   }

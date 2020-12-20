@@ -12,6 +12,8 @@ namespace {
         return olc::Pixel(255, 128, 0);
       case tdef::world::BlockType::Wall:
         return olc::GREY;
+      case tdef::world::BlockType::Portal:
+        return olc::GREEN;
       default:
         break;
     }
@@ -132,6 +134,8 @@ namespace tdef {
         drawSprite(sd, res.cf);
       }
     }
+
+    // Render the portal.
 
     // Render each element.
     for (unsigned id = 0u ; id < items.size() ; ++id) {

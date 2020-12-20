@@ -114,14 +114,13 @@ namespace tdef {
 
         sd.x = t.p.x();
         sd.y = t.p.y();
-
         sd.radius = t.radius;
         sd.loc = RelativePosition::BottomRight;
 
-        // TODO: Restore health.
         sd.color = colorFromBlockType(t.type);
 
         drawSprite(sd, res.cf);
+        drawHealthBar(sd, t.health, res.cf, Orientation::Vertical);
       }
 
       // Case of a mob.
@@ -130,14 +129,13 @@ namespace tdef {
 
         sd.x = t.p.x();
         sd.y = t.p.y();
-
         sd.radius = t.radius;
         sd.loc = RelativePosition::CenterTop;
 
-        // TODO: Restore health.
         sd.color = colorFromMobType(t.type);
 
         drawSprite(sd, res.cf);
+        drawHealthBar(sd, t.health, res.cf);
       }
 
     }

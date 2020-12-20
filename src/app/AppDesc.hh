@@ -2,7 +2,7 @@
 # define   APP_DESC_HH
 
 # include <string>
-# include "olcPixelGameEngine.h"
+# include "olcEngine.hh"
 # include "coordinates/CoordinateFrame.hh"
 
 namespace tdef {

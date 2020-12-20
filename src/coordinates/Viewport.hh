@@ -1,7 +1,7 @@
 #ifndef    VIEWPORT_HH
 # define   VIEWPORT_HH
 
-# include "olcPixelGameEngine.h"
+# include "olcEngine.hh"
 
 namespace tdef {
 

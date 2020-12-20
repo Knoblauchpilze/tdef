@@ -2,7 +2,6 @@
 # define   PGE_APP_HXX
 
 # include "PGEApp.hh"
-# include "utils.hh"
 
 namespace tdef {
 

@@ -11,15 +11,22 @@ namespace tdef {
     public:
 
       /**
-       * @brief - Defines a new spawner with the specified props.
-       * @param pos - the position of this spawner.
-       * @param height - the height of the wall. Used to prevent
-       *                 some entities from moving through it.
-       * @param owner - the owner of the mob.
+       * @brief - Definition of new props to define a wall.
        */
-      Wall(const utils::Point2f& pos,
-           float height = 1.0f,
-           const utils::Uuid& owner = utils::Uuid());
+      struct WProps: public Block::BProps {
+        float height;
+      };
+
+      static
+      WProps
+      newProps(const utils::Point2f& p,
+               const utils::Uuid& owner = utils::Uuid()) noexcept;
+
+      /**
+       * @brief - Defines a new spawner with the specified props.
+       * @param props - the properties defining this wall.
+       */
+      Wall(const WProps& props);
 
       float
       getHeight() const noexcept;

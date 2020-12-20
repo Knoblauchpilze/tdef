@@ -107,15 +107,8 @@ namespace tdef {
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        m_blocks.push_back(
-          std::make_shared<Spawner>(
-            p,    // position
-            1.0f, // threshold
-            0.9f, // reserve
-            0.0f, // refill
-            4.0f  // (spawn) radius
-          )
-        );
+        SpawnerShPtr s = std::make_shared<Spawner>(Spawner::newProps(p));
+        m_blocks.push_back(s);
         --id;
       }
     }
@@ -128,7 +121,8 @@ namespace tdef {
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        m_blocks.push_back(std::make_shared<Wall>(p));
+        WallShPtr w = std::make_shared<Wall>(Wall::newProps(p));
+        m_blocks.push_back(w);
         --id;
       }
     }

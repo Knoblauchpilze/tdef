@@ -38,6 +38,7 @@ namespace tdef {
     enum class BlockType {
       Spawner,
       Wall,
+      Portal,
     };
 
     /**

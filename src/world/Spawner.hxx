@@ -10,14 +10,8 @@ namespace tdef {
   Spawner::newProps(const utils::Point2f& p,
                     const utils::Uuid& owner) noexcept
   {
-    Spawner::SProps pp;
-
-    pp.pos = p;
-    pp.radius = 1.0f;
-
-    pp.health = 1.0f;
-
-    pp.owner = owner;
+    SProps pp;
+    assignProps(pp, p, owner);
 
     pp.spawnRadius = 4.0f;
 

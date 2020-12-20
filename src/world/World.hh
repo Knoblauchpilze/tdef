@@ -152,12 +152,6 @@ namespace tdef {
       utils::RNG m_rng;
 
       /**
-       * @brief - Defines the position of the exit portal for this
-       *          world.
-       */
-      utils::Point2f m_portal;
-
-      /**
        * @brief - The list of blocks for this world.
        */
       std::vector<BlockShPtr> m_blocks;

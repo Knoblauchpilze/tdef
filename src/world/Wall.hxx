@@ -10,17 +10,11 @@ namespace tdef {
   Wall::newProps(const utils::Point2f& p,
                  const utils::Uuid& owner) noexcept
   {
-    Wall::WProps pp;
-
-    pp.pos = p;
-    pp.radius = 1.0f;
-
-    pp.health = 1.0f;
-
-    pp.owner = owner;
+    WProps pp;
+    assignProps(pp, p, owner);
 
     pp.height = 1.0f;
-    
+
     return pp;
   }
 

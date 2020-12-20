@@ -5,6 +5,7 @@
 # include <core_utils/TimeUtils.hh>
 # include "Spawner.hh"
 # include "Wall.hh"
+# include "Portal.hh"
 
 namespace tdef {
 
@@ -16,7 +17,6 @@ namespace tdef {
 
     m_rng(seed),
 
-    m_portal(0.0f, 0.0f),
     m_blocks(),
     m_mobs(),
 
@@ -36,7 +36,6 @@ namespace tdef {
 
     m_rng(seed),
 
-    m_portal(0.0f, 0.0f),
     m_blocks(),
     m_mobs(),
 
@@ -94,6 +93,7 @@ namespace tdef {
   World::generate() {
     static constexpr int sk_spawners = 5;
     static constexpr int sk_walls = 10;
+    static constexpr int sk_portals = 2;
 
     utils::Point2f p;
     int key = 0;
@@ -122,6 +122,20 @@ namespace tdef {
 
       if (used.count(key) == 0) {
         WallShPtr w = std::make_shared<Wall>(Wall::newProps(p));
+        m_blocks.push_back(w);
+        --id;
+      }
+    }
+
+    id = sk_portals;
+    while (id > 0) {
+      p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
+      p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
+
+      key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
+
+      if (used.count(key) == 0) {
+        PortalShPtr w = std::make_shared<Portal>(Portal::newProps(p));
         m_blocks.push_back(w);
         --id;
       }

@@ -94,14 +94,17 @@ namespace tdef {
     static constexpr int sk_walls = 10;
 
     utils::Point2f p;
+    int key = 0;
+    std::unordered_set<int> used;
 
     int id = sk_spawners;
     while (id > 0) {
       p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
       p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
 
-      // TODO: Restore this.
-      if (true) {
+      key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
+
+      if (used.count(key) == 0) {
         m_blocks.push_back(
           std::make_shared<Spawner>(
             p,    // position
@@ -120,8 +123,10 @@ namespace tdef {
       p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
       p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
 
-      if (true) {
-        m_blocks.push_back(newWall(p));
+      key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
+
+      if (used.count(key) == 0) {
+        m_blocks.push_back(std::make_shared<Wall>(p));
         --id;
       }
     }

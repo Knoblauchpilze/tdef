@@ -39,6 +39,15 @@ namespace tdef {
         olc::Pixel color;
       };
 
+      /**
+       * @brief - Describe a possible orientation for a graphic
+       *          component (e.g. a healthbar, etc.).
+       */
+      enum class Orientation {
+        Horizontal,
+        Vertical
+      };
+
       void
       loadWorld() override;
 
@@ -79,6 +88,22 @@ namespace tdef {
        */
       void
       drawSprite(const SpriteDesc& t, const CoordinateFrame& cf);
+
+      /**
+       * @brief - Used to draw a minimalistic health bar for an entity
+       *          or block at position (x, y) in cells coordinates. It
+       *          is displayed with the specified alpha transparency.
+       * @param t - the description of the tile to draw.
+       * @param ratio - the ratio of the healthbar that is still full.
+       * @param cf - the coordinate frame to use to perform the
+       *             conversion from tile position to pixels.
+       * @param o - the orientation of the healtbar.
+       */
+      void
+      drawHealthBar(const SpriteDesc& t,
+                    float ratio,
+                    const CoordinateFrame& cf,
+                    const Orientation& o = Orientation::Horizontal);
 
     private:
 

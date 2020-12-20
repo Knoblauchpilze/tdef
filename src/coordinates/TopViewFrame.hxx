@@ -36,7 +36,11 @@ namespace tdef {
 
   inline
   olc::vf2d
-  TopViewFrame::tileCoordsToPixels(float x, float y) const noexcept {
+  TopViewFrame::tileCoordsToPixels(float x,
+                                   float y,
+                                   const RelativePosition& loc,
+                                   float radius) const noexcept
+  {
     // Offset the input coordinates based on the
     // current position of the cell's viewport.
     x -= m_cViewport.p.x;
@@ -48,6 +52,22 @@ namespace tdef {
       m_pViewport.p.x + x * m_tScaled.x,
       m_pViewport.p.y + y * m_tScaled.y
     );
+
+    // Account for the relative position of the
+    // tile compared to the input position.
+    switch (loc) {
+      case RelativePosition::CenterTop:
+        // Offset by a full tile in height and
+        // half a tile in width.
+        tp.x -= radius * tileSize().x / 2.0f;
+        tp.y -= radius * tileSize().y;
+        break;
+      case RelativePosition::BottomRight:
+        // This is the default case.
+      default:
+        // Nothing to do.
+        break;
+    }
 
     return tp;
   }

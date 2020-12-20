@@ -145,16 +145,24 @@ namespace tdef {
 
     id = sk_mobs;
     while (id > 0) {
-      p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
-      p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
+      p.x() = m_rng.rndInt(0.0f, m_w - 1.0f);
+      p.y() = m_rng.rndInt(0.0f, m_h - 1.0f);
 
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        MobShPtr m = std::make_shared<Mob>(Mob::newProps(p));
+        Mob::MProps mp = Mob::newProps(p);
+
+        if (id % 2 == 0) {
+          mp.radius = 1.5f;
+        } else {
+          mp.radius = 0.5f;
+        }
+
+        MobShPtr m = std::make_shared<Mob>(mp);
         m_mobs.push_back(m);
 
-        log("Generating mob at " + std::to_string(p.x()) + "x" + std::to_string(p.y()));
+        log("Generating mob at " + std::to_string(p.x()) + "x" + std::to_string(p.y()) + " with radius " + std::to_string(mp.radius));
 
         --id;
       }

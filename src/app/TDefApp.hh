@@ -34,6 +34,7 @@ namespace tdef {
         float y;
 
         float radius;
+        RelativePosition loc;
 
         olc::Pixel color;
       };
@@ -72,12 +73,12 @@ namespace tdef {
        * @brief - Used to draw the tile referenced by the input
        *          struct to the screen using the corresponding
        *          visual representation.
-       * @param tile - the description of the tile to draw.
+       * @param t - the description of the tile to draw.
        * @param cf - the coordinate frame to use to perform the
        *             conversion from tile position to pixels.
        */
       void
-      drawSprite(const SpriteDesc& tile, const CoordinateFrame& cf);
+      drawSprite(const SpriteDesc& t, const CoordinateFrame& cf);
 
     private:
 

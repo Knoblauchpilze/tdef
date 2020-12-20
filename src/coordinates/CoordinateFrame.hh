@@ -7,6 +7,23 @@
 
 namespace tdef {
 
+  /**
+   * @brief - Relative position of a an element compared
+   *          to the provided position in input. This is
+   *          a mean to allow to locate an element with
+   *          respect to a specific part of its 'body'.
+   */
+  enum class RelativePosition {
+    BottomRight,   //< The element is at the bottom right
+                    //< of the provided position (so the
+                    //< position corresponds to the top
+                    //< left corner of the element).
+    CenterTop      //< The element is at the center top of
+                    //< the provided position (so the pos
+                    //< corresponds to the bottom center
+                    //< of the element).
+  };
+
   class CoordinateFrame: public utils::CoreObject {
     public:
 
@@ -68,12 +85,20 @@ namespace tdef {
        *          classes for their specific purposes.
        * @param x - the cell coordinate along the `x` axis.
        * @param y - the cell coordinate along the `y` axis.
+       * @param loc - defines the relative position of the tile
+       *              compared to the position provided as input.
+       * @param radius - the radius of the element for which the
+       *                 pixels position is computed. Allows to
+       *                 adapt the relative position to the size
+       *                 of the element.
        * @return - the coordinates in pixels of the tile defined
        *           by the input coords.
        */
       virtual olc::vf2d
       tileCoordsToPixels(float x,
-                         float y) const noexcept = 0;
+                         float y,
+                         const RelativePosition& loc = RelativePosition::BottomRight,
+                         float radius = 1.0f) const noexcept = 0;
 
       /**
        * @brief - Convert from pixels coordinates to tile coords.

@@ -43,14 +43,9 @@ namespace tdef {
 
   inline
   void
-  TDefApp::drawSprite(const SpriteDesc& tile, const CoordinateFrame& cf) {
-    // TODO: The position might not be the top left
-    // but rather the center of the sprite.
-    FillRectDecal(
-      cf.tileCoordsToPixels(tile.x, tile.y),
-      cf.tileSize(),
-      tile.color
-    );
+  TDefApp::drawSprite(const SpriteDesc& t, const CoordinateFrame& cf) {
+    olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y, t.loc, t.radius);
+    FillRectDecal(p, t.radius * cf.tileSize(), t.color);
   }
 
 }

@@ -38,12 +38,20 @@ namespace tdef {
        *          compute the corresponding pixels position.
        * @param x - the cell coordinate along the `x` axis.
        * @param y - the cell coordinate along the `y` axis.
+       * @param loc - the relative position of the tile when
+       *              compared to the provided location.
+       * @param radius - the radius of the element for which the
+       *                 pixels position is computed. Allows to
+       *                 adapt the relative position to the size
+       *                 of the element.
        * @return - the coordinates in pixels of the tile defined
        *           by the input coords.
        */
       olc::vf2d
       tileCoordsToPixels(float x,
-                         float y) const noexcept override;
+                         float y,
+                         const RelativePosition& loc = RelativePosition::BottomRight,
+                         float radius = 1.0f) const noexcept override;
 
       /**
        * @brief - Implementation of the interface method to

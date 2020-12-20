@@ -2,7 +2,7 @@
 # define   UTILS_HH
 
 # include <string>
-# include "olcPixelGameEngine.h"
+# include "olcEngine.hh"
 
 template <typename CoordinateType>
 std::string

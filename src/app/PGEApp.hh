@@ -2,7 +2,7 @@
 # define   PGE_APP_HH
 
 # include <core_utils/CoreObject.hh>
-# include "olcPixelGameEngine.h"
+# include "olcEngine.hh"
 # include "AppDesc.hh"
 # include "coordinates/CoordinateFrame.hh"
 # include "world/World.hh"

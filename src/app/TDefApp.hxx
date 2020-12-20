@@ -2,7 +2,6 @@
 # define   TDEF_APP_HXX
 
 # include "TDefApp.hh"
-# include "utils.hh"
 
 namespace tdef {
 

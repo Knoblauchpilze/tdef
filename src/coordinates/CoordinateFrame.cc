@@ -1,6 +1,5 @@
 
 # include "CoordinateFrame.hh"
-# include "utils.hh"
 
 namespace tdef {
 

@@ -1,7 +1,5 @@
 
 # include "TDefApp.hh"
-# include "ColorUtils.hh"
-# include "utils.hh"
 
 namespace {
 
@@ -27,7 +25,7 @@ namespace tdef {
 
   TDefApp::TDefApp(const AppDesc& desc):
     PGEApp(desc),
-    
+
     m_world(nullptr),
     m_loc(nullptr)
   {}
@@ -87,8 +85,6 @@ namespace tdef {
       }
     }
 
-    // Render the portal.
-
     // Render each element.
     for (unsigned id = 0u ; id < items.size() ; ++id) {
       const world::ItemEntry& ie = items[id];
@@ -130,13 +126,46 @@ namespace tdef {
   }
 
   void
-  TDefApp::drawUI(const RenderDesc& /*res*/) {
-    clearLayer();
+  TDefApp::drawUI(const RenderDesc& res) {
+    // Clear rendering target.
+    SetPixelMode(olc::Pixel::ALPHA);
+    Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
+
+    // Draw the cursor.
+    olc::vi2d mp = GetMousePos();
+    olc::vi2d mtp = res.cf.pixelCoordsToTiles(mp);
+
+    SpriteDesc sd;
+    sd.x = mtp.x;
+    sd.y = mtp.y;
+
+    sd.radius = 1.0f;
+
+    sd.color = olc::PINK;
+
+    drawSprite(sd, res.cf);
+
+    SetPixelMode(olc::Pixel::NORMAL);
   }
 
   void
-  TDefApp::drawDebug(const RenderDesc& /*res*/) {
-    clearLayer();
+  TDefApp::drawDebug(const RenderDesc& res) {
+    // Clear rendering target.
+    SetPixelMode(olc::Pixel::ALPHA);
+    Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
+
+    // Draw cursor's position.
+    olc::vi2d mp = GetMousePos();
+    olc::vf2d it;
+    olc::vi2d mtp = res.cf.pixelCoordsToTiles(mp, &it);
+
+    int h = GetDrawTargetHeight();
+    int dOffset = 15;
+    DrawString(olc::vi2d(0, h - MENU_HEIGHT - 3 * dOffset), "Mouse coords      : " + toString(mp), olc::CYAN);
+    DrawString(olc::vi2d(0, h - MENU_HEIGHT - 2 * dOffset), "World cell coords : " + toString(mtp), olc::CYAN);
+    DrawString(olc::vi2d(0, h - MENU_HEIGHT - 1 * dOffset), "Intra cell        : " + toString(it), olc::CYAN);
+
+    SetPixelMode(olc::Pixel::NORMAL);
   }
 
 }

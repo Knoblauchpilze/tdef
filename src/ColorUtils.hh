@@ -1,7 +1,7 @@
 #ifndef    COLOR_UTILS_HH
 # define   COLOR_UTILS_HH
 
-# include "olcPixelGameEngine.h"
+# include "olcEngine.hh"
 
 namespace tdef {
 

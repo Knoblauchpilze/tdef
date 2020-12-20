@@ -124,6 +124,9 @@ namespace tdef {
       struct SpriteDesc {
         float x;
         float y;
+
+        float radius;
+
         olc::Pixel color;
       };
 

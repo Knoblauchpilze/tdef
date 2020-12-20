@@ -4,6 +4,7 @@
 # include "Locator.hh"
 # include <algorithm>
 # include "Mob.hh"
+# include "Spawner.hh"
 # include <maths_utils/LocationUtils.hh>
 
 namespace tdef {
@@ -25,10 +26,16 @@ namespace tdef {
   Locator::block(int id) const noexcept {
     BlockShPtr b = m_blocks[id];
 
+    world::BlockType bt = world::BlockType::Wall;
+    if (std::dynamic_pointer_cast<Spawner>(b) != nullptr) {
+      bt = world::BlockType::Spawner;
+    }
+
     world::Block bd{
-      b->getPos(),
-      b->getRadius(),
-      b->getHealthRatio()
+      b->getPos(),         // p
+      b->getRadius(),      // radius
+      b->getHealthRatio(), // health
+      bt                   // type
     };
 
     return bd;

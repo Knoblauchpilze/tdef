@@ -3,6 +3,24 @@
 # include "ColorUtils.hh"
 # include "utils.hh"
 
+namespace {
+
+  olc::Pixel
+  colorFromBlockType(const tdef::world::BlockType& type) noexcept {
+    switch (type) {
+      case tdef::world::BlockType::Spawner:
+        return olc::Pixel(255, 128, 0);
+      case tdef::world::BlockType::Wall:
+        return olc::DARK_GREY;
+      default:
+        break;
+    }
+
+    return olc::RED;
+  }
+
+}
+
 namespace tdef {
 
   PGEApp::PGEApp(const AppDesc& desc):
@@ -79,7 +97,6 @@ namespace tdef {
     Clear(olc::BLACK);
 
     // Fetch elements to display.
-
     Viewport v = res.cf.cellsViewport();
     std::vector<world::ItemEntry> items = res.loc->getVisible(
       v.p.x,
@@ -91,7 +108,67 @@ namespace tdef {
       world::Sort::ZOrder
     );
 
-    // TODO: Handle rendering.
+    SpriteDesc sd;
+
+    // Render background.
+    int xMin = std::floor(v.p.x);
+    xMin = std::max(xMin, 0);
+    int yMin = std::floor(v.p.y);
+    yMin = std::max(yMin, 0);
+    int xMax = std::floor(v.p.x + v.dims.x);
+    xMax = std::min(xMax, res.loc->w());
+    int yMax = std::floor(v.p.y + v.dims.y);
+    yMax = std::min(yMax, res.loc->h());
+
+    for (int y = yMin ; y <= yMax ; ++y) {
+      for (int x = xMin ; x <= xMax ; ++x) {
+        sd.x = x;
+        sd.y = y;
+
+        sd.radius = 1.0f;
+
+        sd.color = olc::VERY_DARK_GREY;
+
+        drawSprite(sd, res.cf);
+      }
+    }
+
+    // Render each element.
+    for (unsigned id = 0u ; id < items.size() ; ++id) {
+      const world::ItemEntry& ie = items[id];
+
+      // Case of a block.
+      if (ie.type == world::ItemType::Block) {
+        world::Block t = res.loc->block(ie.index);
+
+        sd.x = t.p.x();
+        sd.y = t.p.y();
+
+        sd.radius = t.radius;
+
+        // TODO: Restore health.
+        sd.color = colorFromBlockType(t.type);
+
+        drawSprite(sd, res.cf);
+      }
+
+      // Case of a mob.
+      if (ie.type == world::ItemType::Mob) {
+        world::Mob t = res.loc->mob(ie.index);
+
+        sd.x = t.p.x();
+        sd.y = t.p.y();
+
+        sd.radius = t.radius;
+
+        // TODO: Restore health.
+        // TODO: Restore color.
+        sd.color = olc::BLUE;
+
+        drawSprite(sd, res.cf);
+      }
+
+    }
 
     SetPixelMode(olc::Pixel::NORMAL);
   }

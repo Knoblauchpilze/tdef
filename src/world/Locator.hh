@@ -22,6 +22,25 @@ namespace tdef {
     };
 
     /**
+     * @brief - Convenience enumeration defining the possible
+     *          types for an item visible in the frustum of
+     *          the locator.
+     */
+    enum class ItemType {
+      Block,
+      Mob,
+    };
+
+    /**
+     * @brief - Defines the possible types for a block
+     *          in the world.
+     */
+    enum class BlockType {
+      Spawner,
+      Wall,
+    };
+
+    /**
      * @brief - Convenience wrapper allowing to access the
      *          properties of a block.
      */
@@ -29,6 +48,7 @@ namespace tdef {
       utils::Point2f p;
       float radius;
       float health;
+      BlockType type;
     };
 
     /**
@@ -39,16 +59,6 @@ namespace tdef {
       utils::Point2f p;
       float radius;
       float health;
-    };
-
-    /**
-     * @brief - Convenience enumeration defining the possible
-     *          types for an item visible in the frustum of
-     *          the locator.
-     */
-    enum class ItemType {
-      Block,
-      Mob,
     };
 
     /**

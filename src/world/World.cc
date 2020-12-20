@@ -56,6 +56,8 @@ namespace tdef {
       utils::now(),            // moment
       tDelta,                  // elapsed
 
+      m_loc,                   // frustum
+
       std::vector<MobShPtr>(), // mSpawned
       std::vector<Mob*>(),     // mRemoved
     };

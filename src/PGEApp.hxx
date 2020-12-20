@@ -8,20 +8,23 @@ namespace tdef {
 
   inline
   bool
-  PGEApp::OnUserUpdate(float /*fElapsedTime*/) {
+  PGEApp::OnUserUpdate(float fElapsedTime) {
     // Handle inputs.
     InputChanges ic = handleInputs();
 
     // Handle game logic if needed.
     switch (m_state) {
       case State::Running:
+        m_world->step(fElapsedTime);
         break;
       case State::Pausing:
         log("Pausing app");
+        m_world->pause(fElapsedTime);
         m_state = State::Paused;
         break;
       case State::Resuming:
         log("Resuming app");
+        m_world->resume(fElapsedTime);
         m_state = State::Running;
         break;
       case State::Paused:
@@ -37,12 +40,17 @@ namespace tdef {
     // once the process is done.
     olc::Sprite* base = GetDrawTarget();
 
+    RenderDesc res{
+      m_loc, // Locator
+      *m_frame, // Coordinate frame
+    };
+
     SetDrawTarget(m_mLayer);
-    draw();
+    draw(res);
 
     if (hasUI()) {
       SetDrawTarget(m_uiLayer);
-      drawUI();
+      drawUI(res);
     }
     if (!hasUI() && isFirstFrame()) {
       SetDrawTarget(m_uiLayer);
@@ -63,7 +71,7 @@ namespace tdef {
     // updated.
     if (hasDebug()) {
       SetDrawTarget(m_dLayer);
-      drawDebug();
+      drawDebug(res);
     }
     if (!hasDebug() && (ic.debugLayerToggled || isFirstFrame())) {
       SetDrawTarget(m_dLayer);

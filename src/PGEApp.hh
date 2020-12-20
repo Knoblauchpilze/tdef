@@ -55,6 +55,18 @@ namespace tdef {
     protected:
 
       /**
+       * @brief - Convenience structure defining the resources
+       *          that can be displayed in any app. It contains
+       *          pointers to the world's data, to the frames
+       *          allowing to change from screen coordinates to
+       *          world coordinates and the UI.
+       */
+      struct RenderDesc {
+        LocatorShPtr loc;
+        CoordinateFrame& cf;
+      };
+
+      /**
        * @brief - Convenience define indicating a fully opaque alpha.
        */
       static constexpr int ALPHA_OPAQUE = 255;
@@ -120,25 +132,28 @@ namespace tdef {
        *          of the app. This method is called first and
        *          that means that it will be overriden by all
        *          UI and debug information.
+       * @param res - the resources that can be drawn.
        */
       virtual void
-      draw();
+      draw(const RenderDesc& res);
 
       /**
        * @brief - Interface method allowing to draw the UI of
        *          the application. This regroups menu and all
        *          needed elements that are not game elements.
+       * @param res - the resources that can be drawn.
        */
       virtual void
-      drawUI();
+      drawUI(const RenderDesc& res);
 
       /**
        * @brief - Interface method allowing inheriting classes
        *          to perform their own drawing calls to show
        *          debug info.
+       * @param res - the resources that can be drawn.
        */
       virtual void
-      drawDebug();
+      drawDebug(const RenderDesc& res);
 
       /**
        * @brief - Another interface method allowing to clear

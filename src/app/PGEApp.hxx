@@ -15,16 +15,14 @@ namespace tdef {
     // Handle game logic if needed.
     switch (m_state) {
       case State::Running:
-        m_world->step(fElapsedTime);
+       onStep(fElapsedTime);
         break;
       case State::Pausing:
-        log("Pausing app");
-        m_world->pause(fElapsedTime);
+        onPause(fElapsedTime);
         m_state = State::Paused;
         break;
       case State::Resuming:
-        log("Resuming app");
-        m_world->resume(fElapsedTime);
+        onResume(fElapsedTime);
         m_state = State::Running;
         break;
       case State::Paused:
@@ -41,7 +39,6 @@ namespace tdef {
     olc::Sprite* base = GetDrawTarget();
 
     RenderDesc res{
-      m_loc, // Locator
       *m_frame, // Coordinate frame
     };
 
@@ -128,16 +125,6 @@ namespace tdef {
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
     SetPixelMode(olc::Pixel::NORMAL);
-  }
-
-  inline
-  void
-  PGEApp::drawSprite(const SpriteDesc& tile, const CoordinateFrame& cf) {
-    FillRectDecal(
-      cf.tileCoordsToPixels(tile.x, tile.y),
-      cf.tileSize(),
-      tile.color
-    );
   }
 
   inline

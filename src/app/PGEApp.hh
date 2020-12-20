@@ -62,7 +62,6 @@ namespace tdef {
        *          world coordinates and the UI.
        */
       struct RenderDesc {
-        LocatorShPtr loc;
         CoordinateFrame& cf;
       };
 
@@ -88,26 +87,6 @@ namespace tdef {
        */
       static constexpr int MENU_HEIGHT = 50;
 
-      /**
-       * @brief - Interface method allowing inheriting classes
-       *          to get a chance to load resources needed for
-       *          display. This method is guaranteed to be
-       *          called before the first call to `draw` is
-       *          issued.
-       *          The default implementation does nothing.
-       */
-      virtual void
-      loadResources();
-
-      /**
-       * @brief - Interface method allowing inheriting classes
-       *          to be notified when the app is going to be
-       *          destroyed so that resources can be cleaned.
-       *          The default implementation does nothing.
-       */
-      virtual void
-      cleanResources();
-
       bool
       isFirstFrame() const noexcept;
 
@@ -116,47 +95,6 @@ namespace tdef {
 
       bool
       hasUI() const noexcept;
-
-      /**
-       * @brief - Convenience structure regrouping needed props
-       *          to draw a sprite.
-       */
-      struct SpriteDesc {
-        float x;
-        float y;
-
-        float radius;
-
-        olc::Pixel color;
-      };
-
-      /**
-       * @brief - Interface method to display the main content
-       *          of the app. This method is called first and
-       *          that means that it will be overriden by all
-       *          UI and debug information.
-       * @param res - the resources that can be drawn.
-       */
-      virtual void
-      draw(const RenderDesc& res);
-
-      /**
-       * @brief - Interface method allowing to draw the UI of
-       *          the application. This regroups menu and all
-       *          needed elements that are not game elements.
-       * @param res - the resources that can be drawn.
-       */
-      virtual void
-      drawUI(const RenderDesc& res);
-
-      /**
-       * @brief - Interface method allowing inheriting classes
-       *          to perform their own drawing calls to show
-       *          debug info.
-       * @param res - the resources that can be drawn.
-       */
-      virtual void
-      drawDebug(const RenderDesc& res);
 
       /**
        * @brief - Another interface method allowing to clear
@@ -169,15 +107,96 @@ namespace tdef {
       clearLayer();
 
       /**
-       * @brief - Used to draw the tile referenced by the input
-       *          struct to the screen using the corresponding
-       *          visual representation.
-       * @param tile - the description of the tile to draw.
-       * @param cf - the coordinate frame to use to perform the
-       *             conversion from tile position to pixels.
+       * @brief - Interface method allowing to load the data
+       *          needed for the world displayed by this app.
+       *          Called before any call to `draw` is issued.
        */
-      void
-      drawSprite(const SpriteDesc& tile, const CoordinateFrame& cf);
+      virtual void
+      loadWorld() = 0;
+
+      /**
+       * @brief - Interface method allowing inheriting classes
+       *          to get a chance to load resources needed for
+       *          display. This method is guaranteed to be
+       *          called before the first call to `draw` is
+       *          issued.
+       */
+      virtual void
+      loadResources() = 0;
+
+      /**
+       * @brief - Interface method allowing to load and initialize
+       *          menu resources to use for the UI of this app.
+       *          This method will be called before any call to the
+       *          `drawUI` method is issued.
+       */
+      virtual void
+      loadMenuResources() = 0;
+
+      /**
+       * @brief - Interface method allowing inheriting classes
+       *          to be notified when the app is going to be
+       *          destroyed so that resources can be cleaned.
+       *          The default implementation does nothing.
+       */
+      virtual void
+      cleanResources() = 0;
+
+      /**
+       * @brief - Interface method to display the main content
+       *          of the app. This method is called first and
+       *          that means that it will be overriden by all
+       *          UI and debug information.
+       * @param res - the resources that can be drawn.
+       */
+      virtual void
+      draw(const RenderDesc& res) = 0;
+
+      /**
+       * @brief - Interface method allowing to draw the UI of
+       *          the application. This regroups menu and all
+       *          needed elements that are not game elements.
+       * @param res - the resources that can be drawn.
+       */
+      virtual void
+      drawUI(const RenderDesc& res) = 0;
+
+      /**
+       * @brief - Interface method allowing inheriting classes
+       *          to perform their own drawing calls to show
+       *          debug info.
+       * @param res - the resources that can be drawn.
+       */
+      virtual void
+      drawDebug(const RenderDesc& res) = 0;
+
+      /**
+       * @brief - Interface method called at each step of the
+       *          application and while the pause has not been
+       *          activated.
+       *          Inheriting classes should implement this to
+       *          provide their own logic.
+       * @param elapsed - the elapsed time since the last call
+       *                  to this method.
+       */
+      virtual void
+      onStep(float elapsed) = 0;
+
+      /**
+       * @brief - Interface method called at each frame when
+       *          the pause has been activated.
+       * @param elapsed - the elapsed time since the last call.
+       */
+      virtual void
+      onPause(float elapsed) = 0;
+
+      /**
+       * @brief - Interface method called at each frame when
+       *          the resume method has been called.
+       * @param elapsed - the elapsed time since the last call.
+       */
+      virtual void
+      onResume(float elapsed) = 0;
 
     private:
 
@@ -216,13 +235,6 @@ namespace tdef {
        */
       void
       initialize(const olc::vi2d& dims, const olc::vi2d& pixRatio);
-
-      /**
-       * @brief - Called during the initialization of the application
-       *          in order to load resources needed by the menu.
-       */
-      void
-      loadMenuResources();
 
       /**
        * @brief - Used to perform the necessary update based on
@@ -298,21 +310,6 @@ namespace tdef {
        *          screen coordinates and conversely.
        */
       CoordinateFrameShPtr m_frame;
-
-      /**
-       * @brief - The world managed by this application.
-       */
-      WorldShPtr m_world;
-
-      /**
-       * @brief - An element to use to interact with elements from
-       *          the world. This object provide convenience methods
-       *          to access in an efficient way elements that are
-       *          within a particular region or in a way that allow
-       *          efficient drawing on screen (such as in ascending
-       *          `z` order).
-       */
-      LocatorShPtr m_loc;
   };
 
 }

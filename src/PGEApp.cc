@@ -73,13 +73,23 @@ namespace tdef {
   }
 
   void
-  PGEApp::draw() {
+  PGEApp::draw(const RenderDesc& res) {
     // Clear rendering target.
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::BLACK);
 
-    // Fetch the visible cells.
-    // Viewport v = m_frame->cellsViewport();
+    // Fetch elements to display.
+
+    Viewport v = res.cf.cellsViewport();
+    std::vector<world::ItemEntry> items = res.loc->getVisible(
+      v.p.x,
+      v.p.y,
+      v.p.x + v.dims.x,
+      v.p.y + v.dims.y,
+      nullptr,
+      nullptr,
+      world::Sort::ZOrder
+    );
 
     // TODO: Handle rendering.
 
@@ -87,23 +97,13 @@ namespace tdef {
   }
 
   void
-  PGEApp::drawUI() {
-    SetPixelMode(olc::Pixel::ALPHA);
-    Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
-
-    // Nothing to do yet.
-
-    SetPixelMode(olc::Pixel::NORMAL);
+  PGEApp::drawUI(const RenderDesc& /*res*/) {
+    clearLayer();
   }
 
   void
-  PGEApp::drawDebug() {
-    SetPixelMode(olc::Pixel::ALPHA);
-    Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
-
-    // Nothing to do yet.
-
-    SetPixelMode(olc::Pixel::NORMAL);
+  PGEApp::drawDebug(const RenderDesc& /*res*/) {
+    clearLayer();
   }
 
   void

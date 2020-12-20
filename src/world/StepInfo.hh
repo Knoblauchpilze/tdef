@@ -11,6 +11,9 @@ namespace tdef {
   class Mob;
   using MobShPtr = std::shared_ptr<Mob>;
 
+  class Locator;
+  using LocatorShPtr = std::shared_ptr<Locator>;
+
   /**
    * @enum  - Convenience structure regrouping all variables
    *          needed to perform the advancement of one step
@@ -22,6 +25,8 @@ namespace tdef {
 
     utils::TimeStamp moment;
     float elapsed;
+
+    LocatorShPtr frustum;
 
     std::vector<MobShPtr> mSpawned;
     std::vector<Mob*> mRemoved;

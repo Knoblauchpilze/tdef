@@ -5,11 +5,10 @@
 
 namespace tdef {
 
-  BlockShPtr
-  newWall(const utils::Point2f& pos,
-          const utils::Uuid& owner)
-  {
-    return std::make_shared<Block>(pos, "wall", owner);
+  inline
+  float
+  Wall::getHeight() const noexcept {
+    return m_height;
   }
 
 }

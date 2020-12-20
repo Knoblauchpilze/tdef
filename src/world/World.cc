@@ -91,9 +91,11 @@ namespace tdef {
 
   void
   World::generate() {
-    static constexpr int sk_spawners = 5;
-    static constexpr int sk_walls = 10;
-    static constexpr int sk_portals = 2;
+    static constexpr int sk_spawners = 3;
+    static constexpr int sk_walls = 2;
+    static constexpr int sk_portals = 1;
+
+    static constexpr int sk_mobs = 2;
 
     utils::Point2f p;
     int key = 0;
@@ -107,8 +109,8 @@ namespace tdef {
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        SpawnerShPtr s = std::make_shared<Spawner>(Spawner::newProps(p));
-        m_blocks.push_back(s);
+        SpawnerShPtr b = std::make_shared<Spawner>(Spawner::newProps(p));
+        m_blocks.push_back(b);
         --id;
       }
     }
@@ -121,8 +123,8 @@ namespace tdef {
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        WallShPtr w = std::make_shared<Wall>(Wall::newProps(p));
-        m_blocks.push_back(w);
+        WallShPtr b = std::make_shared<Wall>(Wall::newProps(p));
+        m_blocks.push_back(b);
         --id;
       }
     }
@@ -135,8 +137,25 @@ namespace tdef {
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        PortalShPtr w = std::make_shared<Portal>(Portal::newProps(p));
-        m_blocks.push_back(w);
+        PortalShPtr b = std::make_shared<Portal>(Portal::newProps(p));
+        m_blocks.push_back(b);
+        --id;
+      }
+    }
+
+    id = sk_mobs;
+    while (id > 0) {
+      p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
+      p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
+
+      key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
+
+      if (used.count(key) == 0) {
+        MobShPtr m = std::make_shared<Mob>(Mob::newProps(p));
+        m_mobs.push_back(m);
+
+        log("Generating mob at " + std::to_string(p.x()) + "x" + std::to_string(p.y()));
+
         --id;
       }
     }

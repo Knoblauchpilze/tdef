@@ -7,11 +7,29 @@ namespace {
   colorFromBlockType(const tdef::world::BlockType& type) noexcept {
     switch (type) {
       case tdef::world::BlockType::Spawner:
-        return olc::Pixel(255, 128, 0);
+        return olc::ORANGE;
       case tdef::world::BlockType::Wall:
         return olc::GREY;
       case tdef::world::BlockType::Portal:
         return olc::GREEN;
+      default:
+        break;
+    }
+
+    return olc::RED;
+  }
+
+  olc::Pixel
+  colorFromMobType(const tdef::world::MobType& type) noexcept {
+    switch (type) {
+      case tdef::world::MobType::Regular:
+        return olc::APPLE_GREEN;
+      case tdef::world::MobType::Fast:
+        return olc::YELLOW;
+      case tdef::world::MobType::Strong:
+        return olc::PALE_DARK_RED;
+      case tdef::world::MobType::Air:
+        return olc::CORNFLOWER_BLUE;
       default:
         break;
     }
@@ -36,7 +54,7 @@ namespace tdef {
 # ifdef WORLD_FROM_FILE
     m_world = std::make_shared<World>(100, std::string("data/worlds/level_1.lvl"));
 # else
-    m_world = std::make_shared<World>(100, 100, 50);
+    m_world = std::make_shared<World>(100, 10, 5);
 # endif
 
     m_loc = m_world->locator();
@@ -114,8 +132,7 @@ namespace tdef {
         sd.radius = t.radius;
 
         // TODO: Restore health.
-        // TODO: Restore color.
-        sd.color = olc::BLUE;
+        sd.color = colorFromMobType(t.type);
 
         drawSprite(sd, res.cf);
       }
@@ -141,7 +158,8 @@ namespace tdef {
 
     sd.radius = 1.0f;
 
-    sd.color = olc::PINK;
+    sd.color = olc::DARK_COBALT_BLUE;
+    sd.color.a = ALPHA_SEMI_OPAQUE;
 
     drawSprite(sd, res.cf);
 

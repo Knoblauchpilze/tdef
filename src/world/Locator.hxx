@@ -50,10 +50,14 @@ namespace tdef {
   Locator::mob(int id) const noexcept {
     MobShPtr m = m_mobs[id];
 
+    world::MobType mt = world::MobType::Fast;
+    // TODO: Handle mobe type.
+
     world::Mob md{
       m->getPos(),
       m->getRadius(),
       m->getHealthRatio(),
+      mt
     };
 
     return md;

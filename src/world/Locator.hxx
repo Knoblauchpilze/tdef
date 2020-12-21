@@ -6,6 +6,7 @@
 # include "Mob.hh"
 # include "Spawner.hh"
 # include "Portal.hh"
+# include "Tower.hh"
 # include <maths_utils/LocationUtils.hh>
 
 namespace tdef {
@@ -33,6 +34,9 @@ namespace tdef {
     }
     else if (std::dynamic_pointer_cast<Portal>(b) != nullptr) {
       bt = world::BlockType::Portal;
+    }
+    else if (std::dynamic_pointer_cast<Tower>(b) != nullptr) {
+      bt = world::BlockType::Tower;
     }
 
     world::Block bd{

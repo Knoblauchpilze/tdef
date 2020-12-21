@@ -12,6 +12,8 @@ namespace {
         return olc::GREY;
       case tdef::world::BlockType::Portal:
         return olc::GREEN;
+      case tdef::world::BlockType::Tower:
+        return olc::BROWN;
       default:
         break;
     }

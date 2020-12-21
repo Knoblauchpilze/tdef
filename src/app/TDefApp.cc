@@ -184,6 +184,49 @@ namespace tdef {
     DrawString(olc::vi2d(0, h - MENU_HEIGHT - 2 * dOffset), "World cell coords : " + toString(mtp), olc::CYAN);
     DrawString(olc::vi2d(0, h - MENU_HEIGHT - 1 * dOffset), "Intra cell        : " + toString(it), olc::CYAN);
 
+    // Render entities' path and position.
+    Viewport v = res.cf.cellsViewport();
+    world::ItemType ie = world::ItemType::Mob;
+    std::vector<world::ItemEntry> items = m_loc->getVisible(
+      v.p.x,
+      v.p.y,
+      v.p.x + v.dims.x,
+      v.p.y + v.dims.y,
+      &ie,
+      nullptr,
+      world::Sort::ZOrder
+    );
+
+    for (unsigned i = 0 ; i < items.size() ; ++i) {
+      const world::ItemEntry& ie = items[i];
+
+      // Be on the safe side.
+      if (ie.type != world::ItemType::Mob) {
+        log(
+          "Fetched item with type " + std::to_string(static_cast<int>(ie.type)) + " while requesting only entities",
+          utils::Level::Warning
+        );
+
+        continue;
+      }
+
+      world::Mob md = m_loc->mob(ie.index);
+
+      // Draw the path of this entity if any.
+      if (md.path.valid()) {
+        olc::vf2d old;
+        for (unsigned id = 0u ; id < md.path.cPoints.size() ; ++id) {
+          olc::vf2d p = res.cf.tileCoordsToPixels(md.path.cPoints[id].x(), md.path.cPoints[id].y());
+          FillCircle(p, 3, olc::CYAN);
+
+          if (id > 0u) {
+            DrawLine(old, p, olc::WHITE);
+          }
+          old = p;
+        }
+      }
+    }
+
     SetPixelMode(olc::Pixel::NORMAL);
   }
 

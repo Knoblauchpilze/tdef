@@ -72,6 +72,7 @@ namespace tdef {
       float radius;
       float health;
       MobType type;
+      path::Path path;
     };
 
     /**

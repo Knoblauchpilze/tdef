@@ -57,7 +57,8 @@ namespace tdef {
       m->getPos(),
       m->getRadius(),
       m->getHealthRatio(),
-      mt
+      mt,
+      m->getPath()
     };
 
     return md;

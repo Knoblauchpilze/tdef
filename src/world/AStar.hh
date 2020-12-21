@@ -45,7 +45,7 @@ namespace tdef {
        */
       bool
       findPath(std::vector<utils::Point2f>& path,
-               float radius = 10.0f,
+               float radius = -1.0f,
                bool allowLog = false) const noexcept;
 
     private:

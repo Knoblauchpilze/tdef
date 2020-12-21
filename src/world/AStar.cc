@@ -249,21 +249,27 @@ namespace tdef {
         // will prevent it from being returned as we do
         // not consider it valid.
         bool valid = true;
-        unsigned id = 0u;
-        while (id < out.size() && valid) {
-          valid = (utils::d(m_start, out[id]) < radius);
 
-          if (!valid && allowLog) {
-            log(
-              "Distance from start " + std::to_string(m_start.x()) + "x" + std::to_string(m_start.y()) +
-              " to point " + std::to_string(id) + "/" + std::to_string(out.size()) +
-              " " + std::to_string(out[id].x()) + "x" + std::to_string(out[id].y()) +
-              " is " + std::to_string(utils::d(m_start, out[id])) +
-              ", limit is " + std::to_string(radius)
-            );
+        // In case the `radius` is negative, consider
+        // that there's no limit.
+        if (radius >= 0.0f) {
+          unsigned id = 0u;
+
+          while (id < out.size() && valid) {
+            valid = (utils::d(m_start, out[id]) < radius);
+
+            if (!valid && allowLog) {
+              log(
+                "Distance from start " + std::to_string(m_start.x()) + "x" + std::to_string(m_start.y()) +
+                " to point " + std::to_string(id) + "/" + std::to_string(out.size()) +
+                " " + std::to_string(out[id].x()) + "x" + std::to_string(out[id].y()) +
+                " is " + std::to_string(utils::d(m_start, out[id])) +
+                ", limit is " + std::to_string(radius)
+              );
+            }
+
+            ++id;
           }
-
-          ++id;
         }
 
         // Copy the path if it is valid.

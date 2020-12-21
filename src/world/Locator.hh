@@ -39,6 +39,7 @@ namespace tdef {
       Spawner,
       Wall,
       Portal,
+      Tower,
     };
 
     /**

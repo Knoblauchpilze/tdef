@@ -6,6 +6,7 @@
 # include "Spawner.hh"
 # include "Wall.hh"
 # include "Portal.hh"
+# include "Tower.hh"
 
 namespace tdef {
 
@@ -94,6 +95,7 @@ namespace tdef {
     static constexpr int sk_spawners = 3;
     static constexpr int sk_walls = 2;
     static constexpr int sk_portals = 1;
+    static constexpr int sk_towers = 4;
 
     static constexpr int sk_mobs = 2;
 
@@ -142,6 +144,21 @@ namespace tdef {
         --id;
       }
     }
+
+    id = sk_towers;
+    while (id > 0) {
+      p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
+      p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
+
+      key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
+
+      if (used.count(key) == 0) {
+        TowerShPtr b = std::make_shared<Tower>(Tower::newProps(p));
+        m_blocks.push_back(b);
+        --id;
+      }
+    }
+
 
     id = sk_mobs;
     while (id > 0) {

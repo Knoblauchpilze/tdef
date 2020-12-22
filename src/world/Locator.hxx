@@ -4,6 +4,7 @@
 # include "Locator.hh"
 # include <algorithm>
 # include "Mob.hh"
+# include "Wall.hh"
 # include "Spawner.hh"
 # include "Portal.hh"
 # include "Tower.hh"
@@ -135,6 +136,7 @@ namespace tdef {
   std::vector<BlockShPtr>
   Locator::getVisibleBlocks(const utils::Point2f& p,
                             float r,
+                            const world::BlockType& type,
                             const world::Filter* filter,
                             world::Sort sort) const noexcept
   {
@@ -145,6 +147,28 @@ namespace tdef {
     std::vector<BlockShPtr> bs;
     for (unsigned i = 0u ; i < bds.size() ; ++i) {
       BlockShPtr b = m_blocks[bds[i].index];
+
+      // Check whether the type matches what is desired.
+      bool valid = false;
+      switch (type) {
+        case world::BlockType::Spawner:
+          valid = (std::dynamic_pointer_cast<Spawner>(b) != nullptr);
+          break;
+        case world::BlockType::Wall:
+          valid = (std::dynamic_pointer_cast<Wall>(b) != nullptr);
+          break;
+        case world::BlockType::Portal:
+          valid = (std::dynamic_pointer_cast<Portal>(b) != nullptr);
+          break;
+        case world::BlockType::Tower:
+          valid = (std::dynamic_pointer_cast<Tower>(b) != nullptr);
+          break;
+      }
+
+      if (!valid) {
+        continue;
+      }
+
       bs.push_back(b);
     }
 
@@ -174,10 +198,11 @@ namespace tdef {
   inline
   BlockShPtr
   Locator::getClosestBlock(const utils::Point2f& p,
+                           const world::BlockType& type,
                            float r,
                            const world::Filter* filter) const noexcept
   {
-    std::vector<BlockShPtr> bs = getVisibleBlocks(p, r, filter, world::Sort::Distance);
+    std::vector<BlockShPtr> bs = getVisibleBlocks(p, r, type, filter, world::Sort::Distance);
 
     if (bs.empty()) {
       return nullptr;

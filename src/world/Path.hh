@@ -182,7 +182,7 @@ namespace tdef {
       generatePathTo(StepInfo& info,
                      const utils::Point2f& p,
                      bool ignoreTargetObstruction,
-                     float maxDistanceFromStart = 5.0f,
+                     float maxDistanceFromStart = -1.0f,
                      bool allowLog = false);
     };
 

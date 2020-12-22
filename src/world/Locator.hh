@@ -101,6 +101,11 @@ namespace tdef {
 
   }
 
+  class Block;
+  class Wall;
+  class Spawner;
+  class Portal;
+
   class Locator: public utils::CoreObject {
     public:
 
@@ -352,6 +357,7 @@ namespace tdef {
        * @param p - the position of the center of the area to
        *            consider.
        * @param r - the radius of the area to consider.
+       * @param type - the type of block to fetch.
        * @param filters - include a description of a uuid and
        *                  whether or not theyit should be used
        *                  and considered when fetching items.
@@ -362,6 +368,7 @@ namespace tdef {
       std::vector<BlockShPtr>
       getVisibleBlocks(const utils::Point2f& p,
                        float r,
+                       const world::BlockType& type,
                        const world::Filter* filter = nullptr,
                        world::Sort sort = world::Sort::None) const noexcept;
 
@@ -390,6 +397,7 @@ namespace tdef {
        *          the closest block from the total visible list.
        * @param p - the position of the center of the area to
        *            consider.
+       * @param type - the type of block to fetch.
        * @param r - a limit for the radius for entities to be
        *            considered.
        * @param filters - include a description of a uuid and
@@ -399,6 +407,7 @@ namespace tdef {
        */
       BlockShPtr
       getClosestBlock(const utils::Point2f& p,
+                      const world::BlockType& type,
                       float r = -1.0f,
                       const world::Filter* filter = nullptr) const noexcept;
 

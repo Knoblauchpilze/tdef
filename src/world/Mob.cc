@@ -42,10 +42,15 @@ namespace tdef {
     }
 
     utils::Point2f bp = b->getPos();
-    bp.x() += b->getRadius() / 2.0f;
-    bp.y() += b->getRadius() / 2.0f;
 
-    log("Found portal at " + bp.toString() + " (d: " + std::to_string(utils::d(bp, m_pos)) + ")");
+    float d = utils::d(bp, m_pos);
+    if (d < m_rArrival) {
+      // We arrived at the portal, hit it.
+      // TODO: Handle this.
+      return;
+    }
+
+    log("Found portal at " + bp.toString() + " (d: " + std::to_string(d) + ")");
 
     // Generate a path to the portal and go there.
     path::Path np = path::newPath(m_pos);

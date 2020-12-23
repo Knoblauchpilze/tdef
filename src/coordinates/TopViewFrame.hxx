@@ -62,6 +62,9 @@ namespace tdef {
         tp.x -= radius * tileSize().x / 2.0f;
         tp.y -= radius * tileSize().y;
         break;
+      case RelativePosition::Center:
+        tp.x -= radius * tileSize().x / 2.0f;
+        tp.y -= radius * tileSize().y / 2.0f;
       case RelativePosition::BottomRight:
         // This is the default case.
       default:

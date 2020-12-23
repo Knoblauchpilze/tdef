@@ -168,17 +168,6 @@ namespace tdef {
       mob(int id) const noexcept;
 
       /**
-       * @brief - Used to indicate that the locator should be
-       *          recomputing the spatially-optimized layout
-       *          due probably to some motions.
-       *          An internal system is used to detect items
-       *          that have changed so it's somewhat safe to
-       *          call this more often than needed.
-       */
-      void
-      refresh();
-
-      /**
        * @brief - Allow to determine whether a specific loc
        *          is obstructed (meaning that a block already
        *          exists here) or not.
@@ -431,16 +420,6 @@ namespace tdef {
     private:
 
       /**
-       * @brief - Used to initialize the internal variables to
-       *          compute information about the data stored in
-       *          this world.
-       */
-      void
-      initialize();
-
-    private:
-
-      /**
        * @brief - Define a convenience structure to perform the
        *          sorting of tiles and entities.
        */
@@ -460,19 +439,14 @@ namespace tdef {
       int m_h;
 
       /**
-       * @brief - The elements registered in the world.
+       * @brief - The blocks registered in the world.
        */
       const std::vector<BlockShPtr>& m_blocks;
-      const std::vector<MobShPtr>& m_mobs;
 
       /**
-       * @brief - A map referencing the unique indices for
-       *          blocks in the world. It is build as the
-       *          object is constructed (or refreshed) and
-       *          allows to quickly access to the position
-       *          where a block exists.
+       * @brief - The mobs registered in the world.
        */
-      std::unordered_set<int> m_blocksIDs;
+      const std::vector<MobShPtr>& m_mobs;
   };
 
   using LocatorShPtr = std::shared_ptr<Locator>;

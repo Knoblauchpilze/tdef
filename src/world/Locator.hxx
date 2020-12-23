@@ -56,7 +56,7 @@ namespace tdef {
     MobShPtr m = m_mobs[id];
 
     world::MobType mt = world::MobType::Fast;
-    // TODO: Handle mobe type.
+    // TODO: Handle mob type.
 
     world::Mob md{
       m->getPos(),
@@ -67,25 +67,6 @@ namespace tdef {
     };
 
     return md;
-  }
-
-  inline
-  void
-  Locator::refresh() {
-    m_blocksIDs.clear();
-    initialize();
-  }
-
-  inline
-  bool
-  Locator::obstructed(float x, float y) const noexcept {
-    // Convert input coordinates to integer cell
-    // coordinates.
-    int xi = static_cast<int>(x);
-    int yi = static_cast<int>(y);
-
-    // Verify that no block occupies this location.
-    return m_blocksIDs.count(yi * m_w + xi) > 0;
   }
 
   inline

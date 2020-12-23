@@ -11,7 +11,7 @@ namespace tdef {
     m_dLayer(0u),
     m_uiLayer(0u),
 
-    m_debugOn(false),
+    m_debugOn(true),
     m_uiOn(true),
 
     m_state(State::Running),

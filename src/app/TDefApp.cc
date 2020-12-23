@@ -117,7 +117,7 @@ namespace tdef {
         sd.x = t.p.x();
         sd.y = t.p.y();
         sd.radius = t.radius;
-        sd.loc = RelativePosition::BottomRight;
+        sd.loc = RelativePosition::Center;
 
         sd.color = colorFromBlockType(t.type);
 

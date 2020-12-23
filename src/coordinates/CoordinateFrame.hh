@@ -15,13 +15,17 @@ namespace tdef {
    */
   enum class RelativePosition {
     BottomRight,   //< The element is at the bottom right
-                    //< of the provided position (so the
-                    //< position corresponds to the top
-                    //< left corner of the element).
-    CenterTop      //< The element is at the center top of
-                    //< the provided position (so the pos
-                    //< corresponds to the bottom center
-                    //< of the element).
+                   //< of the provided position (so the
+                   //< position corresponds to the top
+                   //< left corner of the element).
+    CenterTop,     //< The element is at the center top of
+                   //< the provided position (so the pos
+                   //< corresponds to the bottom center
+                   //< of the element).
+    Center         //< The element is at the center of the
+                   //< provided position (so the position
+                   //< corresponds to the center of the
+                   //< element).
   };
 
   class CoordinateFrame: public utils::CoreObject {

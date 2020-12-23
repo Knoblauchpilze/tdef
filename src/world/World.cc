@@ -111,6 +111,7 @@ namespace tdef {
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
+        log("Spawner at " + p.toString());
         SpawnerShPtr b = std::make_shared<Spawner>(Spawner::newProps(p));
         m_blocks.push_back(b);
         --id;
@@ -125,6 +126,7 @@ namespace tdef {
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
+        log("Wall at " + p.toString());
         WallShPtr b = std::make_shared<Wall>(Wall::newProps(p));
         m_blocks.push_back(b);
         --id;
@@ -139,6 +141,7 @@ namespace tdef {
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
+        log("Portal at " + p.toString());
         PortalShPtr b = std::make_shared<Portal>(Portal::newProps(p));
         m_blocks.push_back(b);
         --id;
@@ -153,6 +156,7 @@ namespace tdef {
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
+        log("Tower at " + p.toString());
         TowerShPtr b = std::make_shared<Tower>(Tower::newProps(p));
         m_blocks.push_back(b);
         --id;

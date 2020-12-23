@@ -14,13 +14,21 @@ namespace tdef {
     m_h(height),
 
     m_blocks(blocks),
-    m_mobs(mobs),
-
-    m_blocksIDs()
+    m_mobs(mobs)
   {
     setService("locator");
+  }
 
-    initialize();
+  bool
+  Locator::obstructed(float x, float y) const noexcept {
+    // TODO: Should check bboxes of blocks.
+    // Convert input coordinates to integer cell
+    // coordinates.
+    int xi = static_cast<int>(x);
+    int yi = static_cast<int>(y);
+
+    // Verify that no block occupies this location.
+    return m_blocksIDs.count(yi * m_w + xi) > 0;
   }
 
   bool
@@ -92,7 +100,7 @@ namespace tdef {
 
       cPoints.push_back(p);
 
-      obstruction = (xi != xo || yi != yo) && (m_blocksIDs.count(yi * m_w + xi) > 0);
+      obstruction = (xi != xo || yi != yo) && obstructed(p);
 
       if (allowLog) {
         log(
@@ -137,7 +145,7 @@ namespace tdef {
 
     cPoints.push_back(end);
 
-    obstruction = (m_blocksIDs.count(yi * m_w + xi) > 0);
+    obstruction = obstructed(end);
     if (obstruction) {
       if (obs != nullptr) {
         *obs = end;
@@ -367,15 +375,6 @@ namespace tdef {
     }
 
     return out;
-  }
-
-  void
-  Locator::initialize() {
-    // Register each solid tile in the map.
-    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
-      const utils::Point2f& p = m_blocks[id]->getPos();
-      m_blocksIDs.insert(static_cast<int>(p.y()) * m_w + static_cast<int>(p.x()));
-    }
   }
 
 }

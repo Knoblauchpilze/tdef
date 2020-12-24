@@ -77,7 +77,7 @@ namespace tdef {
       v.p.y + v.dims.y,
       nullptr,
       nullptr,
-      world::Sort::ZOrder
+      world::Sort::None
     );
 
     SpriteDesc sd;

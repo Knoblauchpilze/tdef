@@ -21,14 +21,21 @@ namespace tdef {
 
   bool
   Locator::obstructed(float x, float y) const noexcept {
-    // TODO: Should check bboxes of blocks.
-    // Convert input coordinates to integer cell
-    // coordinates.
-    int xi = static_cast<int>(x);
-    int yi = static_cast<int>(y);
+    unsigned id = 0;
+    while (id < m_blocks.size()) {
+      const utils::Point2f& p = m_blocks[id]->getPos();
+      float hr = m_blocks[id]->getRadius() / 2.0f;
 
-    // Verify that no block occupies this location.
-    return m_blocksIDs.count(yi * m_w + xi) > 0;
+      if (x >= p.x() - hr && x <= p.x() + hr &&
+          y >= p.y() - hr && y <= p.y() + hr)
+      {
+        return true;
+      }
+
+      ++id;
+    }
+
+    return false;
   }
 
   bool

@@ -122,7 +122,10 @@ namespace tdef {
         sd.color = colorFromBlockType(t.type);
 
         drawSprite(sd, res.cf);
-        drawHealthBar(sd, t.health, res.cf, Orientation::Vertical);
+
+        if (t.type == world::BlockType::Tower) {
+          drawHealthBar(sd, t.health, res.cf, Orientation::Vertical);
+        }
       }
 
       // Case of a mob.

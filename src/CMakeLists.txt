@@ -9,7 +9,6 @@ set (CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 set (SOURCES
   ${SOURCES}
-  olcEngine.cc
   )
 
 add_subdirectory(

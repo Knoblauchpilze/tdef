@@ -7,6 +7,8 @@ namespace tdef {
     Block(props, "portal"),
 
     m_lives(props.lives)
-  {}
+  {
+    setService("portal");
+  }
 
 }

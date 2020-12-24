@@ -80,8 +80,7 @@ namespace tdef {
 
       /**
        * @brief - An indication of the energy left for this
-       *          mob to take actions. This include spawning
-       *          new pheromones for example.
+       *          mob to take actions.
        */
       float m_energy;
 

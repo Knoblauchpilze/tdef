@@ -49,6 +49,24 @@ namespace tdef {
   }
 
   inline
+  bool
+  WorldElement::damage(float hit) {
+    // In case the `hit` is in fact a healing
+    // we can do that in the limit of the health
+    // pool for this element.
+    if (hit < 0.0f) {
+      m_health = std::min(m_health - hit, m_totalHealth);
+
+      return true;
+    }
+
+    // Otherwise, clamp to a null health.
+    m_health = std::max(m_health - hit, 0.0f);
+
+    return (m_health > 0.0f);
+  }
+
+  inline
   void
   WorldElement::assignProps(Props& pp,
                             const utils::Point2f& p,

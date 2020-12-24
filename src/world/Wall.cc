@@ -7,6 +7,8 @@ namespace tdef {
     Block(props, "wall"),
 
     m_height(props.height)
-  {}
+  {
+    setService("wall");
+  }
 
 }

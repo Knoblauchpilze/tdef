@@ -68,9 +68,6 @@ namespace tdef {
     end.x() = p.x() + d * xDir;
     end.y() = p.y() + d * yDir;
 
-    int xo = static_cast<int>(p.x());
-    int yo = static_cast<int>(p.y());
-
     // Handle the trivial case where the direction does not
     // have a valid length in which case we return `false`
     // (as in no obstructed) as the initial cell is never
@@ -81,8 +78,6 @@ namespace tdef {
 
     bool obstruction = false;
     float t = 0.0f;
-
-    int xi, yi;
 
     if (allowLog) {
       log(
@@ -99,15 +94,9 @@ namespace tdef {
     yDir *= d;
 
     while (!obstruction && t < 1.0f) {
-      // Prevent the initial cell to be considered
-      // as obstructed: this allow objects that get
-      // stuck to be able to move out.
-      xi = static_cast<int>(p.x());
-      yi = static_cast<int>(p.y());
-
       cPoints.push_back(p);
 
-      obstruction = (xi != xo || yi != yo) && obstructed(p);
+      obstruction = obstructed(p);
 
       if (allowLog) {
         log(
@@ -147,9 +136,6 @@ namespace tdef {
     }
 
     // Check obstruction for the final cell.
-    xi = static_cast<int>(end.x());
-    yi = static_cast<int>(end.y());
-
     cPoints.push_back(end);
 
     obstruction = obstructed(end);

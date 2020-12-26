@@ -115,6 +115,13 @@ namespace tdef {
     private:
 
       /**
+       * @brief - Definition of the height of the game menu in
+       *          pixels. Allow to tailor some other display so
+       *          that they don't overlap the menu.
+       */
+      static constexpr int MENU_HEIGHT = 50;
+
+      /**
        * @brief - The world managed by this application.
        */
       WorldShPtr m_world;
@@ -130,9 +137,16 @@ namespace tdef {
       LocatorShPtr m_loc;
 
       /**
-       * @brief - Defines the main ui for this app.
+       * @brief - Defines the menu allowing to display information
+       *          on the status of the player.
        */
-      MenuShPtr m_menu;
+      MenuShPtr m_sMenu;
+
+      /**
+       * @brief - Defines the menu allowing to purchase towers for
+       *          the game.
+       */
+      MenuShPtr m_tMenu;
   };
 
 }

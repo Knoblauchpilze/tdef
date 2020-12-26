@@ -86,13 +86,6 @@ namespace tdef {
        */
       static constexpr int ALPHA_TRANSPARENT = 0;
 
-      /**
-       * @brief - Definition of the height of the game menu in
-       *          pixels. Allow to tailor some other display so
-       *          that they don't overlap the menu.
-       */
-      static constexpr int MENU_HEIGHT = 50;
-
       bool
       isFirstFrame() const noexcept;
 

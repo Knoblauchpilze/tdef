@@ -17,7 +17,8 @@ namespace tdef {
   inline
   void
   TDefApp::cleanMenuResources() {
-    m_menu.reset();
+    m_sMenu.reset();
+    m_tMenu.reset();
   }
 
   inline
@@ -47,14 +48,15 @@ namespace tdef {
   inline
   void
   TDefApp::onInputs(const controls::State& c) {
-    if (m_menu == nullptr) {
-      return;
-    }
-
     // Handle menus update and process the
     // corresponding actions.
     std::vector<ActionShPtr> actions;
-    m_menu->processUserInput(c, actions);
+    if (m_sMenu != nullptr) {
+      m_sMenu->processUserInput(c, actions);
+    }
+    if (m_tMenu != nullptr) {
+      m_tMenu->processUserInput(c, actions);
+    }
 
     for (unsigned id = 0u ; id < actions.size() ; ++id) {
       actions[id]->apply(*m_world);

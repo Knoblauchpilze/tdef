@@ -49,7 +49,8 @@ namespace tdef {
     m_world(nullptr),
     m_loc(nullptr),
 
-    m_menu(nullptr)
+    m_sMenu(nullptr),
+    m_tMenu(nullptr)
   {}
 
   void
@@ -71,18 +72,44 @@ namespace tdef {
     int w = ScreenWidth();
     int h = ScreenHeight();
 
-    olc::vi2d mPos(0, h - MENU_HEIGHT);
-    olc::vf2d mSize(w, MENU_HEIGHT);
+    int rgb = 20;
+    int mHeight = 20;
 
-    m_menu = std::make_shared<Menu>(
-      mPos,
-      mSize,
-      "menu",
-      menu::newColoredBackground(olc::VERY_DARK_MAGENTA),
-      menu::newTextContent("salut", menu::Alignment::Right),
-      menu::Layout::Horizontal,
-      nullptr
-    );
+    olc::vi2d mPos(0, 0);
+    olc::vf2d mSize(w, mHeight);
+    olc::Pixel c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
+    menu::BackgroundDesc bg = menu::newColoredBackground(c);
+    menu::MenuContentDesc fg = menu::newTextContent("salut");
+
+    m_sMenu = std::make_shared<Menu>(mPos, mSize, "menu", bg, fg);
+
+    // Gold amount.
+    rgb *= 2;
+    c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
+    bg = menu::newColoredBackground(c);
+    fg = menu::newTextContent("Gold: 50");
+    MenuShPtr sm = std::make_shared<Menu>(mPos, mSize, "gold", bg, fg);
+    m_sMenu->addMenu(sm);
+
+    // Lives status.
+    fg = menu::newTextContent("Lives: 15");
+    sm = std::make_shared<Menu>(mPos, mSize, "lives", bg, fg);
+    m_sMenu->addMenu(sm);
+
+    // Wave count.
+    fg = menu::newTextContent("Wave: 1");
+    sm = std::make_shared<Menu>(mPos, mSize, "wave", bg, fg);
+    m_sMenu->addMenu(sm);
+
+    // Bottom menu.
+    mHeight = MENU_HEIGHT;
+    mPos = olc::vi2d(0, h - mHeight);
+    mSize.y = MENU_HEIGHT;
+    rgb *= 2;
+    c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
+    bg = menu::newColoredBackground(c);
+    fg = menu::newTextContent("ca va ?");
+    m_tMenu = std::make_shared<Menu>(mPos, mSize, "menu", bg, fg);
   }
 
   void
@@ -192,9 +219,12 @@ namespace tdef {
 
     drawSprite(sd, res.cf);
 
-    // Render the game menu.
-    if (m_menu != nullptr) {
-      m_menu->render(this);
+    // Render the game menus.
+    if (m_sMenu != nullptr) {
+      m_sMenu->render(this);
+    }
+    if (m_tMenu != nullptr) {
+      m_tMenu->render(this);
     }
 
     SetPixelMode(olc::Pixel::NORMAL);

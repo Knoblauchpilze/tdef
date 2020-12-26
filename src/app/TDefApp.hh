@@ -2,8 +2,9 @@
 # define   TDEF_APP_HH
 
 # include "PGEApp.hh"
-# include "world/World.hh"
-# include "world/Locator.hh"
+# include "World.hh"
+# include "Locator.hh"
+# include "Menu.hh"
 
 namespace tdef {
 
@@ -57,8 +58,11 @@ namespace tdef {
       void
       loadMenuResources() override;
 
-      virtual void
+      void
       cleanResources() override;
+
+      void
+      cleanMenuResources() override;
 
       void
       draw(const RenderDesc& res) override;
@@ -77,6 +81,9 @@ namespace tdef {
 
       void
       onResume(float elapsed) override;
+
+      void
+      onInputs(const controls::State& c) override;
 
       /**
        * @brief - Used to draw the tile referenced by the input
@@ -121,6 +128,11 @@ namespace tdef {
        *          `z` order).
        */
       LocatorShPtr m_loc;
+
+      /**
+       * @brief - Defines the main ui for this app.
+       */
+      MenuShPtr m_menu;
   };
 
 }

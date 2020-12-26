@@ -29,6 +29,9 @@ namespace tdef {
         break;
     }
 
+    // Handle user inputs.
+    onInputs(m_controls);
+
     // Handle rendering: for each function
     // we will assign the draw target first
     // so that the function does not have
@@ -87,6 +90,7 @@ namespace tdef {
   bool
   PGEApp::OnUserDestroy() {
     cleanResources();
+    cleanMenuResources();
 
     return true;
   }

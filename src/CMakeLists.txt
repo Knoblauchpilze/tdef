@@ -20,6 +20,10 @@ add_subdirectory(
   )
 
 add_subdirectory(
+  ${CMAKE_CURRENT_SOURCE_DIR}/ui
+  )
+
+add_subdirectory(
   ${CMAKE_CURRENT_SOURCE_DIR}/app
   )
 
@@ -41,4 +45,7 @@ target_link_libraries(tdef_lib
 target_include_directories (tdef_lib PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/app
+  ${CMAKE_CURRENT_SOURCE_DIR}/coordinates
+  ${CMAKE_CURRENT_SOURCE_DIR}/world
+  ${CMAKE_CURRENT_SOURCE_DIR}/ui
   )

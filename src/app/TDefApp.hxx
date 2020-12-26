@@ -2,6 +2,7 @@
 # define   TDEF_APP_HXX
 
 # include "TDefApp.hh"
+# include "Action.hh"
 
 namespace tdef {
 
@@ -11,11 +12,13 @@ namespace tdef {
 
   inline
   void
-  TDefApp::loadMenuResources() {}
+  TDefApp::cleanResources() {}
 
   inline
   void
-  TDefApp::cleanResources() {}
+  TDefApp::cleanMenuResources() {
+    m_menu.reset();
+  }
 
   inline
   void
@@ -38,6 +41,23 @@ namespace tdef {
   TDefApp::onResume(float elapsed) {
     if (m_world != nullptr) {
       m_world->resume(elapsed);
+    }
+  }
+
+  inline
+  void
+  TDefApp::onInputs(const controls::State& c) {
+    if (m_menu == nullptr) {
+      return;
+    }
+
+    // Handle menus update and process the
+    // corresponding actions.
+    std::vector<ActionShPtr> actions;
+    m_menu->processUserInput(c, actions);
+
+    for (unsigned id = 0u ; id < actions.size() ; ++id) {
+      actions[id]->apply(*m_world);
     }
   }
 

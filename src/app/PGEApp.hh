@@ -4,8 +4,9 @@
 # include <core_utils/CoreObject.hh>
 # include "olcEngine.hh"
 # include "AppDesc.hh"
-# include "coordinates/CoordinateFrame.hh"
-# include "world/World.hh"
+# include "CoordinateFrame.hh"
+# include "Controls.hh"
+# include "World.hh"
 
 namespace tdef {
 
@@ -148,6 +149,16 @@ namespace tdef {
       cleanResources() = 0;
 
       /**
+       * @brief - Interface method allowing inheriting classes
+       *          to be notified when the app is going to be
+       *          destroyed so that menu resources can be
+       *          cleaned.
+       *          The default implementation does nothing.
+       */
+      virtual void
+      cleanMenuResources() = 0;
+
+      /**
        * @brief - Interface method to display the main content
        *          of the app. This method is called first and
        *          that means that it will be overriden by all
@@ -202,6 +213,14 @@ namespace tdef {
        */
       virtual void
       onResume(float elapsed) = 0;
+
+      /**
+       * @brief - Interface method called at each frame when
+       *          the inputs should be handled.
+       * @param c - the current state of the controls.
+       */
+      virtual void
+      onInputs(const controls::State& c) = 0;
 
     private:
 
@@ -295,11 +314,17 @@ namespace tdef {
       bool m_uiOn;
 
       /**
-       * @brief - Indicates that the simulation of the game is
-       *          paused: the world will not evolve during this
-       *          time.
+       * @brief - Indicatesthe current state of the simulation
+       *          supported by this app.
        */
       State m_state;
+
+      /**
+       * @brief - A map to keep track of the state of the controls
+       *          to be transmitted to the world's entities for
+       *          the simulation.
+       */
+      controls::State m_controls;
 
       /**
        * @brief - Boolean allowing to display logs only on the

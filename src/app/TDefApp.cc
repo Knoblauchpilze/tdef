@@ -47,7 +47,9 @@ namespace tdef {
     PGEApp(desc),
 
     m_world(nullptr),
-    m_loc(nullptr)
+    m_loc(nullptr),
+
+    m_menu(nullptr)
   {}
 
   void
@@ -60,6 +62,27 @@ namespace tdef {
 # endif
 
     m_loc = m_world->locator();
+  }
+
+  void
+  TDefApp::loadMenuResources() {
+    // Create the menu: we want it to have a fixed
+    // height and be at the bottom of the screen.
+    int w = ScreenWidth();
+    int h = ScreenHeight();
+
+    olc::vi2d mPos(0, h - MENU_HEIGHT);
+    olc::vf2d mSize(w, MENU_HEIGHT);
+
+    m_menu = std::make_shared<Menu>(
+      mPos,
+      mSize,
+      "menu",
+      menu::newColoredBackground(olc::VERY_DARK_MAGENTA),
+      menu::newTextContent("salut", menu::Alignment::Right),
+      menu::Layout::Horizontal,
+      nullptr
+    );
   }
 
   void
@@ -168,6 +191,11 @@ namespace tdef {
     sd.color.a = ALPHA_SEMI_OPAQUE;
 
     drawSprite(sd, res.cf);
+
+    // Render the game menu.
+    if (m_menu != nullptr) {
+      m_menu->render(this);
+    }
 
     SetPixelMode(olc::Pixel::NORMAL);
   }

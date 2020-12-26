@@ -15,6 +15,7 @@ namespace tdef {
     m_uiOn(true),
 
     m_state(State::Running),
+    m_controls(controls::newState()),
     m_first(true),
 
     m_frame(desc.frame)
@@ -88,6 +89,10 @@ namespace tdef {
       m_frame->translate(GetMousePos());
     }
 
+    olc::vi2d mPos = GetMousePos();
+    m_controls.mPosX = mPos.x;
+    m_controls.mPosY = mPos.y;
+
     int scroll = GetMouseWheel();
     if (scroll > 0) {
       m_frame->zoomIn(GetMousePos());
@@ -95,6 +100,43 @@ namespace tdef {
     if (scroll < 0) {
       m_frame->zoomOut(GetMousePos());
     }
+
+    // Handle inputs.
+    olc::HWButton b = GetKey(olc::RIGHT);
+    m_controls.keys[controls::keys::Right] = b.bPressed || b.bHeld;
+
+    b = GetKey(olc::UP);
+    m_controls.keys[controls::keys::Up] = b.bPressed || b.bHeld;
+
+    b = GetKey(olc::LEFT);
+    m_controls.keys[controls::keys::Left] = b.bPressed || b.bHeld;
+
+    b = GetKey(olc::DOWN);
+    m_controls.keys[controls::keys::Down] = b.bPressed || b.bHeld;
+
+    b = GetKey(olc::SPACE);
+    m_controls.keys[controls::keys::Space] = b.bPressed || b.bHeld;
+
+    b = GetKey(olc::TAB),
+    m_controls.tab = b.bReleased;
+
+    auto analysis = [](const olc::HWButton& b) {
+      if (b.bPressed) {
+        return controls::ButtonState::Pressed;
+      }
+      if (b.bHeld) {
+        return controls::ButtonState::Held;
+      }
+      if (b.bReleased) {
+        return controls::ButtonState::Released;
+      }
+
+      return controls::ButtonState::Free;
+    };
+
+    m_controls.buttons[controls::mouse::Left] = analysis(GetMouse(0));
+    m_controls.buttons[controls::mouse::Right] = analysis(GetMouse(1));
+    m_controls.buttons[controls::mouse::Middle] = analysis(GetMouse(2));
 
     // De/activate the debug mode if needed and
     // handle general simulation control options.

@@ -1,9 +1,10 @@
 
-set (SOURCES
-  ${SOURCES}
+target_sources (tdef_lib PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/olcEngine.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/PGEApp.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/TDefApp.cc
-  PARENT_SCOPE
   )
 
+target_include_directories (tdef_lib PUBLIC
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+  )

@@ -16,6 +16,12 @@ namespace tdef {
 
   inline
   void
+  Block::init(StepInfo& /*info*/) {
+    // Nothing to do.
+  }
+
+  inline
+  void
   Block::step(StepInfo& /*info*/) {
     // Nothing to do.
   }
@@ -29,6 +35,12 @@ namespace tdef {
   inline
   void
   Block::resume(const utils::TimeStamp& /*t*/) {
+    // Nothing to do.
+  }
+
+  inline
+  void
+  Block::destroy(StepInfo& /*info*/) {
     // Nothing to do.
   }
 

@@ -79,6 +79,16 @@ namespace tdef {
       damage(float hit);
 
       /**
+       * @brief - Interface method caled before the first
+       *          execution of this element with the info
+       *          on the step at the moment of the spawn.
+       *          It allows to initialize some values.
+       * @param info - the info of the step.
+       */
+      virtual void
+      init(StepInfo& info) = 0;
+
+      /**
        * @brief - Interface method allowing for a world element
        *          to evolve based on its surroundings. We use a
        *          struct gathering the current state of the
@@ -108,6 +118,14 @@ namespace tdef {
        */
       virtual void
       resume(const utils::TimeStamp& t) = 0;
+
+      /**
+       * @brief - Interface method called before an element is
+       *          removed from the game.
+       * @param info - the information about the step.
+       */
+      virtual void
+      destroy(StepInfo& info) = 0;
 
     protected:
 

@@ -35,6 +35,14 @@ namespace tdef {
     return m_path.enRoute(m_rArrival);
   }
 
+  inline
+  void
+  Mob::init(StepInfo& /*info*/) {}
+
+  inline
+  void
+  Mob::destroy(StepInfo& /*info*/) {}
+
 }
 
 #endif    /* MOB_HXX */

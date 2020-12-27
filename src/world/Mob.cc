@@ -45,8 +45,13 @@ namespace tdef {
 
     float d = utils::d(bp, m_pos);
     if (d < m_rArrival) {
-      // We arrived at the portal, hit it.
-      // TODO: Handle this.
+      // We arrived at the portal, hit it and then
+      // mark the mob for deletion.
+      p->breach();
+      info.removeMob(this);
+
+      log("Mob made it through, lives: " + std::to_string(p->getLives()));
+
       return;
     }
 

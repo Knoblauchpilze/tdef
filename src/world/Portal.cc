@@ -11,4 +11,9 @@ namespace tdef {
     setService("portal");
   }
 
+  void
+  Portal::breach() {
+    --m_lives;
+  }
+
 }

@@ -31,6 +31,14 @@ namespace tdef {
       float
       getLives() const noexcept;
 
+      /**
+       * @brief - Method to handle the breaching of the portal
+       *          by an entity. This allows to specialize what
+       *          needs to be done in this case.
+       */
+      void
+      breach();
+
     private:
 
       /**

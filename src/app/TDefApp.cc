@@ -92,6 +92,7 @@ namespace tdef {
     m_sMenu->addMenu(sm);
 
     // Lives status.
+    // TODO: Make this dynamic.
     fg = menu::newTextContent("Lives: 15");
     sm = std::make_shared<Menu>(mPos, mSize, "lives", bg, fg);
     m_sMenu->addMenu(sm);

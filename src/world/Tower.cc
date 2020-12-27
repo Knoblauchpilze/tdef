@@ -17,6 +17,8 @@ namespace tdef {
     m_range(props.range),
     m_attack(props.attack)
   {
+    // TODO: Handle upgrade.
+    // TODO: Handle tower type.
     setService("tower");
   }
 

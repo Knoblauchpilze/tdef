@@ -50,31 +50,20 @@ namespace tdef {
       bool
       isEnRoute() const noexcept;
 
-      /**
-       * @brief - Implementation of the interface method to evolve
-       *          this mob.
-       */
+      void
+      init(StepInfo& info) override;
+
       void
       step(StepInfo& info) override;
 
-      /**
-       * @brief - Implementation of the interface method to pause
-       *          the internal processes for this mob. Note that
-       *          it is mostly provided so that this class is not
-       *          abstract as there are not really any process to
-       *          pause at this time.
-       * @param t - the timestamp at which the pause occur.
-       */
       void
       pause(const utils::TimeStamp& t) override;
 
-      /**
-       * @brief - Implementation of the interface method to resume
-       *          the internal processes for this mob.
-       * @param t - the timestamp at which the resume occur.
-       */
       void
       resume(const utils::TimeStamp& t) override;
+
+      void
+      destroy(StepInfo& info) override;
 
     private:
 

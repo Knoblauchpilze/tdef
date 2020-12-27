@@ -11,31 +11,20 @@ namespace tdef {
   class Block: public WorldElement {
     public:
 
-      /**
-       * @brief - Base implementation for an element which
-       *          does nothing.
-       * @param info - information about the world.
-       */
+      void
+      init(StepInfo& info) override;
+
       void
       step(StepInfo& info) override;
 
-      /**
-       * @brief - Base implementation for an element which
-       *          does nothing: there are no internal ops
-       *          to pause.
-       * @param t - the timestamp at which the pause occur.
-       */
       void
       pause(const utils::TimeStamp& t) override;
 
-      /**
-       * @brief - Base implementation for an element which
-       *          does nothing: there are no internal ops
-       *          to resume.
-       * @param t - the timestamp at which the resume occur.
-       */
       void
       resume(const utils::TimeStamp& t) override;
+
+      void
+      destroy(StepInfo& info) override;
 
     protected:
 

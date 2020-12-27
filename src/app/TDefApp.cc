@@ -50,7 +50,9 @@ namespace tdef {
     m_loc(nullptr),
 
     m_sMenu(nullptr),
-    m_tMenu(nullptr)
+    m_tMenu(nullptr),
+
+    m_tPack(nullptr)
   {}
 
   void
@@ -133,6 +135,7 @@ namespace tdef {
 
     SpriteDesc sd;
     sd.loc = RelativePosition::BottomRight;
+    sd.sprite.id = 0;
 
     // Render background.
     int xMin = std::floor(v.p.x);
@@ -151,7 +154,8 @@ namespace tdef {
 
         sd.radius = 1.0f;
 
-        sd.color = olc::DARK_GREY;
+        sd.sprite.sprite = 0;
+        sd.sprite.tint = olc::DARK_GREY;
 
         drawSprite(sd, res.cf);
       }
@@ -170,7 +174,9 @@ namespace tdef {
         sd.radius = t.radius;
         sd.loc = RelativePosition::Center;
 
-        sd.color = colorFromBlockType(t.type);
+        // TODO: Change this ?
+        sd.sprite.sprite = 0;
+        sd.sprite.tint = colorFromBlockType(t.type);
 
         drawSprite(sd, res.cf);
 
@@ -188,7 +194,9 @@ namespace tdef {
         sd.radius = t.radius;
         sd.loc = RelativePosition::CenterTop;
 
-        sd.color = colorFromMobType(t.type);
+        // TODO: Change this ?
+        sd.sprite.sprite = 0;
+        sd.sprite.tint = colorFromMobType(t.type);
 
         drawSprite(sd, res.cf);
         drawHealthBar(sd, t.health, res.cf);
@@ -209,16 +217,11 @@ namespace tdef {
     olc::vi2d mp = GetMousePos();
     olc::vi2d mtp = res.cf.pixelCoordsToTiles(mp);
 
-    SpriteDesc sd;
-    sd.x = mtp.x;
-    sd.y = mtp.y;
+    olc::Pixel c = olc::DARK_COBALT_BLUE;
+    c.a = ALPHA_SEMI_OPAQUE;
 
-    sd.radius = 1.0f;
-
-    sd.color = olc::DARK_COBALT_BLUE;
-    sd.color.a = ALPHA_SEMI_OPAQUE;
-
-    drawSprite(sd, res.cf);
+    olc::vf2d p = res.cf.tileCoordsToPixels(mtp.x, mtp.y, RelativePosition::BottomRight, 1.0f);
+    FillRectDecal(p, res.cf.tileSize(), c);
 
     // Render the game menus.
     if (m_sMenu != nullptr) {

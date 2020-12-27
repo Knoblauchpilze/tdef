@@ -4,24 +4,6 @@
 namespace {
 
   olc::Pixel
-  colorFromBlockType(const tdef::world::BlockType& type) noexcept {
-    switch (type) {
-      case tdef::world::BlockType::Spawner:
-        return olc::ORANGE;
-      case tdef::world::BlockType::Wall:
-        return olc::GREY;
-      case tdef::world::BlockType::Portal:
-        return olc::GREEN;
-      case tdef::world::BlockType::Tower:
-        return olc::BROWN;
-      default:
-        break;
-    }
-
-    return olc::RED;
-  }
-
-  olc::Pixel
   colorFromMobType(const tdef::world::MobType& type) noexcept {
     switch (type) {
       case tdef::world::MobType::Regular:
@@ -158,7 +140,7 @@ namespace tdef {
         sd.sprite.sprite = 0;
         sd.sprite.tint = olc::DARK_GREY;
 
-        drawSprite(sd, res.cf);
+        drawRect(sd, res.cf);
       }
     }
 
@@ -177,7 +159,7 @@ namespace tdef {
 
         // TODO: Change this ?
         sd.sprite.sprite = 0;
-        sd.sprite.tint = colorFromBlockType(t.type);
+        sd.sprite.tint = olc::WHITE;
 
         drawSprite(sd, res.cf);
 
@@ -199,7 +181,7 @@ namespace tdef {
         sd.sprite.sprite = 0;
         sd.sprite.tint = colorFromMobType(t.type);
 
-        drawSprite(sd, res.cf);
+        drawRect(sd, res.cf);
         drawHealthBar(sd, t.health, res.cf);
       }
 
@@ -218,11 +200,16 @@ namespace tdef {
     olc::vi2d mp = GetMousePos();
     olc::vi2d mtp = res.cf.pixelCoordsToTiles(mp);
 
-    olc::Pixel c = olc::DARK_COBALT_BLUE;
-    c.a = ALPHA_SEMI_OPAQUE;
+    SpriteDesc sd;
+    sd.x = mtp.x;
+    sd.y = mtp.y;
 
-    olc::vf2d p = res.cf.tileCoordsToPixels(mtp.x, mtp.y, RelativePosition::BottomRight, 1.0f);
-    FillRectDecal(p, res.cf.tileSize(), c);
+    sd.radius = 1.0f;
+
+    sd.sprite.tint = olc::DARK_COBALT_BLUE;
+    sd.sprite.tint.a = ALPHA_SEMI_OPAQUE;
+
+    drawRect(sd, res.cf);
 
     // Render the game menus.
     if (m_sMenu != nullptr) {

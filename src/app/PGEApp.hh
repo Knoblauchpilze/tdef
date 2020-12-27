@@ -72,14 +72,19 @@ namespace tdef {
       static constexpr int ALPHA_OPAQUE = 255;
 
       /**
+       * @brief - Almost fully opaque.
+       */
+      static constexpr int ALPHA_ALMOST_OPAQUE = 192;
+
+      /**
        * @brief - Not fully opaque nor fully transparent.
        */
       static constexpr int ALPHA_SEMI_OPAQUE = 128;
 
       /**
-       * @brief - Almost fully opaque.
+       * @brief - Almost fully transparent.
        */
-      static constexpr int ALPHA_ALMOST_OPAQUE = 192;
+      static constexpr int ALPHA_ALMOST_TRANSPARENT = 64;
 
       /**
        * @brief - Convenience define indicating a fully transparent alpha.

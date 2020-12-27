@@ -8,17 +8,32 @@ namespace tdef {
 
   inline
   void
-  TDefApp::loadResources() {}
+  TDefApp::loadResources() {
+    sprites::Pack p;
+    p.file = "data/img/towers.png";
+    p.sSize = olc::vi2d(64, 64);
+    p.layout = olc::vi2d(4, 1);
+
+    m_tPack = std::make_shared<TexturePack>(p);
+  }
 
   inline
   void
-  TDefApp::cleanResources() {}
+  TDefApp::cleanResources() {
+    if (m_tPack != nullptr) {
+      m_tPack.reset();
+    }
+  }
 
   inline
   void
   TDefApp::cleanMenuResources() {
-    m_sMenu.reset();
-    m_tMenu.reset();
+    if (m_sMenu != nullptr) {
+      m_sMenu.reset();
+    }
+    if (m_tMenu != nullptr) {
+      m_tMenu.reset();
+    }
   }
 
   inline
@@ -67,7 +82,9 @@ namespace tdef {
   void
   TDefApp::drawSprite(const SpriteDesc& t, const CoordinateFrame& cf) {
     olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y, t.loc, t.radius);
-    FillRectDecal(p, t.radius * cf.tileSize(), t.color);
+
+    m_tPack->draw(this, t.sprite, p, t.radius);
+    // FillRectDecal(p, t.radius * cf.tileSize(), t.color);
   }
 
   inline

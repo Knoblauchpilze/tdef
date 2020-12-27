@@ -5,6 +5,7 @@
 # include "World.hh"
 # include "Locator.hh"
 # include "Menu.hh"
+# include "TexturePack.hh"
 
 namespace tdef {
 
@@ -37,7 +38,7 @@ namespace tdef {
         float radius;
         RelativePosition loc;
 
-        olc::Pixel color;
+        sprites::Sprite sprite;
       };
 
       /**
@@ -147,6 +148,12 @@ namespace tdef {
        *          the game.
        */
       MenuShPtr m_tMenu;
+
+      /**
+       * @brief - A description of the textures used to represent
+       *          the elements of the game.
+       */
+      TexturePackShPtr m_tPack;
   };
 
 }

@@ -2,15 +2,19 @@
 # define   TEXTURE_PACK_HXX
 
 # include "TexturePack.hh"
+# include "utils.hh"
 
 namespace tdef {
 
   inline
   TexturePack::~TexturePack() {
-    if (m_pack != nullptr) {
-      delete m_pack;
-      m_pack = nullptr;
+    for (unsigned id = 0 ; id < m_packs.size() ; ++id) {
+      if (m_packs[id].res != nullptr) {
+        delete m_packs[id].res;
+      }
     }
+
+    m_packs.clear();
   }
 
   inline
@@ -25,18 +29,18 @@ namespace tdef {
 
   inline
   olc::vi2d
-  TexturePack::spriteCoords(const olc::vi2d& coord,
-                            int id) const noexcept
+  TexturePack::spriteCoords(const Pack& pack,
+                            const olc::vi2d& coord,
+                            int id) const
   {
-    // Compute linear identifier from 2D coordinates.
-    int lID = coord.y * m_layout.x + coord.x + id;
+    int lID = coord.y * pack.layout.x + coord.x + id;
 
     // Go back to 2D coordinates using the layout on
     // the linearized ID and the size of the sprite
     // to obtain a pixels position.
     return olc::vi2d(
-      (lID % m_layout.x) * m_sSize.x,
-      (lID / m_layout.x) * m_sSize.y
+      (lID % pack.layout.x) * pack.sSize.x,
+      (lID / pack.layout.x) * pack.sSize.y
     );
   }
 

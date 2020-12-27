@@ -153,7 +153,13 @@ namespace tdef {
        * @brief - A description of the textures used to represent
        *          the elements of the game.
        */
-      TexturePackShPtr m_tPack;
+      TexturePackShPtr m_packs;
+
+      /**
+       * @brief - A description of the identifier used to represent
+       *          the texture pack for towers.
+       */
+      unsigned m_tPackID;
   };
 
 }

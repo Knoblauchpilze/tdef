@@ -3,17 +3,38 @@
 
 namespace tdef {
 
-  TexturePack::TexturePack(const sprites::Pack& pack):
+  TexturePack::TexturePack():
     utils::CoreObject("pack"),
 
-    m_sSize(pack.sSize),
-    m_layout(pack.layout),
-
-    m_pack(nullptr)
+    m_packs()
   {
     setService("textures");
+  }
 
-    load(pack.file);
+  unsigned
+  TexturePack::registerPack(const sprites::Pack& pack) {
+    // Load the file as a sprite and then convert it
+    // to a faster `Decal` resource.
+    olc::Sprite* spr = new olc::Sprite(pack.file);
+    if (spr == nullptr) {
+      error(
+        "Failed to load texture pack \"" + pack.file + "\"",
+        "Loading returned null"
+      );
+    }
+
+    // Build the internal structure, register it and
+    // return the corresponding identifier.
+    Pack p;
+    p.sSize = pack.sSize;
+    p.layout = pack.layout;
+
+    p.res = new olc::Decal(spr);
+
+    unsigned id = m_packs.size();
+    m_packs.push_back(p);
+
+    return id;
   }
 
   void
@@ -22,24 +43,21 @@ namespace tdef {
                     const olc::vf2d& p,
                     const olc::vf2d& scale) const
   {
-    // TODO: Replace with actual resolution of type.
-    olc::vi2d sCoords = spriteCoords(olc::vi2d(s.sprite, 0), s.id);
-    pge->DrawPartialDecal(p, m_pack, sCoords, m_sSize, scale, s.tint);
-  }
-
-  void
-  TexturePack::load(const std::string& file) {
-    // Load the file as a sprite and then convert it
-    // to a faster `Decal` resource.
-    olc::Sprite* spr = new olc::Sprite(file);
-    if (spr == nullptr) {
-      error(
-        "Failed to load texture pack \"" + file + "\"",
-        "Loading returned null"
+    // Check whether the pack is valid.
+    if (s.pack >= m_packs.size()) {
+      log(
+        "Unable to draw sprite from pack " + std::to_string(s.pack),
+        utils::Level::Error
       );
+
+      return;
     }
 
-    m_pack = new olc::Decal(spr);
+    const Pack& tp = m_packs[s.pack];
+
+    // TODO: Replace with actual resolution of type.
+    olc::vi2d sCoords = spriteCoords(tp, olc::vi2d(s.sprite, 0), s.id);
+    pge->DrawPartialDecal(p, tp.res, sCoords, tp.sSize, scale, s.tint);
   }
 
 }

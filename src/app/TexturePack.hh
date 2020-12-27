@@ -36,6 +36,10 @@ namespace tdef {
      *          to draw a sprite.
      */
     struct Sprite {
+      // The `pack` defines the identifier of the pack from
+      // which the sprite should be picked.
+      unsigned pack;
+
       // The `sprite` defines an identifier for the sprite. The
       // position of the sprite in the resource pack will be
       // computed from this identifier.
@@ -57,18 +61,28 @@ namespace tdef {
     public:
 
       /**
-       * @brief - Generate a new texture pack from the resource
-       *          pack.
-       * @param pack - defines the needed resources to describe
-       *               textures aggregated in a pack.
+       * @brief - Generate a new texture pack with no resources
+       *          registered yet.
        */
-      TexturePack(const sprites::Pack& pack);
+      TexturePack();
 
       /**
        * @brief - Detroys the texture pack and release the sprites
        *          and resources attached to it.
        */
       ~TexturePack();
+
+      /**
+       * @brief - Performs the registration of the input pack
+       *          and return the corresponding pack identifier
+       *          so that the caller can refer to this pack
+       *          afterwards.
+       * @param pack - the pack to load.
+       * @return - an identifier allowing to reference this
+       *           pack for later use.
+       */
+      unsigned
+      registerPack(const sprites::Pack& pack);
 
       /**
        * @brief - Used to perform the drawing of the sprite as
@@ -107,12 +121,25 @@ namespace tdef {
     private:
 
       /**
-       * @brief - Performs the analysis of the file defining the
-       *          sprites to load.
-       * @param file - the name of the file describing the pack.
+       * @brief - Convenience structure referencing the needed
+       *          information to describe a texture pack.
+       *          Unlike the public interface this contains the
+       *          values used internally to define the pack.
        */
-      void
-      load(const std::string& file);
+      struct Pack {
+        // The `sSize` defines the size of an individual sprite
+        // in the pack.
+        olc::vi2d sSize;
+
+        // The `layout` defines the repartition of the sprites
+        // in the pack.
+        olc::vi2d layout;
+
+        // The `res` defines the raw data to the whole sprites
+        // registered for this pack. Individual parts describe
+        // each sprite.
+        olc::Decal* res;
+      };
 
       /**
        * @brief - Used to convert from sprite coordinates to the
@@ -126,6 +153,8 @@ namespace tdef {
        *          In order to find the correct sprite, both some
        *          coordinates and a variation id should be set
        *          to fix a single element in the sprites.
+       * @param pack - the texture pack to which the coordinates
+       *               correspond to.
        * @param coord - the coordinates of the sprite to convert
        *                to pixels in the resource pack.
        * @param id - the index of the variation of the sprite
@@ -134,32 +163,19 @@ namespace tdef {
        *           for the input sprite coords.
        */
       olc::vi2d
-      spriteCoords(const olc::vi2d& coord,
-                   int id = 0) const noexcept;
+      spriteCoords(const Pack& pack,
+                   const olc::vi2d& coord,
+                   int id = 0) const;
   
     private:
 
       /**
-       * @brief - The sprite size defines the dimensions of each
-       *          individual sprite defined in the texture pack.
-       *          Each sprite should have an identical size as
-       *          we only define one size for the whole pack.
+       * @brief - The list of packs registered so far for
+       *          this object. Note that the identifier of
+       *          each pack corresponds to the position of
+       *          the pack in this vector.
        */
-      olc::vi2d m_sSize;
-
-      /**
-       * @brief - Defines the layout of the resource pack linked
-       *          to this pack. It helps interpreting the coords
-       *          provided to reference a tile.
-       */
-      olc::vi2d m_layout;
-
-      /**
-       * @brief - Defines the pge object representing the texture
-       *          pack. This object is created during the load of
-       *          the pack and released when the pack is freed.
-       */
-      olc::Decal* m_pack;
+      std::vector<Pack> m_packs;
   };
 
   using TexturePackShPtr = std::shared_ptr<TexturePack>;

@@ -52,7 +52,8 @@ namespace tdef {
     m_sMenu(nullptr),
     m_tMenu(nullptr),
 
-    m_tPack(nullptr)
+    m_packs(std::make_shared<TexturePack>()),
+    m_tPackID(0u)
   {}
 
   void

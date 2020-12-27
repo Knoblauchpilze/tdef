@@ -83,7 +83,7 @@ namespace tdef {
   TDefApp::drawSprite(const SpriteDesc& t, const CoordinateFrame& cf) {
     olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y, t.loc, t.radius);
 
-    m_tPack->draw(this, t.sprite, p, t.radius);
+    m_tPack->draw(this, t.sprite, p, t.radius * cf.tileScale());
     // FillRectDecal(p, t.radius * cf.tileSize(), t.color);
   }
 

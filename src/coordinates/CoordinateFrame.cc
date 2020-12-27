@@ -1,5 +1,6 @@
 
 # include "CoordinateFrame.hh"
+# include "utils.hh"
 
 namespace tdef {
 
@@ -28,6 +29,11 @@ namespace tdef {
   CoordinateFrame::updateTileScale() {
     m_tScaled = m_pViewport.dims / m_cViewport.dims;
     m_scale = m_tScaled / m_ts;
+
+    log(
+      "Tile size is " + toString(m_ts) + ", scale is " + toString(m_scale),
+      utils::Level::Verbose
+    );
   }
 
 }

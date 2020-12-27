@@ -1,17 +1,22 @@
 
-set (SOURCES
-  ${SOURCES}
+target_sources (tdef_lib PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/Block.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Spawner.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Wall.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Portal.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/Tower.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/Mob.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/StepInfo.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Locator.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/Path.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/AStar.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/World.cc
-  PARENT_SCOPE
   )
 
+target_include_directories (tdef_lib PUBLIC
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+  )
+
+add_subdirectory(
+  ${CMAKE_CURRENT_SOURCE_DIR}/mobs
+  )
+
+add_subdirectory(
+  ${CMAKE_CURRENT_SOURCE_DIR}/towers
+  )

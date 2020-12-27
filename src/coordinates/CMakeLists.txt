@@ -1,7 +1,8 @@
 
-set (SOURCES
-  ${SOURCES}
+target_sources (tdef_lib PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/CoordinateFrame.cc
-  PARENT_SCOPE
   )
 
+target_include_directories (tdef_lib PUBLIC
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+  )

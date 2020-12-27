@@ -7,33 +7,27 @@ set (CMAKE_CXX_EXTENSIONS OFF)
 #set (CMAKE_VERBOSE_MAKEFILE ON)
 set (CMAKE_POSITION_INDEPENDENT_CODE ON)
 
-set (SOURCES
-  ${SOURCES}
-  )
+add_library (tdef_lib SHARED "")
 
-add_subdirectory(
+add_subdirectory (
   ${CMAKE_CURRENT_SOURCE_DIR}/coordinates
   )
 
-add_subdirectory(
+add_subdirectory (
   ${CMAKE_CURRENT_SOURCE_DIR}/world
   )
 
-add_subdirectory(
+add_subdirectory (
   ${CMAKE_CURRENT_SOURCE_DIR}/ui
   )
 
-add_subdirectory(
+add_subdirectory (
   ${CMAKE_CURRENT_SOURCE_DIR}/app
   )
 
-add_library (tdef_lib SHARED
-  ${SOURCES}
-  )
+set (TDEF_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" PARENT_SCOPE)
 
-set (NEW_FRONTIERS_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}" PARENT_SCOPE)
-
-target_link_libraries(tdef_lib
+target_link_libraries (tdef_lib
   sdl_core
   png
   X11
@@ -46,6 +40,5 @@ target_include_directories (tdef_lib PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/app
   ${CMAKE_CURRENT_SOURCE_DIR}/coordinates
-  ${CMAKE_CURRENT_SOURCE_DIR}/world
   ${CMAKE_CURRENT_SOURCE_DIR}/ui
   )

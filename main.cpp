@@ -34,7 +34,7 @@ int main(int /*argc*/, char** /*argv*/) {
     tdef::CoordinateFrameShPtr cf = std::make_shared<tdef::TopViewFrame>(
       tdef::Viewport{olc::vf2d(0.0f, 0.0f), olc::vf2d(10.0f, 10.0f)},
       tdef::Viewport{olc::vf2d(10.0f, 50.0f), olc::vf2d(640.0f, 480.0f)},
-      olc::vi2d(64, 32)
+      olc::vi2d(64, 64)
     );
     tdef::AppDesc ad = tdef::newDesc(
       olc::vi2d(640, 480),

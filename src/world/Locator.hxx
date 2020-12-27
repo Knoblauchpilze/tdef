@@ -40,12 +40,11 @@ namespace tdef {
       bt = world::BlockType::Tower;
     }
 
-    world::Block bd{
-      b->getPos(),         // p
-      b->getRadius(),      // radius
-      b->getHealthRatio(), // health
-      bt                   // type
-    };
+    world::Block bd;
+    bd.p = b->getPos();
+    bd.radius = b->getRadius();
+    bd.health = b->getHealthRatio();
+    bd.type = bt;
 
     return bd;
   }
@@ -58,13 +57,12 @@ namespace tdef {
     world::MobType mt = world::MobType::Fast;
     // TODO: Handle mob type.
 
-    world::Mob md{
-      m->getPos(),
-      m->getRadius(),
-      m->getHealthRatio(),
-      mt,
-      m->getPath()
-    };
+    world::Mob md;
+    md.p = m->getPos();
+    md.radius = m->getRadius();
+    md.health = m->getHealthRatio();
+    md.type = mt;
+    md.path = m->getPath();
 
     return md;
   }

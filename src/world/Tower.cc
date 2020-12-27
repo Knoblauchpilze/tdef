@@ -52,7 +52,7 @@ namespace tdef {
     log("Killed mob at " + m->getPos().toString());
 
     // Mark this mob for deletion.
-    // TODO: Handle this.
+    info.removeMob(m.get());
   }
 
   void

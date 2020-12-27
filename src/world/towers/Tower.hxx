@@ -8,6 +8,7 @@ namespace tdef {
   inline
   Tower::TProps
   Tower::newProps(const utils::Point2f& p,
+                  const towers::Type& type,
                   const utils::Uuid& owner) noexcept
   {
     TProps pp;
@@ -21,7 +22,15 @@ namespace tdef {
     pp.attack = 0.2f;
     pp.attackCost = 0.55f;
 
+    pp.type = type;
+
     return pp;
+  }
+
+  inline
+  const towers::Type&
+  Tower::getType() const noexcept {
+    return m_type;
   }
 
 }

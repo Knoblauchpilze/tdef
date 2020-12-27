@@ -30,6 +30,8 @@ namespace tdef {
     BlockShPtr b = m_blocks[id];
 
     world::BlockType bt = world::BlockType::Wall;
+    int var = 0;
+
     if (std::dynamic_pointer_cast<Spawner>(b) != nullptr) {
       bt = world::BlockType::Spawner;
     }
@@ -38,6 +40,24 @@ namespace tdef {
     }
     else if (std::dynamic_pointer_cast<Tower>(b) != nullptr) {
       bt = world::BlockType::Tower;
+
+      TowerShPtr t = std::dynamic_pointer_cast<Tower>(b);
+      switch (t->getType()) {
+        case towers::Type::Snipe:
+          var = 1;
+          break;
+        case towers::Type::Slow:
+          var = 2;
+          break;
+        case towers::Type::Cannon:
+          var = 3;
+          break;
+        case towers::Type::Regular:
+        default:
+          // Assume regular type.
+          var = 0;
+          break;
+      }
     }
 
     world::Block bd;
@@ -45,6 +65,7 @@ namespace tdef {
     bd.radius = b->getRadius();
     bd.health = b->getHealthRatio();
     bd.type = bt;
+    bd.id = var;
 
     return bd;
   }

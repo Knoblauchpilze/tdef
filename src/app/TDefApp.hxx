@@ -10,11 +10,16 @@ namespace tdef {
   void
   TDefApp::loadResources() {
     sprites::Pack p;
+
     p.file = "data/img/towers.png";
     p.sSize = olc::vi2d(64, 64);
     p.layout = olc::vi2d(4, 1);
-
     m_tPackID = m_packs->registerPack(p);
+
+    p.file = "data/img/walls.png";
+    p.sSize = olc::vi2d(64, 64);
+    p.layout = olc::vi2d(1, 1);
+    m_wPackID = m_packs->registerPack(p);
   }
 
   inline

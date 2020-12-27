@@ -5,8 +5,11 @@
 
 namespace tdef {
 
-  Tower::Tower(const TProps& props):
+  Tower::Tower(const TProps& props,
+               const towers::Data& desc):
     Block(props, "tower"),
+
+    m_type(props.type),
 
     m_energy(props.energy),
     m_maxEnergy(props.maxEnergy),
@@ -15,10 +18,11 @@ namespace tdef {
     m_attackCost(props.attackCost),
 
     m_range(props.range),
-    m_attack(props.attack)
+    m_attack(props.attack),
+
+    m_processes(desc)
   {
     // TODO: Handle upgrade.
-    // TODO: Handle tower type.
     setService("tower");
   }
 
@@ -33,7 +37,11 @@ namespace tdef {
     }
 
     // Find the closest mob.
-    MobShPtr m = info.frustum->getClosestMob(m_pos, m_range, nullptr);
+    towers::PickData pd;
+    pd.pos = m_pos;
+    pd.range = m_range;
+
+    MobShPtr m = m_processes.pickMob(info, pd);
     if (m == nullptr) {
       // No mobs are visible, nothing to do.
       return;
@@ -47,7 +55,11 @@ namespace tdef {
 
     // Hit the mob with a devastating attack.
     m_energy -= m_attackCost;
-    if (m->damage(m_attack)) {
+
+    towers::DamageData dd;
+    dd.attack = m_attack;
+
+    if (m_processes.damage(info, m, dd)) {
       return;
     }
 

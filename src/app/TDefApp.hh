@@ -172,6 +172,12 @@ namespace tdef {
        *          the texture pack for towers.
        */
       unsigned m_tPackID;
+
+      /**
+       * @brief - A description of the identifier used to represent
+       *          the texture pack for walls.
+       */
+      unsigned m_wPackID;
   };
 
 }

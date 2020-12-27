@@ -62,6 +62,10 @@ namespace tdef {
       float radius;
       float health;
       BlockType type;
+
+      // The `id` defines a custom value which is interpreted
+      // from the `type` of the block.
+      int id;
     };
 
     /**

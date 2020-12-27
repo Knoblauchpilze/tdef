@@ -7,6 +7,7 @@
 # include "Wall.hh"
 # include "Portal.hh"
 # include "Tower.hh"
+# include "TowerFactory.hh"
 
 namespace tdef {
 
@@ -157,7 +158,28 @@ namespace tdef {
 
       if (used.count(key) == 0) {
         log("Tower at " + p.toString());
-        TowerShPtr b = std::make_shared<Tower>(Tower::newProps(p));
+
+        Tower::TProps pp;
+        towers::Data td;
+
+        if (id % 4 == 0) {
+          pp = TowerFactory::generateBasicTowerProps(p);
+          td = TowerFactory::generateBasicTowerData();
+        }
+        else if (id % 4 == 1) {
+          pp = TowerFactory::generateSniperTowerProps(p);
+          td = TowerFactory::generateSniperTowerData();
+        }
+        else if (id % 4 == 2) {
+          pp = TowerFactory::generateSlowTowerProps(p);
+          td = TowerFactory::generateSlowTowerData();
+        }
+        else {
+          pp = TowerFactory::generateCannonTowerProps(p);
+          td = TowerFactory::generateCannonTowerData();
+        }
+
+        TowerShPtr b = std::make_shared<Tower>(pp, td);
         m_blocks.push_back(b);
         --id;
       }

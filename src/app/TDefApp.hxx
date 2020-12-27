@@ -88,6 +88,15 @@ namespace tdef {
 
   inline
   void
+  TDefApp::drawRect(const SpriteDesc& t,
+                    const CoordinateFrame& cf)
+  {
+    olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y, t.loc, t.radius);
+    FillRectDecal(p, t.radius * cf.tileSize(), t.sprite.tint);
+  }
+
+  inline
+  void
   TDefApp::drawHealthBar(const SpriteDesc& t,
                          float ratio,
                          const CoordinateFrame& cf,

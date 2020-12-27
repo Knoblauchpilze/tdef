@@ -98,6 +98,18 @@ namespace tdef {
       drawSprite(const SpriteDesc& t, const CoordinateFrame& cf);
 
       /**
+       * @brief - Used to draw a simple rect at the specified
+       *          location. Note that we reuse the sprite desc
+       *          but don't actually use the sprite.
+       * @param t - the description of the tile to draw.
+       * @param cf - the coordinate frame to use to perform the
+       *             conversion from tile position to pixels.
+       */
+      void
+      drawRect(const SpriteDesc& t,
+               const CoordinateFrame& cf);
+
+      /**
        * @brief - Used to draw a minimalistic health bar for an entity
        *          or block at position (x, y) in cells coordinates. It
        *          is displayed with the specified alpha transparency.

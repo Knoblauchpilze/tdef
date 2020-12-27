@@ -14,14 +14,14 @@ namespace tdef {
     p.sSize = olc::vi2d(64, 64);
     p.layout = olc::vi2d(4, 1);
 
-    m_tPack = std::make_shared<TexturePack>(p);
+    m_tPackID = m_packs->registerPack(p);
   }
 
   inline
   void
   TDefApp::cleanResources() {
-    if (m_tPack != nullptr) {
-      m_tPack.reset();
+    if (m_packs != nullptr) {
+      m_packs.reset();
     }
   }
 
@@ -83,8 +83,7 @@ namespace tdef {
   TDefApp::drawSprite(const SpriteDesc& t, const CoordinateFrame& cf) {
     olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y, t.loc, t.radius);
 
-    m_tPack->draw(this, t.sprite, p, t.radius * cf.tileScale());
-    // FillRectDecal(p, t.radius * cf.tileSize(), t.color);
+    m_packs->draw(this, t.sprite, p, t.radius * cf.tileScale());
   }
 
   inline

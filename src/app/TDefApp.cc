@@ -35,7 +35,8 @@ namespace tdef {
     m_tMenu(nullptr),
 
     m_packs(std::make_shared<TexturePack>()),
-    m_tPackID(0u)
+    m_tPackID(0u),
+    m_wPackID(0u)
   {}
 
   void
@@ -157,11 +158,34 @@ namespace tdef {
         sd.radius = t.radius;
         sd.loc = RelativePosition::Center;
 
-        // TODO: Change this ?
-        sd.sprite.sprite = 0;
-        sd.sprite.tint = olc::WHITE;
+        bool pack = true;
+        switch (t.type) {
+          case world::BlockType::Spawner:
+            pack = false;
+            sd.sprite.tint = olc::DARK_GREEN;
+            break;
+          case world::BlockType::Wall:
+            sd.sprite.pack = m_wPackID;
+            sd.sprite.sprite = 0;
+            sd.sprite.tint = olc::WHITE;
+            break;
+          case world::BlockType::Portal:
+            pack = false;
+            sd.sprite.tint = olc::DARK_RED;
+            break;
+          case world::BlockType::Tower:
+            sd.sprite.pack = m_tPackID;
+            sd.sprite.sprite = t.id;
+            sd.sprite.tint = olc::WHITE;
+            break;
+        }
 
-        drawSprite(sd, res.cf);
+        if (pack) {
+          drawSprite(sd, res.cf);
+        }
+        else {
+          drawRect(sd, res.cf);
+        }
 
         if (t.type == world::BlockType::Tower) {
           drawHealthBar(sd, t.health, res.cf, Orientation::Vertical);

@@ -74,18 +74,29 @@ namespace tdef {
     // Handle menus update and process the
     // corresponding actions.
     std::vector<ActionShPtr> actions;
+    bool relevant = false;
+
+
     if (m_sMenu != nullptr) {
-      m_sMenu->processUserInput(c, actions);
+      menu::InputHandle ih = m_sMenu->processUserInput(c, actions);
+      relevant = (relevant || ih.relevant);
     }
     if (m_tMenu != nullptr) {
-      m_tMenu->processUserInput(c, actions);
+      menu::InputHandle ih = m_tMenu->processUserInput(c, actions);
+      relevant = (relevant || ih.relevant);
     }
     if (m_uMenu != nullptr) {
-      m_uMenu->processUserInput(c, actions);
+      menu::InputHandle ih = m_uMenu->processUserInput(c, actions);
+      relevant = (relevant || ih.relevant);
     }
 
     for (unsigned id = 0u ; id < actions.size() ; ++id) {
       actions[id]->apply(*m_world);
+    }
+
+    bool lClick = (c.buttons[controls::mouse::Left] == controls::ButtonState::Released);
+    if (lClick && !relevant) {
+      log("Should handle click", utils::Level::Warning);
     }
   }
 

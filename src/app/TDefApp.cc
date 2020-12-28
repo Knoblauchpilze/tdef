@@ -1,5 +1,6 @@
 
 # include "TDefApp.hh"
+# include "TowerMenu.hh"
 
 namespace {
 
@@ -105,19 +106,19 @@ namespace tdef {
     bg = menu::newColoredBackground(c);
 
     fg = menu::newTextContent("Regular");
-    sm = std::make_shared<Menu>(mPos, mSize, "tower1", bg, fg);
+    sm = std::make_shared<TowerMenu>(mPos, mSize, towers::Type::Regular, bg, fg);
     m_tMenu->addMenu(sm);
 
     fg = menu::newTextContent("Snipe");
-    sm = std::make_shared<Menu>(mPos, mSize, "tower2", bg, fg);
+    sm = std::make_shared<TowerMenu>(mPos, mSize, towers::Type::Snipe, bg, fg);
     m_tMenu->addMenu(sm);
 
     fg = menu::newTextContent("Slow");
-    sm = std::make_shared<Menu>(mPos, mSize, "tower3", bg, fg);
+    sm = std::make_shared<TowerMenu>(mPos, mSize, towers::Type::Slow, bg, fg);
     m_tMenu->addMenu(sm);
 
     fg = menu::newTextContent("Cannon");
-    sm = std::make_shared<Menu>(mPos, mSize, "tower4", bg, fg);
+    sm = std::make_shared<TowerMenu>(mPos, mSize, towers::Type::Cannon, bg, fg);
     m_tMenu->addMenu(sm);
 
     // Upgrade menu.

@@ -23,7 +23,7 @@ namespace tdef {
       ~TowerAction() = default;
 
       void
-      apply(World& w) const override;
+      apply(Game& g) const override;
 
     private:
 

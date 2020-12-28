@@ -156,10 +156,10 @@ namespace tdef {
       block(int id) const noexcept;
 
       /**
-       * @brief - Similar to the `solidTile` method but to get
-       *          the entity at the specified index.
-       * @param id - the index of the entity to get.
-       * @return - the corresponding entity.
+       * @brief - Similar to the `block` method but to get the mob
+       *          at the specified index.
+       * @param id - the index of the mob to get.
+       * @return - the corresponding mob.
        */
       world::Mob
       mob(int id) const noexcept;
@@ -252,9 +252,8 @@ namespace tdef {
        * @brief - Return the list of items that are visible
        *          in the view frustum defined by the AABB
        *          from the input values.
-       *          All items are included (blocks, entities
-       *          and VFXs) and the user can request items
-       *          to be sorted.
+       *          All items are included and the user can
+       *          request items to be sorted.
        * @param xMin - the abscissa of the top left corner
        *               of the view frustum.
        * @param yMin - the ordinate of the top left corner

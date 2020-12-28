@@ -17,6 +17,10 @@ namespace tdef {
   class Menu;
   using MenuShPtr = std::shared_ptr<Menu>;
 
+  // Forward declaration of the action class.
+  class Action;
+  using ActionShPtr = std::shared_ptr<Action>;
+
   namespace menu {
 
     /**

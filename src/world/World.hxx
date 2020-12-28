@@ -40,8 +40,13 @@ namespace tdef {
 
   inline
   void
-  World::setTowerType(const towers::Type& type) {
-    m_tType = std::make_shared<towers::Type>(type);
+  World::spawn(BlockShPtr block) {
+    if (block == nullptr) {
+      log("Failed to spawn null block", utils::Level::Error);
+      return;
+    }
+
+    m_blocks.push_back(block);
   }
 
   inline

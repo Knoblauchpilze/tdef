@@ -38,38 +38,34 @@ namespace tdef {
   inline
   void
   TDefApp::cleanMenuResources() {
-    if (m_sMenu != nullptr) {
-      m_sMenu.reset();
+    for (unsigned id = 0u ; id < m_menus.size() ; ++id) {
+      m_menus[id].reset();
     }
-    if (m_tMenu != nullptr) {
-      m_tMenu.reset();
-    }
-    if (m_uMenu != nullptr) {
-      m_uMenu.reset();
-    }
+
+    m_menus.clear();
   }
 
   inline
   void
   TDefApp::onStep(float elapsed) {
-    if (m_world != nullptr) {
-      m_world->step(elapsed);
+    if (m_game != nullptr) {
+      m_game->step(elapsed);
     }
   }
 
   inline
   void
   TDefApp::onPause(float elapsed) {
-    if (m_world != nullptr) {
-      m_world->pause(elapsed);
+    if (m_game != nullptr) {
+      m_game->pause(elapsed);
     }
   }
 
   inline
   void
   TDefApp::onResume(float elapsed) {
-    if (m_world != nullptr) {
-      m_world->resume(elapsed);
+    if (m_game != nullptr) {
+      m_game->resume(elapsed);
     }
   }
 
@@ -83,21 +79,13 @@ namespace tdef {
     std::vector<ActionShPtr> actions;
     bool relevant = false;
 
-    if (m_sMenu != nullptr) {
-      menu::InputHandle ih = m_sMenu->processUserInput(c, actions);
-      relevant = (relevant || ih.relevant);
-    }
-    if (m_tMenu != nullptr) {
-      menu::InputHandle ih = m_tMenu->processUserInput(c, actions);
-      relevant = (relevant || ih.relevant);
-    }
-    if (m_uMenu != nullptr) {
-      menu::InputHandle ih = m_uMenu->processUserInput(c, actions);
+    for (unsigned id = 0u ; id < m_menus.size() ; ++id) {
+      menu::InputHandle ih = m_menus[id]->processUserInput(c, actions);
       relevant = (relevant || ih.relevant);
     }
 
     for (unsigned id = 0u ; id < actions.size() ; ++id) {
-      actions[id]->apply(*m_world);
+      actions[id]->apply(*m_game);
     }
 
     bool lClick = (c.buttons[controls::mouse::Left] == controls::ButtonState::Released);
@@ -105,7 +93,7 @@ namespace tdef {
       olc::vf2d it;
       olc::vi2d tp = cf.pixelCoordsToTiles(olc::vi2d(c.mPosX, c.mPosY), &it);
 
-      m_world->performAction(tp.x + it.x, tp.y + it.y);
+      m_game->performAction(tp.x + it.x, tp.y + it.y);
     }
   }
 
@@ -137,7 +125,7 @@ namespace tdef {
     // to `red` for `almost-dead`. The `empty` part
     // of the health bar will be darkened to make it
     // stand out.
-    olc::Pixel hbc = colorGradient(olc::RED, olc::GREEN, ratio, ALPHA_ALMOST_OPAQUE);
+    olc::Pixel hbc = colorGradient(olc::RED, olc::GREEN, ratio, alpha::AlmostOpaque);
     olc::Pixel bc(hbc.r / 2, hbc.g / 2, hbc.b / 2, hbc.a);
 
     // The combined length of the healthbar will be

@@ -101,6 +101,10 @@ namespace tdef {
 
   inline
   void
+  PGEApp::loadMenuResources() {}
+
+  inline
+  void
   PGEApp::cleanResources() {}
 
   inline
@@ -126,7 +130,7 @@ namespace tdef {
   PGEApp::clearLayer() {
     // Clear the canvas with a neutral fully transparent color.
     SetPixelMode(olc::Pixel::ALPHA);
-    Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
+    Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
     SetPixelMode(olc::Pixel::NORMAL);
   }
 

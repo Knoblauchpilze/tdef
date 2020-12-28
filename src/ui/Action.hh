@@ -3,9 +3,12 @@
 
 # include <memory>
 # include <core_utils/CoreObject.hh>
-# include "World.hh"
 
 namespace tdef {
+
+  // Forward declare the game class onto which the
+  // actions will be applied.
+  class Game;
 
   class Action: public utils::CoreObject {
     public:
@@ -17,17 +20,17 @@ namespace tdef {
 
       /**
        * @brief - Interface method allowing to perform an
-       *          action on the input world. It aims at
+       *          action on the input game. It aims at
        *          providing a common interface allowing
        *          menus to trigger some real changes in the
-       *          world.
+       *          game.
        *          Inheriting classes should redefine this
-       *          method based on their effect on the world.
-       * @param w - the world onto which the action should
+       *          method based on their effect on the game.
+       * @param g - the game onto which the action should
        *            be applied.
        */
       virtual void
-      apply(World& w) const = 0;
+      apply(Game& g) const = 0;
 
     protected:
 

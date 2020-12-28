@@ -66,31 +66,6 @@ namespace tdef {
         CoordinateFrame& cf;
       };
 
-      /**
-       * @brief - Convenience define indicating a fully opaque alpha.
-       */
-      static constexpr int ALPHA_OPAQUE = 255;
-
-      /**
-       * @brief - Almost fully opaque.
-       */
-      static constexpr int ALPHA_ALMOST_OPAQUE = 192;
-
-      /**
-       * @brief - Not fully opaque nor fully transparent.
-       */
-      static constexpr int ALPHA_SEMI_OPAQUE = 128;
-
-      /**
-       * @brief - Almost fully transparent.
-       */
-      static constexpr int ALPHA_ALMOST_TRANSPARENT = 64;
-
-      /**
-       * @brief - Convenience define indicating a fully transparent alpha.
-       */
-      static constexpr int ALPHA_TRANSPARENT = 0;
-
       bool
       isFirstFrame() const noexcept;
 

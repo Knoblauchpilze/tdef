@@ -2,28 +2,6 @@
 # include "TDefApp.hh"
 # include "TowerMenu.hh"
 
-namespace {
-
-  olc::Pixel
-  colorFromMobType(const tdef::world::MobType& type) noexcept {
-    switch (type) {
-      case tdef::world::MobType::Regular:
-        return olc::APPLE_GREEN;
-      case tdef::world::MobType::Fast:
-        return olc::YELLOW;
-      case tdef::world::MobType::Strong:
-        return olc::PALE_DARK_RED;
-      case tdef::world::MobType::Air:
-        return olc::CORNFLOWER_BLUE;
-      default:
-        break;
-    }
-
-    return olc::RED;
-  }
-
-}
-
 namespace tdef {
 
   TDefApp::TDefApp(const AppDesc& desc):
@@ -38,6 +16,7 @@ namespace tdef {
 
     m_packs(std::make_shared<TexturePack>()),
     m_tPackID(0u),
+    m_mPackID(0u),
     m_wPackID(0u)
   {}
 
@@ -141,17 +120,24 @@ namespace tdef {
     m_uMenu->addMenu(sm);
 
     fg = menu::newTextContent("Strength: 10");
-    sm = std::make_shared<Menu>(mPos, mSize, "prop1", bg, fg);
+    sm = std::make_shared<Menu>(mPos, mSize, "prop2", bg, fg);
     m_uMenu->addMenu(sm);
 
     fg = menu::newTextContent("Attack speed: 10");
-    sm = std::make_shared<Menu>(mPos, mSize, "prop1", bg, fg);
+    sm = std::make_shared<Menu>(mPos, mSize, "prop3", bg, fg);
     m_uMenu->addMenu(sm);
 
     fg = menu::newTextContent("Reload time: 10");
-    sm = std::make_shared<Menu>(mPos, mSize, "prop1", bg, fg);
+    sm = std::make_shared<Menu>(mPos, mSize, "prop4", bg, fg);
     m_uMenu->addMenu(sm);
-    // TODO: Implement this.
+
+    fg = menu::newTextContent("Sell");
+    sm = std::make_shared<Menu>(mPos, mSize, "prop5", bg, fg);
+    m_uMenu->addMenu(sm);
+
+    fg = menu::newTextContent("Target mode");
+    sm = std::make_shared<Menu>(mPos, mSize, "prop6", bg, fg);
+    m_uMenu->addMenu(sm);
   }
 
   void
@@ -256,11 +242,11 @@ namespace tdef {
         sd.radius = t.radius;
         sd.loc = RelativePosition::CenterTop;
 
-        // TODO: Change this ?
-        sd.sprite.sprite = 0;
-        sd.sprite.tint = colorFromMobType(t.type);
+        sd.sprite.pack = m_mPackID;
+        sd.sprite.sprite = t.id;
+        sd.sprite.tint = olc::WHITE;
 
-        drawRect(sd, res.cf);
+        drawSprite(sd, res.cf);
         drawHealthBar(sd, t.health, res.cf);
       }
 

@@ -7,6 +7,20 @@
 # include "Path.hh"
 
 namespace tdef {
+  namespace mobs {
+
+    /**
+     * @brief - Defines the possible types for a mob
+     *          in the world.
+     */
+    enum class Type {
+      Regular,
+      Fast,
+      Strong,
+      Air,
+    };
+
+  }
 
   class Mob: public WorldElement {
     public:
@@ -21,11 +35,18 @@ namespace tdef {
 
         float speed;
         float arrival;
+
+        // The `type` defines a representation of the real
+        // kind of the mob. If one is using the factory
+        // mobs with the same type should have similar
+        // properties but it's not guaranteed otherwise.
+        mobs::Type type;
       };
 
       static
       MProps
       newProps(const utils::Point2f& p,
+               const mobs::Type& type = mobs::Type::Regular,
                const utils::Uuid& owner = utils::Uuid()) noexcept;
 
       /**
@@ -33,6 +54,13 @@ namespace tdef {
        * @param props - the properties defining this mob.
        */
       Mob(const MProps& props);
+
+      /**
+       * @brief - Fetch the type for this mob.
+       * @return - the type for this mob.
+       */
+      const mobs::Type&
+      getType() const noexcept;
 
       /**
        * @brief - Returns the current path followed by the entity.
@@ -66,6 +94,15 @@ namespace tdef {
       destroy(StepInfo& info) override;
 
     private:
+
+      /**
+       * @brief - The type of the mob. This is mostly used
+       *          to quickly identify the mob but most of
+       *          the precise behaviors are actually defined
+       *          through custom processes attached for the
+       *          attack behavior.
+       */
+      mobs::Type m_type;
 
       /**
        * @brief - An indication of the energy left for this

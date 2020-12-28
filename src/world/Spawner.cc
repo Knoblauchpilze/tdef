@@ -6,6 +6,8 @@ namespace tdef {
   Spawner::Spawner(const SProps& props):
     Block(props, "spawner"),
 
+    m_type(props.mob),
+
     m_spawnRadius(std::max(props.spawnRadius, 0.0f)),
 
     m_stock(props.reserve),
@@ -53,7 +55,7 @@ namespace tdef {
     y += (m_pos.y() + 0.5f);
 
     // Create the mob and return it.
-    Mob::MProps props = Mob::newProps(utils::Point2f(x, y), getOwner());
+    Mob::MProps props = Mob::newProps(utils::Point2f(x, y), m_type, getOwner());
 
     return std::make_shared<Mob>(props);
   }

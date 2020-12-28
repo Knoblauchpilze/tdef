@@ -8,6 +8,8 @@ namespace tdef {
   Mob::Mob(const MProps& props):
     WorldElement(props, "mob"),
 
+    m_type(props.type),
+
     m_energy(props.energy),
     m_maxEnergy(props.maxEnergy),
     m_energyRefill(props.refill),

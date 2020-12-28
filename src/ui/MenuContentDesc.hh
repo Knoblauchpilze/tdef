@@ -46,11 +46,13 @@ namespace tdef {
      * @brief - Initializes a menu content structure defining only
      *          a text for the menu.
      * @param text - the text for this menu.
+     * @param color - the color of the text.
      * @param align - the alignment for the text.
      * @return - the created menu object.
      */
     MenuContentDesc
     newTextContent(const std::string& text,
+                   const olc::Pixel& color = olc::MAGENTA,
                    const Alignment& align = Alignment::Left) noexcept;
 
     /**

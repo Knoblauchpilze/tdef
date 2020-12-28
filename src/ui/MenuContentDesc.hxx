@@ -8,11 +8,14 @@ namespace tdef {
 
     inline
     MenuContentDesc
-    newTextContent(const std::string& text, const Alignment& align) noexcept {
+    newTextContent(const std::string& text,
+                   const olc::Pixel& color,
+                   const Alignment& align) noexcept
+    {
       MenuContentDesc m;
 
       m.text = text;
-      m.color = olc::MAGENTA;
+      m.color = color;
 
       m.icon = "";
       m.size = olc::vi2d();

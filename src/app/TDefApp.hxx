@@ -39,6 +39,9 @@ namespace tdef {
     if (m_tMenu != nullptr) {
       m_tMenu.reset();
     }
+    if (m_uMenu != nullptr) {
+      m_uMenu.reset();
+    }
   }
 
   inline
@@ -76,6 +79,9 @@ namespace tdef {
     }
     if (m_tMenu != nullptr) {
       m_tMenu->processUserInput(c, actions);
+    }
+    if (m_uMenu != nullptr) {
+      m_uMenu->processUserInput(c, actions);
     }
 
     for (unsigned id = 0u ; id < actions.size() ; ++id) {

@@ -54,6 +54,8 @@ namespace tdef {
        * @param fg - the description of the content for the menu.
        * @param layout - the layout for this menu: will define how
        *                 children are represented in the menu.
+       * @param clickable - indicates whether this menu can be
+       *                    clicked.
        * @param parent - the parent menu for this element. Specify
        *                 `null` in case the menu is the root of the
        *                 subsystem.
@@ -64,6 +66,7 @@ namespace tdef {
            const menu::BackgroundDesc& bg,
            const menu::MenuContentDesc& fg,
            const menu::Layout& layout = menu::Layout::Horizontal,
+           bool clickable = true,
            Menu* parent = nullptr);
 
       /**
@@ -187,6 +190,7 @@ namespace tdef {
        */
       struct State {
         bool visible;
+        bool clickable;
         bool highlighted;
         bool selected;
       };

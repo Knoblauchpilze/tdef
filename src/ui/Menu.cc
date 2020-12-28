@@ -9,10 +9,11 @@ namespace tdef {
              const menu::BackgroundDesc& bg,
              const menu::MenuContentDesc& fg,
              const menu::Layout& layout,
+             bool clickable,
              Menu* parent):
     utils::CoreObject(name),
 
-    m_state(State{true, false, false}),
+    m_state(State{true, clickable, false, false}),
 
     m_pos(pos),
     m_size(size),
@@ -40,7 +41,10 @@ namespace tdef {
 
     // Render the uniform background for this menu.
     olc::vi2d pos = absolutePosition();
-    olc::Pixel c = (m_state.highlighted || m_state.selected ? m_bg.hColor : m_bg.color);
+    olc::Pixel c = m_bg.color;
+    if (m_state.clickable && (m_state.highlighted || m_state.selected)) {
+      c = m_bg.hColor;
+    }
     pge->FillRectDecal(pos, m_size, c);
 
     // Render this menu.

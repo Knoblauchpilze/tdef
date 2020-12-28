@@ -33,6 +33,7 @@ namespace tdef {
 
     m_sMenu(nullptr),
     m_tMenu(nullptr),
+    m_uMenu(nullptr),
 
     m_packs(std::make_shared<TexturePack>()),
     m_tPackID(0u),
@@ -65,38 +66,91 @@ namespace tdef {
     olc::vf2d mSize(w, mHeight);
     olc::Pixel c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
     menu::BackgroundDesc bg = menu::newColoredBackground(c);
-    menu::MenuContentDesc fg = menu::newTextContent("salut");
+    menu::MenuContentDesc fg = menu::newTextContent("");
 
-    m_sMenu = std::make_shared<Menu>(mPos, mSize, "menu", bg, fg);
+    m_sMenu = std::make_shared<Menu>(mPos, mSize, "sMenu", bg, fg);
 
     // Gold amount.
     rgb *= 2;
     c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
     bg = menu::newColoredBackground(c);
     fg = menu::newTextContent("Gold: 50");
-    MenuShPtr sm = std::make_shared<Menu>(mPos, mSize, "gold", bg, fg);
+    MenuShPtr sm = std::make_shared<Menu>(mPos, mSize, "gold", bg, fg, menu::Layout::Horizontal, false);
     m_sMenu->addMenu(sm);
 
     // Lives status.
     // TODO: Make this dynamic.
     fg = menu::newTextContent("Lives: 15");
-    sm = std::make_shared<Menu>(mPos, mSize, "lives", bg, fg);
+    sm = std::make_shared<Menu>(mPos, mSize, "lives", bg, fg, menu::Layout::Horizontal, false);
     m_sMenu->addMenu(sm);
 
     // Wave count.
     fg = menu::newTextContent("Wave: 1");
-    sm = std::make_shared<Menu>(mPos, mSize, "wave", bg, fg);
+    sm = std::make_shared<Menu>(mPos, mSize, "wave", bg, fg, menu::Layout::Horizontal, false);
     m_sMenu->addMenu(sm);
 
     // Bottom menu.
     mHeight = MENU_HEIGHT;
     mPos = olc::vi2d(0, h - mHeight);
     mSize.y = MENU_HEIGHT;
+    rgb /= 2;
+    c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
+
+    bg = menu::newColoredBackground(c);
+    fg = menu::newTextContent("");
+    m_tMenu = std::make_shared<Menu>(mPos, mSize, "tMenu", bg, fg);
+
     rgb *= 2;
     c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
     bg = menu::newColoredBackground(c);
-    fg = menu::newTextContent("ca va ?");
-    m_tMenu = std::make_shared<Menu>(mPos, mSize, "menu", bg, fg);
+
+    fg = menu::newTextContent("Regular");
+    sm = std::make_shared<Menu>(mPos, mSize, "tower1", bg, fg);
+    m_tMenu->addMenu(sm);
+
+    fg = menu::newTextContent("Snipe");
+    sm = std::make_shared<Menu>(mPos, mSize, "tower2", bg, fg);
+    m_tMenu->addMenu(sm);
+
+    fg = menu::newTextContent("Slow");
+    sm = std::make_shared<Menu>(mPos, mSize, "tower3", bg, fg);
+    m_tMenu->addMenu(sm);
+
+    fg = menu::newTextContent("Cannon");
+    sm = std::make_shared<Menu>(mPos, mSize, "tower4", bg, fg);
+    m_tMenu->addMenu(sm);
+
+    // Upgrade menu.
+    int mWidth = 120;
+    mPos = olc::vi2d(w - mWidth, 20);
+    mSize = olc::vi2d(mWidth, h - 20 - mHeight);
+    rgb /= 2;
+    c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
+
+    bg = menu::newColoredBackground(c);
+    fg = menu::newTextContent("");
+    m_uMenu = std::make_shared<Menu>(mPos, mSize, "menu", bg, fg, menu::Layout::Vertical);
+
+    rgb *= 2;
+    c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
+    bg = menu::newColoredBackground(c);
+
+    fg = menu::newTextContent("Range: 10");
+    sm = std::make_shared<Menu>(mPos, mSize, "prop1", bg, fg);
+    m_uMenu->addMenu(sm);
+
+    fg = menu::newTextContent("Strength: 10");
+    sm = std::make_shared<Menu>(mPos, mSize, "prop1", bg, fg);
+    m_uMenu->addMenu(sm);
+
+    fg = menu::newTextContent("Attack speed: 10");
+    sm = std::make_shared<Menu>(mPos, mSize, "prop1", bg, fg);
+    m_uMenu->addMenu(sm);
+
+    fg = menu::newTextContent("Reload time: 10");
+    sm = std::make_shared<Menu>(mPos, mSize, "prop1", bg, fg);
+    m_uMenu->addMenu(sm);
+    // TODO: Implement this.
   }
 
   void
@@ -241,6 +295,9 @@ namespace tdef {
     }
     if (m_tMenu != nullptr) {
       m_tMenu->render(this);
+    }
+    if (m_uMenu != nullptr) {
+      m_uMenu->render(this);
     }
 
     SetPixelMode(olc::Pixel::NORMAL);

@@ -162,6 +162,12 @@ namespace tdef {
       MenuShPtr m_tMenu;
 
       /**
+       * @brief - Defines the menu allowing to upgrade and modify
+       *          a selected tower.
+       */
+      MenuShPtr m_uMenu;
+
+      /**
        * @brief - A description of the textures used to represent
        *          the elements of the game.
        */

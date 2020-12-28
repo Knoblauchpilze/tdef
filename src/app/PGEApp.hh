@@ -216,9 +216,12 @@ namespace tdef {
        * @brief - Interface method called at each frame when
        *          the inputs should be handled.
        * @param c - the current state of the controls.
+       * @param cf - the coordinate frame associated to this
+       *             app.
        */
       virtual void
-      onInputs(const controls::State& c) = 0;
+      onInputs(const controls::State& c,
+               const CoordinateFrame& cf) = 0;
 
     private:
 

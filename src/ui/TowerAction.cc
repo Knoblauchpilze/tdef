@@ -10,9 +10,8 @@ namespace tdef {
   {}
 
   void
-  TowerAction::apply(World& /*w*/) const {
-    // TODO: Handle this.
-    log("Should apply tower action with type " + std::to_string(static_cast<int>(m_type)));
+  TowerAction::apply(World& w) const {
+    w.setTowerType(m_type);
   }
 
 }

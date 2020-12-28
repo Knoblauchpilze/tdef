@@ -20,7 +20,7 @@ namespace tdef {
   }
 
   Tower::TProps
-  TowerFactory::generateSniperTowerProps(const utils::Point2f& p) noexcept {
+  TowerFactory::generateSnipeTowerProps(const utils::Point2f& p) noexcept {
     Tower::TProps pp = Tower::newProps(p, towers::Type::Snipe);
 
     pp.energy = 0.5f;
@@ -80,7 +80,7 @@ namespace tdef {
   }
 
   towers::Data
-  TowerFactory::generateSniperTowerData() noexcept {
+  TowerFactory::generateSnipeTowerData() noexcept {
     towers::Data dd;
 
     dd.pickMob = [](StepInfo& info, towers::PickData& data) {

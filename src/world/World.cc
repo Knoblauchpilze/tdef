@@ -22,7 +22,9 @@ namespace tdef {
     m_blocks(),
     m_mobs(),
 
-    m_loc(nullptr)
+    m_loc(nullptr),
+
+    m_tType(nullptr)
   {
     setService("world");
 
@@ -41,7 +43,9 @@ namespace tdef {
     m_blocks(),
     m_mobs(),
 
-    m_loc(nullptr)
+    m_loc(nullptr),
+
+    m_tType(nullptr)
   {
     // Check dimensions.
     setService("world");
@@ -92,6 +96,66 @@ namespace tdef {
   }
 
   void
+  World::performAction(float x, float y) {
+    // Make sure that a tower type is defined.
+    if (m_tType == nullptr) {
+      return;
+    }
+
+    // Check whether this position is obstructed.
+    if (m_loc->obstructed(x, y)) {
+      log("Can't place tower at " + std::to_string(x) + "x" + std::to_string(y));
+      return;
+    }
+
+    // Generate the tower.
+    Tower::TProps pp;
+    towers::Data td;
+    utils::Point2f p(std::floor(x) + 0.5f, std::floor(y) + 0.5f);
+
+    bool valid = true;
+    switch (*m_tType) {
+      case towers::Type::Regular:
+        pp = TowerFactory::generateBasicTowerProps(p);
+        td = TowerFactory::generateBasicTowerData();
+        break;
+      case towers::Type::Snipe:
+        pp = TowerFactory::generateSnipeTowerProps(p);
+        td = TowerFactory::generateSnipeTowerData();
+        break;
+      case towers::Type::Slow:
+        pp = TowerFactory::generateSlowTowerProps(p);
+        td = TowerFactory::generateSlowTowerData();
+        break;
+      case towers::Type::Cannon:
+        pp = TowerFactory::generateCannonTowerProps(p);
+        td = TowerFactory::generateCannonTowerData();
+        break;
+      default:
+        valid = false;
+        break;
+    }
+
+    if (!valid) {
+      log(
+        "Unknown tower type " + std::to_string(static_cast<int>(*m_tType)) +
+        " to generate",
+        utils::Level::Warning
+      );
+
+      return;
+    }
+
+    log(
+      "Generated tower " + std::to_string(static_cast<int>(*m_tType)) +
+      " at " + std::to_string(x) + "x" + std::to_string(y)
+    );
+
+    TowerShPtr t = std::make_shared<Tower>(pp, td);
+    m_blocks.push_back(t);
+  }
+
+  void
   World::generate() {
     static constexpr int sk_spawners = 3;
     static constexpr int sk_walls = 2;
@@ -106,8 +170,8 @@ namespace tdef {
 
     int id = sk_spawners;
     while (id > 0) {
-      p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
-      p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
+      p.x() = m_rng.rndInt(0.0f, m_w - 1.0f) + 0.5f;
+      p.y() = m_rng.rndInt(0.0f, m_h - 1.0f) + 0.5f;
 
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
@@ -121,8 +185,8 @@ namespace tdef {
 
     id = sk_walls;
     while (id > 0) {
-      p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
-      p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
+      p.x() = m_rng.rndInt(0.0f, m_w - 1.0f) + 0.5f;
+      p.y() = m_rng.rndInt(0.0f, m_h - 1.0f) + 0.5f;
 
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
@@ -136,8 +200,8 @@ namespace tdef {
 
     id = sk_portals;
     while (id > 0) {
-      p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
-      p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
+      p.x() = m_rng.rndInt(0.0f, m_w - 1.0f) + 0.5f;
+      p.y() = m_rng.rndInt(0.0f, m_h - 1.0f) + 0.5f;
 
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
@@ -151,8 +215,8 @@ namespace tdef {
 
     id = sk_towers;
     while (id > 0) {
-      p.x() = m_rng.rndFloat(0.0f, m_w - 1.0f);
-      p.y() = m_rng.rndFloat(0.0f, m_h - 1.0f);
+      p.x() = m_rng.rndInt(0.0f, m_w - 1.0f) + 0.5f;
+      p.y() = m_rng.rndInt(0.0f, m_h - 1.0f) + 0.5f;
 
       key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
 
@@ -167,8 +231,8 @@ namespace tdef {
           td = TowerFactory::generateBasicTowerData();
         }
         else if (id % 4 == 1) {
-          pp = TowerFactory::generateSniperTowerProps(p);
-          td = TowerFactory::generateSniperTowerData();
+          pp = TowerFactory::generateSnipeTowerProps(p);
+          td = TowerFactory::generateSnipeTowerData();
         }
         else if (id % 4 == 2) {
           pp = TowerFactory::generateSlowTowerProps(p);
@@ -184,7 +248,6 @@ namespace tdef {
         --id;
       }
     }
-
 
     id = sk_mobs;
     while (id > 0) {

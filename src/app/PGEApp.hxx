@@ -30,7 +30,7 @@ namespace tdef {
     }
 
     // Handle user inputs.
-    onInputs(m_controls);
+    onInputs(m_controls, *m_frame);
 
     // Handle rendering: for each function
     // we will assign the draw target first

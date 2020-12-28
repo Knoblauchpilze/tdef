@@ -75,12 +75,13 @@ namespace tdef {
 
   inline
   void
-  TDefApp::onInputs(const controls::State& c) {
+  TDefApp::onInputs(const controls::State& c,
+                    const CoordinateFrame& cf)
+  {
     // Handle menus update and process the
     // corresponding actions.
     std::vector<ActionShPtr> actions;
     bool relevant = false;
-
 
     if (m_sMenu != nullptr) {
       menu::InputHandle ih = m_sMenu->processUserInput(c, actions);
@@ -101,7 +102,10 @@ namespace tdef {
 
     bool lClick = (c.buttons[controls::mouse::Left] == controls::ButtonState::Released);
     if (lClick && !relevant) {
-      log("Should handle click", utils::Level::Warning);
+      olc::vf2d it;
+      olc::vi2d tp = cf.pixelCoordsToTiles(olc::vi2d(c.mPosX, c.mPosY), &it);
+
+      m_world->performAction(tp.x + it.x, tp.y + it.y);
     }
   }
 

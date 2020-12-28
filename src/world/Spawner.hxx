@@ -8,6 +8,7 @@ namespace tdef {
   inline
   Spawner::SProps
   Spawner::newProps(const utils::Point2f& p,
+                    const mobs::Type& type,
                     const utils::Uuid& owner) noexcept
   {
     SProps pp;
@@ -18,6 +19,8 @@ namespace tdef {
     pp.threshold = 1.0f;
     pp.reserve = 0.9f;
     pp.refill = 0.0f;
+
+    pp.mob = type;
 
     return pp;
   }

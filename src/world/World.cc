@@ -98,7 +98,7 @@ namespace tdef {
     static constexpr int sk_portals = 1;
     static constexpr int sk_towers = 4;
 
-    static constexpr int sk_mobs = 2;
+    static constexpr int sk_mobs = 4;
 
     utils::Point2f p;
     int key = 0;
@@ -196,10 +196,17 @@ namespace tdef {
       if (used.count(key) == 0) {
         Mob::MProps mp = Mob::newProps(p);
 
-        if (id % 2 == 0) {
-          mp.radius = 1.5f;
-        } else {
-          mp.radius = 0.5f;
+        if (id % 4 == 0) {
+          mp.type = mobs::Type::Regular;
+        }
+        else if(id % 4 == 1) {
+          mp.type = mobs::Type::Fast;
+        }
+        else if(id % 4 == 2) {
+          mp.type = mobs::Type::Strong;
+        }
+        else {
+          mp.type = mobs::Type::Air;
         }
 
         MobShPtr m = std::make_shared<Mob>(mp);

@@ -8,6 +8,7 @@ namespace tdef {
   inline
   Mob::MProps
   Mob::newProps(const utils::Point2f& p,
+                const mobs::Type& type,
                 const utils::Uuid& owner) noexcept
   {
     MProps pp;
@@ -20,7 +21,15 @@ namespace tdef {
     pp.speed = 1.0f;
     pp.arrival = 0.0001f;
 
+    pp.type = type;
+
     return pp;
+  }
+
+  inline
+  const mobs::Type&
+  Mob::getType() const noexcept {
+    return m_type;
   }
 
   inline

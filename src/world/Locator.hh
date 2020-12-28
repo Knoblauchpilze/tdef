@@ -43,17 +43,6 @@ namespace tdef {
     };
 
     /**
-     * @brief - Defines the possible types for a mob
-     *          in the world.
-     */
-    enum class MobType {
-      Regular,
-      Fast,
-      Strong,
-      Air,
-    };
-
-    /**
      * @brief - Convenience wrapper allowing to access the
      *          properties of a block.
      */
@@ -76,8 +65,12 @@ namespace tdef {
       utils::Point2f p;
       float radius;
       float health;
-      MobType type;
+
       path::Path path;
+
+      // The `id` defines a custom value which is interpreted
+      // from the `type` of the mob.
+      int id;
     };
 
     /**

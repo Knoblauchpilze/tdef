@@ -20,11 +20,14 @@ namespace tdef {
         float threshold;
         float reserve;
         float refill;
+
+        mobs::Type mob;
       };
 
       static
       SProps
       newProps(const utils::Point2f& p,
+               const mobs::Type& type = mobs::Type::Regular,
                const utils::Uuid& owner = utils::Uuid()) noexcept;
 
       /**
@@ -67,6 +70,11 @@ namespace tdef {
       spawn(StepInfo& info) noexcept;
 
     private:
+
+      /**
+       * @brief - The type of mob to spawn by this object.
+       */
+      mobs::Type m_type;
 
       /**
        * @brief - The radius around this spawner where a mob

@@ -181,6 +181,12 @@ namespace tdef {
 
       /**
        * @brief - A description of the identifier used to represent
+       *          the texture pack for mobs.
+       */
+      unsigned m_mPackID;
+
+      /**
+       * @brief - A description of the identifier used to represent
        *          the texture pack for walls.
        */
       unsigned m_wPackID;

@@ -75,15 +75,29 @@ namespace tdef {
   Locator::mob(int id) const noexcept {
     MobShPtr m = m_mobs[id];
 
-    world::MobType mt = world::MobType::Fast;
-    // TODO: Handle mob type.
-
     world::Mob md;
     md.p = m->getPos();
     md.radius = m->getRadius();
     md.health = m->getHealthRatio();
-    md.type = mt;
+
     md.path = m->getPath();
+
+    switch (m->getType()) {
+      case mobs::Type::Fast:
+        md.id = 1;
+        break;
+      case mobs::Type::Strong:
+        md.id = 2;
+        break;
+      case mobs::Type::Air:
+        md.id = 3;
+        break;
+      case mobs::Type::Regular:
+      default:
+        // Assume regular type.
+        md.id = 0;
+        break;
+    }
 
     return md;
   }

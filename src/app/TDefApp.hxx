@@ -16,6 +16,11 @@ namespace tdef {
     p.layout = olc::vi2d(4, 1);
     m_tPackID = m_packs->registerPack(p);
 
+    p.file = "data/img/mobs.png";
+    p.sSize = olc::vi2d(64, 64);
+    p.layout = olc::vi2d(4, 1);
+    m_mPackID = m_packs->registerPack(p);
+
     p.file = "data/img/walls.png";
     p.sSize = olc::vi2d(64, 64);
     p.layout = olc::vi2d(1, 1);

@@ -40,6 +40,12 @@ namespace tdef {
 
   inline
   void
+  World::setTowerType(const towers::Type& type) {
+    m_tType = std::make_shared<towers::Type>(type);
+  }
+
+  inline
+  void
   World::loadDimensions(std::ifstream& in) {
     // Read each dimension: should be on separate lines.
     in >> m_w;

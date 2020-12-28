@@ -15,7 +15,7 @@ namespace tdef {
 
       static
       Tower::TProps
-      generateSniperTowerProps(const utils::Point2f& p) noexcept;
+      generateSnipeTowerProps(const utils::Point2f& p) noexcept;
 
       static
       Tower::TProps
@@ -31,7 +31,7 @@ namespace tdef {
 
       static
       towers::Data
-      generateSniperTowerData() noexcept;
+      generateSnipeTowerData() noexcept;
 
       static
       towers::Data

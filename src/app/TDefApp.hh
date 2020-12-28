@@ -84,7 +84,8 @@ namespace tdef {
       onResume(float elapsed) override;
 
       void
-      onInputs(const controls::State& c) override;
+      onInputs(const controls::State& c,
+               const CoordinateFrame& cf) override;
 
       /**
        * @brief - Used to draw the tile referenced by the input

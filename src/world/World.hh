@@ -8,6 +8,7 @@
 # include <core_utils/RNG.hh>
 # include <maths_utils/Point2.hh>
 # include "Mob.hh"
+# include "Tower.hh"
 # include "Block.hh"
 # include "Locator.hh"
 
@@ -106,6 +107,29 @@ namespace tdef {
       void
       resume(float tDelta);
 
+
+      /**
+       * @brief - Defines the type of tower to spawn upon
+       *          invoking the `performAction` method.
+       * @param type - the type of tower to spawn.
+       */
+      void
+      setTowerType(const towers::Type& type);
+
+      /**
+       * @brief - Used to create a tower with the specified
+       *          type (as defined by the `setTowerType`)
+       *          method at the specified position. Note
+       *          that we will only perform the action if
+       *          no elements exist here.
+       * @param x - the abscissa of the position at which the
+       *            action should be taking place.
+       * @param y - the ordinate of the position at which the
+       *            action will be taking place.
+       */
+      void
+      performAction(float x, float y);
+
     private:
 
       /**
@@ -166,6 +190,11 @@ namespace tdef {
        *          mobs based on their position.
        */
       LocatorShPtr m_loc;
+
+      /**
+       * @brief - The type of tower to spawn if needed.
+       */
+      std::shared_ptr<towers::Type> m_tType;
   };
 
   using WorldShPtr = std::shared_ptr<World>;

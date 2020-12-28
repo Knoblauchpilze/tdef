@@ -52,6 +52,8 @@ namespace tdef {
   void
   Game::step(float tDelta) {
     m_world->step(tDelta);
+
+    // TODO: Include update of the menus here.
   }
 
   inline

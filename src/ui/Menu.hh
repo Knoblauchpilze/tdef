@@ -119,6 +119,13 @@ namespace tdef {
       olc::vf2d
       getSize() const noexcept;
 
+      /**
+       * @brief - Replace the existing content with the new one.
+       * @param mcd - the new content description for this menu.
+       */
+      void
+      setContent(const menu::MenuContentDesc& mcd);
+
     protected:
 
       /**

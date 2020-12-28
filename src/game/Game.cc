@@ -142,8 +142,6 @@ namespace tdef {
     sm = std::make_shared<Menu>(pos, size, "wave", bg, fg, menu::Layout::Horizontal, false);
     m->addMenu(sm);
 
-    // TODO: Make this dynamic.
-
     return m;
   }
 
@@ -192,7 +190,7 @@ namespace tdef {
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    MenuShPtr m = std::make_shared<Menu>(pos, size, "uMenu", bg, fg);
+    MenuShPtr m = std::make_shared<Menu>(pos, size, "uMenu", bg, fg, menu::Layout::Vertical);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);

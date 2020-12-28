@@ -19,6 +19,14 @@ namespace tdef {
 
   inline
   void
+  Menu::setContent(const menu::MenuContentDesc& mcd) {
+    clearContent();
+    m_fg = mcd;
+    loadFGTile();
+  }
+
+  inline
+  void
   Menu::onClick(std::vector<ActionShPtr>& /*actions*/) const {
     // Nothing to do.
   }

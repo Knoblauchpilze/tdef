@@ -1,18 +1,14 @@
 
 # include "TDefApp.hh"
-# include "TowerMenu.hh"
 
 namespace tdef {
 
   TDefApp::TDefApp(const AppDesc& desc):
     PGEApp(desc),
 
-    m_world(nullptr),
-    m_loc(nullptr),
+    m_game(nullptr),
 
-    m_sMenu(nullptr),
-    m_tMenu(nullptr),
-    m_uMenu(nullptr),
+    m_menus(),
 
     m_packs(std::make_shared<TexturePack>()),
     m_tPackID(0u),
@@ -22,122 +18,15 @@ namespace tdef {
 
   void
   TDefApp::loadWorld() {
-// # define WORLD_FROM_FILE
-# ifdef WORLD_FROM_FILE
-    m_world = std::make_shared<World>(100, std::string("data/worlds/level_1.lvl"));
-# else
-    m_world = std::make_shared<World>(100, 10, 5);
-# endif
-
-    m_loc = m_world->locator();
+    m_game = std::make_shared<Game>();
   }
 
   void
   TDefApp::loadMenuResources() {
-    // Create the menu: we want it to have a fixed
-    // height and be at the bottom of the screen.
-    int w = ScreenWidth();
-    int h = ScreenHeight();
+    olc::vi2d dims(ScreenWidth(), ScreenHeight());
 
-    int rgb = 20;
-    int mHeight = 20;
-
-    olc::vi2d mPos(0, 0);
-    olc::vf2d mSize(w, mHeight);
-    olc::Pixel c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
-    menu::BackgroundDesc bg = menu::newColoredBackground(c);
-    menu::MenuContentDesc fg = menu::newTextContent("");
-
-    m_sMenu = std::make_shared<Menu>(mPos, mSize, "sMenu", bg, fg);
-
-    // Gold amount.
-    rgb *= 2;
-    c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
-    bg = menu::newColoredBackground(c);
-    fg = menu::newTextContent("Gold: 50");
-    MenuShPtr sm = std::make_shared<Menu>(mPos, mSize, "gold", bg, fg, menu::Layout::Horizontal, false);
-    m_sMenu->addMenu(sm);
-
-    // Lives status.
-    // TODO: Make this dynamic.
-    fg = menu::newTextContent("Lives: 15");
-    sm = std::make_shared<Menu>(mPos, mSize, "lives", bg, fg, menu::Layout::Horizontal, false);
-    m_sMenu->addMenu(sm);
-
-    // Wave count.
-    fg = menu::newTextContent("Wave: 1");
-    sm = std::make_shared<Menu>(mPos, mSize, "wave", bg, fg, menu::Layout::Horizontal, false);
-    m_sMenu->addMenu(sm);
-
-    // Bottom menu.
-    mHeight = MENU_HEIGHT;
-    mPos = olc::vi2d(0, h - mHeight);
-    mSize.y = MENU_HEIGHT;
-    rgb /= 2;
-    c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
-
-    bg = menu::newColoredBackground(c);
-    fg = menu::newTextContent("");
-    m_tMenu = std::make_shared<Menu>(mPos, mSize, "tMenu", bg, fg);
-
-    rgb *= 2;
-    c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
-    bg = menu::newColoredBackground(c);
-
-    fg = menu::newTextContent("Regular");
-    sm = std::make_shared<TowerMenu>(mPos, mSize, towers::Type::Regular, bg, fg);
-    m_tMenu->addMenu(sm);
-
-    fg = menu::newTextContent("Snipe");
-    sm = std::make_shared<TowerMenu>(mPos, mSize, towers::Type::Snipe, bg, fg);
-    m_tMenu->addMenu(sm);
-
-    fg = menu::newTextContent("Slow");
-    sm = std::make_shared<TowerMenu>(mPos, mSize, towers::Type::Slow, bg, fg);
-    m_tMenu->addMenu(sm);
-
-    fg = menu::newTextContent("Cannon");
-    sm = std::make_shared<TowerMenu>(mPos, mSize, towers::Type::Cannon, bg, fg);
-    m_tMenu->addMenu(sm);
-
-    // Upgrade menu.
-    int mWidth = 120;
-    mPos = olc::vi2d(w - mWidth, 20);
-    mSize = olc::vi2d(mWidth, h - 20 - mHeight);
-    rgb /= 2;
-    c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
-
-    bg = menu::newColoredBackground(c);
-    fg = menu::newTextContent("");
-    m_uMenu = std::make_shared<Menu>(mPos, mSize, "menu", bg, fg, menu::Layout::Vertical);
-
-    rgb *= 2;
-    c = olc::Pixel(rgb, rgb, rgb, ALPHA_SEMI_OPAQUE);
-    bg = menu::newColoredBackground(c);
-
-    fg = menu::newTextContent("Range: 10");
-    sm = std::make_shared<Menu>(mPos, mSize, "prop1", bg, fg);
-    m_uMenu->addMenu(sm);
-
-    fg = menu::newTextContent("Strength: 10");
-    sm = std::make_shared<Menu>(mPos, mSize, "prop2", bg, fg);
-    m_uMenu->addMenu(sm);
-
-    fg = menu::newTextContent("Attack speed: 10");
-    sm = std::make_shared<Menu>(mPos, mSize, "prop3", bg, fg);
-    m_uMenu->addMenu(sm);
-
-    fg = menu::newTextContent("Reload time: 10");
-    sm = std::make_shared<Menu>(mPos, mSize, "prop4", bg, fg);
-    m_uMenu->addMenu(sm);
-
-    fg = menu::newTextContent("Sell");
-    sm = std::make_shared<Menu>(mPos, mSize, "prop5", bg, fg);
-    m_uMenu->addMenu(sm);
-
-    fg = menu::newTextContent("Target mode");
-    sm = std::make_shared<Menu>(mPos, mSize, "prop6", bg, fg);
-    m_uMenu->addMenu(sm);
+    // Generate menus and register them.
+    m_menus = m_game->generateMenus(dims);
   }
 
   void
@@ -148,7 +37,7 @@ namespace tdef {
 
     // Fetch elements to display.
     Viewport v = res.cf.cellsViewport();
-    std::vector<world::ItemEntry> items = m_loc->getVisible(
+    std::vector<world::ItemEntry> items = m_game->getVisible(
       v.p.x,
       v.p.y,
       v.p.x + v.dims.x,
@@ -168,9 +57,9 @@ namespace tdef {
     int yMin = std::floor(v.p.y);
     yMin = std::max(yMin, 0);
     int xMax = std::floor(v.p.x + v.dims.x);
-    xMax = std::min(xMax, m_loc->w());
+    xMax = std::min(xMax, m_game->w());
     int yMax = std::floor(v.p.y + v.dims.y);
-    yMax = std::min(yMax, m_loc->h());
+    yMax = std::min(yMax, m_game->h());
 
     for (int y = yMin ; y <= yMax ; ++y) {
       for (int x = xMin ; x <= xMax ; ++x) {
@@ -192,7 +81,7 @@ namespace tdef {
 
       // Case of a block.
       if (ie.type == world::ItemType::Block) {
-        world::Block t = m_loc->block(ie.index);
+        world::Block t = m_game->block(ie.index);
 
         sd.x = t.p.x();
         sd.y = t.p.y();
@@ -235,7 +124,7 @@ namespace tdef {
 
       // Case of a mob.
       if (ie.type == world::ItemType::Mob) {
-        world::Mob t = m_loc->mob(ie.index);
+        world::Mob t = m_game->mob(ie.index);
 
         sd.x = t.p.x();
         sd.y = t.p.y();
@@ -259,7 +148,7 @@ namespace tdef {
   TDefApp::drawUI(const RenderDesc& res) {
     // Clear rendering target.
     SetPixelMode(olc::Pixel::ALPHA);
-    Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
+    Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
 
     // Draw the cursor.
     olc::vi2d mp = GetMousePos();
@@ -272,19 +161,13 @@ namespace tdef {
     sd.radius = 1.0f;
 
     sd.sprite.tint = olc::DARK_COBALT_BLUE;
-    sd.sprite.tint.a = ALPHA_SEMI_OPAQUE;
+    sd.sprite.tint.a = alpha::SemiOpaque;
 
     drawRect(sd, res.cf);
 
     // Render the game menus.
-    if (m_sMenu != nullptr) {
-      m_sMenu->render(this);
-    }
-    if (m_tMenu != nullptr) {
-      m_tMenu->render(this);
-    }
-    if (m_uMenu != nullptr) {
-      m_uMenu->render(this);
+    for (unsigned id = 0u ; id < m_menus.size() ; ++id) {
+      m_menus[id]->render(this);
     }
 
     SetPixelMode(olc::Pixel::NORMAL);
@@ -294,7 +177,7 @@ namespace tdef {
   TDefApp::drawDebug(const RenderDesc& res) {
     // Clear rendering target.
     SetPixelMode(olc::Pixel::ALPHA);
-    Clear(olc::Pixel(255, 255, 255, ALPHA_TRANSPARENT));
+    Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
 
     // Draw cursor's position.
     olc::vi2d mp = GetMousePos();
@@ -303,14 +186,14 @@ namespace tdef {
 
     int h = GetDrawTargetHeight();
     int dOffset = 15;
-    DrawString(olc::vi2d(0, h - MENU_HEIGHT - 3 * dOffset), "Mouse coords      : " + toString(mp), olc::CYAN);
-    DrawString(olc::vi2d(0, h - MENU_HEIGHT - 2 * dOffset), "World cell coords : " + toString(mtp), olc::CYAN);
-    DrawString(olc::vi2d(0, h - MENU_HEIGHT - 1 * dOffset), "Intra cell        : " + toString(it), olc::CYAN);
+    DrawString(olc::vi2d(0, h / 2), "Mouse coords      : " + toString(mp), olc::CYAN);
+    DrawString(olc::vi2d(0, h / 2 + 1 * dOffset), "World cell coords : " + toString(mtp), olc::CYAN);
+    DrawString(olc::vi2d(0, h / 2 + 2 * dOffset), "Intra cell        : " + toString(it), olc::CYAN);
 
     // Render entities' path and position.
     Viewport v = res.cf.cellsViewport();
     world::ItemType ie = world::ItemType::Mob;
-    std::vector<world::ItemEntry> items = m_loc->getVisible(
+    std::vector<world::ItemEntry> items = m_game->getVisible(
       v.p.x,
       v.p.y,
       v.p.x + v.dims.x,
@@ -333,7 +216,7 @@ namespace tdef {
         continue;
       }
 
-      world::Mob md = m_loc->mob(ie.index);
+      world::Mob md = m_game->mob(ie.index);
 
       // Draw the path of this entity if any.
       if (md.path.valid()) {

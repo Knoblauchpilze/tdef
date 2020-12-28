@@ -2,8 +2,7 @@
 # define   TDEF_APP_HH
 
 # include "PGEApp.hh"
-# include "World.hh"
-# include "Locator.hh"
+# include "Game.hh"
 # include "Menu.hh"
 # include "TexturePack.hh"
 
@@ -129,44 +128,15 @@ namespace tdef {
     private:
 
       /**
-       * @brief - Definition of the height of the game menu in
-       *          pixels. Allow to tailor some other display so
-       *          that they don't overlap the menu.
+       * @brief - The game managed by this application.
        */
-      static constexpr int MENU_HEIGHT = 50;
+      GameShPtr m_game;
 
       /**
-       * @brief - The world managed by this application.
+       * @brief - Defines the list of menus available for
+       *          this app.
        */
-      WorldShPtr m_world;
-
-      /**
-       * @brief - An element to use to interact with elements from
-       *          the world. This object provide convenience methods
-       *          to access in an efficient way elements that are
-       *          within a particular region or in a way that allow
-       *          efficient drawing on screen (such as in ascending
-       *          `z` order).
-       */
-      LocatorShPtr m_loc;
-
-      /**
-       * @brief - Defines the menu allowing to display information
-       *          on the status of the player.
-       */
-      MenuShPtr m_sMenu;
-
-      /**
-       * @brief - Defines the menu allowing to purchase towers for
-       *          the game.
-       */
-      MenuShPtr m_tMenu;
-
-      /**
-       * @brief - Defines the menu allowing to upgrade and modify
-       *          a selected tower.
-       */
-      MenuShPtr m_uMenu;
+      std::vector<MenuShPtr> m_menus;
 
       /**
        * @brief - A description of the textures used to represent

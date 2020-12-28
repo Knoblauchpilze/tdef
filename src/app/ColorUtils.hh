@@ -52,6 +52,16 @@ namespace tdef {
   olc::Pixel
   modulate(const olc::Pixel& in, float factor) noexcept;
 
+  namespace alpha {
+
+    static constexpr int Opaque = 255;
+    static constexpr int AlmostOpaque = 192;
+    static constexpr int SemiOpaque = 128;
+    static constexpr int AlmostTransparent = 64;
+    static constexpr int Transparent = 0;
+
+  }
+
 }
 
 std::string

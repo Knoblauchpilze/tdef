@@ -1,5 +1,6 @@
 
 # include "TowerAction.hh"
+# include "Game.hh"
 
 namespace tdef {
 
@@ -10,8 +11,8 @@ namespace tdef {
   {}
 
   void
-  TowerAction::apply(World& w) const {
-    w.setTowerType(m_type);
+  TowerAction::apply(Game& g) const {
+    g.setTowerType(m_type);
   }
 
 }

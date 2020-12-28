@@ -61,11 +61,6 @@ namespace tdef {
     return true;
   }
 
-  void
-  PGEApp::loadMenuResources() {
-    // Nothing to do here.
-  }
-
   PGEApp::InputChanges
   PGEApp::handleInputs() {
     InputChanges ic{false, false};

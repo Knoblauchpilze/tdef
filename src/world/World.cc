@@ -22,9 +22,7 @@ namespace tdef {
     m_blocks(),
     m_mobs(),
 
-    m_loc(nullptr),
-
-    m_tType(nullptr)
+    m_loc(nullptr)
   {
     setService("world");
 
@@ -43,9 +41,7 @@ namespace tdef {
     m_blocks(),
     m_mobs(),
 
-    m_loc(nullptr),
-
-    m_tType(nullptr)
+    m_loc(nullptr)
   {
     // Check dimensions.
     setService("world");
@@ -93,66 +89,6 @@ namespace tdef {
         m_mobs.erase(toRm);
       }
     }
-  }
-
-  void
-  World::performAction(float x, float y) {
-    // Make sure that a tower type is defined.
-    if (m_tType == nullptr) {
-      return;
-    }
-
-    // Check whether this position is obstructed.
-    if (m_loc->obstructed(x, y)) {
-      log("Can't place tower at " + std::to_string(x) + "x" + std::to_string(y));
-      return;
-    }
-
-    // Generate the tower.
-    Tower::TProps pp;
-    towers::Data td;
-    utils::Point2f p(std::floor(x) + 0.5f, std::floor(y) + 0.5f);
-
-    bool valid = true;
-    switch (*m_tType) {
-      case towers::Type::Regular:
-        pp = TowerFactory::generateBasicTowerProps(p);
-        td = TowerFactory::generateBasicTowerData();
-        break;
-      case towers::Type::Snipe:
-        pp = TowerFactory::generateSnipeTowerProps(p);
-        td = TowerFactory::generateSnipeTowerData();
-        break;
-      case towers::Type::Slow:
-        pp = TowerFactory::generateSlowTowerProps(p);
-        td = TowerFactory::generateSlowTowerData();
-        break;
-      case towers::Type::Cannon:
-        pp = TowerFactory::generateCannonTowerProps(p);
-        td = TowerFactory::generateCannonTowerData();
-        break;
-      default:
-        valid = false;
-        break;
-    }
-
-    if (!valid) {
-      log(
-        "Unknown tower type " + std::to_string(static_cast<int>(*m_tType)) +
-        " to generate",
-        utils::Level::Warning
-      );
-
-      return;
-    }
-
-    log(
-      "Generated tower " + std::to_string(static_cast<int>(*m_tType)) +
-      " at " + std::to_string(x) + "x" + std::to_string(y)
-    );
-
-    TowerShPtr t = std::make_shared<Tower>(pp, td);
-    m_blocks.push_back(t);
   }
 
   void

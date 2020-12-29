@@ -46,6 +46,14 @@ namespace tdef {
       setTowerType(const towers::Type& type);
 
       /**
+       * @brief - Defines that a wall should be prepared to
+       *          be spawned. This overrides any kind of
+       *          tower that might have been defined.
+       */
+      void
+      allowWallBuilding();
+
+      /**
        * @brief - Used to create a tower with the specified
        *          type (as defined by the `setTowerType`)
        *          method at the specified position. Note
@@ -177,6 +185,26 @@ namespace tdef {
       MenuShPtr
       generateUpgradeMenu(const olc::vi2d& dims) const;
 
+      /**
+       * @brief - Spawn a new tower at the specified position
+       *          assuming that 1. a tower is actually set to
+       *          be spawned and 2. the coordinates are valid.
+       * @param x - the abscissa where the tower will be build.
+       * @param y - the ordinate where the tower will be build.
+       */
+      void
+      spawnTower(float x, float y);
+
+      /**
+       * @brief - Spawn a new wall at the specified position
+       *          assuming that a wall is able to be spawned
+       *          and that the coordinates are valid.
+       * @param x - the abscissa where the wall will be build.
+       * @param y - the ordinate where the wall will be build.
+       */
+      void
+      spawnWall(float x, float y);
+
     private:
 
       /**
@@ -204,11 +232,6 @@ namespace tdef {
       WorldShPtr m_world;
 
       /**
-       * @brief - The type of tower to spawn if needed.
-       */
-      std::shared_ptr<towers::Type> m_tType;
-
-      /**
        * @brief - An element to use to interact with elements from
        *          the world. This object provide convenience methods
        *          to access in an efficient way elements that are
@@ -217,6 +240,19 @@ namespace tdef {
        *          `z` order).
        */
       LocatorShPtr m_loc;
+
+      /**
+       * @brief - The type of tower to spawn if needed.
+       */
+      std::shared_ptr<towers::Type> m_tType;
+
+      /**
+       * @brief - Used to define that building a wall is
+       *          allowed. This will usually be used to
+       *          override any information about a tower
+       *          to build.
+       */
+      bool m_wallBuilding;
   };
 
   using GameShPtr = std::shared_ptr<Game>;

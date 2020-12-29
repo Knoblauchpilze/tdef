@@ -21,6 +21,14 @@ namespace tdef {
   void
   Game::setTowerType(const towers::Type& type) {
     m_tType = std::make_shared<towers::Type>(type);
+    m_wallBuilding = false;
+  }
+
+  inline
+  void
+  Game::allowWallBuilding() {
+    m_tType.reset();
+    m_wallBuilding = true;
   }
 
   inline

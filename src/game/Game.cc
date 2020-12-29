@@ -1,7 +1,8 @@
 
 # include "Game.hh"
 # include "TowerFactory.hh"
-# include "TowerMenu.hh"
+# include "SimpleMenu.hh"
+# include "SimpleAction.hh"
 
 namespace tdef {
 
@@ -162,19 +163,75 @@ namespace tdef {
     bg = menu::newColoredBackground(smbgc);
 
     fg = menu::newTextContent("Regular");
-    MenuShPtr sm = std::make_shared<TowerMenu>(pos, size, towers::Type::Regular, bg, fg);
+    MenuShPtr sm = std::make_shared<SimpleMenu>(
+      pos,
+      size,
+      bg,
+      fg,
+      [](std::vector<ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<SimpleAction>(
+            [](Game& g) {
+              g.setTowerType(towers::Type::Regular);
+            }
+          )
+        );
+      }
+    );
     m->addMenu(sm);
 
     fg = menu::newTextContent("Snipe");
-    sm = std::make_shared<TowerMenu>(pos, size, towers::Type::Snipe, bg, fg);
+    sm = std::make_shared<SimpleMenu>(
+      pos,
+      size,
+      bg,
+      fg,
+      [](std::vector<ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<SimpleAction>(
+            [](Game& g) {
+              g.setTowerType(towers::Type::Snipe);
+            }
+          )
+        );
+      }
+    );
     m->addMenu(sm);
 
     fg = menu::newTextContent("Slow");
-    sm = std::make_shared<TowerMenu>(pos, size, towers::Type::Slow, bg, fg);
+    sm = std::make_shared<SimpleMenu>(
+      pos,
+      size,
+      bg,
+      fg,
+      [](std::vector<ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<SimpleAction>(
+            [](Game& g) {
+              g.setTowerType(towers::Type::Slow);
+            }
+          )
+        );
+      }
+    );
     m->addMenu(sm);
 
     fg = menu::newTextContent("Cannon");
-    sm = std::make_shared<TowerMenu>(pos, size, towers::Type::Cannon, bg, fg);
+    sm = std::make_shared<SimpleMenu>(
+      pos,
+      size,
+      bg,
+      fg,
+      [](std::vector<ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<SimpleAction>(
+            [](Game& g) {
+              g.setTowerType(towers::Type::Cannon);
+            }
+          )
+        );
+      }
+    );
     m->addMenu(sm);
 
     return m;

@@ -10,7 +10,10 @@ namespace tdef {
     utils::CoreObject("game"),
 
     m_world(nullptr),
-    m_loc(nullptr)
+    m_loc(nullptr),
+
+    m_tType(nullptr),
+    m_wallBuilding(false)
   {
     setService("game");
 
@@ -39,61 +42,26 @@ namespace tdef {
   void
   Game::performAction(float x, float y) {
     // Make sure that a tower type is defined.
-    if (m_tType == nullptr) {
+    if (m_tType == nullptr && !m_wallBuilding) {
       return;
     }
 
     // Check whether this position is obstructed.
     if (m_loc->obstructed(x, y)) {
-      log("Can't place tower at " + std::to_string(x) + "x" + std::to_string(y));
+      log("Can't place element at " + std::to_string(x) + "x" + std::to_string(y));
       return;
     }
 
-    // Generate the tower.
-    Tower::TProps pp;
-    towers::Data td;
-    utils::Point2f p(std::floor(x) + 0.5f, std::floor(y) + 0.5f);
-
-    bool valid = true;
-    switch (*m_tType) {
-      case towers::Type::Regular:
-        pp = TowerFactory::generateBasicTowerProps(p);
-        td = TowerFactory::generateBasicTowerData();
-        break;
-      case towers::Type::Snipe:
-        pp = TowerFactory::generateSnipeTowerProps(p);
-        td = TowerFactory::generateSnipeTowerData();
-        break;
-      case towers::Type::Slow:
-        pp = TowerFactory::generateSlowTowerProps(p);
-        td = TowerFactory::generateSlowTowerData();
-        break;
-      case towers::Type::Cannon:
-        pp = TowerFactory::generateCannonTowerProps(p);
-        td = TowerFactory::generateCannonTowerData();
-        break;
-      default:
-        valid = false;
-        break;
-    }
-
-    if (!valid) {
-      log(
-        "Unknown tower type " + std::to_string(static_cast<int>(*m_tType)) +
-        " to generate",
-        utils::Level::Warning
-      );
-
+    // Spawn a tower or a wall.
+    if (m_tType != nullptr) {
+      spawnTower(x, y);
       return;
     }
 
-    log(
-      "Generated tower " + std::to_string(static_cast<int>(*m_tType)) +
-      " at " + std::to_string(x) + "x" + std::to_string(y)
-    );
-
-    TowerShPtr t = std::make_shared<Tower>(pp, td);
-    m_world->spawn(t);
+    if (m_wallBuilding) {
+      spawnWall(x, y);
+      return;
+    }
   }
 
   float
@@ -234,6 +202,24 @@ namespace tdef {
     );
     m->addMenu(sm);
 
+    fg = menu::newTextContent("Wall");
+    sm = std::make_shared<SimpleMenu>(
+      pos,
+      size,
+      bg,
+      fg,
+      [](std::vector<ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<SimpleAction>(
+            [](Game& g) {
+              g.allowWallBuilding();
+            }
+          )
+        );
+      }
+    );
+    m->addMenu(sm);
+
     return m;
   }
 
@@ -278,6 +264,66 @@ namespace tdef {
     m->addMenu(sm);
 
     return m;
+  }
+
+  void
+  Game::spawnTower(float x, float y) {
+    // Generate the tower.
+    Tower::TProps pp;
+    towers::Data td;
+    utils::Point2f p(std::floor(x) + 0.5f, std::floor(y) + 0.5f);
+
+    bool valid = true;
+    switch (*m_tType) {
+      case towers::Type::Regular:
+        pp = TowerFactory::generateBasicTowerProps(p);
+        td = TowerFactory::generateBasicTowerData();
+        break;
+      case towers::Type::Snipe:
+        pp = TowerFactory::generateSnipeTowerProps(p);
+        td = TowerFactory::generateSnipeTowerData();
+        break;
+      case towers::Type::Slow:
+        pp = TowerFactory::generateSlowTowerProps(p);
+        td = TowerFactory::generateSlowTowerData();
+        break;
+      case towers::Type::Cannon:
+        pp = TowerFactory::generateCannonTowerProps(p);
+        td = TowerFactory::generateCannonTowerData();
+        break;
+      default:
+        valid = false;
+        break;
+    }
+
+    if (!valid) {
+      log(
+        "Unknown tower type " + std::to_string(static_cast<int>(*m_tType)) +
+        " to generate",
+        utils::Level::Warning
+      );
+
+      return;
+    }
+
+    log(
+      "Generated tower " + std::to_string(static_cast<int>(*m_tType)) +
+      " at " + std::to_string(x) + "x" + std::to_string(y)
+    );
+
+    TowerShPtr t = std::make_shared<Tower>(pp, td);
+    m_world->spawn(t);
+  }
+
+  void
+  Game::spawnWall(float x, float y) {
+    log("Generated wall at " + std::to_string(x) + "x" + std::to_string(y));
+
+    utils::Point2f p(std::floor(x) + 0.5f, std::floor(y) + 0.5f);
+    Wall::WProps pp = Wall::newProps(p);
+
+    WallShPtr w = std::make_shared<Wall>(pp);
+    m_world->spawn(w);
   }
 
 }

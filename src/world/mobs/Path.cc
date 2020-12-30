@@ -68,7 +68,7 @@ namespace tdef {
     }
 
     bool
-    Path::generatePathTo(StepInfo& info,
+    Path::generatePathTo(LocatorShPtr frustum,
                          const utils::Point2f& p,
                          bool ignoreTargetObstruction,
                          float maxDistanceFromStart,
@@ -91,7 +91,7 @@ namespace tdef {
       // solid block and we're not supposed to be
       // ignoring it: in this case it does not make
       // sense to try to generate a path.
-      if (info.frustum->obstructed(p) && !ignoreTargetObstruction) {
+      if (frustum->obstructed(p) && !ignoreTargetObstruction) {
         return false;
       }
 
@@ -100,7 +100,7 @@ namespace tdef {
       utils::Point2f obsP;
       std::vector<utils::Point2f> iPoints;
 
-      bool obs = info.frustum->obstructed(s, xDir, yDir, d, iPoints, &obsP);
+      bool obs = frustum->obstructed(s, xDir, yDir, d, iPoints, &obsP);
       bool obsWithinTarget = obs && (std::abs(obsP.x() - p.x()) < 1.0f && std::abs(obsP.y() - p.y()) < 1.0f);
 
       if (!obs || (obsWithinTarget && ignoreTargetObstruction)) {
@@ -133,7 +133,7 @@ namespace tdef {
       // desired (the A*) as it means that each mob
       // has indeed infinite vision for now but
       // that's it.
-      AStar alg(s, p, info.frustum);
+      AStar alg(s, p, frustum);
       std::vector<utils::Point2f> steps;
 
       if (!alg.findPath(steps, maxDistanceFromStart, allowLog)) {

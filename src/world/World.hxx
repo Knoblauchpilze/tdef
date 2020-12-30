@@ -40,17 +40,6 @@ namespace tdef {
 
   inline
   void
-  World::spawn(BlockShPtr block) {
-    if (block == nullptr) {
-      log("Failed to spawn null block", utils::Level::Error);
-      return;
-    }
-
-    m_blocks.push_back(block);
-  }
-
-  inline
-  void
   World::loadDimensions(std::ifstream& in) {
     // Read each dimension: should be on separate lines.
     in >> m_w;

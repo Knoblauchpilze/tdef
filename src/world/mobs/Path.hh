@@ -1,10 +1,15 @@
 #ifndef    PATH_HH
 # define   PATH_HH
 
-# include "StepInfo.hh"
+# include <vector>
+# include <memory>
 # include <maths_utils/Point2.hh>
 
 namespace tdef {
+  // Forward declaration of the `Locator` class.
+  class Locator;
+  using LocatorShPtr = std::shared_ptr<Locator>;
+
   namespace path {
 
     /**
@@ -29,11 +34,9 @@ namespace tdef {
        * @brief - Used to make sure that the starting and end
        *          postion of this segment are consistent with
        *          the dimensions of the world.
-       * @param info - information about the world into which
-       *               this segment is living.
        */
       void
-      normalize(const StepInfo& info);
+      normalize();
     };
 
     /**
@@ -139,6 +142,14 @@ namespace tdef {
       currentTarget() const noexcept;
 
       /**
+       * @brief - Used to fetch the final target of the path
+       *          after all segments will have been traversed.
+       * @return - the target of the path.
+       */
+      utils::Point2f
+      target() const noexcept;
+
+      /**
        * @brief - Used to advance on this path assuming the
        *          path follower is moving at `speed` along
        *          the path and that `elapsed` seconds have
@@ -158,8 +169,8 @@ namespace tdef {
        *          by the `x` and `y` coordinates and add needed
        *          segments to the path. The start of the path is
        *          assumed to be the current end of the path.
-       * @param info - allowing to detect obstruction to reach
-       *               the target.
+       * @param frustum - allowing to detect obstruction to reach
+       *                  the target.
        * @param p - the point to generate a path to.
        * @param ignoreTargetObstruction - set this value to `true`
        *                                  in case obstruction of
@@ -179,7 +190,7 @@ namespace tdef {
        *           target and `false` otherwise.
        */
       bool
-      generatePathTo(StepInfo& info,
+      generatePathTo(LocatorShPtr frustum,
                      const utils::Point2f& p,
                      bool ignoreTargetObstruction,
                      float maxDistanceFromStart = -1.0f,

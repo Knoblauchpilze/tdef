@@ -44,6 +44,12 @@ namespace tdef {
     // Nothing to do.
   }
 
+  inline
+  void
+  Block::worldUpdate(LocatorShPtr /*loc*/) {
+    // Nothing to do.
+  }
+
 }
 
 #endif    /* BLOCK_HXX */

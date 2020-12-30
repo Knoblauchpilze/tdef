@@ -103,6 +103,25 @@ namespace tdef {
   }
 
   void
+  World::spawn(BlockShPtr block) {
+    if (block == nullptr) {
+      log("Failed to spawn null block", utils::Level::Error);
+      return;
+    }
+
+    m_blocks.push_back(block);
+
+    // Update elements.
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      m_blocks[id]->worldUpdate(m_loc);
+    }
+
+    for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
+      m_mobs[id]->worldUpdate(m_loc);
+    }
+  }
+
+  void
   World::generate() {
     static constexpr int sk_spawners = 3;
     static constexpr int sk_walls = 2;

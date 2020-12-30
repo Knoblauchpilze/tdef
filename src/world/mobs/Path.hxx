@@ -18,7 +18,7 @@ namespace tdef {
 
     inline
     void
-    Segment::normalize(const StepInfo& /*info*/) {
+    Segment::normalize() {
       // Update direction for this segment.
       xD = end.x() - start.x();
       yD = end.y() - start.y();
@@ -127,6 +127,16 @@ namespace tdef {
       }
 
       return segments[seg].end;
+    }
+
+    inline
+    utils::Point2f
+    Path::target() const noexcept {
+      if (segments.empty()) {
+        return utils::Point2f();
+      }
+
+      return segments.back().end;
     }
 
     inline

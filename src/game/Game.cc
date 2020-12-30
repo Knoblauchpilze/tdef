@@ -130,7 +130,7 @@ namespace tdef {
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
-    fg = menu::newTextContent("Regular");
+    fg = menu::newTextContent("Basic");
     MenuShPtr sm = std::make_shared<SimpleMenu>(
       pos,
       size,
@@ -140,7 +140,7 @@ namespace tdef {
         actions.push_back(
           std::make_shared<SimpleAction>(
             [](Game& g) {
-              g.setTowerType(towers::Type::Regular);
+              g.setTowerType(towers::Type::Basic);
             }
           )
         );
@@ -148,7 +148,7 @@ namespace tdef {
     );
     m->addMenu(sm);
 
-    fg = menu::newTextContent("Snipe");
+    fg = menu::newTextContent("Sniper");
     sm = std::make_shared<SimpleMenu>(
       pos,
       size,
@@ -158,7 +158,7 @@ namespace tdef {
         actions.push_back(
           std::make_shared<SimpleAction>(
             [](Game& g) {
-              g.setTowerType(towers::Type::Snipe);
+              g.setTowerType(towers::Type::Sniper);
             }
           )
         );
@@ -166,7 +166,7 @@ namespace tdef {
     );
     m->addMenu(sm);
 
-    fg = menu::newTextContent("Slow");
+    fg = menu::newTextContent("Freezing");
     sm = std::make_shared<SimpleMenu>(
       pos,
       size,
@@ -176,7 +176,7 @@ namespace tdef {
         actions.push_back(
           std::make_shared<SimpleAction>(
             [](Game& g) {
-              g.setTowerType(towers::Type::Slow);
+              g.setTowerType(towers::Type::Freezing);
             }
           )
         );
@@ -275,15 +275,15 @@ namespace tdef {
 
     bool valid = true;
     switch (*m_tType) {
-      case towers::Type::Regular:
+      case towers::Type::Basic:
         pp = TowerFactory::generateBasicTowerProps(p);
         td = TowerFactory::generateBasicTowerData();
         break;
-      case towers::Type::Snipe:
-        pp = TowerFactory::generateSnipeTowerProps(p);
-        td = TowerFactory::generateSnipeTowerData();
+      case towers::Type::Sniper:
+        pp = TowerFactory::generateSniperTowerProps(p);
+        td = TowerFactory::generateSniperTowerData();
         break;
-      case towers::Type::Slow:
+      case towers::Type::Freezing:
         pp = TowerFactory::generateSlowTowerProps(p);
         td = TowerFactory::generateSlowTowerData();
         break;

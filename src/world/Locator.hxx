@@ -43,16 +43,40 @@ namespace tdef {
 
       TowerShPtr t = std::dynamic_pointer_cast<Tower>(b);
       switch (t->getType()) {
-        case towers::Type::Snipe:
+        case towers::Type::Sniper:
           var = 1;
           break;
-        case towers::Type::Slow:
+        case towers::Type::Cannon:
           var = 2;
           break;
-        case towers::Type::Cannon:
+        case towers::Type::Freezing:
           var = 3;
           break;
-        case towers::Type::Regular:
+        case towers::Type::Venom:
+          var = 4;
+          break;
+        case towers::Type::Splash:
+          var = 5;
+          break;
+        case towers::Type::Blast:
+          var = 6;
+          break;
+        case towers::Type::Multishot:
+          var = 7;
+          break;
+        case towers::Type::Minigun:
+          var = 8;
+          break;
+        case towers::Type::Antiair:
+          var = 9;
+          break;
+        case towers::Type::Tesla:
+          var = 10;
+          break;
+        case towers::Type::Missile:
+          var = 11;
+          break;
+        case towers::Type::Basic:
         default:
           // Assume regular type.
           var = 0;
@@ -89,8 +113,29 @@ namespace tdef {
       case mobs::Type::Strong:
         md.id = 2;
         break;
-      case mobs::Type::Air:
+      case mobs::Type::Heli:
         md.id = 3;
+        break;
+      case mobs::Type::Jet:
+        md.id = 4;
+        break;
+      case mobs::Type::Armored:
+        md.id = 5;
+        break;
+      case mobs::Type::Healer:
+        md.id = 6;
+        break;
+      case mobs::Type::Toxic:
+        md.id = 7;
+        break;
+      case mobs::Type::Icy:
+        md.id = 8;
+        break;
+      case mobs::Type::Fighter:
+        md.id = 9;
+        break;
+      case mobs::Type::Light:
+        md.id = 10;
         break;
       case mobs::Type::Regular:
       default:

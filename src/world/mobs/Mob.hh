@@ -17,7 +17,14 @@ namespace tdef {
       Regular,
       Fast,
       Strong,
-      Air,
+      Heli,
+      Jet,
+      Armored,
+      Healer,
+      Toxic,
+      Icy,
+      Fighter,
+      Light,
     };
 
   }

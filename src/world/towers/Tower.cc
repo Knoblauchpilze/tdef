@@ -63,7 +63,9 @@ namespace tdef {
       return;
     }
 
-    log("Killed mob at " + m->getPos().toString());
+    log("Killed mob at " + m->getPos().toString() + ", earned " + std::to_string(m->getBounty()) + " coin(s)");
+
+    info.gold += m->getBounty();
 
     // Mark this mob for deletion.
     info.removeMob(m.get());

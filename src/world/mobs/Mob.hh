@@ -43,6 +43,8 @@ namespace tdef {
         float speed;
         float arrival;
 
+        float bounty;
+
         // The `type` defines a representation of the real
         // kind of the mob. If one is using the factory
         // mobs with the same type should have similar
@@ -75,6 +77,14 @@ namespace tdef {
        */
       const path::Path&
       getPath() const noexcept;
+
+      /**
+       * @brief - Fetch the bounty associated to this mob if it
+       *          is killed.
+       * @return - the bounty associated to the mob.
+       */
+      float
+      getBounty() const noexcept;
 
       /**
        * @brief - Convenience wrapper to determine whether this
@@ -147,6 +157,11 @@ namespace tdef {
        * @brief - The current path followed by this mob.
        */
       path::Path m_path;
+
+      /**
+       * @brief - The bounty provided by this mob if killed.
+       */
+      float m_bounty;
   };
 
   using MobShPtr = std::shared_ptr<Mob>;

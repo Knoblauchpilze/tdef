@@ -31,6 +31,8 @@ namespace tdef {
     std::vector<MobShPtr> mSpawned;
     std::vector<Mob*> mRemoved;
 
+    float gold;
+
     void
     spawnMob(MobShPtr m);
 

@@ -5,6 +5,7 @@
 # include <memory>
 # include <fstream>
 # include <core_utils/CoreObject.hh>
+# include <core_utils/Signal.hh>
 # include <core_utils/RNG.hh>
 # include <maths_utils/Point2.hh>
 # include "Mob.hh"
@@ -177,6 +178,15 @@ namespace tdef {
        *          mobs based on their position.
        */
       LocatorShPtr m_loc;
+
+    public:
+
+      /**
+       * @brief - Signal emitted whenever gold is earned during
+       *          a simulation step for the world. The parameter
+       *          corresponds to the amount of gold earned.
+       */
+      utils::Signal<float> onGoldEarned;
   };
 
   using WorldShPtr = std::shared_ptr<World>;

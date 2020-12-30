@@ -13,7 +13,12 @@ namespace tdef {
     m_loc(nullptr),
 
     m_tType(nullptr),
-    m_wallBuilding(false)
+    m_wallBuilding(false),
+
+    m_lives(BASE_LIVES),
+    m_mLives(nullptr),
+    m_gold(BASE_GOLD),
+    m_mGold(nullptr)
   {
     setService("game");
 
@@ -28,7 +33,7 @@ namespace tdef {
   }
 
   std::vector<MenuShPtr>
-  Game::generateMenus(const olc::vi2d& dims) const {
+  Game::generateMenus(const olc::vi2d& dims) {
     // Generate each menu.
     std::vector<MenuShPtr> menus;
     
@@ -84,8 +89,24 @@ namespace tdef {
     return l;
   }
 
+  void
+  Game::step(float tDelta) {
+    m_world->step(tDelta);
+
+    // Update the status based on the game data.
+    m_lives = lives();
+
+    int v = static_cast<int>(m_lives);
+    menu::MenuContentDesc fg = menu::newTextContent("Lives: " + std::to_string(v));
+    m_mLives->setContent(fg);
+
+    v = static_cast<int>(m_gold);
+    fg = menu::newTextContent("Gold: " + std::to_string(v));
+    m_mGold->setContent(fg);
+  }
+
   MenuShPtr
-  Game::generateStatusMenu(const olc::vi2d& dims) const {
+  Game::generateStatusMenu(const olc::vi2d& dims) {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
     const olc::vi2d pos;
@@ -101,18 +122,18 @@ namespace tdef {
     bg = menu::newColoredBackground(smbgc);
 
     // Gold amount.
-    fg = menu::newTextContent("Gold: " + std::to_string(BASE_GOLD));
-    MenuShPtr sm = std::make_shared<Menu>(pos, size, "gold", bg, fg, menu::Layout::Horizontal, false);
-    m->addMenu(sm);
+    fg = menu::newTextContent("Gold: " + std::to_string(m_gold));
+    m_mGold = std::make_shared<Menu>(pos, size, "gold", bg, fg, menu::Layout::Horizontal, false);
+    m->addMenu(m_mGold);
 
     // Lives status.
-    fg = menu::newTextContent("Lives: " + std::to_string(BASE_LIVES));
-    sm = std::make_shared<Menu>(pos, size, "lives", bg, fg, menu::Layout::Horizontal, false);
-    m->addMenu(sm);
+    fg = menu::newTextContent("Lives: " + std::to_string(m_lives));
+    m_mLives = std::make_shared<Menu>(pos, size, "lives", bg, fg, menu::Layout::Horizontal, false);
+    m->addMenu(m_mLives);
 
     // Wave count.
     fg = menu::newTextContent("Wave: 1");
-    sm = std::make_shared<Menu>(pos, size, "wave", bg, fg, menu::Layout::Horizontal, false);
+    MenuShPtr sm = std::make_shared<Menu>(pos, size, "wave", bg, fg, menu::Layout::Horizontal, false);
     m->addMenu(sm);
 
     return m;

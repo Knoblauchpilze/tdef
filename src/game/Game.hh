@@ -35,7 +35,7 @@ namespace tdef {
        * @return - the list of menus representing this game.
        */
       std::vector<MenuShPtr>
-      generateMenus(const olc::vi2d& dims) const;
+      generateMenus(const olc::vi2d& dims);
 
       /**
        * @brief - Defines the type of tower to spawn upon
@@ -163,7 +163,7 @@ namespace tdef {
        * @return - the generated menu.
        */
       MenuShPtr
-      generateStatusMenu(const olc::vi2d& dims) const;
+      generateStatusMenu(const olc::vi2d& dims);
 
       /**
        * @brief - Generate the menu displaying a status for
@@ -251,6 +251,28 @@ namespace tdef {
        *          to build.
        */
       bool m_wallBuilding;
+
+      /**
+       * @brief - The available lives for this game.
+       */
+      float m_lives;
+
+      /**
+       * @brief - The menu indicating the number of remaining lives
+       *          in the game.
+       */
+      MenuShPtr m_mLives;
+
+      /**
+       * @brief - The available gold for this game.
+       */
+      float m_gold;
+
+      /**
+       * @brief - The menu indicating the amount of gold available
+       *          for this game.
+       */
+      MenuShPtr m_mGold;
   };
 
   using GameShPtr = std::shared_ptr<Game>;

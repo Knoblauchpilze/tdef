@@ -13,7 +13,6 @@
 # include "coordinates/TopViewFrame.hh"
 # include "TDefApp.hh"
 
-// TODO: Check entities before placing a tower.
 // TODO: Create `worldChanged` method to recompute A* for mobs when a tower is placed.
 // TODO: Adding missing tower types.
 // TODO: Add a `goldEarned` in the StepInfo.

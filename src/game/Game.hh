@@ -189,21 +189,19 @@ namespace tdef {
        * @brief - Spawn a new tower at the specified position
        *          assuming that 1. a tower is actually set to
        *          be spawned and 2. the coordinates are valid.
-       * @param x - the abscissa where the tower will be build.
-       * @param y - the ordinate where the tower will be build.
+       * @param p - the position of the tower.
        */
       void
-      spawnTower(float x, float y);
+      spawnTower(const utils::Point2f& p);
 
       /**
        * @brief - Spawn a new wall at the specified position
        *          assuming that a wall is able to be spawned
        *          and that the coordinates are valid.
-       * @param x - the abscissa where the wall will be build.
-       * @param y - the ordinate where the wall will be build.
+       * @param p - the position of the tower.
        */
       void
-      spawnWall(float x, float y);
+      spawnWall(const utils::Point2f& p);
 
     private:
 

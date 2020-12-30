@@ -46,20 +46,24 @@ namespace tdef {
       return;
     }
 
+    // Assume the point is at the center of the
+    // cell corresponding to the input position.
+    utils::Point2f p(std::floor(x) + 0.5f, std::floor(y) + 0.5f);
+
     // Check whether this position is obstructed.
-    if (m_loc->obstructed(x, y)) {
-      log("Can't place element at " + std::to_string(x) + "x" + std::to_string(y));
+    if (m_loc->obstructed(p.x(), p.y(), true)) {
+      log("Can't place element at " + std::to_string(p.x()) + "x" + std::to_string(p.y()));
       return;
     }
 
     // Spawn a tower or a wall.
     if (m_tType != nullptr) {
-      spawnTower(x, y);
+      spawnTower(p);
       return;
     }
 
     if (m_wallBuilding) {
-      spawnWall(x, y);
+      spawnWall(p);
       return;
     }
   }
@@ -267,11 +271,10 @@ namespace tdef {
   }
 
   void
-  Game::spawnTower(float x, float y) {
+  Game::spawnTower(const utils::Point2f& p) {
     // Generate the tower.
     Tower::TProps pp;
     towers::Data td;
-    utils::Point2f p(std::floor(x) + 0.5f, std::floor(y) + 0.5f);
 
     bool valid = true;
     switch (*m_tType) {
@@ -306,20 +309,16 @@ namespace tdef {
       return;
     }
 
-    log(
-      "Generated tower " + std::to_string(static_cast<int>(*m_tType)) +
-      " at " + std::to_string(x) + "x" + std::to_string(y)
-    );
+    log("Generated tower " + std::to_string(static_cast<int>(*m_tType)) + " at " + p.toString());
 
     TowerShPtr t = std::make_shared<Tower>(pp, td);
     m_world->spawn(t);
   }
 
   void
-  Game::spawnWall(float x, float y) {
-    log("Generated wall at " + std::to_string(x) + "x" + std::to_string(y));
+  Game::spawnWall(const utils::Point2f& p) {
+    log("Generated wall at " + p.toString());
 
-    utils::Point2f p(std::floor(x) + 0.5f, std::floor(y) + 0.5f);
     Wall::WProps pp = Wall::newProps(p);
 
     WallShPtr w = std::make_shared<Wall>(pp);

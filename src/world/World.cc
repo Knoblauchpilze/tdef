@@ -22,7 +22,9 @@ namespace tdef {
     m_blocks(),
     m_mobs(),
 
-    m_loc(nullptr)
+    m_loc(nullptr),
+
+    onGoldEarned()
   {
     setService("world");
 
@@ -41,7 +43,9 @@ namespace tdef {
     m_blocks(),
     m_mobs(),
 
-    m_loc(nullptr)
+    m_loc(nullptr),
+
+    onGoldEarned()
   {
     // Check dimensions.
     setService("world");
@@ -61,6 +65,8 @@ namespace tdef {
 
       std::vector<MobShPtr>(), // mSpawned
       std::vector<Mob*>(),     // mRemoved
+
+      0.0f,                    // gold
     };
 
     // Make elements evolve.
@@ -88,6 +94,11 @@ namespace tdef {
       if (toRm != m_mobs.end()) {
         m_mobs.erase(toRm);
       }
+    }
+
+    // Handle cases where some gold was earned.
+    if (si.gold > 0.0f) {
+      onGoldEarned.safeEmit("gold earned signal", si.gold);
     }
   }
 

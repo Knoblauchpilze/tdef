@@ -17,8 +17,10 @@ namespace tdef {
 
     m_lives(BASE_LIVES),
     m_mLives(nullptr),
+
     m_gold(BASE_GOLD),
-    m_mGold(nullptr)
+    m_mGold(nullptr),
+    m_goldEarnedSlot(-1)
   {
     setService("game");
 
@@ -30,6 +32,10 @@ namespace tdef {
 # endif
 
     m_loc = m_world->locator();
+
+    // Register this item as a listener of the gold
+    // earned signal.
+    m_goldEarnedSlot = m_world->onGoldEarned.connect_member<Game>(this, &Game::updateGold);
   }
 
   std::vector<MenuShPtr>

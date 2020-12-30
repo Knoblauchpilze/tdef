@@ -6,6 +6,14 @@
 namespace tdef {
 
   inline
+  Game::~Game() {
+    // Disconnect the gold earned slot.
+    if (m_goldEarnedSlot >= 0) {
+      m_world->onGoldEarned.disconnect(m_goldEarnedSlot);
+    }
+  }
+
+  inline
   int
   Game::w() const noexcept {
     return m_world->w();
@@ -66,6 +74,12 @@ namespace tdef {
   void
   Game::resume(float tDelta) {
     m_world->resume(tDelta);
+  }
+
+  inline
+  void
+  Game::updateGold(float earned) {
+    m_gold += earned;
   }
 
 }

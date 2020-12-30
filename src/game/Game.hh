@@ -18,7 +18,7 @@ namespace tdef {
        */
       Game();
 
-      ~Game() = default;
+      ~Game();
 
       int
       w() const noexcept;
@@ -203,6 +203,17 @@ namespace tdef {
       void
       spawnWall(const utils::Point2f& p);
 
+      /**
+       * @brief - Updates the amount of gold available for the
+       *          game with the provided amount. Note that we
+       *          consider that this method will not be called
+       *          in a concurrent context as it is not thread
+       *          safe.
+       * @param earned - the amount of gold earned.
+       */
+      void
+      updateGold(float earned);
+
     private:
 
       /**
@@ -273,6 +284,12 @@ namespace tdef {
        *          for this game.
        */
       MenuShPtr m_mGold;
+
+      /**
+       * @brief - Holds the slot index returned by the world when
+       *          registering for gold earned update.
+       */
+      int m_goldEarnedSlot;
   };
 
   using GameShPtr = std::shared_ptr<Game>;

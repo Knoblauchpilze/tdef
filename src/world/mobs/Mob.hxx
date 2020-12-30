@@ -21,6 +21,8 @@ namespace tdef {
     pp.speed = 1.0f;
     pp.arrival = 0.0001f;
 
+    pp.bounty = 1.0f;
+
     pp.type = type;
 
     return pp;
@@ -36,6 +38,12 @@ namespace tdef {
   const path::Path&
   Mob::getPath() const noexcept {
     return m_path;
+  }
+
+  inline
+  float
+  Mob::getBounty() const noexcept {
+    return m_bounty;
   }
 
   inline

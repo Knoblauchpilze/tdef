@@ -6,7 +6,7 @@ namespace tdef {
 
   Tower::TProps
   TowerFactory::generateBasicTowerProps(const utils::Point2f& p) noexcept {
-    Tower::TProps pp = Tower::newProps(p, towers::Type::Regular);
+    Tower::TProps pp = Tower::newProps(p, towers::Type::Basic);
 
     pp.energy = 0.5f;
     pp.maxEnergy = 1.0f;
@@ -20,8 +20,8 @@ namespace tdef {
   }
 
   Tower::TProps
-  TowerFactory::generateSnipeTowerProps(const utils::Point2f& p) noexcept {
-    Tower::TProps pp = Tower::newProps(p, towers::Type::Snipe);
+  TowerFactory::generateSniperTowerProps(const utils::Point2f& p) noexcept {
+    Tower::TProps pp = Tower::newProps(p, towers::Type::Sniper);
 
     pp.energy = 0.5f;
     pp.maxEnergy = 1.0f;
@@ -36,7 +36,7 @@ namespace tdef {
 
   Tower::TProps
   TowerFactory::generateSlowTowerProps(const utils::Point2f& p) noexcept {
-    Tower::TProps pp = Tower::newProps(p, towers::Type::Slow);
+    Tower::TProps pp = Tower::newProps(p, towers::Type::Freezing);
 
     pp.energy = 0.5f;
     pp.maxEnergy = 1.0f;
@@ -80,7 +80,7 @@ namespace tdef {
   }
 
   towers::Data
-  TowerFactory::generateSnipeTowerData() noexcept {
+  TowerFactory::generateSniperTowerData() noexcept {
     towers::Data dd;
 
     dd.pickMob = [](StepInfo& info, towers::PickData& data) {

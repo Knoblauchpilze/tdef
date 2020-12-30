@@ -167,8 +167,8 @@ namespace tdef {
           td = TowerFactory::generateBasicTowerData();
         }
         else if (id % 4 == 1) {
-          pp = TowerFactory::generateSnipeTowerProps(p);
-          td = TowerFactory::generateSnipeTowerData();
+          pp = TowerFactory::generateSniperTowerProps(p);
+          td = TowerFactory::generateSniperTowerData();
         }
         else if (id % 4 == 2) {
           pp = TowerFactory::generateSlowTowerProps(p);
@@ -205,7 +205,7 @@ namespace tdef {
           mp.type = mobs::Type::Strong;
         }
         else {
-          mp.type = mobs::Type::Air;
+          mp.type = mobs::Type::Heli;
         }
 
         MobShPtr m = std::make_shared<Mob>(mp);

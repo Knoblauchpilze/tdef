@@ -68,10 +68,18 @@ namespace tdef {
      *          of towers available in the game.
      */
     enum class Type {
-      Regular,
-      Snipe,
-      Slow,
+      Basic,
+      Sniper,
       Cannon,
+      Freezing,
+      Venom,
+      Splash,
+      Blast,
+      Multishot,
+      Minigun,
+      Antiair,
+      Tesla,
+      Missile,
     };
 
   }
@@ -101,7 +109,7 @@ namespace tdef {
       static
       TProps
       newProps(const utils::Point2f& p,
-               const towers::Type& type = towers::Type::Regular,
+               const towers::Type& type = towers::Type::Basic,
                const utils::Uuid& owner = utils::Uuid()) noexcept;
 
       /**

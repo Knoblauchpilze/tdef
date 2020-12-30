@@ -58,6 +58,14 @@ namespace tdef {
 
   inline
   void
+  Mob::pause(const utils::TimeStamp& /*t*/) {}
+
+  inline
+  void
+  Mob::resume(const utils::TimeStamp& /*t*/) {}
+
+  inline
+  void
   Mob::destroy(StepInfo& /*info*/) {}
 
 }

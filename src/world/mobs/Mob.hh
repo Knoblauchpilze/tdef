@@ -110,6 +110,9 @@ namespace tdef {
       void
       destroy(StepInfo& info) override;
 
+      void
+      worldUpdate(LocatorShPtr loc) override;
+
     private:
 
       /**

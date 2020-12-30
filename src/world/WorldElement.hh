@@ -127,6 +127,18 @@ namespace tdef {
       virtual void
       destroy(StepInfo& info) = 0;
 
+      /**
+       * @brief - Interface method called whenever a change in
+       *          the world occurs that might lead the element
+       *          to reconsider some of the choices made.
+       *          This typically include a new block spawned
+       *          (which might change the pathes).
+       * @param loc - information about the current step of
+       *               the game.
+       */
+      virtual void
+      worldUpdate(LocatorShPtr loc) = 0;
+
     protected:
 
       /**

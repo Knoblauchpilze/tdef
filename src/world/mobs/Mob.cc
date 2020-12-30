@@ -63,8 +63,8 @@ namespace tdef {
 
     // Generate a path to the portal and go there.
     path::Path np = path::newPath(m_pos);
-    if (!np.generatePathTo(info, bp, true)) {
-      log("Failed to generate path to " + bp.toString());
+    if (!np.generatePathTo(info.frustum, bp, true)) {
+      log("Failed to generate path to " + bp.toString(), utils::Level::Error);
       return;
     }
 
@@ -72,9 +72,25 @@ namespace tdef {
   }
 
   void
-  Mob::pause(const utils::TimeStamp& /*t*/) {}
+  Mob::worldUpdate(LocatorShPtr loc) {
+    // We need to recompute the path to the target if
+    // a valid path is assigned.
+    if (!isEnRoute()) {
+      return;
+    }
 
-  void
-  Mob::resume(const utils::TimeStamp& /*t*/) {}
+    utils::Point2f e = m_path.target();
+
+    // Generate a path to the portal and go there.
+    path::Path np = path::newPath(m_pos);
+    if (!np.generatePathTo(loc, e, true)) {
+      log("Failed to generate path to " + e.toString(), utils::Level::Error);
+      return;
+    }
+
+    log("Generated new path to " + e.toString());
+
+    std::swap(m_path, np);
+  }
 
 }

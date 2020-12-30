@@ -8,7 +8,6 @@
 # include "Mob.hh"
 
 namespace tdef {
-
   namespace world {
 
     /**

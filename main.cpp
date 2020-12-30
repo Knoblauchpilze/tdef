@@ -13,7 +13,6 @@
 # include "coordinates/TopViewFrame.hh"
 # include "TDefApp.hh"
 
-// TODO: Create `worldChanged` method to recompute A* for mobs when a tower is placed.
 // TODO: Adding missing tower types.
 
 int main(int /*argc*/, char** /*argv*/) {

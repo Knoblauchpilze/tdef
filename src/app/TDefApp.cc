@@ -129,7 +129,7 @@ namespace tdef {
         sd.x = t.p.x();
         sd.y = t.p.y();
         sd.radius = t.radius;
-        sd.loc = RelativePosition::CenterTop;
+        sd.loc = RelativePosition::Center;
 
         sd.sprite.pack = m_mPackID;
         sd.sprite.sprite = t.id;

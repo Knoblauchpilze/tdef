@@ -170,10 +170,12 @@ namespace tdef {
        *          exists here) or not.
        * @param x - the abscissa to check for occupancy.
        * @param y - the ordinate to check for occupancy.
+       * @param includeMobs - `true` in case the obstruction
+       *                      should also include mobs.
        * @return - `true` if the location is occupied.
        */
       bool
-      obstructed(float x, float y) const noexcept;
+      obstructed(float x, float y, bool includeMobs = false) const noexcept;
 
       /**
        * @brief - Allow to determine whether a specific loc

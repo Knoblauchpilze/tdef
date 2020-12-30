@@ -20,11 +20,31 @@ namespace tdef {
   }
 
   bool
-  Locator::obstructed(float x, float y) const noexcept {
+  Locator::obstructed(float x, float y, bool includeMobs) const noexcept {
     unsigned id = 0;
     while (id < m_blocks.size()) {
       const utils::Point2f& p = m_blocks[id]->getPos();
       float hr = m_blocks[id]->getRadius() / 2.0f;
+
+      if (x >= p.x() - hr && x <= p.x() + hr &&
+          y >= p.y() - hr && y <= p.y() + hr)
+      {
+        return true;
+      }
+
+      ++id;
+    }
+
+    // In case the mobs should not be included, we
+    // can stop here.
+    if (!includeMobs) {
+      return false;
+    }
+
+    id = 0u;
+    while (id < m_mobs.size()) {
+      const utils::Point2f& p = m_mobs[id]->getPos();
+      float hr = m_mobs[id]->getRadius() / 2.0f;
 
       if (x >= p.x() - hr && x <= p.x() + hr &&
           y >= p.y() - hr && y <= p.y() + hr)

@@ -13,6 +13,13 @@
 # include "coordinates/TopViewFrame.hh"
 # include "TDefApp.hh"
 
+// TODO: Check entities before placing a tower.
+// TODO: Create `worldChanged` method to recompute A* for mobs when a tower is placed.
+// TODO: Adding missing tower types.
+// TODO: Add a `goldEarned` in the StepInfo.
+// TODO: Add a cost for the mob.
+// TODO: Create menus instances in the `Game` so that we can update lives.
+
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.
   utils::StdLogger logger;

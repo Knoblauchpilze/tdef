@@ -79,6 +79,16 @@ namespace tdef {
       ~Menu();
 
       /**
+       * @brief - Used to define whether this menu is visible.
+       *          Changes will only be applied in the next
+       *          call to `render` and the display should be
+       *          cleared beforehand by external processes.
+       * @param visible - `true` if this menu is visible.
+       */
+      void
+      setVisible(bool visible) noexcept;
+
+      /**
        * @brief- Interface method allowing to render a menu in
        *         a parent application. This is used to offload
        *         some of the rendering code from the main app

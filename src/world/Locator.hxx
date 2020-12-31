@@ -148,6 +148,18 @@ namespace tdef {
   }
 
   inline
+  WorldElementShPtr
+  Locator::itemAt(const utils::Point2f& p, bool includeMobs) const noexcept {
+    return itemAt(p.x(), p.y(), includeMobs);
+  }
+
+  inline
+  bool
+  Locator::obstructed(float x, float y, bool includeMobs) const noexcept {
+    return itemAt(x, y, includeMobs) != nullptr;
+  }
+
+  inline
   bool
   Locator::obstructed(const utils::Point2f& p) const noexcept {
     return obstructed(p.x(), p.y());

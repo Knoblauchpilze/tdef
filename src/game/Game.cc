@@ -1,8 +1,13 @@
 
 # include "Game.hh"
+# include <cxxabi.h>
 # include "TowerFactory.hh"
 # include "SimpleMenu.hh"
 # include "SimpleAction.hh"
+# include "Mob.hh"
+# include "Tower.hh"
+# include "Spawner.hh"
+# include "Wall.hh"
 
 namespace tdef {
 
@@ -46,24 +51,71 @@ namespace tdef {
     menus.push_back(generateStatusMenu(dims));
     menus.push_back(generateTowersMenu(dims));
     menus.push_back(generateUpgradeMenu(dims));
+    menus.push_back(generateMobMenu(dims));
 
     return menus;
   }
 
   void
   Game::performAction(float x, float y) {
-    // Make sure that a tower type is defined.
-    if (m_tType == nullptr && !m_wallBuilding) {
-      return;
-    }
-
     // Assume the point is at the center of the
     // cell corresponding to the input position.
     utils::Point2f p(std::floor(x) + 0.5f, std::floor(y) + 0.5f);
 
     // Check whether this position is obstructed.
-    if (m_loc->obstructed(p.x(), p.y(), true)) {
-      log("Can't place element at " + std::to_string(p.x()) + "x" + std::to_string(p.y()));
+    WorldElementShPtr we = m_loc->itemAt(p, true);
+    if (we != nullptr) {
+      // Select this element to be displayed in
+      // the side panel.
+      log("hihi 1");
+      MobShPtr m = std::dynamic_pointer_cast<Mob>(we);
+      if (m != nullptr) {
+        log("Haha 1");
+        displayMob(m);
+        return;
+      }
+
+      log("hihi 2");
+      TowerShPtr t = std::dynamic_pointer_cast<Tower>(we);
+      if (t != nullptr) {
+        log("Haha 2");
+        displayTower(t);
+        return;
+      }
+
+      log("hihi 3");
+      SpawnerShPtr s = std::dynamic_pointer_cast<Spawner>(we);
+      if (s != nullptr) {
+        log("Haha 3");
+        displaySpawner(s);
+        return;
+      }
+
+      log("hihi 4");
+      WallShPtr w = std::dynamic_pointer_cast<Wall>(we);
+      if (w != nullptr) {
+        log("Haha 4");
+        displayWall(w);
+        return;
+      }
+
+      // Unknown element to display.
+      int status;
+      std::string et = abi::__cxa_demangle(typeid(*we).name(), 0, 0, &status);
+      log(
+        "Failed to display element at " + we->getPos().toString() +
+        " with type \"" + et + "\"",
+        utils::Level::Error
+      );
+
+      return;
+    }
+
+    // As no world element is located at the
+    // position of the action, we can attempt
+    // to build a tower or a wall, assuming
+    // there is one defined.
+    if (m_tType == nullptr && !m_wallBuilding) {
       return;
     }
 
@@ -294,6 +346,49 @@ namespace tdef {
     sm = std::make_shared<Menu>(pos, size, "prop6", bg, fg);
     m->addMenu(sm);
 
+    // This menu is hidden until the user clicks on
+    // a tower.
+    m->setVisible(false);
+
+    return m;
+  }
+
+  MenuShPtr
+  Game::generateMobMenu(const olc::vi2d& dims) const {
+    // Constants.
+    const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
+    const olc::vi2d pos(dims.x - 120, 20);
+    const olc::vf2d size(120, dims.y - 20 - 50);
+
+    menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
+    menu::MenuContentDesc fg = menu::newTextContent("");
+
+    MenuShPtr m = std::make_shared<Menu>(pos, size, "mMenu", bg, fg, menu::Layout::Vertical);
+
+    // Adapt color for the sub menus background.
+    const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
+    bg = menu::newColoredBackground(smbgc);
+
+    fg = menu::newTextContent("Type: Regular");
+    MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
+    m->addMenu(sm);
+
+    fg = menu::newTextContent("Health: 10");
+    sm = std::make_shared<Menu>(pos, size, "prop2", bg, fg);
+    m->addMenu(sm);
+
+    fg = menu::newTextContent("Speed: 10");
+    sm = std::make_shared<Menu>(pos, size, "prop3", bg, fg);
+    m->addMenu(sm);
+
+    fg = menu::newTextContent("Bounty: 10");
+    sm = std::make_shared<Menu>(pos, size, "prop4", bg, fg);
+    m->addMenu(sm);
+
+    // This menu is hidden until the user clicks on
+    // a mob.
+    m->setVisible(false);
+
     return m;
   }
 
@@ -350,6 +445,30 @@ namespace tdef {
 
     WallShPtr w = std::make_shared<Wall>(pp);
     m_world->spawn(w);
+  }
+
+  void
+  Game::displayMob(MobShPtr /*m*/) noexcept {
+    // TODO: Handle this.
+    log("Should display mob", utils::Level::Warning);
+  }
+
+  void
+  Game::displayTower(TowerShPtr /*t*/) noexcept {
+    // TODO: Handle this.
+    log("Should display tower", utils::Level::Warning);
+  }
+
+  void
+  Game::displaySpawner(SpawnerShPtr /*s*/) noexcept {
+    // TODO: Handle this.
+    log("Should display spawner", utils::Level::Warning);
+  }
+
+  void
+  Game::displayWall(WallShPtr /*w*/) noexcept {
+    // TODO: Handle this.
+    log("Should display wall", utils::Level::Warning);
   }
 
 }

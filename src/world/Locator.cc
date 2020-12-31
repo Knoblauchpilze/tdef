@@ -19,8 +19,10 @@ namespace tdef {
     setService("locator");
   }
 
-  bool
-  Locator::obstructed(float x, float y, bool includeMobs) const noexcept {
+  WorldElementShPtr
+  Locator::itemAt(float x, float y, bool includeMobs) const noexcept {
+    // Search each block and see whether it spans the
+    // input coordinates.
     unsigned id = 0;
     while (id < m_blocks.size()) {
       const utils::Point2f& p = m_blocks[id]->getPos();
@@ -29,7 +31,7 @@ namespace tdef {
       if (x >= p.x() - hr && x <= p.x() + hr &&
           y >= p.y() - hr && y <= p.y() + hr)
       {
-        return true;
+        return m_blocks[id];
       }
 
       ++id;
@@ -38,9 +40,11 @@ namespace tdef {
     // In case the mobs should not be included, we
     // can stop here.
     if (!includeMobs) {
-      return false;
+      return nullptr;
     }
 
+    // Otherwise follow a similar process to see
+    // if a mob spans the input coordinates.
     id = 0u;
     while (id < m_mobs.size()) {
       const utils::Point2f& p = m_mobs[id]->getPos();
@@ -49,13 +53,13 @@ namespace tdef {
       if (x >= p.x() - hr && x <= p.x() + hr &&
           y >= p.y() - hr && y <= p.y() + hr)
       {
-        return true;
+        return m_mobs[id];
       }
 
       ++id;
     }
 
-    return false;
+    return nullptr;
   }
 
   bool

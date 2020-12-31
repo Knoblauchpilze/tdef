@@ -35,12 +35,28 @@ namespace {
     std::vector<Node>
     generateNeighbors(const utils::Point2f& target) const noexcept;
 
+    /**
+     * @brief - Used the Cantor pairing function to map
+     *          the coordinates of this node to a single
+     *          integer value.
+     * @return - the mapped integer for this node.
+     */
     int
-    hash(int offset) const noexcept;
+    hash() const noexcept;
 
+    /**
+     * @brief - Used to invert the hash provided as input
+     *          to a set of coordinates. As we hash any
+     *          non integer coordinates to the same value
+     *          we will consider that the point lies at
+     *          the center of the cell.
+     * @param hash - the value to invert.
+     * @return - the normalized coordinates computed from
+     *           the hash.
+     */
     static
     utils::Point2f
-    invertHash(int hash, int offset) noexcept;
+    invertHash(int hash) noexcept;
   };
 
   inline
@@ -134,17 +150,35 @@ namespace {
 
   inline
   int
-  Node::hash(int offset) const noexcept {
-    return static_cast<int>(std::floor(p.y())) * offset + static_cast<int>(std::floor(p.x()));
+  Node::hash() const noexcept {
+    // See here for more details:
+    // https://en.wikipedia.org/wiki/Pairing_function#Cantor_pairing_function
+    // TODO: Note that the pairing function is able
+    // to generate really large numbers and thus we
+    // should make sure that the hash is always set
+    // even for large worlds. Maybe a smarter func
+    // could be used.
+    // TODO: Adding a wall at `(5, 2)` and then `(3, 2)`
+    // seems to put A* in an infinite loop.
+    int k1 = static_cast<int>(std::floor(p.x()));
+    int k2 = static_cast<int>(std::floor(p.y()));
+
+    return 0.5 * (k1 + k2) * (k1 + k2 + 1) + k2;
   }
 
   inline
   utils::Point2f
-  Node::invertHash(int hash, int offset) noexcept {
+  Node::invertHash(int hash) noexcept {
+    // Invert the pairing done by the Cantor function
+    // as described in the same article.
+    float temp = (std::sqrt(8.0f * hash + 1) - 1.0f) / 2.0f;
+    int w = static_cast<int>(std::floor(temp));
+    float t = (w * w + w) / 2.0f;
+
     utils::Point2f p;
 
-    p.x() = 0.5f + hash % offset;
-    p.y() = 0.5f + hash / offset;
+    p.y() = 0.5f + hash - t;
+    p.x() = 0.5f + w - p.y();
 
     return p;
   }
@@ -200,7 +234,7 @@ namespace tdef {
     AssociationMap cameFrom;
     AssociationMap associations;
 
-    associations[init.hash(m_loc->w())] = 0;
+    associations[init.hash()] = 0;
 
     // Common lambdas to handle sorting and distance
     // computation from a point to another.
@@ -237,7 +271,7 @@ namespace tdef {
           );
         }
 
-        bool found = reconstructPath(cameFrom, m_loc->w(), out, allowLog);
+        bool found = reconstructPath(cameFrom, out, allowLog);
         if (found) {
           // Smooth out the sharp turns that might have
           // been produced by the A*.
@@ -334,7 +368,7 @@ namespace tdef {
         }
 
         // Use the pre-computed diagonal neighbors status
-        // and prevent the registration of the it if it
+        // and prevent the registration of the node if it
         // is not valid in the sense defined in the above
         // section.
         if ((id == NorthEast && !validNE) ||
@@ -345,18 +379,11 @@ namespace tdef {
           continue;
         }
 
-        // Prevent neighbors outside of the map.
-        if (neighbor.p.x() < 0.0f || neighbor.p.x() >= m_loc->w() ||
-            neighbor.p.y() < 0.0f || neighbor.p.y() >= m_loc->h())
-        {
-          continue;
-        }
-
-        AssociationMap::iterator it = associations.find(neighbor.hash(m_loc->w()));
+        AssociationMap::iterator it = associations.find(neighbor.hash());
 
         if (it == associations.end() || neighbor.c < nodes[it->second].c) {
           // This path to neighbor is better than any previous one.
-          cameFrom[neighbor.hash(m_loc->w())] = current.hash(m_loc->w());
+          cameFrom[neighbor.hash()] = current.hash();
 
           if (it != associations.end()) {
             if (allowLog) {
@@ -364,10 +391,10 @@ namespace tdef {
                 "Updating " + std::to_string(neighbor.p.x()) + "x" + std::to_string(neighbor.p.y()) +
                 " from c " + std::to_string(nodes[it->second].c) + ", " + std::to_string(nodes[it->second].h) +
                 " (f: " + std::to_string(nodes[it->second].c + nodes[it->second].h) + "," +
-                " parent: " + std::to_string(cameFrom[nodes[it->second].hash(m_loc->w())]) + ")" +
+                " parent: " + std::to_string(cameFrom[nodes[it->second].hash()]) + ")" +
                 " to c: " + std::to_string(neighbor.c) + " h: " + std::to_string(neighbor.h) +
                 " (f: " + std::to_string(neighbor.c + neighbor.h) + "," +
-                " parent is " + std::to_string(current.hash(m_loc->w())) + ")",
+                " parent is " + std::to_string(current.hash()) + ")",
                 utils::Level::Verbose
               );
             }
@@ -380,13 +407,13 @@ namespace tdef {
                 "Registering " + std::to_string(neighbor.p.x()) + "x" + std::to_string(neighbor.p.y()) +
                 " with c: " + std::to_string(neighbor.c) + " h: " + std::to_string(neighbor.h) +
                 " (f: " + std::to_string(neighbor.c + neighbor.h) + "," +
-                " parent is " + std::to_string(current.hash(m_loc->w())) + ")",
+                " parent is " + std::to_string(current.hash()) + ")",
                 utils::Level::Verbose
               );
             }
 
             openNodes.push_back(nodes.size());
-            associations[neighbor.hash(m_loc->w())] = nodes.size();
+            associations[neighbor.hash()] = nodes.size();
             nodes.push_back(neighbor);
           }
         }
@@ -399,18 +426,17 @@ namespace tdef {
 
   bool
   AStar::reconstructPath(const std::unordered_map<int, int>& parents,
-                         int offset,
                          std::vector<utils::Point2f>& path,
                          bool allowLog) const noexcept
   {
     std::vector<utils::Point2f> out;
 
     Node n{m_end, 0.0f, 0.0f};
-    int h = n.hash(offset);
+    int h = n.hash();
     std::unordered_map<int, int>::const_iterator it = parents.find(h);
 
     while (it != parents.cend()) {
-      n.p = Node::invertHash(h, offset);
+      n.p = Node::invertHash(h);
 
       if (allowLog) {
         log(
@@ -435,7 +461,7 @@ namespace tdef {
     // If this is the case we can copy the path we
     // just built to the output argument.
     n.p = m_start;
-    int sh = n.hash(offset);
+    int sh = n.hash();
 
     if (sh == h) {
       // We need to reverse the path as we've built

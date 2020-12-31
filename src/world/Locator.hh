@@ -116,34 +116,12 @@ namespace tdef {
        *          to be exposed to external users so it's hidden
        *          in here. One can use the methods to query the
        *          elements through the dedicated interface.
-       * @param width - the width of the world in which elements
-       *                are registered. Expressed in cells.
-       * @param height - similar to `width` but for the height
-       *                 of the world.
        * @param blocks - the list of tiles registered in the
        *                 world.
        * @param mobs - the list of mobs of the world.
        */
-      Locator(int width,
-              int height,
-              const std::vector<BlockShPtr>& blocks,
+      Locator(const std::vector<BlockShPtr>& blocks,
               const std::vector<MobShPtr>& mobs);
-
-      /**
-       * @brief - Return the width of the world in cells.
-       * @return - the number of cell in width for the
-       *           world attached to this locator.
-       */
-      int
-      w() const noexcept;
-
-      /**
-       * @brief - Return the height of the world in cells.
-       * @return - the number of cell in height for the
-       *           world attached to this locator.
-       */
-      int
-      h() const noexcept;
 
       /**
        * @brief - Retrieve the tile at the specified index. Note
@@ -461,16 +439,6 @@ namespace tdef {
         utils::Point2f p;
         unsigned id;
       };
-
-      /**
-       * @brief - The width of the world in cells.
-       */
-      int m_w;
-
-      /**
-       * @brief - The height of the world in cells.
-       */
-      int m_h;
 
       /**
        * @brief - The blocks registered in the world.

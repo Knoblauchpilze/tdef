@@ -20,12 +20,6 @@ namespace tdef {
 
       ~Game();
 
-      int
-      w() const noexcept;
-
-      int
-      h() const noexcept;
-
       /**
        * @brief - Used to perform the creation of the menus
        *          allowing to control the world wrapped by

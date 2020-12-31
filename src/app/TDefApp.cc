@@ -53,13 +53,9 @@ namespace tdef {
 
     // Render background.
     int xMin = std::floor(v.p.x);
-    xMin = std::max(xMin, 0);
     int yMin = std::floor(v.p.y);
-    yMin = std::max(yMin, 0);
-    int xMax = std::floor(v.p.x + v.dims.x);
-    xMax = std::min(xMax, m_game->w());
-    int yMax = std::floor(v.p.y + v.dims.y);
-    yMax = std::min(yMax, m_game->h());
+    int xMax = std::ceil(v.p.x + v.dims.x);
+    int yMax = std::ceil(v.p.y + v.dims.y);
 
     for (int y = yMin ; y <= yMax ; ++y) {
       for (int x = xMin ; x <= xMax ; ++x) {

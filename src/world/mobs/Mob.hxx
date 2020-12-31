@@ -4,6 +4,40 @@
 # include "Mob.hh"
 
 namespace tdef {
+  namespace mobs {
+
+    inline
+    std::string
+    toString(const Type& t) noexcept {
+      switch (t) {
+        case Type::Regular:
+          return "Regular";
+        case Type::Fast:
+          return "Fast";
+        case Type::Strong:
+          return "Strong";
+        case Type::Heli:
+          return "Heli";
+        case Type::Jet:
+          return "Jet";
+        case Type::Armored:
+          return "Armored";
+        case Type::Healer:
+          return "Healer";
+        case Type::Toxic:
+          return "Toxic";
+        case Type::Icy:
+          return "Icy";
+        case Type::Fighter:
+          return "Fighter";
+        case Type::Light:
+          return "Light";
+        default:
+          return "Unknown";
+      }
+    }
+
+  }
 
   inline
   Mob::MProps
@@ -44,6 +78,12 @@ namespace tdef {
   float
   Mob::getBounty() const noexcept {
     return m_bounty;
+  }
+
+  inline
+  float
+  Mob::getSpeed() const noexcept {
+    return m_speed;
   }
 
   inline

@@ -183,7 +183,7 @@ namespace tdef {
        * @return - the generated menu.
        */
       MenuShPtr
-      generateUpgradeMenu(const olc::vi2d& dims) const;
+      generateUpgradeMenu(const olc::vi2d& dims);
 
       /**
        * @brief - Generate the menu displaying the values
@@ -193,7 +193,7 @@ namespace tdef {
        * @return - the generated menu.
        */
       MenuShPtr
-      generateMobMenu(const olc::vi2d& dims) const;
+      generateMobMenu(const olc::vi2d& dims);
 
       /**
        * @brief - Spawn a new tower at the specified position
@@ -263,13 +263,6 @@ namespace tdef {
     private:
 
       /**
-       * @brief - Definition of the height of the game menu in
-       *          pixels. Allow to tailor some other display so
-       *          that they don't overlap the menu.
-       */
-      static constexpr int MENU_HEIGHT = 50;
-
-      /**
        * @brief - The number of gold that the player is starting
        *          with.
        */
@@ -280,6 +273,52 @@ namespace tdef {
        *          game is lost.
        */
       static constexpr int BASE_LIVES = 15;
+
+      /**
+       * @brief - Convenience structure regrouping all the info
+       *          on a tower display.
+       */
+      struct TowerDisplay {
+        // `main` defines the main menu that controls the display
+        // of tower's info. Set it to visible or hidden according
+        // to whether a tower is selected.
+        MenuShPtr main;
+
+        // The following items defines the menus displaying the
+        // various props of a tower.
+        MenuShPtr type;
+        MenuShPtr range;
+        MenuShPtr damage;
+        MenuShPtr attackSpeed;
+
+        // `tower` defines a pointer to the tower being displayed.
+        // It allows to continuously update the values displayed
+        // in the menus.
+        TowerShPtr tower;
+      };
+
+      /**
+       * @brief - Convenience structure regrouping all the info
+       *          on a mob display.
+       */
+      struct MobDisplay {
+        // `main` defines the main menu that controls the display
+        // of mob's info. Set it to visible or hidden according
+        // to whether a mob is selected.
+        MenuShPtr main;
+
+        // The following items defines the menus displaying the
+        // various props of a mob.
+        MenuShPtr type;
+        MenuShPtr health;
+        MenuShPtr speed;
+        MenuShPtr bounty;
+
+        // `mob` defines a pointer to the mob being displayed. It
+        // allows to continuously update the values displayed in
+        // the menus.
+        MobShPtr mob;
+      };
 
       /**
        * @brief - The world for this game.
@@ -336,6 +375,20 @@ namespace tdef {
        *          registering for gold earned update.
        */
       int m_goldEarnedSlot;
+
+      /**
+       * @brief - The properties of the tower display menus. This
+       *          attribute is only valid once the corresponding
+       *          generation method has been called.
+       */
+      TowerDisplay m_tDisplay;
+
+      /**
+       * @brief - The properties of the mob display menus. This
+       *          attribute is only valid once the corresponding
+       *          generation method has been called.
+       */
+      MobDisplay m_mDisplay;
   };
 
   using GameShPtr = std::shared_ptr<Game>;

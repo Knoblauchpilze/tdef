@@ -34,6 +34,12 @@ namespace tdef {
 
   inline
   float
+  WorldElement::getHealth() const noexcept {
+    return m_health;
+  }
+
+  inline
+  float
   WorldElement::getHealthRatio() const noexcept {
     if (m_totalHealth <= 0.0f) {
       return 1.0f;

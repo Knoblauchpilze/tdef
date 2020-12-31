@@ -82,6 +82,16 @@ namespace tdef {
       Missile,
     };
 
+    /**
+     * @brief - Converts the input type value to a string
+     *          and to an "Unknown" value if the enum can
+     *          not be interpreted.
+     * @param t - the type to convert.
+     * @return - the string representation of the enum.
+     */
+    std::string
+    toString(const Type& t) noexcept;
+
   }
 
   class Tower: public Block {
@@ -127,6 +137,24 @@ namespace tdef {
        */
       const towers::Type&
       getType() const noexcept;
+
+      float
+      getRange() const noexcept;
+
+      float
+      getAttack() const noexcept;
+
+      /**
+       * @brief - Returns an aggregated number measuring the
+       *          attack speed for this tower. The higher the
+       *          value the faster the tower is able to attack.
+       *          The value is `0` in case the tower can't do
+       *          more than one attack and is homogenous to a
+       *          duration.
+       * @return - the attack speed for this tower.
+       */
+      float
+      getAttackSpeed() const noexcept;
 
       /**
        * @brief - Implementation of the interface method to evolve

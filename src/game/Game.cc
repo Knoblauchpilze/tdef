@@ -67,34 +67,26 @@ namespace tdef {
     if (we != nullptr) {
       // Select this element to be displayed in
       // the side panel.
-      log("hihi 1");
       MobShPtr m = std::dynamic_pointer_cast<Mob>(we);
       if (m != nullptr) {
-        log("Haha 1");
         displayMob(m);
         return;
       }
 
-      log("hihi 2");
       TowerShPtr t = std::dynamic_pointer_cast<Tower>(we);
       if (t != nullptr) {
-        log("Haha 2");
         displayTower(t);
         return;
       }
 
-      log("hihi 3");
       SpawnerShPtr s = std::dynamic_pointer_cast<Spawner>(we);
       if (s != nullptr) {
-        log("Haha 3");
         displaySpawner(s);
         return;
       }
 
-      log("hihi 4");
       WallShPtr w = std::dynamic_pointer_cast<Wall>(we);
       if (w != nullptr) {
-        log("Haha 4");
         displayWall(w);
         return;
       }

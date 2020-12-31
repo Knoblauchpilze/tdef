@@ -62,9 +62,15 @@ namespace tdef {
   Menu::processUserInput(const controls::State& c,
                          std::vector<ActionShPtr>& actions)
   {
+    menu::InputHandle res{false, false};
+
+    // In case the menu is not visible, do nothing.
+    if (!m_state.visible) {
+      return res;
+    }
+
     // Make sure that the children get their chance
     // to process the event.
-    menu::InputHandle res{false, false};
     for (unsigned id = 0u ; id < m_children.size() ; ++id) {
       menu::InputHandle rc = m_children[id]->processUserInput(c, actions);
 

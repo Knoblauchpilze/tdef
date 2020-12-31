@@ -25,7 +25,10 @@ namespace tdef {
 
     m_gold(BASE_GOLD),
     m_mGold(nullptr),
-    m_goldEarnedSlot(-1)
+    m_goldEarnedSlot(-1),
+
+    m_tDisplay(),
+    m_mDisplay()
   {
     setService("game");
 
@@ -153,6 +156,43 @@ namespace tdef {
     v = static_cast<int>(m_gold);
     fg = menu::newTextContent("Gold: " + std::to_string(v));
     m_mGold->setContent(fg);
+
+    // Update display values for visible menus.
+    if (m_tDisplay.tower != nullptr) {
+      std::string t = towers::toString(m_tDisplay.tower->getType());
+      fg = menu::newTextContent("Type: " + t);
+      m_tDisplay.type->setContent(fg);
+
+      float v = m_tDisplay.tower->getRange();
+      fg = menu::newTextContent("Range: " + std::to_string(v));
+      m_tDisplay.range->setContent(fg);
+
+      v = m_tDisplay.tower->getAttack();
+      fg = menu::newTextContent("Damage: " + std::to_string(v));
+      m_tDisplay.damage->setContent(fg);
+
+      v = m_tDisplay.tower->getAttackSpeed();
+      fg = menu::newTextContent("Attack speed: " + std::to_string(v));
+      m_tDisplay.attackSpeed->setContent(fg);
+    }
+
+    if (m_mDisplay.mob != nullptr) {
+      std::string t = mobs::toString(m_mDisplay.mob->getType());
+      fg = menu::newTextContent("Type: " + t);
+      m_mDisplay.type->setContent(fg);
+
+      float v = m_mDisplay.mob->getHealth();
+      fg = menu::newTextContent("Health: " + std::to_string(v));
+      m_mDisplay.health->setContent(fg);
+
+      v = m_mDisplay.mob->getSpeed();
+      fg = menu::newTextContent("Speed: " + std::to_string(v));
+      m_mDisplay.speed->setContent(fg);
+
+      v = m_mDisplay.mob->getBounty();
+      fg = menu::newTextContent("Bounty: " + std::to_string(v));
+      m_mDisplay.bounty->setContent(fg);
+    }
   }
 
   MenuShPtr
@@ -299,89 +339,95 @@ namespace tdef {
   }
 
   MenuShPtr
-  Game::generateUpgradeMenu(const olc::vi2d& dims) const {
+  Game::generateUpgradeMenu(const olc::vi2d& dims) {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
-    const olc::vi2d pos(dims.x - 120, 20);
-    const olc::vf2d size(120, dims.y - 20 - 50);
+    const olc::vi2d pos(dims.x - 150, 20);
+    const olc::vf2d size(150, dims.y - 20 - 50);
 
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    MenuShPtr m = std::make_shared<Menu>(pos, size, "uMenu", bg, fg, menu::Layout::Vertical);
-
-    // Adapt color for the sub menus background.
-    const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
-    bg = menu::newColoredBackground(smbgc);
-
-    fg = menu::newTextContent("Range: 10");
-    MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
-    m->addMenu(sm);
-
-    fg = menu::newTextContent("Strength: 10");
-    sm = std::make_shared<Menu>(pos, size, "prop2", bg, fg);
-    m->addMenu(sm);
-
-    fg = menu::newTextContent("Attack speed: 10");
-    sm = std::make_shared<Menu>(pos, size, "prop3", bg, fg);
-    m->addMenu(sm);
-
-    fg = menu::newTextContent("Reload time: 10");
-    sm = std::make_shared<Menu>(pos, size, "prop4", bg, fg);
-    m->addMenu(sm);
-
-    fg = menu::newTextContent("Sell");
-    sm = std::make_shared<Menu>(pos, size, "prop5", bg, fg);
-    m->addMenu(sm);
-
-    fg = menu::newTextContent("Target mode");
-    sm = std::make_shared<Menu>(pos, size, "prop6", bg, fg);
-    m->addMenu(sm);
-
-    // This menu is hidden until the user clicks on
-    // a tower.
-    m->setVisible(false);
-
-    return m;
-  }
-
-  MenuShPtr
-  Game::generateMobMenu(const olc::vi2d& dims) const {
-    // Constants.
-    const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
-    const olc::vi2d pos(dims.x - 120, 20);
-    const olc::vf2d size(120, dims.y - 20 - 50);
-
-    menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
-    menu::MenuContentDesc fg = menu::newTextContent("");
-
-    MenuShPtr m = std::make_shared<Menu>(pos, size, "mMenu", bg, fg, menu::Layout::Vertical);
+    m_tDisplay.main = std::make_shared<Menu>(pos, size, "uMenu", bg, fg, menu::Layout::Vertical);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
     fg = menu::newTextContent("Type: Regular");
-    MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
-    m->addMenu(sm);
+    m_tDisplay.type = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
+    m_tDisplay.main->addMenu(m_tDisplay.type);
+
+    fg = menu::newTextContent("Range: 10");
+    m_tDisplay.range = std::make_shared<Menu>(pos, size, "prop2", bg, fg);
+    m_tDisplay.main->addMenu(m_tDisplay.range);
+
+    fg = menu::newTextContent("Damage: 10");
+    m_tDisplay.damage = std::make_shared<Menu>(pos, size, "prop3", bg, fg);
+    m_tDisplay.main->addMenu(m_tDisplay.damage);
+
+    fg = menu::newTextContent("Attack speed: 10");
+    m_tDisplay.attackSpeed = std::make_shared<Menu>(pos, size, "prop4", bg, fg);
+    m_tDisplay.main->addMenu(m_tDisplay.attackSpeed);
+
+    fg = menu::newTextContent("Sell");
+    MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop5", bg, fg);
+    m_tDisplay.main->addMenu(sm);
+
+    fg = menu::newTextContent("Target mode");
+    sm = std::make_shared<Menu>(pos, size, "prop6", bg, fg);
+    m_tDisplay.main->addMenu(sm);
+
+    // This menu is hidden until the user clicks on
+    // a tower.
+    m_tDisplay.main->setVisible(false);
+
+    // No mob being tracked for now.
+    m_tDisplay.tower = nullptr;
+
+    return m_tDisplay.main;
+  }
+
+  MenuShPtr
+  Game::generateMobMenu(const olc::vi2d& dims) {
+    // Constants.
+    const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
+    const olc::vi2d pos(dims.x - 150, 20);
+    const olc::vf2d size(150, dims.y - 20 - 50);
+
+    menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
+    menu::MenuContentDesc fg = menu::newTextContent("");
+
+    m_mDisplay.main = std::make_shared<Menu>(pos, size, "mMenu", bg, fg, menu::Layout::Vertical);
+
+    // Adapt color for the sub menus background.
+    const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
+    bg = menu::newColoredBackground(smbgc);
+
+    fg = menu::newTextContent("Type: Regular");
+    m_mDisplay.type = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
+    m_mDisplay.main->addMenu(m_mDisplay.type);
 
     fg = menu::newTextContent("Health: 10");
-    sm = std::make_shared<Menu>(pos, size, "prop2", bg, fg);
-    m->addMenu(sm);
+    m_mDisplay.health = std::make_shared<Menu>(pos, size, "prop2", bg, fg);
+    m_mDisplay.main->addMenu(m_mDisplay.health);
 
     fg = menu::newTextContent("Speed: 10");
-    sm = std::make_shared<Menu>(pos, size, "prop3", bg, fg);
-    m->addMenu(sm);
+    m_mDisplay.speed = std::make_shared<Menu>(pos, size, "prop3", bg, fg);
+    m_mDisplay.main->addMenu(m_mDisplay.speed);
 
     fg = menu::newTextContent("Bounty: 10");
-    sm = std::make_shared<Menu>(pos, size, "prop4", bg, fg);
-    m->addMenu(sm);
+    m_mDisplay.bounty = std::make_shared<Menu>(pos, size, "prop4", bg, fg);
+    m_mDisplay.main->addMenu(m_mDisplay.bounty);
 
     // This menu is hidden until the user clicks on
     // a mob.
-    m->setVisible(false);
+    m_mDisplay.main->setVisible(false);
 
-    return m;
+    // No mob being tracked for now.
+    m_mDisplay.mob = nullptr;
+
+    return m_mDisplay.main;
   }
 
   void
@@ -440,25 +486,51 @@ namespace tdef {
   }
 
   void
-  Game::displayMob(MobShPtr /*m*/) noexcept {
-    // TODO: Handle this.
-    log("Should display mob", utils::Level::Warning);
+  Game::displayMob(MobShPtr m) noexcept {
+    // Deactivate any other menu and activate the
+    // one corresponding to mob props.
+    m_tDisplay.main->setVisible(false);
+    m_tDisplay.tower = nullptr;
+    m_mDisplay.main->setVisible(true);
+
+    // Register the mob as the one being followed.
+    m_mDisplay.mob = m;
   }
 
   void
-  Game::displayTower(TowerShPtr /*t*/) noexcept {
-    // TODO: Handle this.
-    log("Should display tower", utils::Level::Warning);
+  Game::displayTower(TowerShPtr t) noexcept {
+    // Deactivate any other menu and activate the
+    // one corresponding to mob props.
+    m_tDisplay.main->setVisible(true);
+    m_mDisplay.main->setVisible(false);
+    m_mDisplay.mob = nullptr;
+
+    // Register the tower as the one being followed.
+    m_tDisplay.tower = t;
   }
 
   void
   Game::displaySpawner(SpawnerShPtr /*s*/) noexcept {
+    // Deactivate any other menu and activate the
+    // one corresponding to mob props.
+    m_tDisplay.main->setVisible(false);
+    m_tDisplay.tower = nullptr;
+    m_mDisplay.main->setVisible(false);
+    m_mDisplay.mob = nullptr;
+
     // TODO: Handle this.
     log("Should display spawner", utils::Level::Warning);
   }
 
   void
   Game::displayWall(WallShPtr /*w*/) noexcept {
+    // Deactivate any other menu and activate the
+    // one corresponding to mob props.
+    m_tDisplay.main->setVisible(false);
+    m_tDisplay.tower = nullptr;
+    m_mDisplay.main->setVisible(false);
+    m_mDisplay.mob = nullptr;
+
     // TODO: Handle this.
     log("Should display wall", utils::Level::Warning);
   }

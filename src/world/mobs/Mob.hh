@@ -27,6 +27,16 @@ namespace tdef {
       Light,
     };
 
+    /**
+     * @brief - Converts the input type value to a string
+     *          and to an "Unknown" value if the enum can
+     *          not be interpreted.
+     * @param t - the type to convert.
+     * @return - the string representation of the enum.
+     */
+    std::string
+    toString(const Type& t) noexcept;
+
   }
 
   class Mob: public WorldElement {
@@ -78,13 +88,11 @@ namespace tdef {
       const path::Path&
       getPath() const noexcept;
 
-      /**
-       * @brief - Fetch the bounty associated to this mob if it
-       *          is killed.
-       * @return - the bounty associated to the mob.
-       */
       float
       getBounty() const noexcept;
+
+      float
+      getSpeed() const noexcept;
 
       /**
        * @brief - Convenience wrapper to determine whether this

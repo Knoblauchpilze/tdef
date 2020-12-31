@@ -47,6 +47,15 @@ namespace tdef {
       getRadius() const noexcept;
 
       /**
+       * @brief - Fetch the current health for this world
+       *          element. This value corresponds to the
+       *          total health pool.
+       * @return - the current health.
+       */
+      float
+      getHealth() const noexcept;
+
+      /**
        * @brief - Retrieve the ratio of current health over
        *          total health for this element. This value
        *          is in the range `[0; 1]` and allows to

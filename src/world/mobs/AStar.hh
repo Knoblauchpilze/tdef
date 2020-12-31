@@ -57,8 +57,6 @@ namespace tdef {
        * @param parents - a description of the explored nodes
        *                  with their `parent` (i.e. the node
        *                  that was explored just before).
-       * @param offset - the offset to use when computing the
-       *                 hashes for nodes.
        * @param path - output vector which will contain the
        *               reconstructed path.
        * @param allowLog - `true` if the process should be
@@ -67,7 +65,6 @@ namespace tdef {
        */
       bool
       reconstructPath(const std::unordered_map<int, int>& parents,
-                      int offset,
                       std::vector<utils::Point2f>& path,
                       bool allowLog) const noexcept;
 

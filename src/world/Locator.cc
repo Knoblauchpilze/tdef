@@ -4,14 +4,9 @@
 
 namespace tdef {
 
-  Locator::Locator(int width,
-                   int height,
-                   const std::vector<BlockShPtr>& blocks,
+  Locator::Locator(const std::vector<BlockShPtr>& blocks,
                    const std::vector<MobShPtr>& mobs):
     utils::CoreObject("locator"),
-
-    m_w(width),
-    m_h(height),
 
     m_blocks(blocks),
     m_mobs(mobs)

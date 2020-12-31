@@ -14,18 +14,6 @@ namespace tdef {
   }
 
   inline
-  int
-  Game::w() const noexcept {
-    return m_world->w();
-  }
-
-  inline
-  int
-  Game::h() const noexcept {
-    return m_world->h();
-  }
-
-  inline
   void
   Game::setTowerType(const towers::Type& type) {
     m_tType = std::make_shared<towers::Type>(type);

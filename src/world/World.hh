@@ -37,12 +37,10 @@ namespace tdef {
     public:
 
       /**
-       * @brief - Create a new world with the specified dimensions.
+       * @brief - Create a new world with the specified seed.
        * @param seed - the seed to use for this world.
-       * @param width - the width of the world in cells.
-       * @param height - the height of the window in cells.
        */
-      World(int seed, int width = 8, int height = 6);
+      World(int seed);
 
       /**
        * @brief - Build a new world from the file specified in input.
@@ -58,12 +56,6 @@ namespace tdef {
        * @brief - Desctruction of the object.
        */
       ~World();
-
-      unsigned
-      w() const noexcept;
-
-      unsigned
-      h() const noexcept;
 
       /**
        * @brief - Used to return a locator object to allow easy
@@ -135,26 +127,7 @@ namespace tdef {
       void
       loadFromFile(const std::string& file);
 
-      /**
-       * @brief - Used to parse the dimensions of the world
-       *          from the file laoded in the stream.
-       *         Throws an error in case an error occurs.
-       * @param in - the stream describing the level file.
-       */
-      void
-      loadDimensions(std::ifstream& in);
-
     private:
-
-      /**
-       * @brief - Width of the world in cells.
-       */
-      int m_w;
-
-      /**
-       * @brief - Height of the world in cells.
-       */
-      int m_h;
 
       /**
        * @brief - The random number engine for this world: allows to

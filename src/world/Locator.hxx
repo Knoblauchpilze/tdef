@@ -13,18 +13,6 @@
 namespace tdef {
 
   inline
-  int
-  Locator::w() const noexcept {
-    return m_w;
-  }
-
-  inline
-  int
-  Locator::h() const noexcept {
-    return m_h;
-  }
-
-  inline
   world::Block
   Locator::block(int id) const noexcept {
     BlockShPtr b = m_blocks[id];

@@ -11,11 +11,8 @@
 
 namespace tdef {
 
-  World::World(int seed, int width, int height):
+  World::World(int seed):
     utils::CoreObject("world"),
-
-    m_w(width),
-    m_h(height),
 
     m_rng(seed),
 
@@ -34,9 +31,6 @@ namespace tdef {
   World::World(int seed,
                const std::string& file):
     utils::CoreObject("world"),
-
-    m_w(0),
-    m_h(0),
 
     m_rng(seed),
 
@@ -128,7 +122,12 @@ namespace tdef {
     static constexpr int sk_portals = 1;
     static constexpr int sk_towers = 4;
 
-    static constexpr int sk_mobs = 4;
+    static constexpr int sk_mobs = 1;
+
+    // Assume a certain width and height to
+    // prevent collision.
+    unsigned w = 10;
+    unsigned h = 5;
 
     utils::Point2f p;
     int key = 0;
@@ -136,10 +135,10 @@ namespace tdef {
 
     int id = sk_spawners;
     while (id > 0) {
-      p.x() = m_rng.rndInt(0.0f, m_w - 1.0f) + 0.5f;
-      p.y() = m_rng.rndInt(0.0f, m_h - 1.0f) + 0.5f;
+      p.x() = m_rng.rndInt(0.0f, w - 1.0f) + 0.5f;
+      p.y() = m_rng.rndInt(0.0f, h - 1.0f) + 0.5f;
 
-      key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
+      key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
         log("Spawner at " + p.toString());
@@ -151,10 +150,10 @@ namespace tdef {
 
     id = sk_walls;
     while (id > 0) {
-      p.x() = m_rng.rndInt(0.0f, m_w - 1.0f) + 0.5f;
-      p.y() = m_rng.rndInt(0.0f, m_h - 1.0f) + 0.5f;
+      p.x() = m_rng.rndInt(0.0f, w - 1.0f) + 0.5f;
+      p.y() = m_rng.rndInt(0.0f, h - 1.0f) + 0.5f;
 
-      key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
+      key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
         log("Wall at " + p.toString());
@@ -166,10 +165,10 @@ namespace tdef {
 
     id = sk_portals;
     while (id > 0) {
-      p.x() = m_rng.rndInt(0.0f, m_w - 1.0f) + 0.5f;
-      p.y() = m_rng.rndInt(0.0f, m_h - 1.0f) + 0.5f;
+      p.x() = m_rng.rndInt(0.0f, w - 1.0f) + 0.5f;
+      p.y() = m_rng.rndInt(0.0f, h - 1.0f) + 0.5f;
 
-      key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
+      key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
         log("Portal at " + p.toString());
@@ -181,10 +180,10 @@ namespace tdef {
 
     id = sk_towers;
     while (id > 0) {
-      p.x() = m_rng.rndInt(0.0f, m_w - 1.0f) + 0.5f;
-      p.y() = m_rng.rndInt(0.0f, m_h - 1.0f) + 0.5f;
+      p.x() = m_rng.rndInt(0.0f, w - 1.0f) + 0.5f;
+      p.y() = m_rng.rndInt(0.0f, h - 1.0f) + 0.5f;
 
-      key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
+      key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
         log("Tower at " + p.toString());
@@ -217,10 +216,10 @@ namespace tdef {
 
     id = sk_mobs;
     while (id > 0) {
-      p.x() = m_rng.rndInt(0.0f, m_w - 1.0f);
-      p.y() = m_rng.rndInt(0.0f, m_h - 1.0f);
+      p.x() = m_rng.rndInt(0.0f, w - 1.0f);
+      p.y() = m_rng.rndInt(0.0f, h - 1.0f);
 
-      key = static_cast<int>(p.y() * m_w) + static_cast<int>(p.x());
+      key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
         Mob::MProps mp = Mob::newProps(p);
@@ -247,7 +246,7 @@ namespace tdef {
       }
     }
 
-    m_loc = std::make_shared<Locator>(m_w, m_h, m_blocks, m_mobs);
+    m_loc = std::make_shared<Locator>(m_blocks, m_mobs);
   }
 
   void
@@ -261,9 +260,6 @@ namespace tdef {
         std::string("No such file")
       );
     }
-
-    // Read the dimensions of the world.
-    loadDimensions(in);
 
     error(
       "Loading from file is not implemented",

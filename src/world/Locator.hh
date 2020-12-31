@@ -97,6 +97,8 @@ namespace tdef {
 
   }
 
+  class WorldElement;
+  using WorldElementShPtr = std::shared_ptr<WorldElement>;
   class Block;
   class Wall;
   class Spawner;
@@ -162,6 +164,41 @@ namespace tdef {
        */
       world::Mob
       mob(int id) const noexcept;
+
+      /**
+       * @brief - Allows to query the item at the specified
+       *          position. The item can either be a block
+       *          (default case) but also a mob in case the
+       *          corresponding boolean is set to `true`.
+       *          Note that we don't include a `z` ordering
+       *          which means that the first matching item
+       *          will be returned. We give precedence to
+       *          blocks over mobs.
+       * @param x - the abscissa of the position to check.
+       * @param y - the ordinate of the position to check.
+       * @param includeMobs - `true` if mobs should also be
+       *                      checked when searching for an
+       *                      item at the position.
+       * @return - the pointer to the element (be it a mob
+       *           or a block) at the position or `null` if
+       *           no such element is at the position.
+       */
+      WorldElementShPtr
+      itemAt(float x, float y, bool includeMobs = false) const noexcept;
+
+      /**
+       * @brief - Variant of the `itemAt` method which uses
+       *          a point rather than two separate coords.
+       *          Uses the variant with coordinates as a
+       *          proxy.
+       * @param p - the position to check for an item.
+       * @param includeMobs - `true` if mobs should be used
+       *                      in the test.
+       * @return - the element at the specified position or
+       *           `null` in case the position is empty.
+       */
+      WorldElementShPtr
+      itemAt(const utils::Point2f& p, bool includeMobs = false) const noexcept;
 
       /**
        * @brief - Allow to determine whether a specific loc

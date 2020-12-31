@@ -1,6 +1,7 @@
 #ifndef    WORLD_ELEMENT_HH
 # define   WORLD_ELEMENT_HH
 
+# include <memory>
 # include <core_utils/TimeUtils.hh>
 # include <core_utils/CoreObject.hh>
 # include <core_utils/Uuid.hh>
@@ -225,6 +226,7 @@ namespace tdef {
       float m_health;
   };
 
+  using WorldElementShPtr = std::shared_ptr<WorldElement>;
 }
 
 # include "WorldElement.hxx"

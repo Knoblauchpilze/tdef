@@ -12,6 +12,12 @@ namespace tdef {
   }
 
   inline
+  void
+  Menu::setVisible(bool visible) noexcept {
+    m_state.visible = visible;
+  }
+
+  inline
   olc::vf2d
   Menu::getSize() const noexcept {
     return m_size;

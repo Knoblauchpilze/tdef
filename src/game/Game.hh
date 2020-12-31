@@ -186,6 +186,16 @@ namespace tdef {
       generateUpgradeMenu(const olc::vi2d& dims) const;
 
       /**
+       * @brief - Generate the menu displaying the values
+       *          for a mob.
+       * @param dims - the dimensions of the window holding
+       *               this menu.
+       * @return - the generated menu.
+       */
+      MenuShPtr
+      generateMobMenu(const olc::vi2d& dims) const;
+
+      /**
        * @brief - Spawn a new tower at the specified position
        *          assuming that 1. a tower is actually set to
        *          be spawned and 2. the coordinates are valid.
@@ -202,6 +212,42 @@ namespace tdef {
        */
       void
       spawnWall(const utils::Point2f& p);
+
+      /**
+       * @brief - Used to setup the menu allowing to display
+       *          the properties of a mob with the instance
+       *          provided in input.
+       * @param m - the mob whose props should be displayed.
+       */
+      void
+      displayMob(MobShPtr m) noexcept;
+
+      /**
+       * @brief - Used to setup the menu allowing to display
+       *          the properties of a tower with the instance
+       *          provided in input.
+       * @param t - the tower whose props should be displayed.
+       */
+      void
+      displayTower(TowerShPtr t) noexcept;
+
+      /**
+       * @brief - Used to setup the menu allowing to display
+       *          the properties of a spawner with the input
+       *          instance.
+       * @param s - the spawner whose props will be displayed.
+       */
+      void
+      displaySpawner(SpawnerShPtr s) noexcept;
+
+      /**
+       * @brief - Used to setup the menu allowing to display
+       *          the properties of a wall with the instance
+       *          provided in input.
+       * @param w - the wall whose props should be displayed.
+       */
+      void
+      displayWall(WallShPtr w) noexcept;
 
       /**
        * @brief - Updates the amount of gold available for the

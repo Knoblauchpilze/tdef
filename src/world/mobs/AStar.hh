@@ -64,7 +64,7 @@ namespace tdef {
        * @return - `true` if the path could be reconstructed.
        */
       bool
-      reconstructPath(const std::unordered_map<int, int>& parents,
+      reconstructPath(const std::unordered_map<std::string, std::string>& parents,
                       std::vector<utils::Point2f>& path,
                       bool allowLog) const noexcept;
 

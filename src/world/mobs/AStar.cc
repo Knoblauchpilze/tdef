@@ -36,12 +36,12 @@ namespace {
     generateNeighbors(const utils::Point2f& target) const noexcept;
 
     /**
-     * @brief - Used the Cantor pairing function to map
-     *          the coordinates of this node to a single
-     *          integer value.
-     * @return - the mapped integer for this node.
+     * @brief - Use a basic string transformation to do
+     *          a conversion of the coordinates for this
+     *          node to a single string.
+     * @return - the mapped string for this node.
      */
-    int
+    std::string
     hash() const noexcept;
 
     /**
@@ -56,17 +56,60 @@ namespace {
      */
     static
     utils::Point2f
-    invertHash(int hash) noexcept;
+    invertHash(const std::string& hash) noexcept;
   };
 
   inline
   bool
   Node::contains(const utils::Point2f& m) const noexcept {
-    int iPX = static_cast<int>(p.x());
-    int iPY = static_cast<int>(p.y());
+    // We want to compare the floating point values
+    // by considering that they belong to the cell
+    // right before the one it is in.
+    // So for example:
+    // `(1.2, 2.7)` -> `(1, 2)`.
+    // `(1.7, 2.2)` -> `(1, 2)`.
+    // But also:
+    // `(-0.2, -0.7)` -> `(-1, -1)`
+    // `(-0.9, -1.1)` -> `(-1, -2)`.
+    //
+    // At first, we thought about just casting the
+    // values to `int`. But it fails for negative
+    // values (as `-0.9` would get converted to a
+    // `-0`).
+    // The `round` approach also does not work for
+    // positive values (as `2.7` will be converted
+    // to `3`).
+    // What should work is to subtract `1` in the
+    // negative case so that the conversion moves
+    // the cell to the current one *away* from `0`
+    // and not *towards* `0`.
+    float px = p.x();
+    float py = p.y();
 
-    int iMX = static_cast<int>(m.x());
-    int iMY = static_cast<int>(m.y());
+    if (px < 0.0f) {
+      px -= 1.0f;
+    }
+    if (py < 0.0f) {
+      py -= 1.0f;
+    }
+
+    float mx = m.x();
+    float my = m.y();
+
+    if (mx < 0.0f) {
+      mx -= 1.0f;
+    }
+    if (my < 0.0f) {
+      my -= 1.0f;
+    }
+
+    // Now convert the cell values and compare
+    // them to check for inclusion.
+    int iPX = static_cast<int>(px);
+    int iPY = static_cast<int>(py);
+
+    int iMX = static_cast<int>(mx);
+    int iMY = static_cast<int>(my);
 
     return iPX == iMX && iPY == iMY;
   }
@@ -149,38 +192,44 @@ namespace {
   }
 
   inline
-  int
+  std::string
   Node::hash() const noexcept {
-    // See here for more details:
-    // https://en.wikipedia.org/wiki/Pairing_function#Cantor_pairing_function
-    // TODO: Note that the pairing function is able
-    // to generate really large numbers and thus we
-    // should make sure that the hash is always set
-    // even for large worlds. Maybe a smarter func
-    // could be used.
-    // TODO: Adding a wall at `(5, 2)` and then `(3, 2)`
-    // seems to put A* in an infinite loop.
+    // We first tried to use the Cantor pairing
+    // function but as usual the fact that the
+    // generated keys are usually quite large
+    // was not really suited to our needs: as
+    // we can have large coordinates in large
+    // worlds the hashing should stay bounded.
+    // The string approach (by basically just
+    // concatenating the two coordinates) has
+    // the advantage to work no matter the
+    // dimensions of the world.
     int k1 = static_cast<int>(std::floor(p.x()));
     int k2 = static_cast<int>(std::floor(p.y()));
 
-    return 0.5 * (k1 + k2) * (k1 + k2 + 1) + k2;
+    return std::to_string(k1) + "#" + std::to_string(k2);
   }
 
   inline
   utils::Point2f
-  Node::invertHash(int hash) noexcept {
-    // Invert the pairing done by the Cantor function
-    // as described in the same article.
-    float temp = (std::sqrt(8.0f * hash + 1) - 1.0f) / 2.0f;
-    int w = static_cast<int>(std::floor(temp));
-    float t = (w * w + w) / 2.0f;
+  Node::invertHash(const std::string& hash) noexcept {
+    // Deconcatenate the input hash and offset
+    // with half a cell the produced coords.
+    std::size_t id = hash.find('#');
 
-    utils::Point2f p;
+    if (id == std::string::npos) {
+      // This is very weied, assume a default
+      // node.
+      return utils::Point2f(0.5f, 0.5f);
+    }
 
-    p.y() = 0.5f + hash - t;
-    p.x() = 0.5f + w - p.y();
+    std::string xStr = hash.substr(0, id);
+    std::string yStr = hash.substr(id + 1);
 
-    return p;
+    float x = 0.5f + std::stof(xStr);
+    float y = 0.5f + std::stof(yStr);
+
+    return utils::Point2f(x, y);
   }
 
 }
@@ -226,12 +275,12 @@ namespace tdef {
       );
     }
 
-    using AssociationMap = std::unordered_map<int, int>;
+    using AssociationMap = std::unordered_map<std::string, int>;
 
     // The `cameFrom[i]` defines the index of its parent
     // node, i.e. the node we were traversing when this
     // node was encountered.
-    AssociationMap cameFrom;
+    std::unordered_map<std::string, std::string> cameFrom;
     AssociationMap associations;
 
     associations[init.hash()] = 0;
@@ -271,12 +320,16 @@ namespace tdef {
           );
         }
 
-        bool found = reconstructPath(cameFrom, out, allowLog);
-        if (found) {
-          // Smooth out the sharp turns that might have
-          // been produced by the A*.
-          smoothPath(out, allowLog);
+        log("Allowlog: " + std::to_string(allowLog));
+
+        // Attempt to reconstruct the path.
+        if (!reconstructPath(cameFrom, out, allowLog)) {
+          return false;
         }
+
+        // Smooth out the sharp turns that might have
+        // been produced by the A*.
+        smoothPath(out, allowLog);
 
         // Check whether the path goes beyong the input
         // limit at any point: if this is the case we
@@ -311,7 +364,7 @@ namespace tdef {
           std::swap(path, out);
         }
 
-        return found && valid;
+        return valid;
       }
 
       // Also, consider the node if it is not obstructed
@@ -391,10 +444,10 @@ namespace tdef {
                 "Updating " + std::to_string(neighbor.p.x()) + "x" + std::to_string(neighbor.p.y()) +
                 " from c " + std::to_string(nodes[it->second].c) + ", " + std::to_string(nodes[it->second].h) +
                 " (f: " + std::to_string(nodes[it->second].c + nodes[it->second].h) + "," +
-                " parent: " + std::to_string(cameFrom[nodes[it->second].hash()]) + ")" +
+                " parent: " + cameFrom[nodes[it->second].hash()] + ")" +
                 " to c: " + std::to_string(neighbor.c) + " h: " + std::to_string(neighbor.h) +
                 " (f: " + std::to_string(neighbor.c + neighbor.h) + "," +
-                " parent is " + std::to_string(current.hash()) + ")",
+                " parent is " + current.hash() + ")",
                 utils::Level::Verbose
               );
             }
@@ -407,7 +460,7 @@ namespace tdef {
                 "Registering " + std::to_string(neighbor.p.x()) + "x" + std::to_string(neighbor.p.y()) +
                 " with c: " + std::to_string(neighbor.c) + " h: " + std::to_string(neighbor.h) +
                 " (f: " + std::to_string(neighbor.c + neighbor.h) + "," +
-                " parent is " + std::to_string(current.hash()) + ")",
+                " parent is " + current.hash() + ")",
                 utils::Level::Verbose
               );
             }
@@ -425,15 +478,15 @@ namespace tdef {
   }
 
   bool
-  AStar::reconstructPath(const std::unordered_map<int, int>& parents,
+  AStar::reconstructPath(const std::unordered_map<std::string, std::string>& parents,
                          std::vector<utils::Point2f>& path,
                          bool allowLog) const noexcept
   {
     std::vector<utils::Point2f> out;
 
     Node n{m_end, 0.0f, 0.0f};
-    int h = n.hash();
-    std::unordered_map<int, int>::const_iterator it = parents.find(h);
+    std::string h = n.hash();
+    std::unordered_map<std::string, std::string>::const_iterator it = parents.find(h);
 
     while (it != parents.cend()) {
       n.p = Node::invertHash(h);
@@ -441,8 +494,8 @@ namespace tdef {
       if (allowLog) {
         log(
           "Registering point " + std::to_string(n.p.x()) + "x" + std::to_string(n.p.y()) +
-          " with hash " + std::to_string(h) +
-          ", parent is " + std::to_string(it->second),
+          " with hash " + h +
+          ", parent is " + it->second,
           utils::Level::Verbose
         );
       }
@@ -461,7 +514,7 @@ namespace tdef {
     // If this is the case we can copy the path we
     // just built to the output argument.
     n.p = m_start;
-    int sh = n.hash();
+    std::string sh = n.hash();
 
     if (sh == h) {
       // We need to reverse the path as we've built
@@ -545,10 +598,8 @@ namespace tdef {
     std::vector<utils::Point2f> dummy;
 
     // Simplify the whole path.
-    int count = 0;
-    while (id < path.size() - 1u && count < 10) {
+    while (id < path.size() - 1u) {
       utils::Point2f c = path[id + 1u];
-      Node n{c, 0.0f, 0.0f};
 
       // Check whether the starting position and the
       // current point can be joined by a straight
@@ -564,10 +615,11 @@ namespace tdef {
             "Simplified point " + std::to_string(path[id].x()) + "x" + std::to_string(path[id].y()) +
             " as path from " + std::to_string(p.x()) + "x" + std::to_string(p.y()) +
             " to " + std::to_string(c.x()) + "x" + std::to_string(c.y()) +
-            " is unobstructed (obs: " + std::to_string(obs) + ", cont: " + std::to_string(n.contains(m_end)) + ")",
+            " is unobstructed (obs: " + std::to_string(obs) + ", cont: " + std::to_string(end.contains(o)) + ")",
             utils::Level::Verbose
           );
         }
+
         ++id;
       }
       else {
@@ -586,8 +638,6 @@ namespace tdef {
         p = path[id];
         ++id;
       }
-
-      ++count;
     }
 
     // Register the last points.

@@ -1,5 +1,9 @@
 
 target_sources (tdef_lib PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/TowerData.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/TowerFactory.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/MobData.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/MobFactory.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Game.cc
   )
 

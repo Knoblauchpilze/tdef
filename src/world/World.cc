@@ -186,27 +186,27 @@ namespace tdef {
       key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        log("Tower at " + p.toString());
-
         Tower::TProps pp;
         towers::Data td;
 
         if (id % 4 == 0) {
-          pp = TowerFactory::generateBasicTowerProps(p);
-          td = TowerFactory::generateBasicTowerData();
+          pp = towers::generateProps(towers::Type::Basic, p);
+          td = towers::generateData(towers::Type::Basic);
         }
         else if (id % 4 == 1) {
-          pp = TowerFactory::generateSniperTowerProps(p);
-          td = TowerFactory::generateSniperTowerData();
+          pp = towers::generateProps(towers::Type::Sniper, p);
+          td = towers::generateData(towers::Type::Sniper);
         }
         else if (id % 4 == 2) {
-          pp = TowerFactory::generateSlowTowerProps(p);
-          td = TowerFactory::generateSlowTowerData();
+          pp = towers::generateProps(towers::Type::Freezing, p);
+          td = towers::generateData(towers::Type::Freezing);
         }
         else {
-          pp = TowerFactory::generateCannonTowerProps(p);
-          td = TowerFactory::generateCannonTowerData();
+          pp = towers::generateProps(towers::Type::Cannon, p);
+          td = towers::generateData(towers::Type::Cannon);
         }
+
+        log("Generated tower " + std::to_string(static_cast<int>(pp.type)) + " at " + p.toString());
 
         TowerShPtr b = std::make_shared<Tower>(pp, td);
         m_blocks.push_back(b);

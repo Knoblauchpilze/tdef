@@ -13,8 +13,6 @@
 # include "coordinates/TopViewFrame.hh"
 # include "TDefApp.hh"
 
-// TODO: Adding missing tower types.
-
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.
   utils::StdLogger logger;

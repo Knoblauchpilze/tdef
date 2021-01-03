@@ -439,20 +439,20 @@ namespace tdef {
     bool valid = true;
     switch (*m_tType) {
       case towers::Type::Basic:
-        pp = TowerFactory::generateBasicTowerProps(p);
-        td = TowerFactory::generateBasicTowerData();
+        pp = towers::generateProps(towers::Type::Basic, p);
+        td = towers::generateData(towers::Type::Basic);
         break;
       case towers::Type::Sniper:
-        pp = TowerFactory::generateSniperTowerProps(p);
-        td = TowerFactory::generateSniperTowerData();
+        pp = towers::generateProps(towers::Type::Sniper, p);
+        td = towers::generateData(towers::Type::Sniper);
         break;
       case towers::Type::Freezing:
-        pp = TowerFactory::generateSlowTowerProps(p);
-        td = TowerFactory::generateSlowTowerData();
+        pp = towers::generateProps(towers::Type::Freezing, p);
+        td = towers::generateData(towers::Type::Freezing);
         break;
       case towers::Type::Cannon:
-        pp = TowerFactory::generateCannonTowerProps(p);
-        td = TowerFactory::generateCannonTowerData();
+        pp = towers::generateProps(towers::Type::Cannon, p);
+        td = towers::generateData(towers::Type::Cannon);
         break;
       default:
         valid = false;

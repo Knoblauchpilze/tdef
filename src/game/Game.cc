@@ -28,7 +28,9 @@ namespace tdef {
     m_goldEarnedSlot(-1),
 
     m_tDisplay(),
-    m_mDisplay()
+    m_mDisplay(),
+    m_sDisplay(),
+    m_wDisplay()
   {
     setService("game");
 
@@ -55,6 +57,8 @@ namespace tdef {
     menus.push_back(generateTowersMenu(dims));
     menus.push_back(generateUpgradeMenu(dims));
     menus.push_back(generateMobMenu(dims));
+    menus.push_back(generateSpawnerMenu(dims));
+    menus.push_back(generateWallMenu(dims));
 
     return menus;
   }
@@ -192,6 +196,18 @@ namespace tdef {
       v = m_mDisplay.mob->getBounty();
       fg = menu::newTextContent("Bounty: " + std::to_string(v));
       m_mDisplay.bounty->setContent(fg);
+    }
+
+    if (m_sDisplay.spawner != nullptr) {
+      float v = m_sDisplay.spawner->getHealth();
+      fg = menu::newTextContent("Health: " + std::to_string(v));
+      m_sDisplay.health->setContent(fg);
+    }
+    
+    if (m_wDisplay.wall != nullptr) {
+      float v = m_wDisplay.wall->getHealth();
+      fg = menu::newTextContent("Health: " + std::to_string(v));
+      m_wDisplay.health->setContent(fg);
     }
   }
 
@@ -430,6 +446,66 @@ namespace tdef {
     return m_mDisplay.main;
   }
 
+  MenuShPtr
+  Game::generateSpawnerMenu(const olc::vi2d& dims) {
+    // Constants.
+    const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
+    const olc::vi2d pos(dims.x - 150, 20);
+    const olc::vf2d size(150, dims.y - 20 - 50);
+
+    menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
+    menu::MenuContentDesc fg = menu::newTextContent("");
+
+    m_sDisplay.main = std::make_shared<Menu>(pos, size, "sMenu", bg, fg, menu::Layout::Vertical);
+
+    // Adapt color for the sub menus background.
+    const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
+    bg = menu::newColoredBackground(smbgc);
+
+    fg = menu::newTextContent("Health: 10");
+    m_sDisplay.health = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
+    m_sDisplay.main->addMenu(m_sDisplay.health);
+
+    // This menu is hidden until the user clicks on
+    // a spawner.
+    m_sDisplay.main->setVisible(false);
+
+    // No spawner being tracked for now.
+    m_sDisplay.spawner = nullptr;
+
+    return m_sDisplay.main;
+  }
+
+  MenuShPtr
+  Game::generateWallMenu(const olc::vi2d& dims) {
+    // Constants.
+    const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
+    const olc::vi2d pos(dims.x - 150, 20);
+    const olc::vf2d size(150, dims.y - 20 - 50);
+
+    menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
+    menu::MenuContentDesc fg = menu::newTextContent("");
+
+    m_wDisplay.main = std::make_shared<Menu>(pos, size, "wMenu", bg, fg, menu::Layout::Vertical);
+
+    // Adapt color for the sub menus background.
+    const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
+    bg = menu::newColoredBackground(smbgc);
+
+    fg = menu::newTextContent("Health: 10");
+    m_wDisplay.health = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
+    m_wDisplay.main->addMenu(m_wDisplay.health);
+
+    // This menu is hidden until the user clicks on
+    // a wall.
+    m_wDisplay.main->setVisible(false);
+
+    // No wall being tracked for now.
+    m_wDisplay.wall = nullptr;
+
+    return m_wDisplay.main;
+  }
+
   void
   Game::spawnTower(const utils::Point2f& p) {
     // Generate the tower.
@@ -492,6 +568,10 @@ namespace tdef {
     m_tDisplay.main->setVisible(false);
     m_tDisplay.tower = nullptr;
     m_mDisplay.main->setVisible(true);
+    m_sDisplay.main->setVisible(false);
+    m_sDisplay.spawner = nullptr;
+    m_wDisplay.main->setVisible(false);
+    m_wDisplay.wall = nullptr;
 
     // Register the mob as the one being followed.
     m_mDisplay.mob = m;
@@ -504,35 +584,45 @@ namespace tdef {
     m_tDisplay.main->setVisible(true);
     m_mDisplay.main->setVisible(false);
     m_mDisplay.mob = nullptr;
+    m_sDisplay.main->setVisible(false);
+    m_sDisplay.spawner = nullptr;
+    m_wDisplay.main->setVisible(false);
+    m_wDisplay.wall = nullptr;
 
     // Register the tower as the one being followed.
     m_tDisplay.tower = t;
   }
 
   void
-  Game::displaySpawner(SpawnerShPtr /*s*/) noexcept {
+  Game::displaySpawner(SpawnerShPtr s) noexcept {
     // Deactivate any other menu and activate the
     // one corresponding to mob props.
     m_tDisplay.main->setVisible(false);
     m_tDisplay.tower = nullptr;
     m_mDisplay.main->setVisible(false);
     m_mDisplay.mob = nullptr;
+    m_sDisplay.main->setVisible(true);
+    m_wDisplay.main->setVisible(false);
+    m_wDisplay.wall = nullptr;
 
-    // TODO: Handle this.
-    log("Should display spawner", utils::Level::Warning);
+    // Register the spawner as the one being followed.
+    m_sDisplay.spawner = s;
   }
 
   void
-  Game::displayWall(WallShPtr /*w*/) noexcept {
+  Game::displayWall(WallShPtr w) noexcept {
     // Deactivate any other menu and activate the
     // one corresponding to mob props.
     m_tDisplay.main->setVisible(false);
     m_tDisplay.tower = nullptr;
     m_mDisplay.main->setVisible(false);
     m_mDisplay.mob = nullptr;
+    m_sDisplay.main->setVisible(false);
+    m_sDisplay.spawner = nullptr;
+    m_wDisplay.main->setVisible(true);
 
-    // TODO: Handle this.
-    log("Should display wall", utils::Level::Warning);
+    // Register the wall as the one being followed.
+    m_wDisplay.wall = w;
   }
 
 }

@@ -18,7 +18,10 @@ namespace tdef {
     m_speed(props.speed),
     m_path(path::newPath(m_pos)),
 
-    m_bounty(props.bounty)
+    m_bounty(props.bounty),
+    m_cost(props.lives),
+
+    m_defense(fromProps(props))
   {
     setService("mob");
   }

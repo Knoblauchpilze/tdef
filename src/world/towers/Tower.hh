@@ -31,9 +31,7 @@ namespace tdef {
 
     /**
      * @brief - Convenience structure defining all props
-     *          needed to perform the custom behaviors
-     *          that can be assigned to a tower. This is
-     *          only relevant for the damaging function.
+     *          defining the data performed by a tower.
      */
     struct DamageData {
       float damage;

@@ -64,6 +64,18 @@ namespace tdef {
       utils::Duration pDuration;
     };
 
+    /**
+     * @brief - Convenience structure defining all props
+     *          allowing a mob to defend itself.
+     */
+    struct DefenseData {
+      float shield;
+
+      bool poisonable;
+      bool slowable;
+      bool stunnable;
+    };
+
   }
 
   class Mob: public WorldElement {
@@ -81,6 +93,13 @@ namespace tdef {
         float arrival;
 
         float bounty;
+        float lives;
+
+        float shield;
+
+        bool poisonable;
+        bool slowable;
+        bool stunnable;
 
         // The `type` defines a representation of the real
         // kind of the mob. If one is using the factory
@@ -117,6 +136,9 @@ namespace tdef {
 
       float
       getBounty() const noexcept;
+
+      float
+      getCost() const noexcept;
 
       float
       getSpeed() const noexcept;
@@ -157,6 +179,19 @@ namespace tdef {
 
       void
       worldUpdate(LocatorShPtr loc) override;
+
+    private:
+
+      /**
+       * @brief - Used to generate a defense data structure from the
+       *          input properties describing a mob.
+       * @param props - the properties to use to generate the defense
+       *                data.
+       * @return - the corresponding mob defense data.
+       */
+      static
+      mobs::DefenseData
+      fromProps(const MProps& props) noexcept;
 
     private:
 
@@ -210,6 +245,17 @@ namespace tdef {
        * @brief - The bounty provided by this mob if killed.
        */
       float m_bounty;
+
+      /**
+       * @brief - The cost to let this mob pass through a portal.
+       */
+      float m_cost;
+
+      /**
+       * @brief - The defense properties of this mob. Used to
+       *          somewhat mitugate any incoming damage.
+       */
+      mobs::DefenseData m_defense;
   };
 
   using MobShPtr = std::shared_ptr<Mob>;

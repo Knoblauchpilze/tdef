@@ -56,6 +56,13 @@ namespace tdef {
     pp.arrival = 0.0001f;
 
     pp.bounty = 1.0f;
+    pp.lives = 1.0f;
+
+    pp.shield = 0.0f;
+
+    pp.poisonable = true;
+    pp.slowable = true;
+    pp.stunnable = true;
 
     pp.type = type;
 
@@ -78,6 +85,12 @@ namespace tdef {
   float
   Mob::getBounty() const noexcept {
     return m_bounty;
+  }
+
+  inline
+  float
+  Mob::getCost() const noexcept {
+    return m_cost;
   }
 
   inline
@@ -107,6 +120,20 @@ namespace tdef {
   inline
   void
   Mob::destroy(StepInfo& /*info*/) {}
+
+  inline
+  mobs::DefenseData
+  Mob::fromProps(const MProps& props) noexcept {
+    mobs::DefenseData dd;
+
+    dd.shield = props.shield;
+
+    dd.poisonable = props.poisonable;
+    dd.slowable = props.slowable;
+    dd.stunnable = props.stunnable;
+
+    return dd;
+  }
 
 }
 

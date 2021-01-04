@@ -18,7 +18,8 @@ namespace tdef {
      */
     struct PickData {
       utils::Point2f pos;
-      float range;
+      float minRange;
+      float maxRange;
     };
 
     /**
@@ -35,7 +36,18 @@ namespace tdef {
      *          only relevant for the damaging function.
      */
     struct DamageData {
-      float attack;
+      float damage;
+
+      float aoeRadius;
+      float aoeDamage;
+
+      float accuracy;
+
+      float speed;
+      utils::Duration sDuration;
+
+      float poison;
+      utils::Duration pDuration;
     };
 
     /**
@@ -105,8 +117,27 @@ namespace tdef {
         float maxEnergy;
         float refill;
 
-        float range;
-        float attack;
+        float minRange;
+        float maxRange;
+
+        float damage;
+        float aoeRadius;
+        float aoeDamage;
+
+        float attackSpeed;
+        float rotation;
+        float aimSpeed;
+        float projectileSpeed;
+        float accuracy;
+
+        float duration;
+        float shootAngle;
+        int projectiles;
+        float acceleration;
+
+        float freezePercent;
+        float freezeSpeed;
+
         float attackCost;
 
         // The `type` defines a representation of the real
@@ -185,6 +216,19 @@ namespace tdef {
     private:
 
       /**
+       * @brief - Used to generate a damage data structure from the
+       *          input properties describing a tower.
+       * @param props - the properties to use to generate the damage
+       *                data.
+       * @return - the corresponding tower damage data.
+       */
+      static
+      towers::DamageData
+      fromProps(const TProps& props) noexcept;
+
+    private:
+
+      /**
        * @brief - The type of the tower. This is mostly used
        *          to quickly identify the tower but most of
        *          the precise behaviors are actually defined
@@ -220,14 +264,19 @@ namespace tdef {
       float m_attackCost;
 
       /**
-       * @brief - Defines the range of this tower.
+       * @brief - Defines the minimum range of this tower.
        */
-      float m_range;
+      float m_minRange;
 
       /**
-       * @brief - Defines the attack value of this tower.
+       * @brief - Defines the maximum range of this tower.
        */
-      float m_attack;
+      float m_maxRange;
+
+      /**
+       * @brief - Defines the damage data for this tower.
+       */
+      towers::DamageData m_attack;
 
       /**
        * @brief - Defines the custom processes attached to

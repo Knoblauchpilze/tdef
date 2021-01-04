@@ -37,6 +37,33 @@ namespace tdef {
     std::string
     toString(const Type& t) noexcept;
 
+    /**
+     * @brief - Convenience structure regrouping the info
+     *          needed to perform damage to a mob.
+     */
+    struct Damage {
+      // The number of hit points to subtract for the full
+      // effect of the damage.
+      float hit;
+
+      // A ratio in the range `[0; 1]` indicating how the
+      // speed of the mob should be affected. A stun is
+      // indicated by a value of `0`.
+      float speed;
+
+      // Measure how long the mob will be affected by the
+      // slowing effect.
+      utils::Duration sDuration;
+
+      // A value indicating how much damage the mob should
+      // take every second from being poisoned.
+      float poison;
+
+      // Measure how long the mob will take damage from
+      // the poisoning effect.
+      utils::Duration pDuration;
+    };
+
   }
 
   class Mob: public WorldElement {
@@ -102,6 +129,16 @@ namespace tdef {
        */
       bool
       isEnRoute() const noexcept;
+
+      /**
+       * @brief - Used to interpret the damage structure provided
+       *          in input and to apply it to the mob. The mob is
+       *          able to mitigate some of it.
+       * @param d - the damage to apply.
+       * @return - `true` if the mob is still alive.
+       */
+      bool
+      damage(const mobs::Damage& d);
 
       void
       init(StepInfo& info) override;

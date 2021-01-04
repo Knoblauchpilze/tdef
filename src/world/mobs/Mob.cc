@@ -23,6 +23,12 @@ namespace tdef {
     setService("mob");
   }
 
+  bool
+  Mob::damage(const mobs::Damage& d) {
+    // TODO: Handle the rest of the effect.
+    return WorldElement::damage(d.hit);
+  }
+
   void
   Mob::step(StepInfo& info) {
     // Refilll the energy.

@@ -54,9 +54,28 @@ namespace tdef {
     pp.maxEnergy = 1.0f;
     pp.refill = 0.1f;
 
-    pp.range = 3.0f;
-    pp.attack = 0.2f;
-    pp.attackCost = 0.55f;
+    pp.minRange = 0.0f;
+    pp.maxRange = 3.0f;
+
+    pp.damage = 0.2f;
+    pp.aoeRadius = 0.0f;
+    pp.aoeDamage = 0.0f;
+
+    pp.attackSpeed = 1.0f;
+    pp.rotation = 1.0f;
+    pp.aimSpeed = 1.0f;
+    pp.projectileSpeed = 1.0f;
+    pp.accuracy = 1.0f;
+
+    pp.duration = 0.0f;
+    pp.shootAngle = 0.0f;
+    pp.projectiles = 1;
+    pp.acceleration = 0.0f;
+
+    pp.freezePercent = 0.0f;
+    pp.freezeSpeed = 0.0f;
+
+    pp.attackCost = 0.5f;
 
     pp.type = type;
 
@@ -72,13 +91,13 @@ namespace tdef {
   inline
   float
   Tower::getRange() const noexcept {
-    return m_range;
+    return m_maxRange;
   }
 
   inline
   float
   Tower::getAttack() const noexcept {
-    return m_attack;
+    return m_attack.damage;
   }
 
   inline
@@ -94,6 +113,45 @@ namespace tdef {
     // Otherwise the attack speed is computed as the
     // ratio of the energy refill on the attack cost.
     return m_energyRefill / m_attackCost;
+  }
+
+  inline
+  void
+  Tower::pause(const utils::TimeStamp& /*t*/) {}
+
+  inline
+  void
+  Tower::resume(const utils::TimeStamp& /*t*/) {}
+
+  inline
+  towers::DamageData
+  Tower::fromProps(const TProps& props) noexcept {
+    towers::DamageData dd;
+
+    dd.damage = props.damage;
+
+    dd.aoeRadius = props.aoeRadius;
+    dd.aoeDamage = props.aoeDamage;
+
+    dd.accuracy = props.accuracy;
+
+    dd.speed = props.freezePercent;
+    dd.sDuration = utils::toMilliseconds(
+      static_cast<int>(
+        std::round(props.duration)
+      )
+    );
+
+    // TODO: The damage is registered both in the
+    // `damage` and in the `poison`.
+    dd.poison = props.damage;
+    dd.pDuration = utils::toMilliseconds(
+      static_cast<int>(
+        std::round(props.duration)
+      )
+    );
+
+    return dd;
   }
 
 }

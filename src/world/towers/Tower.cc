@@ -17,8 +17,9 @@ namespace tdef {
 
     m_attackCost(props.attackCost),
 
-    m_range(props.range),
-    m_attack(props.attack),
+    m_minRange(props.minRange),
+    m_maxRange(props.maxRange),
+    m_attack(fromProps(props)),
 
     m_processes(desc)
   {
@@ -39,7 +40,8 @@ namespace tdef {
     // Find the closest mob.
     towers::PickData pd;
     pd.pos = m_pos;
-    pd.range = m_range;
+    pd.minRange = m_minRange;
+    pd.maxRange = m_maxRange;
 
     MobShPtr m = m_processes.pickMob(info, pd);
     if (m == nullptr) {
@@ -49,7 +51,7 @@ namespace tdef {
 
     log(
       "Hitting mob at " + m->getPos().toString() +
-      " for " + std::to_string(m_attack) + " damage" +
+      " for " + std::to_string(m_attack.damage) + " damage" +
       " (health: " + std::to_string(m->getHealthRatio()) + ")"
     );
 
@@ -57,7 +59,18 @@ namespace tdef {
     m_energy -= m_attackCost;
 
     towers::DamageData dd;
-    dd.attack = m_attack;
+    dd.damage = m_attack.damage;
+
+    dd.aoeRadius = m_attack.aoeRadius;
+    dd.aoeDamage = m_attack.aoeDamage;
+
+    dd.accuracy = m_attack.accuracy;
+
+    dd.speed = m_attack.speed;
+    dd.sDuration = m_attack.sDuration;
+
+    dd.poison = m_attack.poison;
+    dd.pDuration = m_attack.pDuration;
 
     if (m_processes.damage(info, m, dd)) {
       return;
@@ -70,11 +83,5 @@ namespace tdef {
     // Mark this mob for deletion.
     info.removeMob(m.get());
   }
-
-  void
-  Tower::pause(const utils::TimeStamp& /*t*/) {}
-
-  void
-  Tower::resume(const utils::TimeStamp& /*t*/) {}
 
 }

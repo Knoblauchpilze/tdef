@@ -1,5 +1,6 @@
 
 # include "Spawner.hh"
+# include "MobFactory.hh"
 
 namespace tdef {
 
@@ -74,7 +75,7 @@ namespace tdef {
 
     id = std::min(static_cast<unsigned>(m_distribution.size()), id);
 
-    Mob::MProps props = Mob::newProps(utils::Point2f(x, y), m_distribution[id].mob, getOwner());
+    Mob::MProps props = mobs::generateProps(m_distribution[id].mob, utils::Point2f(x, y));
     return std::make_shared<Mob>(props);
   }
 

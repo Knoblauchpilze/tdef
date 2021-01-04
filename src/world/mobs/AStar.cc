@@ -320,8 +320,6 @@ namespace tdef {
           );
         }
 
-        log("Allowlog: " + std::to_string(allowLog));
-
         // Attempt to reconstruct the path.
         if (!reconstructPath(cameFrom, out, allowLog)) {
           return false;

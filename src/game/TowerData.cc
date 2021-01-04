@@ -13,12 +13,21 @@ namespace tdef {
 
     MobShPtr
     basicTargetPicking(StepInfo& info, PickData& data) {
-      return info.frustum->getClosestMob(data.pos, data.range, nullptr);
+      return info.frustum->getClosestMob(data.pos, data.maxRange, nullptr);
     }
 
     bool
     basicDamaging(StepInfo& /*info*/, MobShPtr mob, DamageData& data) {
-      return mob->damage(data.attack);
+      mobs::Damage d;
+      d.hit = data.damage;
+
+      d.speed = data.speed;
+      d.sDuration = data.sDuration;
+
+      d.poison = data.poison;
+      d.pDuration = data.pDuration;
+
+      return mob->damage(d);
     }
 
     namespace basic {
@@ -38,7 +47,7 @@ namespace tdef {
       static const float duration = 0.0f;
       static const float shootAngle = 0.0f;
       static const int projectiles = 1;
-      static const float acceleration = 0.0f;;
+      static const float acceleration = 0.0f;
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
@@ -61,8 +70,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -87,7 +115,7 @@ namespace tdef {
       static const float duration = 0.0f;
       static const float shootAngle = 0.0f;
       static const int projectiles = 1;
-      static const float acceleration = 0.0f;;
+      static const float acceleration = 0.0f;
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
@@ -110,8 +138,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -160,8 +207,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -209,8 +275,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -236,7 +321,7 @@ namespace tdef {
       static const float duration = 5.0f;
       static const float shootAngle = 0.0f;
       static const int projectiles = 1;
-      static const float acceleration = 0.0f;;
+      static const float acceleration = 0.0f;
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
@@ -259,8 +344,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -286,7 +390,7 @@ namespace tdef {
       static const float shootAngle = 360.0f;
       // TODO: 6 + 0.35 * Tower level
       static const int projectiles = 6;
-      static const float acceleration = 0.0f;;
+      static const float acceleration = 0.0f;
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
@@ -309,8 +413,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -358,8 +481,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -386,7 +528,7 @@ namespace tdef {
       static const float shootAngle = 65.0f;
       // TODO: 5 + 0.2 * Tower level.
       static const int projectiles = 5;
-      static const float acceleration = 0.0f;;
+      static const float acceleration = 0.0f;
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
@@ -409,8 +551,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -436,7 +597,7 @@ namespace tdef {
       static const float shootAngle = 0.0f;
       static const int projectiles = 1;
       // TODO: 18 + Tower level.
-      static const float acceleration = 18.0f;;
+      static const float acceleration = 18.0f;
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
@@ -459,8 +620,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -485,7 +665,7 @@ namespace tdef {
       static const float duration = 0.0f;
       static const float shootAngle = 0.0f;
       static const int projectiles = 1;
-      static const float acceleration = 0.0f;;
+      static const float acceleration = 0.0f;
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
@@ -508,8 +688,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -534,7 +733,7 @@ namespace tdef {
       static const float duration = 0.0f;
       static const float shootAngle = 0.0f;
       static const int projectiles = 1;
-      static const float acceleration = 0.0f;;
+      static const float acceleration = 0.0f;
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
@@ -557,8 +756,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;
@@ -608,8 +826,27 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.range = maxRange;
-        pp.attack = damage;
+        pp.minRange = minRange;
+        pp.maxRange = maxRange;
+
+        pp.damage = damage;
+        pp.aoeRadius = aoeRadius;
+        pp.aoeDamage = aoeDamage;
+
+        pp.attackSpeed = attackSpeed;
+        pp.rotation = rotation;
+        pp.aimSpeed = aimSpeed;
+        pp.projectileSpeed = projectileSpeed;
+        pp.accuracy = accuracy;
+
+        pp.duration = duration;
+        pp.shootAngle = shootAngle;
+        pp.projectiles = projectiles;
+        pp.acceleration = acceleration;
+
+        pp.freezePercent = freezePercent;
+        pp.freezeSpeed = freezeSpeed;
+
         pp.attackCost = attackSpeed;
 
         return pp;

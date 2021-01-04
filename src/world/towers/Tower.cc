@@ -23,7 +23,6 @@ namespace tdef {
 
     m_processes(desc)
   {
-    // TODO: Handle upgrade.
     setService("tower");
   }
 

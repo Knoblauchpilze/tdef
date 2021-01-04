@@ -6,6 +6,9 @@
 # include <core_utils/CoreObject.hh>
 # include "World.hh"
 # include "Tower.hh"
+# include "Mob.hh"
+# include "Spawner.hh"
+# include "Wall.hh"
 # include "Menu.hh"
 
 namespace tdef {
@@ -190,6 +193,26 @@ namespace tdef {
       generateMobMenu(const olc::vi2d& dims);
 
       /**
+       * @brief - Generate the menu displaying the values
+       *          for a spawner.
+       * @param dims - the dimensions of the window holding
+       *               this menu.
+       * @return - the generated menu.
+       */
+      MenuShPtr
+      generateSpawnerMenu(const olc::vi2d& dims);
+
+      /**
+       * @brief - Generate the menu displaying the values
+       *          for a wall.
+       * @param dims - the dimensions of the window holding
+       *               this menu.
+       * @return - the generated menu.
+       */
+      MenuShPtr
+      generateWallMenu(const olc::vi2d& dims);
+
+      /**
        * @brief - Spawn a new tower at the specified position
        *          assuming that 1. a tower is actually set to
        *          be spawned and 2. the coordinates are valid.
@@ -278,7 +301,7 @@ namespace tdef {
         // to whether a tower is selected.
         MenuShPtr main;
 
-        // The following items defines the menus displaying the
+        // The following items define the menus displaying the
         // various props of a tower.
         MenuShPtr type;
         MenuShPtr range;
@@ -301,7 +324,7 @@ namespace tdef {
         // to whether a mob is selected.
         MenuShPtr main;
 
-        // The following items defines the menus displaying the
+        // The following items define the menus displaying the
         // various props of a mob.
         MenuShPtr type;
         MenuShPtr health;
@@ -312,6 +335,46 @@ namespace tdef {
         // allows to continuously update the values displayed in
         // the menus.
         MobShPtr mob;
+      };
+
+      /**
+       * @brief - Convenience structure regrouping all the info
+       *          on a wall display.
+       */
+      struct SpawnerDisplay {
+        // `main` defines the main menu that controls the display
+        // of spawner's info. Set it to visible or hidden according
+        // to whether a spawner is selected.
+        MenuShPtr main;
+
+        // The following items define the menus displaying the
+        // various props of a spawner.
+        MenuShPtr health;
+
+        // `spawner` defines a pointer to the wall being displayed.
+        // It allows to continuously update the value displayed
+        // in the menus.
+        SpawnerShPtr spawner;
+      };
+
+      /**
+       * @brief - Convenience structure regrouping all the info
+       *          on a wall display.
+       */
+      struct WallDisplay {
+        // `main` defines the main menu that controls the display
+        // of wall's info. Set it to visible or hidden according
+        // to whether a wall is selected.
+        MenuShPtr main;
+
+        // The following items define the menus displaying the
+        // various props of a spawner.
+        MenuShPtr health;
+
+        // `wall` defines a pointer to the wall being displayed.
+        // It allows to continuously update the value displayed
+        // in the menus.
+        WallShPtr wall;
       };
 
       /**
@@ -383,6 +446,20 @@ namespace tdef {
        *          generation method has been called.
        */
       MobDisplay m_mDisplay;
+
+      /**
+       * @brief - The properties of the spawner display menus. It
+       *          is only valid once the corresponding generation
+       *          method has been called.
+       */
+      SpawnerDisplay m_sDisplay;
+
+      /**
+       * @brief - The properties of the wall display menus. This
+       *          attribute is only valid once the corresponding
+       *          generation method has been called.
+       */
+      WallDisplay m_wDisplay;
   };
 
   using GameShPtr = std::shared_ptr<Game>;

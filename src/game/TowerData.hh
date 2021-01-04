@@ -1,7 +1,6 @@
 #ifndef    TOWER_DATA_HH
 # define   TOWER_DATA_HH
 
-# include <core_utils/CoreObject.hh>
 # include "Tower.hh"
 
 namespace tdef {

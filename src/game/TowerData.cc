@@ -55,7 +55,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Basic);
+        Tower::TProps pp = Tower::newProps(p, Type::Basic);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -104,7 +104,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Sniper);
+        Tower::TProps pp = Tower::newProps(p, Type::Sniper);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -154,7 +154,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Cannon);
+        Tower::TProps pp = Tower::newProps(p, Type::Cannon);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -203,7 +203,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Freezing);
+        Tower::TProps pp = Tower::newProps(p, Type::Freezing);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -253,7 +253,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Venom);
+        Tower::TProps pp = Tower::newProps(p, Type::Venom);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -303,7 +303,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Splash);
+        Tower::TProps pp = Tower::newProps(p, Type::Splash);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -352,7 +352,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Blast);
+        Tower::TProps pp = Tower::newProps(p, Type::Blast);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -403,7 +403,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Multishot);
+        Tower::TProps pp = Tower::newProps(p, Type::Multishot);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -453,7 +453,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Minigun);
+        Tower::TProps pp = Tower::newProps(p, Type::Minigun);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -502,7 +502,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Antiair);
+        Tower::TProps pp = Tower::newProps(p, Type::Antiair);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -551,7 +551,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Tesla);
+        Tower::TProps pp = Tower::newProps(p, Type::Tesla);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;
@@ -602,7 +602,7 @@ namespace tdef {
 
       Tower::TProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
-        Tower::TProps pp = Tower::newProps(p, towers::Type::Missile);
+        Tower::TProps pp = Tower::newProps(p, Type::Missile);
 
         pp.energy = attackSpeed;
         pp.maxEnergy = attackSpeed;

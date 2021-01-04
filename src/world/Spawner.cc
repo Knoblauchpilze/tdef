@@ -6,7 +6,7 @@ namespace tdef {
   Spawner::Spawner(const SProps& props):
     Block(props, "spawner"),
 
-    m_type(props.mob),
+    m_distribution(props.mobs),
 
     m_spawnRadius(std::max(props.spawnRadius, 0.0f)),
 
@@ -15,6 +15,13 @@ namespace tdef {
     m_refill(props.refill)
   {
     setService("spawner");
+
+    if (m_distribution.empty()) {
+      error(
+        "Invalid distribution provided to spawner",
+        "No element in distribution"
+      );
+    }
   }
 
   void
@@ -54,9 +61,20 @@ namespace tdef {
     x += (m_pos.x() + 0.5f);
     y += (m_pos.y() + 0.5f);
 
-    // Create the mob and return it.
-    Mob::MProps props = Mob::newProps(utils::Point2f(x, y), m_type, getOwner());
+    // Randomize the type of the mob based on the
+    // distribution associated to this spawner and
+    // return the mob created from this type.
+    float prob = info.rng.rndFloat(0.0f, 1.0f);
+    unsigned id = 0u;
+    float cumProb = 0.0f;
+    while (id < m_distribution.size() && cumProb + m_distribution[id].prob < prob) {
+      cumProb += m_distribution[id].prob;
+      ++id;
+    }
 
+    id = std::min(static_cast<unsigned>(m_distribution.size()), id);
+
+    Mob::MProps props = Mob::newProps(utils::Point2f(x, y), m_distribution[id].mob, getOwner());
     return std::make_shared<Mob>(props);
   }
 

@@ -8,7 +8,7 @@ namespace tdef {
   inline
   Spawner::SProps
   Spawner::newProps(const utils::Point2f& p,
-                    const mobs::Type& type,
+                    const spawners::Distribution& dist,
                     const utils::Uuid& owner) noexcept
   {
     SProps pp;
@@ -20,7 +20,7 @@ namespace tdef {
     pp.reserve = 0.9f;
     pp.refill = 0.0f;
 
-    pp.mob = type;
+    pp.mobs = dist;
 
     return pp;
   }

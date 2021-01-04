@@ -7,6 +7,28 @@
 # include "Mob.hh"
 
 namespace tdef {
+  namespace spawners {
+
+    /**
+     * @brief - Convenience structure allowing to register a
+     *          single item of a mob distribution.
+     */
+    struct DistItem {
+      // `prob` defines the probability for the item.
+      float prob;
+
+      // `mob` defines the type of mob for this item.
+      mobs::Type mob;
+    };
+
+    /**
+     * @brief - Defines a distribution of mobs which allows
+     *          to spawn various type of mobs with different
+     *          probabilities for a spawner.
+     */
+    using Distribution = std::vector<DistItem>;
+
+  }
 
   class Spawner: public Block {
     public:
@@ -21,13 +43,13 @@ namespace tdef {
         float reserve;
         float refill;
 
-        mobs::Type mob;
+        spawners::Distribution mobs;
       };
 
       static
       SProps
       newProps(const utils::Point2f& p,
-               const mobs::Type& type = mobs::Type::Regular,
+               const spawners::Distribution& dist = spawners::Distribution{{1.0f, mobs::Type::Regular}},
                const utils::Uuid& owner = utils::Uuid()) noexcept;
 
       /**
@@ -72,9 +94,12 @@ namespace tdef {
     private:
 
       /**
-       * @brief - The type of mob to spawn by this object.
+       * @brief - The distribution of mobs attached to this
+       *          spawner. Will be polled when a new mob is
+       *          to be spawned so that we can randomize
+       *          each wave.
        */
-      mobs::Type m_type;
+      spawners::Distribution m_distribution;
 
       /**
        * @brief - The radius around this spawner where a mob

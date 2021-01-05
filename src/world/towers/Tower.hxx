@@ -62,7 +62,6 @@ namespace tdef {
     pp.aoeDamage = 0.0f;
 
     pp.attackSpeed = 1.0f;
-    pp.rotation = 1.0f;
     pp.aimSpeed = 1.0f;
     pp.projectileSpeed = 1.0f;
     pp.accuracy = 1.0f;

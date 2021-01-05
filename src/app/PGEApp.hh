@@ -133,9 +133,21 @@ namespace tdef {
 
       /**
        * @brief - Interface method to display the main content
-       *          of the app. This method is called first and
-       *          that means that it will be overriden by all
-       *          UI and debug information.
+       *          of the app. This method only handles the
+       *          decal objects and is called first during the
+       *          rendering step. It means that the content
+       *          will be overriden by all UI and debug info.
+       * @param res - the resources to help the drawing.
+       */
+      virtual void
+      drawDecal(const RenderDesc& res) = 0;
+
+      /**
+       * @brief - Interface method to display the main content
+       *          of the app. This method is called to draw the
+       *          non-decal instances of the content and is
+       *          triggered right after the `drawDecal` one.
+       *          It will still get overriden by UI and debug.
        * @param res - the resources that can be drawn.
        */
       virtual void
@@ -258,6 +270,15 @@ namespace tdef {
        *          of the base layer, we need to give it the largest
        *          index so that it is displayed first, and then the
        *          rest on top.
+       */
+      uint32_t m_mDecalLayer;
+
+      /**
+       * @brief - The index representing the main layer but where
+       *          only non-decal objects can be drawn. This layer
+       *          will be displayed on top of the `m_mLayer` so
+       *          it limits a bit how we can intertwine the items
+       *          in the rendering.
        */
       uint32_t m_mLayer;
 

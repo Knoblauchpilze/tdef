@@ -49,6 +49,7 @@ namespace tdef {
       utils::Point2f p;
       float radius;
       float health;
+      float orientation;
       BlockType type;
 
       // The `id` defines a custom value which is interpreted

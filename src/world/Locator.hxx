@@ -75,6 +75,7 @@ namespace tdef {
     world::Block bd;
     bd.p = b->getPos();
     bd.radius = b->getRadius();
+    bd.orientation = b->getOrientation();
     bd.health = b->getHealthRatio();
     bd.type = bt;
     bd.id = var;

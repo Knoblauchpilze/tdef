@@ -30,7 +30,7 @@ namespace tdef {
   }
 
   void
-  TDefApp::draw(const RenderDesc& res) {
+  TDefApp::drawDecal(const RenderDesc& res) {
     // Clear rendering target.
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::VERY_DARK_GREY);
@@ -141,6 +141,49 @@ namespace tdef {
   }
 
   void
+  TDefApp::draw(const RenderDesc& res) {
+    // Clear rendering target.
+    SetPixelMode(olc::Pixel::ALPHA);
+    Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
+
+    // Fetch elements to display.
+    Viewport v = res.cf.cellsViewport();
+    world::ItemType ie = world::ItemType::Block;
+    std::vector<world::ItemEntry> items = m_game->getVisible(
+      v.p.x,
+      v.p.y,
+      v.p.x + v.dims.x,
+      v.p.y + v.dims.y,
+      &ie,
+      nullptr,
+      world::Sort::None
+    );
+
+    for (unsigned i = 0 ; i < items.size() ; ++i) {
+      const world::ItemEntry& wi = items[i];
+      world::Block bd = m_game->block(wi.index);
+
+      // Represent the orientation as a small line
+      // centered on the block and oriented with a
+      // direction similar to the parent.
+      static const float len = 50.0f;
+
+      olc::vf2d p = res.cf.tileCoordsToPixels(bd.p.x(), bd.p.y(), RelativePosition::BottomRight, bd.radius);
+
+      DrawLine(
+        olc::vf2d(p.x, p.y),
+        olc::vf2d(
+          p.x + len * std::cos(bd.orientation),
+          p.y + len * std::sin(bd.orientation)
+        ),
+        olc::RED
+      );
+    }
+
+    SetPixelMode(olc::Pixel::NORMAL);
+  }
+
+  void
   TDefApp::drawUI(const RenderDesc& res) {
     // Clear rendering target.
     SetPixelMode(olc::Pixel::ALPHA);
@@ -200,19 +243,19 @@ namespace tdef {
     );
 
     for (unsigned i = 0 ; i < items.size() ; ++i) {
-      const world::ItemEntry& ie = items[i];
+      const world::ItemEntry& wi = items[i];
 
       // Be on the safe side.
-      if (ie.type != world::ItemType::Mob) {
+      if (wi.type != world::ItemType::Mob) {
         log(
-          "Fetched item with type " + std::to_string(static_cast<int>(ie.type)) + " while requesting only entities",
+          "Fetched item with type " + std::to_string(static_cast<int>(wi.type)) + " while requesting only entities",
           utils::Level::Warning
         );
 
         continue;
       }
 
-      world::Mob md = m_game->mob(ie.index);
+      world::Mob md = m_game->mob(wi.index);
 
       // Draw the path of this entity if any.
       if (md.path.valid()) {

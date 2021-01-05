@@ -7,6 +7,7 @@ namespace tdef {
     utils::CoreObject(desc.name),
     olc::PixelGameEngine(),
 
+    m_mDecalLayer(0u),
     m_mLayer(0u),
     m_dLayer(0u),
     m_uiLayer(0u),
@@ -51,12 +52,17 @@ namespace tdef {
     m_uiLayer = CreateLayer();
     EnableLayer(m_uiLayer, true);
 
-    // And finally create a layer for the main content: as
-    // the pixel game engine draws layers from back to front
-    // the main content should be at the back so that all
-    // other elements are displayed on top of it.
+    // And finally create the two layers for the main content:
+    // one allowing to draw the decal objects and one all the
+    // regular ones. As the pixel game engine draws layers
+    // from back to front the main content should be at the
+    // back so that all other elements are displayed on top
+    // of it.
     m_mLayer = CreateLayer();
     EnableLayer(m_mLayer, true);
+
+    m_mDecalLayer = CreateLayer();
+    EnableLayer(m_mDecalLayer, true);
 
     return true;
   }

@@ -11,6 +11,10 @@ namespace tdef {
     static const float INFINITE_AIM_SPEED = 0.0f;
     static const float INFINITE_ATTACK_SPEED = 100.0f;
 
+    float degToRad(float deg) noexcept {
+      return deg * 3.1415926535f / 180.0f;
+    }
+
     MobShPtr
     basicTargetPicking(StepInfo& info, PickData& data) {
       return info.frustum->getClosestMob(data.pos, data.maxRange, nullptr);
@@ -39,7 +43,7 @@ namespace tdef {
       static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 1.25f;
-      static const float rotation = 90.0f;
+      static const float rotation = degToRad(90.0f);
       static const float aimSpeed = INFINITE_AIM_SPEED;
       static const float projectileSpeed = 3.0f;
       static const float accuracy = 1.0f;
@@ -107,7 +111,7 @@ namespace tdef {
       static const float aoeDamage = 1.0f;
 
       static const float attackSpeed = 0.3f;
-      static const float rotation = 50.0f;
+      static const float rotation = degToRad(50.0f);
       static const float aimSpeed = 100.0f;
       static const float projectileSpeed = INFINITE_PROJECTILE_SPEED;
       static const float accuracy = 1.0f;
@@ -176,7 +180,7 @@ namespace tdef {
       static const float aoeDamage = 1.0f;
 
       static const float attackSpeed = 0.6f;
-      static const float rotation = 50.0f;
+      static const float rotation = degToRad(50.0f);
       static const float aimSpeed = INFINITE_AIM_SPEED;
       static const float projectileSpeed = 2.4f;
       static const float accuracy = 1.0f;
@@ -244,7 +248,7 @@ namespace tdef {
       static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = INFINITE_ATTACK_SPEED;
-      static const float rotation = 0.0f;
+      static const float rotation = degToRad(0.0f);
       static const float aimSpeed = INFINITE_AIM_SPEED;
       static const float projectileSpeed = INFINITE_PROJECTILE_SPEED;
       static const float accuracy = 1.0f;
@@ -312,7 +316,7 @@ namespace tdef {
       static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 0.45f;
-      static const float rotation = 75.0f;
+      static const float rotation = degToRad(75.0f);
       static const float aimSpeed = INFINITE_AIM_SPEED;
       static const float projectileSpeed = 1.25f;
       static const float accuracy = 1.0f;
@@ -381,7 +385,7 @@ namespace tdef {
       static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 0.9f;
-      static const float rotation = 0.0f;
+      static const float rotation = degToRad(0.0f);
       static const float aimSpeed = INFINITE_AIM_SPEED;
       static const float projectileSpeed = 1.5f;
       static const float accuracy = 0.5f;
@@ -450,7 +454,7 @@ namespace tdef {
       static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 0.5f;
-      static const float rotation = 0.0f;
+      static const float rotation = degToRad(0.0f);
       static const float aimSpeed = INFINITE_AIM_SPEED;
       static const float projectileSpeed = INFINITE_PROJECTILE_SPEED;
       static const float accuracy = 1.0f;
@@ -518,7 +522,7 @@ namespace tdef {
       static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 1.1f;
-      static const float rotation = 50.0f;
+      static const float rotation = degToRad(50.0f);
       static const float aimSpeed = INFINITE_AIM_SPEED;
       static const float projectileSpeed = 2.0f;
       static const float accuracy = 1.0f;
@@ -588,7 +592,7 @@ namespace tdef {
       static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 4.5f;
-      static const float rotation = 40.0f;
+      static const float rotation = degToRad(40.0f);
       static const float aimSpeed = INFINITE_AIM_SPEED;
       static const float projectileSpeed = INFINITE_PROJECTILE_SPEED;
       static const float accuracy = 1.0f;
@@ -657,7 +661,7 @@ namespace tdef {
       static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 1.8f;
-      static const float rotation = 75.0f;
+      static const float rotation = degToRad(75.0f);
       static const float aimSpeed = INFINITE_AIM_SPEED;
       static const float projectileSpeed = 2.3f;
       static const float accuracy = 1.0f;
@@ -725,7 +729,7 @@ namespace tdef {
       static const float aoeDamage = 0.5f;
 
       static const float attackSpeed = 1.5f;
-      static const float rotation = 60.0f;
+      static const float rotation = degToRad(60.0f);
       static const float aimSpeed = INFINITE_AIM_SPEED;
       static const float projectileSpeed = INFINITE_PROJECTILE_SPEED;
       static const float accuracy = 1.0f;
@@ -794,7 +798,7 @@ namespace tdef {
       static const float aoeDamage = 1.0f;
 
       static const float attackSpeed = 0.28f;
-      static const float rotation = 45.0f;
+      static const float rotation = degToRad(45.0f);
       // TODO: 12 + 0.4 / Tower level.
       static const float aimSpeed = 12.0f;
       static const float projectileSpeed = 1.8f;

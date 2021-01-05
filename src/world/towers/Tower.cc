@@ -19,8 +19,8 @@ namespace tdef {
 
     m_minRange(props.minRange),
     m_maxRange(props.maxRange),
-    m_attack(fromProps(props)),
 
+    m_attack(fromProps(props)),
     m_processes(desc)
   {
     setService("tower");

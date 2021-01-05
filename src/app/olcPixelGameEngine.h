@@ -2621,6 +2621,7 @@ namespace olc
 					}
 
 					renderer->DrawLayerQuad(layer->vOffset, layer->vScale, layer->tint);
+					
 
 					// Display Decals in order for this layer
 					for (auto& decal : layer->vecDecalInstance)

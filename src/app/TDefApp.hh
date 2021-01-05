@@ -65,6 +65,9 @@ namespace tdef {
       cleanMenuResources() override;
 
       void
+      drawDecal(const RenderDesc& res) override;
+
+      void
       draw(const RenderDesc& res) override;
 
       void

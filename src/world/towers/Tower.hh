@@ -123,7 +123,6 @@ namespace tdef {
         float aoeDamage;
 
         float attackSpeed;
-        float rotation;
         float aimSpeed;
         float projectileSpeed;
         float accuracy;

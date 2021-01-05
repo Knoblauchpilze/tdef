@@ -44,6 +44,13 @@ namespace tdef {
       *m_frame, // Coordinate frame
     };
 
+    // Note that we usually need to clear
+    // the layer at least once to `activate`
+    // them: otherwise the window usually
+    // stays black.
+    SetDrawTarget(m_mDecalLayer);
+    drawDecal(res);
+
     SetDrawTarget(m_mLayer);
     draw(res);
 

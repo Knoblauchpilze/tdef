@@ -13,7 +13,6 @@
 # include "coordinates/TopViewFrame.hh"
 # include "TDefApp.hh"
 
-// TODO: Add rotation of tower.
 // TODO: Make spawner actually spawn mobs.
 // TODO: Handle upgrade.
 

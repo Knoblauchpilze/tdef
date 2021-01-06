@@ -8,6 +8,7 @@
 # include "Portal.hh"
 # include "Tower.hh"
 # include "TowerFactory.hh"
+# include "MobFactory.hh"
 
 namespace tdef {
 
@@ -221,26 +222,26 @@ namespace tdef {
 
       key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
-      if (used.count(key) == 0) {
-        Mob::MProps mp = Mob::newProps(p);
+      Mob::MProps pp;
 
+      if (used.count(key) == 0) {
         if (id % 4 == 0) {
-          mp.type = mobs::Type::Regular;
+          pp = mobs::generateProps(mobs::Type::Regular, p);
         }
         else if(id % 4 == 1) {
-          mp.type = mobs::Type::Fast;
+          pp = mobs::generateProps(mobs::Type::Fast, p);
         }
         else if(id % 4 == 2) {
-          mp.type = mobs::Type::Strong;
+          pp = mobs::generateProps(mobs::Type::Strong, p);
         }
         else {
-          mp.type = mobs::Type::Heli;
+          pp = mobs::generateProps(mobs::Type::Heli, p);
         }
 
-        MobShPtr m = std::make_shared<Mob>(mp);
+        MobShPtr m = std::make_shared<Mob>(pp);
         m_mobs.push_back(m);
 
-        log("Generating mob at " + std::to_string(p.x()) + "x" + std::to_string(p.y()) + " with radius " + std::to_string(mp.radius));
+        log("Generating mob " + std::to_string(static_cast<int>(pp.type)) + " at " + std::to_string(p.x()) + "x" + std::to_string(p.y()) + " with radius " + std::to_string(pp.radius));
 
         --id;
       }

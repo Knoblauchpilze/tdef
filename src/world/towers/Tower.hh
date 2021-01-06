@@ -223,6 +223,18 @@ namespace tdef {
       towers::DamageData
       fromProps(const TProps& props) noexcept;
 
+      /**
+       * @brief - This method is used to align the tower with the
+       *          selected target. In case no target is defined
+       *          yet the picking process will also be handled.
+       * @param info - information to help the picking.
+       * @return - `true` if the target could be picked and we
+       *           are in such an orientation that a shot is
+       *           possible.
+       */
+      bool
+      pickAndAlignWithTarget(StepInfo& info);
+
     private:
 
       /**
@@ -271,6 +283,15 @@ namespace tdef {
       float m_maxRange;
 
       /**
+       * @brief - The definition of a cone within which a
+       *          tower can shoot. When the angle between
+       *          the target and the tower is less than
+       *          this value a shot is possible. It is
+       *          expressed in radians.
+       */
+      float m_shootAngle;
+
+      /**
        * @brief - Defines the damage data for this tower.
        */
       towers::DamageData m_attack;
@@ -280,6 +301,13 @@ namespace tdef {
        *          this tower.
        */
       towers::Data m_processes;
+
+      /**
+       * @brief - The target for this tower. Until it is
+       *          destroyed or somehow made unavailable
+       *          we will keep locking and firing on it.
+       */
+      MobShPtr m_target;
   };
 
   using TowerShPtr = std::shared_ptr<Tower>;

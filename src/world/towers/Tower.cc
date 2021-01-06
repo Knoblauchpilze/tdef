@@ -95,12 +95,12 @@ namespace tdef {
     // of the tower (so that we can shoot it).
     if (m_target != nullptr) {
       float d = utils::d(m_target->getPos(), getPos());
-      
-      if (d < m_minRange || d > m_maxRange) {
+
+      if (m_target->getHealthRatio() <= 0.0f) {
         m_target.reset();
       }
 
-      if (m_target->getHealthRatio() <= 0.0f) {
+      if (d < m_minRange || d > m_maxRange) {
         m_target.reset();
       }
     }

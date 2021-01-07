@@ -75,6 +75,14 @@ namespace tdef {
       isDead() const noexcept;
 
       /**
+       * @brief - Defines whether this element has already been
+       *          marked for deletion.
+       * @return - `true` if the element has been deleted.
+       */
+      bool
+      isDeleted() const noexcept;
+
+      /**
        * @brief - Used to hit the element with the specified
        *          amount of damage. We clamp the amount of
        *          health to `0` and the return value tells
@@ -198,6 +206,15 @@ namespace tdef {
       void
       setOwner(const utils::Uuid& uuid);
 
+      /**
+       * @brief - Mark this item for deletion based on the
+       *          status provided in input.
+       * @param toDelete - `true` if the item should be
+       *                   marked for deletion.
+       */
+      void
+      markForDeletion(bool toDelete);
+
     protected:
 
       /**
@@ -233,6 +250,12 @@ namespace tdef {
        * @brief - The current health pool for this element.
        */
       float m_health;
+
+      /**
+       * @brief - Defines that this world element has been marked
+       *          for deletion.
+       */
+      bool m_deleted;
   };
 
   using WorldElementShPtr = std::shared_ptr<WorldElement>;

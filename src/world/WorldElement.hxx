@@ -56,6 +56,12 @@ namespace tdef {
 
   inline
   bool
+  WorldElement::isDeleted() const noexcept {
+    return m_deleted;
+  }
+
+  inline
+  bool
   WorldElement::damage(float hit) {
     // In case the `hit` is in fact a healing
     // we can do that in the limit of the health
@@ -97,7 +103,9 @@ namespace tdef {
     m_radius(props.radius <= 0.0f ? 1.0f : props.radius),
 
     m_totalHealth(std::max(props.health, 0.0f)),
-    m_health(m_totalHealth)
+    m_health(m_totalHealth),
+
+    m_deleted(false)
   {
     setService("element");
   }
@@ -106,6 +114,12 @@ namespace tdef {
   void
   WorldElement::setOwner(const utils::Uuid& uuid) {
     m_owner = uuid;
+  }
+
+  inline
+  void
+  WorldElement::markForDeletion(bool toDelete) {
+    m_deleted = toDelete;
   }
 
 }

@@ -61,6 +61,7 @@ namespace tdef {
       // We arrived at the portal, hit it and then
       // mark the mob for deletion.
       p->breach();
+      markForDeletion(true);
       info.removeMob(this);
 
       log("Mob made it through, lives: " + std::to_string(p->getLives()));

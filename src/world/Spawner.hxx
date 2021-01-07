@@ -18,7 +18,7 @@ namespace tdef {
 
     pp.threshold = 1.0f;
     pp.reserve = 0.9f;
-    pp.refill = 0.0f;
+    pp.refill = 0.1f;
 
     pp.mobs = dist;
 

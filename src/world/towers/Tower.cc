@@ -100,6 +100,10 @@ namespace tdef {
         m_target.reset();
       }
 
+      if (m_target != nullptr && m_target->isDeleted()) {
+        m_target.reset();
+      }
+
       if (d < m_minRange || d > m_maxRange) {
         m_target.reset();
       }
@@ -134,15 +138,33 @@ namespace tdef {
 
     float theta = std::atan2(dy, dx);
 
-    // Rotate to close the gap between the
-    // current orientation and the desired
-    // one. We cannot rotate more than the
-    // maximum rotation speed.
-    float dif = theta - m_orientation;
+    // This topic was quite helpful in determining
+    // the shortest angle difference to apply with
+    // both values:
+    // https://stackoverflow.com/questions/28036652/finding-the-shortest-distance-between-two-angles/28037434
+    // `angle2` seems to be the `to` angle and the
+    // `angle1` seems to be the `from` angle.
+    float dif = (theta - m_orientation + 3.1415926535f);
+    dif = std::fmod(dif, 6.283185307f) - 3.1415926535f;
+    dif = (dif < -3.1415926535f ? dif + 6.283185307f : dif);
 
-    float achieved = std::min(dif, m_rotationSpeed * info.elapsed);
+    float aDif = std::abs(dif);
+
+    float achieved = std::min(aDif, m_rotationSpeed * info.elapsed);
+    achieved = std::copysign(achieved, dif);
 
     m_orientation += achieved;
+
+    // Clamp within the range `]-pi; pi]`.
+    float dp = std::fmod(m_orientation + 3.1415926535f, 6.283185307f);
+    if (dp < 0) {
+      m_orientation += 6.283185307;
+    }
+
+    float p = std::fmod(m_orientation - 3.1415926535f, 3.1415926535f);
+    if (p > 0) {
+      m_orientation -= 6.283185307f;
+    }
 
     // The rotation part has been handled, which
     // means that we are now facing the target as

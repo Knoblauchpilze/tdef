@@ -366,12 +366,13 @@ namespace tdef {
     }
     count = std::max(count, 1);
 
-    int d = static_cast<int>(1.0f * expandableSize / count);
+    float d = 1.0f * expandableSize / count;
 
     // Note that we also force the wraping for the
     // background tiled children to something that
     // will be consistent with their actual size.
-    int offset = 0;
+    float offset = 0.0f;
+    float delta = 0.0f;
 
     for (unsigned id = 0u ; id < m_children.size() ; ++id) {
       switch (m_layout) {
@@ -381,7 +382,22 @@ namespace tdef {
             m_children[id]->m_size.x = wh;
           }
           if (m_children[id]->m_fg.expand) {
-            m_children[id]->m_size.y = d;
+            m_children[id]->m_size.y = static_cast<int>(d);
+
+            // Make sure that the size of the child is
+            // a bit larger in case the `d` is not a
+            // perfect integer.
+            if (id == m_children.size() - 1) {
+              delta += (d - m_children[id]->m_size.y);
+            }
+            if (delta > 1.0f) {
+              int sup = static_cast<int>(std::floor(delta));
+              m_children[id]->m_size.y += sup;
+            }
+
+            if (id != m_children.size()) {
+              delta += (d - m_children[id]->m_size.y);
+            }
           }
 
           m_children[id]->m_pos.x = (wh - m_children[id]->m_size.x) / 2.0f;
@@ -392,13 +408,28 @@ namespace tdef {
           // We want the icon to occupy all the space
           // available for the child.
           if (m_children[id]->m_fg.icon != "") {
-            m_children[id]->m_fg.size.y = d;
+            m_children[id]->m_fg.size.y = m_children[id]->m_size.y;
           }
           break;
         case menu::Layout::Horizontal:
         default:
           if (m_children[id]->m_fg.expand) {
-            m_children[id]->m_size.x = d;
+            m_children[id]->m_size.x = static_cast<int>(d);
+
+            // Make sure that the size of the child is
+            // a bit larger in case the `d` is not a
+            // perfect integer.
+            if (id == m_children.size() - 1) {
+              delta += (d - m_children[id]->m_size.x);
+            }
+            if (delta > 1.0f) {
+              int sup = static_cast<int>(std::floor(delta));
+              m_children[id]->m_size.x += sup;
+            }
+
+            if (id != m_children.size()) {
+              delta += (d - m_children[id]->m_size.x);
+            }
           }
           m_children[id]->m_size.y = std::min(m_children[id]->m_size.y, wh);
           if (m_children[id]->m_bg.scale) {

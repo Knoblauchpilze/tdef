@@ -15,6 +15,8 @@ namespace tdef {
     struct BackgroundDesc {
       olc::Pixel color;
       olc::Pixel hColor;
+
+      bool scale;
     };
 
     /**

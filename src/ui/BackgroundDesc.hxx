@@ -15,6 +15,8 @@ namespace tdef {
       bd.color = c;
       bd.hColor = tdef::modulate(c, hsl.b > 127 ? 0.5f : 2.0f);
 
+      bd.scale = true;
+
       return bd;
     }
 

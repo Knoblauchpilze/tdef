@@ -9,6 +9,27 @@
 # include "Spawner.hh"
 # include "Wall.hh"
 
+namespace {
+
+  tdef::MenuShPtr
+  generateTowerMenu(const tdef::towers::Type& type)
+  {
+    return std::make_shared<tdef::GameMenu>(
+      tdef::towers::toString(type),
+      [type](std::vector<tdef::ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<tdef::SimpleAction>(
+            [type](tdef::Game& g) {
+              g.setTowerType(type);
+            }
+          )
+        );
+      }
+    );
+  }
+
+}
+
 namespace tdef {
 
   Game::Game():
@@ -249,89 +270,47 @@ namespace tdef {
   Game::generateTowersMenu(const olc::vi2d& dims) const {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::Transparent);
-    const olc::vi2d pos(0, dims.y - 50);
-    const olc::vf2d size(dims.x, 50);
+    const olc::vi2d pos(0, 20);
+    const olc::vf2d size(50, dims.y - 20);
 
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    MenuShPtr m = std::make_shared<Menu>(pos, size, "tMenu", bg, fg);
+    MenuShPtr m = std::make_shared<Menu>(pos, size, "tMenu", bg, fg, menu::Layout::Vertical);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
-    MenuShPtr sm = std::make_shared<GameMenu>(
-      "Basic",
-      [](std::vector<ActionShPtr>& actions) {
-        actions.push_back(
-          std::make_shared<SimpleAction>(
-            [](Game& g) {
-              g.setTowerType(towers::Type::Basic);
-            }
-          )
-        );
-      }
-    );
-    m->addMenu(sm);
+    m->addMenu(generateTowerMenu(towers::Type::Basic));
+    m->addMenu(generateTowerMenu(towers::Type::Sniper));
+    m->addMenu(generateTowerMenu(towers::Type::Cannon));
+    m->addMenu(generateTowerMenu(towers::Type::Freezing));
+    m->addMenu(generateTowerMenu(towers::Type::Venom));
+    m->addMenu(generateTowerMenu(towers::Type::Splash));
+    m->addMenu(generateTowerMenu(towers::Type::Blast));
+    m->addMenu(generateTowerMenu(towers::Type::Multishot));
+    m->addMenu(generateTowerMenu(towers::Type::Minigun));
+    m->addMenu(generateTowerMenu(towers::Type::Antiair));
+    m->addMenu(generateTowerMenu(towers::Type::Tesla));
+    m->addMenu(generateTowerMenu(towers::Type::Missile));
 
-    sm = std::make_shared<GameMenu>(
-      "Sniper",
-      [](std::vector<ActionShPtr>& actions) {
-        actions.push_back(
-          std::make_shared<SimpleAction>(
-            [](Game& g) {
-              g.setTowerType(towers::Type::Sniper);
-            }
-          )
-        );
-      }
+    m->addMenu(
+      std::make_shared<GameMenu>(
+        "Wall",
+        [](std::vector<ActionShPtr>& actions) {
+          actions.push_back(
+            std::make_shared<SimpleAction>(
+              [](Game& g) {
+                g.allowWallBuilding();
+              }
+            )
+          );
+        },
+        nullptr,
+        false
+      )
     );
-    m->addMenu(sm);
-
-    sm = std::make_shared<GameMenu>(
-      "Freezing",
-      [](std::vector<ActionShPtr>& actions) {
-        actions.push_back(
-          std::make_shared<SimpleAction>(
-            [](Game& g) {
-              g.setTowerType(towers::Type::Freezing);
-            }
-          )
-        );
-      }
-    );
-    m->addMenu(sm);
-
-    sm = std::make_shared<GameMenu>(
-      "Cannon",
-      [](std::vector<ActionShPtr>& actions) {
-        actions.push_back(
-          std::make_shared<SimpleAction>(
-            [](Game& g) {
-              g.setTowerType(towers::Type::Cannon);
-            }
-          )
-        );
-      }
-    );
-    m->addMenu(sm);
-
-    sm = std::make_shared<GameMenu>(
-      "Wall",
-      [](std::vector<ActionShPtr>& actions) {
-        actions.push_back(
-          std::make_shared<SimpleAction>(
-            [](Game& g) {
-              g.allowWallBuilding();
-            }
-          )
-        );
-      },
-      nullptr,
-      false
-    );
-    m->addMenu(sm);
 
     return m;
   }

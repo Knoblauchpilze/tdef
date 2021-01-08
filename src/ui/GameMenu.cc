@@ -10,17 +10,40 @@ namespace tdef {
 
   GameMenu::GameMenu(const std::string& text,
                      const menu::RegisterAction& cb,
-                     Menu* parent):
+                     Menu* parent,
+                     bool enabled):
     SimpleMenu(
       olc::vi2d(),
       olc::vf2d(),
-      menu::newColoredBackground(sk_activeBGColor),
-      menu::newTextContent(text, sk_activeTextColor),
+      menu::newColoredBackground(enabled ? sk_activeBGColor : sk_disabledBGColor),
+      menu::newTextContent(text, enabled ? sk_activeTextColor : sk_disabledTextColor),
       cb,
       parent
-    )
-  {
+    ),
 
+    m_enabled(enabled)
+  {}
+
+  void
+  GameMenu::enable(bool enabled) {
+    menu::BackgroundDesc bg;
+    bg = menu::newColoredBackground(enabled ? sk_activeBGColor : sk_disabledBGColor);
+
+    menu::MenuContentDesc fg;
+    fg = menu::newTextContent(
+      getText(),
+      enabled ? sk_activeTextColor : sk_disabledTextColor
+    );
+
+    setBackground(bg);
+    setContent(fg);
+
+    m_enabled = enabled;
+  }
+
+  bool
+  GameMenu::onHighlight() const {
+    return m_enabled;
   }
 
 }

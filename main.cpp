@@ -14,9 +14,7 @@
 # include "TDefApp.hh"
 
 // TODO: Handle upgrade.
-// TODO: Refine menus: this can be done by adding a `GameMenu` which can
-// be enabled/disabled with a certain color. It would also reduce the
-// number of parameters to pass to the simple menu.
+// TODO: Refine menus.
 // TODO: Add projectiles.
 
 int main(int /*argc*/, char** /*argv*/) {

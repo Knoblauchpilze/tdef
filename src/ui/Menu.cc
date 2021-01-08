@@ -30,6 +30,8 @@ namespace tdef {
     setService("menu");
 
     loadFGTile();
+
+    log("Bg: " + std::to_string(m_bg.color.r) + "x" + std::to_string(m_bg.color.g) + "x" + std::to_string(m_bg.color.b));
   }
 
   void
@@ -330,10 +332,6 @@ namespace tdef {
     // Update the size based on the layout for this
     // menu: we also have to update the other items
     // so that a consistent size is defined.
-    // Note that we only assign the perpendicular
-    // size to the menu layout's direction so that
-    // we keep the actual desired space for the
-    // child in the principal direction.
     int wh = (m_layout == menu::Layout::Horizontal ? m_size.y : m_size.x);
     int i = (m_layout == menu::Layout::Horizontal ? m_size.x : m_size.y);
 
@@ -377,6 +375,9 @@ namespace tdef {
       switch (m_layout) {
         case menu::Layout::Vertical:
           m_children[id]->m_size.x = std::min(m_children[id]->m_size.x, wh);
+          if (m_children[id]->m_bg.scale) {
+            m_children[id]->m_size.x = wh;
+          }
           if (m_children[id]->m_fg.expand) {
             m_children[id]->m_size.y = d;
           }
@@ -398,6 +399,9 @@ namespace tdef {
             m_children[id]->m_size.x = d;
           }
           m_children[id]->m_size.y = std::min(m_children[id]->m_size.y, wh);
+          if (m_children[id]->m_bg.scale) {
+            m_children[id]->m_size.y = wh;
+          }
 
           m_children[id]->m_pos.x = offset;
           m_children[id]->m_pos.y = (wh - m_children[id]->m_size.y) / 2.0f;

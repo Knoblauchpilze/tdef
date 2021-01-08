@@ -9,6 +9,7 @@
 # include "Tower.hh"
 # include "TowerFactory.hh"
 # include "MobFactory.hh"
+# include "SpawnerFactory.hh"
 
 namespace tdef {
 
@@ -143,7 +144,8 @@ namespace tdef {
 
       if (used.count(key) == 0) {
         log("Spawner at " + p.toString());
-        SpawnerShPtr b = std::make_shared<Spawner>(Spawner::newProps(p));
+        Spawner::SProps pp = spawners::generateProps(p);
+        SpawnerShPtr b = std::make_shared<Spawner>(pp);
         m_blocks.push_back(b);
         --id;
       }

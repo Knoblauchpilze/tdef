@@ -21,11 +21,10 @@ namespace tdef {
     public:
 
       /**
-       * @brief - Create a new tower menu allowing to interact
+       * @brief - Create a new simple menu allowing to interact
        *          (typically by creating or removing) towers in
-       *          the world. Upon clicking on this menu a new
-       *          action to register or remove a tower will be
-       *          created.
+       *          the world. Upon clicking on this menu a call
+       *          to the provided callback will be triggered.
        * @param pos - the position of the menu in the parent.
        * @param size - the dimensions of the menu.
        * @param bg - the background for this menu.

@@ -44,6 +44,9 @@ namespace tdef {
         float refill;
 
         spawners::Distribution mobs;
+
+        int minWaveSize;
+        int maxWaveSize;
       };
 
       static
@@ -108,6 +111,18 @@ namespace tdef {
        *          This value is clamped to at least `0`.
        */
       float m_spawnRadius;
+
+      /**
+       * @brief - The minimum number of mobs that can be spawned
+       *          in a single wave of the spawner.
+       */
+      int m_minWaveSize;
+
+      /**
+       * @brief - The maximum number of mobs that can be spawned
+       *          in a single wave of the spawner.
+       */
+      int m_maxWaveSize;
 
       /**
        * @brief - The current stock of resource available in the

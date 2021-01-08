@@ -10,6 +10,8 @@ namespace tdef {
     m_distribution(props.mobs),
 
     m_spawnRadius(std::max(props.spawnRadius, 0.0f)),
+    m_minWaveSize(props.minWaveSize),
+    m_maxWaveSize(std::max(props.maxWaveSize, 1)),
 
     m_stock(props.reserve),
     m_threshold(props.threshold),
@@ -45,7 +47,11 @@ namespace tdef {
       return;
     }
 
-    info.spawnMob(mob);
+    // Generate the size of the wave.
+    int size = info.rng.rndInt(m_minWaveSize, m_maxWaveSize);
+    for (int id = 0u ; id < size ; ++id) {
+      info.spawnMob(mob);
+    }
   }
 
   MobShPtr
@@ -73,7 +79,7 @@ namespace tdef {
       ++id;
     }
 
-    id = std::min(static_cast<unsigned>(m_distribution.size()), id);
+    id = std::min(static_cast<unsigned>(m_distribution.size() - 1u), id);
 
     Mob::MProps props = mobs::generateProps(m_distribution[id].mob, utils::Point2f(x, y));
     return std::make_shared<Mob>(props);

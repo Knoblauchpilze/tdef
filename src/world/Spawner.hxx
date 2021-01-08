@@ -22,6 +22,9 @@ namespace tdef {
 
     pp.mobs = dist;
 
+    pp.minWaveSize = 1;
+    pp.maxWaveSize = 1;
+
     return pp;
   }
 

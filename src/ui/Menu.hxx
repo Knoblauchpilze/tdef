@@ -24,17 +24,45 @@ namespace tdef {
   }
 
   inline
+  std::string
+  Menu::getText() const noexcept {
+    return m_fg.text;
+  }
+
+  inline
+  void
+  Menu::setBackground(const menu::BackgroundDesc& bg) {
+    m_bg = bg;
+
+    // Update the parent's display if possible.
+    if (m_parent != nullptr) {
+      m_parent->updateChildren();
+    }
+  }
+
+  inline
   void
   Menu::setContent(const menu::MenuContentDesc& mcd) {
     clearContent();
     m_fg = mcd;
     loadFGTile();
+
+    // Update the parent's display if possible.
+    if (m_parent != nullptr) {
+      m_parent->updateChildren();
+    }
   }
 
   inline
   void
   Menu::onClick(std::vector<ActionShPtr>& /*actions*/) const {
     // Nothing to do.
+  }
+
+  inline
+  bool
+  Menu::onHighlight() const {
+    return true;
   }
 
   inline

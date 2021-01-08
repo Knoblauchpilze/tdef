@@ -30,8 +30,6 @@ namespace tdef {
     setService("menu");
 
     loadFGTile();
-
-    log("Bg: " + std::to_string(m_bg.color.r) + "x" + std::to_string(m_bg.color.g) + "x" + std::to_string(m_bg.color.b));
   }
 
   void
@@ -107,14 +105,18 @@ namespace tdef {
     // This menu is now highlighted. We also set
     // the return value to indicate that this
     // event was indeed relevant.
-    m_state.highlighted = true;
+    bool process = onHighlight();
+    m_state.highlighted = process;
     res.relevant = true;
 
     // In case the user clicks on the menu, we need
     // to trigger the corresponding handler.
     if (click) {
-      onClick(actions);
-      m_state.selected = true;
+      if (process) {
+        onClick(actions);
+        m_state.selected = true;
+      }
+
       res.selected = true;
     }
 

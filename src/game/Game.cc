@@ -2,7 +2,7 @@
 # include "Game.hh"
 # include <cxxabi.h>
 # include "TowerFactory.hh"
-# include "SimpleMenu.hh"
+# include "GameMenu.hh"
 # include "SimpleAction.hh"
 # include "Mob.hh"
 # include "Tower.hh"
@@ -52,7 +52,7 @@ namespace tdef {
   Game::generateMenus(const olc::vi2d& dims) {
     // Generate each menu.
     std::vector<MenuShPtr> menus;
-    
+
     menus.push_back(generateStatusMenu(dims));
     menus.push_back(generateTowersMenu(dims));
     menus.push_back(generateUpgradeMenu(dims));
@@ -248,7 +248,7 @@ namespace tdef {
   MenuShPtr
   Game::generateTowersMenu(const olc::vi2d& dims) const {
     // Constants.
-    const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
+    const olc::Pixel bgc(20, 20, 20, alpha::Transparent);
     const olc::vi2d pos(0, dims.y - 50);
     const olc::vf2d size(dims.x, 50);
 
@@ -261,12 +261,8 @@ namespace tdef {
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
-    fg = menu::newTextContent("Basic");
-    MenuShPtr sm = std::make_shared<SimpleMenu>(
-      pos,
-      size,
-      bg,
-      fg,
+    MenuShPtr sm = std::make_shared<GameMenu>(
+      "Basic",
       [](std::vector<ActionShPtr>& actions) {
         actions.push_back(
           std::make_shared<SimpleAction>(
@@ -279,12 +275,8 @@ namespace tdef {
     );
     m->addMenu(sm);
 
-    fg = menu::newTextContent("Sniper");
-    sm = std::make_shared<SimpleMenu>(
-      pos,
-      size,
-      bg,
-      fg,
+    sm = std::make_shared<GameMenu>(
+      "Sniper",
       [](std::vector<ActionShPtr>& actions) {
         actions.push_back(
           std::make_shared<SimpleAction>(
@@ -297,12 +289,8 @@ namespace tdef {
     );
     m->addMenu(sm);
 
-    fg = menu::newTextContent("Freezing");
-    sm = std::make_shared<SimpleMenu>(
-      pos,
-      size,
-      bg,
-      fg,
+    sm = std::make_shared<GameMenu>(
+      "Freezing",
       [](std::vector<ActionShPtr>& actions) {
         actions.push_back(
           std::make_shared<SimpleAction>(
@@ -315,12 +303,8 @@ namespace tdef {
     );
     m->addMenu(sm);
 
-    fg = menu::newTextContent("Cannon");
-    sm = std::make_shared<SimpleMenu>(
-      pos,
-      size,
-      bg,
-      fg,
+    sm = std::make_shared<GameMenu>(
+      "Cannon",
       [](std::vector<ActionShPtr>& actions) {
         actions.push_back(
           std::make_shared<SimpleAction>(
@@ -333,12 +317,8 @@ namespace tdef {
     );
     m->addMenu(sm);
 
-    fg = menu::newTextContent("Wall");
-    sm = std::make_shared<SimpleMenu>(
-      pos,
-      size,
-      bg,
-      fg,
+    sm = std::make_shared<GameMenu>(
+      "Wall",
       [](std::vector<ActionShPtr>& actions) {
         actions.push_back(
           std::make_shared<SimpleAction>(
@@ -347,7 +327,9 @@ namespace tdef {
             }
           )
         );
-      }
+      },
+      nullptr,
+      false
     );
     m->addMenu(sm);
 

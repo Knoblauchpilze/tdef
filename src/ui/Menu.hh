@@ -130,6 +130,22 @@ namespace tdef {
       getSize() const noexcept;
 
       /**
+       * @brief - Returns the text associated to this menu or
+       *          the empty string if none is attached.
+       * @return - the text content of this menu.
+       */
+      std::string
+      getText() const noexcept;
+
+      /**
+       * @brief - Replace the existing background content with
+       *          the new one.
+       * @param bg - the new background description.
+       */
+      void
+      setBackground(const menu::BackgroundDesc& bg);
+
+      /**
        * @brief - Replace the existing content with the new one.
        * @param mcd - the new content description for this menu.
        */
@@ -162,6 +178,17 @@ namespace tdef {
       virtual
       void
       onClick(std::vector<ActionShPtr>& actions) const;
+
+      /**
+       * @brief - Interface method called right before this menu
+       *          is changed to selected: this gives the chance
+       *          to inheriting classes to react to a user event.
+       *          The default implementation returns `true`.
+       * @return - `true` if the event should be processed.
+       */
+      virtual
+      bool
+      onHighlight() const;
 
       /**
        * @brief - Used to obtain the absolute position of the

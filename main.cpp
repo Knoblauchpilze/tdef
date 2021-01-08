@@ -13,8 +13,11 @@
 # include "coordinates/TopViewFrame.hh"
 # include "TDefApp.hh"
 
-// TODO: Make spawner actually spawn mobs.
 // TODO: Handle upgrade.
+// TODO: Refine menus: this can be done by adding a `GameMenu` which can
+// be enabled/disabled with a certain color. It would also reduce the
+// number of parameters to pass to the simple menu.
+// TODO: Add projectiles.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

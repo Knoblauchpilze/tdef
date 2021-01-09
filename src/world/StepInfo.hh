@@ -32,10 +32,7 @@ namespace tdef {
     LocatorShPtr frustum;
 
     std::vector<MobShPtr> mSpawned;
-    std::vector<Mob*> mRemoved;
-
     std::vector<ProjectileShPtr> pSpawned;
-    std::vector<Projectile*> pRemoved;
 
     float gold;
 
@@ -43,13 +40,7 @@ namespace tdef {
     spawnMob(MobShPtr m);
 
     void
-    removeMob(Mob* m);
-
-    void
     spawnProjectile(ProjectileShPtr p);
-
-    void
-    removeProjectile(Projectile* p);
   };
 
 }

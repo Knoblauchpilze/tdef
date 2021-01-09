@@ -57,7 +57,9 @@ namespace tdef {
       " (health: " + std::to_string(m_target->getHealth()) + ")"
     );
 
-    // Hit the mob with a devastating attack.
+    // Hit the mob with a devastating attack. Note that
+    // in case the attack destroys the mob it will be
+    // marked as deleted automatically.
     m_energy -= m_attackCost;
     if (attack(info)) {
       return;
@@ -66,9 +68,6 @@ namespace tdef {
     log("Killed " + mobs::toString(m_target->getType()) + " at " + m_target->getPos().toString() + ", earned " + std::to_string(m_target->getBounty()) + " coin(s)");
 
     info.gold += m_target->getBounty();
-
-    // Mark this mob for deletion.
-    info.removeMob(m_target.get());
 
     // Clear the target.
     m_target.reset();
@@ -82,10 +81,6 @@ namespace tdef {
     // of the tower (so that we can shoot it).
     if (m_target != nullptr) {
       float d = utils::d(m_target->getPos(), getPos());
-
-      // if (m_type == towers::Type::Sniper) {
-      //   log("Target " + mobs::toString(m_target->getType()) + " at " + std::to_string(m_target->getPos().x()) + "x" + std::to_string(m_target->getPos().y()) + " has health " + std::to_string(m_target->getHealthRatio()) + " and deleted: " + std::to_string(m_target->isDeleted()));
-      // }
 
       if (m_target->isDead()) {
         m_target.reset();

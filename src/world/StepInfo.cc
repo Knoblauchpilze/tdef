@@ -9,18 +9,8 @@ namespace tdef {
   }
 
   void
-  StepInfo::removeMob(Mob* m) {
-    mRemoved.push_back(m);
-  }
-
-  void
   StepInfo::spawnProjectile(ProjectileShPtr p) {
     pSpawned.push_back(p);
-  }
-
-  void
-  StepInfo::removeProjectile(Projectile* p) {
-    pRemoved.push_back(p);
   }
 
 }

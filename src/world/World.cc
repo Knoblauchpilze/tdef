@@ -62,10 +62,7 @@ namespace tdef {
       m_loc,                          // frustum
 
       std::vector<MobShPtr>(),        // mSpawned
-      std::vector<Mob*>(),            // mRemoved
-
       std::vector<ProjectileShPtr>(), // pSpawned
-      std::vector<Projectile*>(),     // pRemoved
 
       0.0f,                           // gold
     };
@@ -88,35 +85,32 @@ namespace tdef {
       m_mobs.push_back(si.mSpawned[id]);
     }
 
-    for (unsigned id = 0u ; id < si.mRemoved.size() ; ++id) {
-      auto toRm = std::find_if(
-        m_mobs.cbegin(),
-        m_mobs.cend(),
-        [&si, &id](const MobShPtr& m) {
-          return m != nullptr && m.get() == si.mRemoved[id];
+    // Remove elements marked for deletion.
+    m_mobs.erase(
+      std::remove_if(
+        m_mobs.begin(),
+        m_mobs.end(),
+        [](MobShPtr mob){
+          return mob->isDeleted();
         }
-      );
-      if (toRm != m_mobs.end()) {
-        m_mobs.erase(toRm);
-      }
-    }
+      ),
+      m_mobs.end()
+    );
 
     for (unsigned id = 0u ; id < si.pSpawned.size() ; ++id) {
       m_projectiles.push_back(si.pSpawned[id]);
     }
 
-    for (unsigned id = 0u ; id < si.pRemoved.size() ; ++id) {
-      auto toRm = std::find_if(
-        m_projectiles.cbegin(),
-        m_projectiles.cend(),
-        [&si, &id](const ProjectileShPtr& p) {
-          return p != nullptr && p.get() == si.pRemoved[id];
+    m_projectiles.erase(
+      std::remove_if(
+        m_projectiles.begin(),
+        m_projectiles.end(),
+        [](ProjectileShPtr proj){
+          return proj->isDeleted();
         }
-      );
-      if (toRm != m_projectiles.end()) {
-        m_projectiles.erase(toRm);
-      }
-    }
+      ),
+      m_projectiles.end()
+    );
 
     // Handle cases where some gold was earned.
     if (si.gold > 0.0f) {

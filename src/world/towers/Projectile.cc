@@ -28,6 +28,7 @@ namespace tdef {
 
   void
   Projectile::step(StepInfo& /*info*/) {
+    log("Stepping projectile");
     // TODO: Handle this.
   }
 

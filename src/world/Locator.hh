@@ -6,6 +6,7 @@
 # include <core_utils/CoreObject.hh>
 # include "Block.hh"
 # include "Mob.hh"
+# include "Projectile.hh"
 
 namespace tdef {
   namespace world {
@@ -104,6 +105,8 @@ namespace tdef {
   class Wall;
   class Spawner;
   class Portal;
+  class Mob;
+  class Projectile;
 
   class Locator: public utils::CoreObject {
     public:
@@ -120,9 +123,11 @@ namespace tdef {
        * @param blocks - the list of tiles registered in the
        *                 world.
        * @param mobs - the list of mobs of the world.
+       * @param projectiles - the projectiles of the world.
        */
       Locator(const std::vector<BlockShPtr>& blocks,
-              const std::vector<MobShPtr>& mobs);
+              const std::vector<MobShPtr>& mobs,
+              const std::vector<ProjectileShPtr>& projectiles);
 
       /**
        * @brief - Retrieve the tile at the specified index. Note
@@ -450,6 +455,11 @@ namespace tdef {
        * @brief - The mobs registered in the world.
        */
       const std::vector<MobShPtr>& m_mobs;
+
+      /**
+       * @brief - The projectiles registered in the world.
+       */
+      const std::vector<ProjectileShPtr>& m_projectiles;
   };
 
   using LocatorShPtr = std::shared_ptr<Locator>;

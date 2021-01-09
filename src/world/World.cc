@@ -20,6 +20,7 @@ namespace tdef {
 
     m_blocks(),
     m_mobs(),
+    m_projectiles(),
 
     m_loc(nullptr),
 
@@ -38,6 +39,7 @@ namespace tdef {
 
     m_blocks(),
     m_mobs(),
+    m_projectiles(),
 
     m_loc(nullptr),
 
@@ -52,17 +54,20 @@ namespace tdef {
   void
   World::step(float tDelta) {
     StepInfo si{
-      m_rng,                   // rng
+      m_rng,                          // rng
 
-      utils::now(),            // moment
-      tDelta,                  // elapsed
+      utils::now(),                   // moment
+      tDelta,                         // elapsed
 
-      m_loc,                   // frustum
+      m_loc,                          // frustum
 
-      std::vector<MobShPtr>(), // mSpawned
-      std::vector<Mob*>(),     // mRemoved
+      std::vector<MobShPtr>(),        // mSpawned
+      std::vector<Mob*>(),            // mRemoved
 
-      0.0f,                    // gold
+      std::vector<ProjectileShPtr>(), // pSpawned
+      std::vector<Projectile*>(),     // pRemoved
+
+      0.0f,                           // gold
     };
 
     // Make elements evolve.
@@ -72,6 +77,10 @@ namespace tdef {
 
     for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
       m_mobs[id]->step(si);
+    }
+
+    for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
+      m_projectiles[id]->step(si);
     }
 
     // Process influences.
@@ -89,6 +98,23 @@ namespace tdef {
       );
       if (toRm != m_mobs.end()) {
         m_mobs.erase(toRm);
+      }
+    }
+
+    for (unsigned id = 0u ; id < si.pSpawned.size() ; ++id) {
+      m_projectiles.push_back(si.pSpawned[id]);
+    }
+
+    for (unsigned id = 0u ; id < si.pRemoved.size() ; ++id) {
+      auto toRm = std::find_if(
+        m_projectiles.cbegin(),
+        m_projectiles.cend(),
+        [&si, &id](const ProjectileShPtr& p) {
+          return p != nullptr && p.get() == si.pRemoved[id];
+        }
+      );
+      if (toRm != m_projectiles.end()) {
+        m_projectiles.erase(toRm);
       }
     }
 
@@ -249,7 +275,7 @@ namespace tdef {
       }
     }
 
-    m_loc = std::make_shared<Locator>(m_blocks, m_mobs);
+    m_loc = std::make_shared<Locator>(m_blocks, m_mobs, m_projectiles);
   }
 
   void

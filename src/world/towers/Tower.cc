@@ -1,14 +1,15 @@
 
 # include "Tower.hh"
+# include <maths_utils/LocationUtils.hh>
 # include "Mob.hh"
 # include "Locator.hh"
-# include <maths_utils/LocationUtils.hh>
+# include "Projectile.hh"
 
 namespace tdef {
 
   Tower::Tower(const TProps& props,
                const towers::Data& desc):
-    Block(props, "tower"),
+    Block(props, towers::toString(props.type)),
 
     m_type(props.type),
 
@@ -21,6 +22,7 @@ namespace tdef {
     m_minRange(props.minRange),
     m_maxRange(props.maxRange),
     m_shootAngle(props.shootAngle),
+    m_projectileSpeed(props.projectileSpeed),
 
     m_attack(fromProps(props)),
     m_processes(desc),
@@ -49,7 +51,7 @@ namespace tdef {
     }
 
     log(
-      "Hitting mob " + std::to_string(static_cast<int>(m_target->getType())) +
+      "Hitting mob " + mobs::toString(m_target->getType()) +
       " at " + m_target->getPos().toString() +
       " for " + std::to_string(m_attack.damage) + " damage" +
       " (health: " + std::to_string(m_target->getHealth()) + ")"
@@ -57,26 +59,11 @@ namespace tdef {
 
     // Hit the mob with a devastating attack.
     m_energy -= m_attackCost;
-
-    towers::DamageData dd;
-    dd.damage = m_attack.damage;
-
-    dd.aoeRadius = m_attack.aoeRadius;
-    dd.aoeDamage = m_attack.aoeDamage;
-
-    dd.accuracy = m_attack.accuracy;
-
-    dd.speed = m_attack.speed;
-    dd.sDuration = m_attack.sDuration;
-
-    dd.poison = m_attack.poison;
-    dd.pDuration = m_attack.pDuration;
-
-    if (m_processes.damage(info, m_target, dd)) {
+    if (attack(info)) {
       return;
     }
 
-    log("Killed mob at " + m_target->getPos().toString() + ", earned " + std::to_string(m_target->getBounty()) + " coin(s)");
+    log("Killed " + mobs::toString(m_target->getType()) + " at " + m_target->getPos().toString() + ", earned " + std::to_string(m_target->getBounty()) + " coin(s)");
 
     info.gold += m_target->getBounty();
 
@@ -96,7 +83,11 @@ namespace tdef {
     if (m_target != nullptr) {
       float d = utils::d(m_target->getPos(), getPos());
 
-      if (m_target->getHealthRatio() <= 0.0f) {
+      // if (m_type == towers::Type::Sniper) {
+      //   log("Target " + mobs::toString(m_target->getType()) + " at " + std::to_string(m_target->getPos().x()) + "x" + std::to_string(m_target->getPos().y()) + " has health " + std::to_string(m_target->getHealthRatio()) + " and deleted: " + std::to_string(m_target->isDeleted()));
+      // }
+
+      if (m_target->isDead()) {
         m_target.reset();
       }
 
@@ -172,6 +163,60 @@ namespace tdef {
     // shot at it we need to determine whether it
     // lies within the firing cone.
     return std::abs(m_orientation - theta) <= m_shootAngle;
+  }
+
+  bool
+  Tower::attack(StepInfo& info) {
+    // We have to distinguish between two main cases:
+    //   - the tower has an infinite projectile speed.
+    //   - the tower should shoot projectiles.
+    // We could theoretically create a projectile even
+    // in the first case but we figured it would just
+    // overload the simulation with useless objects.
+
+    // Case of an infinite projectile speed.
+    if (hasInfiniteProjectileSpeed(m_projectileSpeed)) {
+      towers::DamageData dd;
+      dd.damage = m_attack.damage;
+
+      dd.aoeRadius = m_attack.aoeRadius;
+      dd.aoeDamage = m_attack.aoeDamage;
+
+      dd.accuracy = m_attack.accuracy;
+
+      dd.speed = m_attack.speed;
+      dd.sDuration = m_attack.sDuration;
+
+      dd.poison = m_attack.poison;
+      dd.pDuration = m_attack.pDuration;
+
+      return m_processes.damage(info, m_target, dd);
+    }
+
+    // Otherwise we need to create a projectile.
+    Projectile::PProps pp = Projectile::newProps(getPos(), getOwner());
+    pp.speed = m_projectileSpeed;
+
+    pp.damage = m_attack.damage;
+    pp.aoeRadius = m_attack.aoeRadius;
+    pp.aoeDamage = m_attack.aoeDamage;
+
+    pp.accuracy = m_attack.accuracy;
+
+    pp.freezePercent = m_attack.speed;
+    // TODO: Should be configurable ?
+    pp.freezeSpeed = utils::toMilliseconds(100);
+    pp.freezeDuration = m_attack.sDuration;
+
+    pp.poison = m_attack.poison;
+    pp.poisonDuration = m_attack.pDuration;
+
+    info.spawnProjectile(std::make_shared<Projectile>(pp, m_target));
+
+    // TODO: Should create a damage simulation function
+    // on the mob to determine whether the projectile
+    // will kill it or not.
+    return false;
   }
 
 }

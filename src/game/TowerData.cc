@@ -7,7 +7,7 @@
 namespace tdef {
   namespace towers {
 
-    static const float INFINITE_PROJECTILE_SPEED = 100.0f;
+    static const float INFINITE_PROJECTILE_SPEED = -1.0f;
     static const float INFINITE_AIM_SPEED = 0.0f;
     static const float INFINITE_ATTACK_SPEED = 100.0f;
 

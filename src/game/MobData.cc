@@ -39,7 +39,7 @@ namespace tdef {
       static const float speed = 1.25f;
       static const float lives = 1.0f;
 
-      static const float health = 80.8f;
+      static const float health = 800.8f;
       static const float shield = 0.0f;
 
       Mob::MProps

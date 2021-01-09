@@ -5,11 +5,13 @@
 namespace tdef {
 
   Locator::Locator(const std::vector<BlockShPtr>& blocks,
-                   const std::vector<MobShPtr>& mobs):
+                   const std::vector<MobShPtr>& mobs,
+                   const std::vector<ProjectileShPtr>& projectiles):
     utils::CoreObject("locator"),
 
     m_blocks(blocks),
-    m_mobs(mobs)
+    m_mobs(mobs),
+    m_projectiles(projectiles)
   {
     setService("locator");
   }

@@ -82,6 +82,12 @@ namespace tdef {
   }
 
   inline
+  bool
+  Tower::hasInfiniteProjectileSpeed(float speed) noexcept {
+    return speed < 0.0f;
+  }
+
+  inline
   const towers::Type&
   Tower::getType() const noexcept {
     return m_type;

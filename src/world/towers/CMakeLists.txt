@@ -1,5 +1,6 @@
 
 target_sources (tdef_lib PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/Projectile.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/Tower.cc
   )
 

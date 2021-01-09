@@ -6,7 +6,7 @@
 namespace tdef {
 
   Mob::Mob(const MProps& props):
-    WorldElement(props, "mob"),
+    WorldElement(props, mobs::toString(props.type)),
 
     m_type(props.type),
 
@@ -29,7 +29,13 @@ namespace tdef {
   bool
   Mob::damage(const mobs::Damage& d) {
     // TODO: Handle the rest of the effect.
-    return WorldElement::damage(d.hit);
+    bool killed = WorldElement::damage(d.hit);
+    
+    if (killed) {
+      markForDeletion(true);
+    }
+    
+    return killed;
   }
 
   void

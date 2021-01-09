@@ -41,10 +41,22 @@ namespace tdef {
 
       float accuracy;
 
+      // Represents the factor by which the speed of the
+      // target of the damage should be multiplied. This
+      // value should be in the range `[0; 1]`.
       float speed;
+
+      // The duration of the slow factor applied to the
+      // target of the damage.
       utils::Duration sDuration;
 
+      // The damage value of the poisoning effect that
+      // this damage will cause. Expressed in health
+      // units per second.
       float poison;
+
+      // The duration of the poisoning effect applied
+      // to the target.
       utils::Duration pDuration;
     };
 
@@ -151,8 +163,8 @@ namespace tdef {
                const utils::Uuid& owner = utils::Uuid()) noexcept;
 
       /**
-       * @brief - Defines a new spawner with the specified props.
-       * @param props - the properties defining this wall.
+       * @brief - Defines a new tower with the specified props.
+       * @param props - the properties defining this tower.
        * @param desc - the description of the custom functions to
        *               use during the behavior of this tower.
        */
@@ -184,29 +196,12 @@ namespace tdef {
       float
       getAttackSpeed() const noexcept;
 
-      /**
-       * @brief - Implementation of the interface method to evolve
-       *          this mob.
-       */
       void
       step(StepInfo& info) override;
 
-      /**
-       * @brief - Implementation of the interface method to pause
-       *          the internal processes for this mob. Note that
-       *          it is mostly provided so that this class is not
-       *          abstract as there are not really any process to
-       *          pause at this time.
-       * @param t - the timestamp at which the pause occur.
-       */
       void
       pause(const utils::TimeStamp& t) override;
 
-      /**
-       * @brief - Implementation of the interface method to resume
-       *          the internal processes for this mob.
-       * @param t - the timestamp at which the resume occur.
-       */
       void
       resume(const utils::TimeStamp& t) override;
 
@@ -224,6 +219,17 @@ namespace tdef {
       fromProps(const TProps& props) noexcept;
 
       /**
+       * @brief - Convenience method to allow grouping the projectile
+       *          speed determination in a single method.
+       * @param speed - the projectile speed to analyze.
+       * @return - `true` if the input speed describes a projectile
+       *           with infinite speed.
+       */
+      static
+      bool
+      hasInfiniteProjectileSpeed(float speed) noexcept;
+
+      /**
        * @brief - This method is used to align the tower with the
        *          selected target. In case no target is defined
        *          yet the picking process will also be handled.
@@ -234,6 +240,21 @@ namespace tdef {
        */
       bool
       pickAndAlignWithTarget(StepInfo& info);
+
+      /**
+       * @brief - Convenience method allowing to perform the attack
+       *          of the current target given the properties of the
+       *          tower.
+       *          We don't verify whether the attack is possible
+       *          given the current resource level and don't account
+       *          for energy usage.
+       * @param info - information to be able to spawn projectiles
+       *               and generally handle the attack.
+       * @return - the `return` value indicates whether or not the
+       *           mob is still alive after the shot.
+       */
+      bool
+      attack(StepInfo& info);
 
     private:
 
@@ -290,6 +311,15 @@ namespace tdef {
        *          expressed in radians.
        */
       float m_shootAngle;
+
+      /**
+       * @brief - The speed at which projectiles are fired
+       *          by this tower. In case this value is set
+       *          to a negative number we consider that the
+       *          projectile has indeed infinite speed and
+       *          won't create the related objects.
+       */
+      float m_projectileSpeed;
 
       /**
        * @brief - Defines the damage data for this tower.

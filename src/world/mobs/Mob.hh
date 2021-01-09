@@ -156,6 +156,8 @@ namespace tdef {
        * @brief - Used to interpret the damage structure provided
        *          in input and to apply it to the mob. The mob is
        *          able to mitigate some of it.
+       *          In case the mob is damaged to the point where it
+       *          reaches `0` hp, we will mark it for deletion.
        * @param d - the damage to apply.
        * @return - `true` if the mob is still alive.
        */

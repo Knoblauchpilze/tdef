@@ -11,6 +11,9 @@ namespace tdef {
   class Mob;
   using MobShPtr = std::shared_ptr<Mob>;
 
+  class Projectile;
+  using ProjectileShPtr = std::shared_ptr<Projectile>;
+
   class Locator;
   using LocatorShPtr = std::shared_ptr<Locator>;
 
@@ -31,6 +34,9 @@ namespace tdef {
     std::vector<MobShPtr> mSpawned;
     std::vector<Mob*> mRemoved;
 
+    std::vector<ProjectileShPtr> pSpawned;
+    std::vector<Projectile*> pRemoved;
+
     float gold;
 
     void
@@ -38,6 +44,12 @@ namespace tdef {
 
     void
     removeMob(Mob* m);
+
+    void
+    spawnProjectile(ProjectileShPtr p);
+
+    void
+    removeProjectile(Projectile* p);
   };
 
 }

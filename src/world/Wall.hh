@@ -23,7 +23,7 @@ namespace tdef {
                const utils::Uuid& owner = utils::Uuid()) noexcept;
 
       /**
-       * @brief - Defines a new spawner with the specified props.
+       * @brief - Defines a new wall with the specified props.
        * @param props - the properties defining this wall.
        */
       Wall(const WProps& props);

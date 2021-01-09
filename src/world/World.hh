@@ -10,6 +10,7 @@
 # include <maths_utils/Point2.hh>
 # include "Mob.hh"
 # include "Tower.hh"
+# include "Projectile.hh"
 # include "Block.hh"
 # include "Locator.hh"
 
@@ -145,6 +146,11 @@ namespace tdef {
        * @brief - The list of mobs available in this world.
        */
       std::vector<MobShPtr> m_mobs;
+
+      /**
+       * @brief - The list of projectiles waiting to do damage.
+       */
+      std::vector<ProjectileShPtr> m_projectiles;
 
       /**
        * @brief - The locator to use to organize objects and

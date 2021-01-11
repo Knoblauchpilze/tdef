@@ -491,6 +491,38 @@ namespace tdef {
         pp = towers::generateProps(towers::Type::Cannon, p);
         td = towers::generateData(towers::Type::Cannon);
         break;
+      case towers::Type::Venom:
+        pp = towers::generateProps(towers::Type::Venom, p);
+        td = towers::generateData(towers::Type::Venom);
+        break;
+      case towers::Type::Splash:
+        pp = towers::generateProps(towers::Type::Splash, p);
+        td = towers::generateData(towers::Type::Splash);
+        break;
+      case towers::Type::Blast:
+        pp = towers::generateProps(towers::Type::Blast, p);
+        td = towers::generateData(towers::Type::Blast);
+        break;
+      case towers::Type::Multishot:
+        pp = towers::generateProps(towers::Type::Multishot, p);
+        td = towers::generateData(towers::Type::Multishot);
+        break;
+      case towers::Type::Minigun:
+        pp = towers::generateProps(towers::Type::Minigun, p);
+        td = towers::generateData(towers::Type::Minigun);
+        break;
+      case towers::Type::Antiair:
+        pp = towers::generateProps(towers::Type::Antiair, p);
+        td = towers::generateData(towers::Type::Antiair);
+        break;
+      case towers::Type::Tesla:
+        pp = towers::generateProps(towers::Type::Tesla, p);
+        td = towers::generateData(towers::Type::Tesla);
+        break;
+      case towers::Type::Missile:
+        pp = towers::generateProps(towers::Type::Missile, p);
+        td = towers::generateData(towers::Type::Missile);
+        break;
       default:
         valid = false;
         break;

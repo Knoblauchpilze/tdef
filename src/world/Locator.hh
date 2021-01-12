@@ -29,6 +29,7 @@ namespace tdef {
     enum class ItemType {
       Block,
       Mob,
+      Projectile
     };
 
     /**
@@ -72,6 +73,14 @@ namespace tdef {
       // The `id` defines a custom value which is interpreted
       // from the `type` of the mob.
       int id;
+    };
+
+    /**
+     * @brief - Convenience wrapper allowing to access the
+     *          properties of a projectile.
+     */
+    struct Projectile {
+      utils::Point2f p;
     };
 
     /**
@@ -148,6 +157,15 @@ namespace tdef {
        */
       world::Mob
       mob(int id) const noexcept;
+
+      /**
+       * @brief - Similar to the `block` method but to get the
+       *          projectile at the specified index.
+       * @param id - the index of the projectile to get.
+       * @return - the corresponding projectile.
+       */
+      world::Projectile
+      projectile(int id) const noexcept;
 
       /**
        * @brief - Allows to query the item at the specified

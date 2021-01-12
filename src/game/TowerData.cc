@@ -259,6 +259,8 @@ namespace tdef {
       static const float acceleration = 0.0f;
 
       static const float freezePercent = 20.0f;
+      // Expressed in percent of the speed that is
+      // subtracted every second.
       static const float freezeSpeed = 12.0f;
 
       Data

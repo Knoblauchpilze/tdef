@@ -25,7 +25,7 @@ namespace tdef {
         float accuracy;
 
         float freezePercent;
-        utils::Duration freezeSpeed;
+        float freezeSpeed;
         utils::Duration freezeDuration;
 
         float poison;
@@ -116,10 +116,12 @@ namespace tdef {
       float m_freezePercent;
 
       /**
-       * @brief - The speed of freezing for this projectile.
-       *          Expressed in milliseconds.
+       * @brief - The percentage by which the speed of the
+       *          target is reduced upon touching this
+       *          projectile. The freezing will be applied
+       *          for the specified duration.
        */
-      utils::Duration m_freezeSpeed;
+      float m_freezeSpeed;
 
       /**
        * @brief - The duration of the freeze effect for this

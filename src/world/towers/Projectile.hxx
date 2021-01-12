@@ -22,7 +22,7 @@ namespace tdef {
     pp.accuracy = 1.0f;
 
     pp.freezePercent = 0.0f;
-    pp.freezeSpeed = utils::Duration::zero();
+    pp.freezeSpeed = 0.0f;
     pp.freezeDuration = utils::Duration::zero();
 
     pp.poison = 0.0f;
@@ -34,6 +34,18 @@ namespace tdef {
   inline
   void
   Projectile::init(StepInfo& /*info*/) {
+    // Nothing to do.
+  }
+
+  inline
+  void
+  Projectile::pause(const utils::TimeStamp& /*t*/) {
+    // Nothing to do.
+  }
+
+  inline
+  void
+  Projectile::resume(const utils::TimeStamp& /*t*/) {
     // Nothing to do.
   }
 

@@ -137,6 +137,17 @@ namespace tdef {
   }
 
   inline
+  world::Projectile
+  Locator::projectile(int id) const noexcept {
+    ProjectileShPtr p = m_projectiles[id];
+
+    world::Projectile pd;
+    pd.p = p->getPos();
+
+    return pd;
+  }
+
+  inline
   WorldElementShPtr
   Locator::itemAt(const utils::Point2f& p, bool includeMobs) const noexcept {
     return itemAt(p.x(), p.y(), includeMobs);

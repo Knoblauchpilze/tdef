@@ -5,6 +5,7 @@
 # include <maths_utils/Point2.hh>
 # include <core_utils/TimeUtils.hh>
 # include "WorldElement.hh"
+# include "Mob.hh"
 
 namespace tdef {
 
@@ -64,6 +65,12 @@ namespace tdef {
       worldUpdate(LocatorShPtr loc) override;
 
     private:
+
+      /**
+       * @brief - Defines the distance below which the projectile
+       *          is considered to have reach its target.
+       */
+      static constexpr const float sk_arrived = 0.0001f;
 
       /**
        * @brief - The target for this projectile. We will

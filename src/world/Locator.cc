@@ -257,6 +257,35 @@ namespace tdef {
       }
     }
 
+    // Then projectiles.
+    if (type == nullptr || *type == world::ItemType::Projectile) {
+      ie.type = world::ItemType::Projectile;
+
+      for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
+        const utils::Point2f& p = m_projectiles[id]->getPos();
+
+        if (p.x() < xMin || p.x() > xMax || p.y() < yMin || p.y() > yMax) {
+          continue;
+        }
+
+        // See above for details.
+        const utils::Uuid& uuid = m_projectiles[id]->getOwner();
+        if (filter != nullptr &&
+            (
+              (filter->include && uuid != filter->id) ||
+              (!filter->include && uuid == filter->id)
+            )
+           )
+        {
+          continue;
+        }
+
+        ie.index = id;
+        entries.push_back(SortEntry{p, static_cast<unsigned>(out.size())});
+        out.push_back(ie);
+      }
+    }
+
     // Check whether we need to sort the output
     // vector.
     if (sort != world::Sort::None) {
@@ -356,6 +385,35 @@ namespace tdef {
 
         ie.index = id;
         entries.push_back(SortEntry{mp, static_cast<unsigned>(out.size())});
+        out.push_back(ie);
+      }
+    }
+
+    // Then projectiles.
+    if (type == nullptr || *type == world::ItemType::Projectile) {
+      ie.type = world::ItemType::Projectile;
+
+      for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
+        const utils::Point2f& pp = m_projectiles[id]->getPos();
+
+        if (r > 0.0f && utils::d2(pp.x(), pp.y(), p.x(), p.y()) > r2) {
+          continue;
+        }
+
+        // See above for details.
+        const utils::Uuid& uuid = m_projectiles[id]->getOwner();
+        if (filter != nullptr &&
+            (
+              (filter->include && uuid != filter->id) ||
+              (!filter->include && uuid == filter->id)
+            )
+           )
+        {
+          continue;
+        }
+
+        ie.index = id;
+        entries.push_back(SortEntry{pp, static_cast<unsigned>(out.size())});
         out.push_back(ie);
       }
     }

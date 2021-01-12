@@ -134,7 +134,6 @@ namespace tdef {
         drawSprite(sd, res.cf);
         drawHealthBar(sd, t.health, res.cf);
       }
-
     }
 
     SetPixelMode(olc::Pixel::NORMAL);
@@ -178,6 +177,27 @@ namespace tdef {
         ),
         olc::RED
       );
+    }
+
+    // Fetch projectiles to display.
+    ie = world::ItemType::Projectile;
+    items = m_game->getVisible(
+      v.p.x,
+      v.p.y,
+      v.p.x + v.dims.x,
+      v.p.y + v.dims.y,
+      &ie,
+      nullptr,
+      world::Sort::None
+    );
+
+    for (unsigned i = 0 ; i < items.size() ; ++i) {
+      const world::ItemEntry& wi = items[i];
+      world::Projectile pd = m_game->projectile(wi.index);
+
+      olc::vf2d p = res.cf.tileCoordsToPixels(pd.p.x(), pd.p.y(), RelativePosition::BottomRight, 2.0f);
+
+      FillCircle(p, 4, olc::PINK);
     }
 
     SetPixelMode(olc::Pixel::NORMAL);

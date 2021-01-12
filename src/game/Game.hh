@@ -124,6 +124,15 @@ namespace tdef {
       mob(int id) const noexcept;
 
       /**
+       * @brief - Forward the call to the locator to fetch the
+       *          projectile with the specified index.
+       * @param id - the index of the entity to get.
+       * @return - the corresponding entity.
+       */
+      world::Projectile
+      projectile(int id) const noexcept;
+
+      /**
        * @brief - Forward the call to step one step ahead
        *          in time to the internal world.
        * @param tDelta - the duration of the last frame in

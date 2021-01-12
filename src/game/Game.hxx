@@ -53,6 +53,12 @@ namespace tdef {
   }
 
   inline
+  world::Projectile
+  Game::projectile(int id) const noexcept {
+    return m_loc->projectile(id);
+  }
+
+  inline
   void
   Game::pause(float tDelta) {
     m_world->pause(tDelta);

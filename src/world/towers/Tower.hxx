@@ -141,6 +141,7 @@ namespace tdef {
     dd.accuracy = props.accuracy;
 
     dd.speed = props.freezePercent;
+    dd.slowdown = props.freezeSpeed;
     dd.sDuration = utils::toMilliseconds(
       static_cast<int>(
         std::round(props.duration)

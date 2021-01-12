@@ -48,18 +48,10 @@ namespace tdef {
       return;
     }
 
+    // TODO: Handling damage.
     log("Arrived");
+
     markForDeletion(true);
-  }
-
-  void
-  Projectile::pause(const utils::TimeStamp& /*t*/) {
-    // TODO: Handle this.
-  }
-
-  void
-  Projectile::resume(const utils::TimeStamp& /*t*/) {
-    // TODO: Handle this.
   }
 
 }

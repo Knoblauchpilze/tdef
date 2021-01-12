@@ -199,8 +199,7 @@ namespace tdef {
     pp.accuracy = m_attack.accuracy;
 
     pp.freezePercent = m_attack.speed;
-    // TODO: Should be configurable ?
-    pp.freezeSpeed = utils::toMilliseconds(100);
+    pp.freezeSpeed = m_attack.slowdown;
     pp.freezeDuration = m_attack.sDuration;
 
     pp.poison = m_attack.poison;

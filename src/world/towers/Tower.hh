@@ -43,8 +43,13 @@ namespace tdef {
 
       // Represents the factor by which the speed of the
       // target of the damage should be multiplied. This
-      // value should be in the range `[0; 1]`.
+      // value should be in the range `[0; 1]` and is
+      // a measure of the final speed of the target.
       float speed;
+
+      // Defines the percentage by which the speed of the
+      // target is reduced every second.
+      float slowdown;
 
       // The duration of the slow factor applied to the
       // target of the damage.
@@ -145,6 +150,9 @@ namespace tdef {
         float acceleration;
 
         float freezePercent;
+        // Defines the percentage of speed that is reduced
+        // per second when an entity is within the range
+        // of this tower.
         float freezeSpeed;
 
         float attackCost;

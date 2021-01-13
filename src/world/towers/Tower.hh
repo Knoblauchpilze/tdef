@@ -37,7 +37,6 @@ namespace tdef {
       float damage;
 
       float aoeRadius;
-      float aoeDamage;
 
       float accuracy;
 
@@ -137,7 +136,6 @@ namespace tdef {
 
         float damage;
         float aoeRadius;
-        float aoeDamage;
 
         float attackSpeed;
         float aimSpeed;

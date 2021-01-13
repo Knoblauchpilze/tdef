@@ -51,6 +51,12 @@ namespace tdef {
       // indicated by a value of `0`.
       float speed;
 
+      // A measure in percent of the decrease in speed
+      // that is applied each second. Using this and the
+      // `speed` one can work out the time it will take
+      // for the mob to actually reach the slowed speed.
+      float sDecraseSpeed;
+
       // Measure how long the mob will be affected by the
       // slowing effect.
       utils::Duration sDuration;

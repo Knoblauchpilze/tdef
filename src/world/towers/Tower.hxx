@@ -59,7 +59,6 @@ namespace tdef {
 
     pp.damage = 0.2f;
     pp.aoeRadius = 0.0f;
-    pp.aoeDamage = 0.0f;
 
     pp.attackSpeed = 1.0f;
     pp.aimSpeed = 1.0f;
@@ -136,7 +135,6 @@ namespace tdef {
     dd.damage = props.damage;
 
     dd.aoeRadius = props.aoeRadius;
-    dd.aoeDamage = props.aoeDamage;
 
     dd.accuracy = props.accuracy;
 

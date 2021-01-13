@@ -20,7 +20,6 @@ namespace tdef {
 
         float damage;
         float aoeRadius;
-        float aoeDamage;
 
         float accuracy;
 
@@ -95,12 +94,6 @@ namespace tdef {
        *          applied when the projectile hits.
        */
       float m_aoeRadius;
-
-      /**
-       * @brief - The value of the aoe damage of the
-       *          projectile.
-       */
-      float m_aoeDamage;
 
       /**
        * @brief - The accuracy of this projectile in the

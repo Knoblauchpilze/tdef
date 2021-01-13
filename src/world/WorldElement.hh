@@ -92,6 +92,8 @@ namespace tdef {
        *          to the element.
        * @param hit - the amount of damage to apply to the
        *              element.
+       * @return - `true` if the world element is alive
+       *           even after taking the hit.
        */
       bool
       damage(float hit);

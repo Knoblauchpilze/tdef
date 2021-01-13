@@ -29,13 +29,13 @@ namespace tdef {
   bool
   Mob::damage(const mobs::Damage& d) {
     // TODO: Handle the rest of the effect.
-    bool killed = WorldElement::damage(d.hit);
+    bool alive = WorldElement::damage(d.hit);
     
-    if (killed) {
+    if (!alive) {
       markForDeletion(true);
     }
     
-    return killed;
+    return alive;
   }
 
   void
@@ -69,7 +69,10 @@ namespace tdef {
       p->breach();
       markForDeletion(true);
 
-      log("Mob made it through, lives: " + std::to_string(p->getLives()));
+      log(
+        "Mob made it through (health: " + std::to_string(getHealth()) + ")" +
+        ", lives: " + std::to_string(p->getLives())
+      );
 
       return;
     }

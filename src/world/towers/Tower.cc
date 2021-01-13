@@ -65,7 +65,11 @@ namespace tdef {
       return;
     }
 
-    log("Killed " + mobs::toString(m_target->getType()) + " at " + m_target->getPos().toString() + ", earned " + std::to_string(m_target->getBounty()) + " coin(s)");
+    log(
+      "Killed " + mobs::toString(m_target->getType()) +
+      " at " + m_target->getPos().toString() +
+      ", earned " + std::to_string(m_target->getBounty()) + " coin(s)"
+    );
 
     info.gold += m_target->getBounty();
 
@@ -171,21 +175,7 @@ namespace tdef {
 
     // Case of an infinite projectile speed.
     if (hasInfiniteProjectileSpeed(m_projectileSpeed)) {
-      towers::DamageData dd;
-      dd.damage = m_attack.damage;
-
-      dd.aoeRadius = m_attack.aoeRadius;
-      dd.aoeDamage = m_attack.aoeDamage;
-
-      dd.accuracy = m_attack.accuracy;
-
-      dd.speed = m_attack.speed;
-      dd.sDuration = m_attack.sDuration;
-
-      dd.poison = m_attack.poison;
-      dd.pDuration = m_attack.pDuration;
-
-      return m_processes.damage(info, m_target, dd);
+      return m_processes.damage(info, m_target, m_attack);
     }
 
     // Otherwise we need to create a projectile.
@@ -194,7 +184,6 @@ namespace tdef {
 
     pp.damage = m_attack.damage;
     pp.aoeRadius = m_attack.aoeRadius;
-    pp.aoeDamage = m_attack.aoeDamage;
 
     pp.accuracy = m_attack.accuracy;
 

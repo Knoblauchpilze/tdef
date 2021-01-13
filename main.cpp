@@ -15,7 +15,6 @@
 
 // TODO: Handle upgrade.
 // TODO: Refine menus.
-// TODO: Add projectiles.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

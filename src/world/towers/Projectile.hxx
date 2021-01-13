@@ -17,7 +17,6 @@ namespace tdef {
 
     pp.damage = 1.0f;
     pp.aoeRadius = 0.0f;
-    pp.aoeDamage = 0.0f;
 
     pp.accuracy = 1.0f;
 

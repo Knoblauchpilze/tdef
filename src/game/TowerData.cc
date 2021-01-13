@@ -26,6 +26,7 @@ namespace tdef {
       d.hit = data.damage;
 
       d.speed = data.speed;
+      d.sDecraseSpeed = data.slowdown;
       d.sDuration = data.sDuration;
 
       d.poison = data.poison;
@@ -40,7 +41,6 @@ namespace tdef {
 
       static const float damage = 7.5f;
       static const float aoeRadius = 0.0f;
-      static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 1.25f;
       static const float rotation = degToRad(90.0f);
@@ -79,7 +79,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -108,7 +107,6 @@ namespace tdef {
 
       static const float damage = 35.0f;
       static const float aoeRadius = 0.0f;
-      static const float aoeDamage = 1.0f;
 
       static const float attackSpeed = 0.3f;
       static const float rotation = degToRad(50.0f);
@@ -147,7 +145,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -177,7 +174,6 @@ namespace tdef {
       static const float damage = 12.5f;
       // TODO: 0.6 + 0.04 * Tower level.
       static const float aoeRadius = 0.6f;
-      static const float aoeDamage = 1.0f;
 
       static const float attackSpeed = 0.6f;
       static const float rotation = degToRad(50.0f);
@@ -216,7 +212,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -245,7 +240,6 @@ namespace tdef {
 
       static const float damage = 0.0f;
       static const float aoeRadius = 0.0f;
-      static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = INFINITE_ATTACK_SPEED;
       static const float rotation = degToRad(0.0f);
@@ -286,7 +280,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -315,7 +308,6 @@ namespace tdef {
 
       static const float damage = 12.2f;
       static const float aoeRadius = 0.0f;
-      static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 0.45f;
       static const float rotation = degToRad(75.0f);
@@ -355,7 +347,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -384,7 +375,6 @@ namespace tdef {
 
       static const float damage = 14.0f;
       static const float aoeRadius = 0.0f;
-      static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 0.9f;
       static const float rotation = degToRad(0.0f);
@@ -424,7 +414,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -453,7 +442,6 @@ namespace tdef {
 
       static const float damage = 18.0f;
       static const float aoeRadius = 0.0f;
-      static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 0.5f;
       static const float rotation = degToRad(0.0f);
@@ -492,7 +480,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -521,7 +508,6 @@ namespace tdef {
 
       static const float damage = 5.7f;
       static const float aoeRadius = 0.0f;
-      static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 1.1f;
       static const float rotation = degToRad(50.0f);
@@ -562,7 +548,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -591,7 +576,6 @@ namespace tdef {
 
       static const float damage = 9.2f;
       static const float aoeRadius = 0.0f;
-      static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 4.5f;
       static const float rotation = degToRad(40.0f);
@@ -631,7 +615,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -660,7 +643,6 @@ namespace tdef {
 
       static const float damage = 4.2f;
       static const float aoeRadius = 0.0f;
-      static const float aoeDamage = 0.0f;
 
       static const float attackSpeed = 1.8f;
       static const float rotation = degToRad(75.0f);
@@ -699,7 +681,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -728,7 +709,6 @@ namespace tdef {
 
       static const float damage = 5.0f;
       static const float aoeRadius = 0.0f;
-      static const float aoeDamage = 0.5f;
 
       static const float attackSpeed = 1.5f;
       static const float rotation = degToRad(60.0f);
@@ -767,7 +747,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
@@ -797,7 +776,6 @@ namespace tdef {
       static const float damage = 35.0f;
       // TODO: 0.73 + 0.045 / Tower level ?
       static const float aoeRadius = 0.73f;
-      static const float aoeDamage = 1.0f;
 
       static const float attackSpeed = 0.28f;
       static const float rotation = degToRad(45.0f);
@@ -837,7 +815,6 @@ namespace tdef {
 
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
-        pp.aoeDamage = aoeDamage;
 
         pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;

@@ -21,6 +21,7 @@ namespace tdef {
 
     m_minRange(props.minRange),
     m_maxRange(props.maxRange),
+    m_aoeRadius(props.aoeRadius),
     m_shootAngle(props.shootAngle),
     m_projectileSpeed(props.projectileSpeed),
 
@@ -183,7 +184,7 @@ namespace tdef {
     pp.speed = m_projectileSpeed;
 
     pp.damage = m_attack.damage;
-    pp.aoeRadius = m_attack.aoeRadius;
+    pp.aoeRadius = m_aoeRadius;
 
     pp.accuracy = m_attack.accuracy;
 

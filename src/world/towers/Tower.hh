@@ -34,10 +34,15 @@ namespace tdef {
      *          defining the data performed by a tower.
      */
     struct DamageData {
+      // The main damage dealt by the tower. This defines
+      // the raw data unshielded and can represent some
+      // sort of poisoning in case the `pDuration` is not
+      // a zero duration.
       float damage;
 
-      float aoeRadius;
-
+      // The accuracy of the damage: this value in the range
+      // `[0; 1]` defines a chance for the damage to miss the
+      // to apply its damage.
       float accuracy;
 
       // Represents the factor by which the speed of the
@@ -53,11 +58,6 @@ namespace tdef {
       // The duration of the slow factor applied to the
       // target of the damage.
       utils::Duration sDuration;
-
-      // The damage value of the poisoning effect that
-      // this damage will cause. Expressed in health
-      // units per second.
-      float poison;
 
       // The duration of the poisoning effect applied
       // to the target.
@@ -308,6 +308,12 @@ namespace tdef {
        * @brief - Defines the maximum range of this tower.
        */
       float m_maxRange;
+
+      /**
+       * @brief - Defines the aoe radius for the projectiles
+       *          fired by this tower.
+       */
+      float m_aoeRadius;
 
       /**
        * @brief - The definition of a cone within which a

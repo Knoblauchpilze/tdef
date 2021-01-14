@@ -146,9 +146,6 @@ namespace tdef {
       )
     );
 
-    // TODO: The damage is registered both in the
-    // `damage` and in the `poison`.
-    dd.poison = props.damage;
     dd.pDuration = utils::toMilliseconds(
       static_cast<int>(
         std::round(props.duration)

@@ -27,7 +27,10 @@ namespace tdef {
         float freezeSpeed;
         utils::Duration freezeDuration;
 
-        float poison;
+        // Note that in case of the duration being
+        // not null we will consider that damage
+        // is indeed applied as poison and will be
+        // applied for this duration.
         utils::Duration poisonDuration;
       };
 
@@ -86,6 +89,11 @@ namespace tdef {
 
       /**
        * @brief - The main damage value for this projectile.
+       *          Note that in case the poison duration is
+       *          not null we will consider that the damage
+       *          is actually applied over the duration of
+       *          the poison where this value is dealt each
+       *          second.
        */
       float m_damage;
 
@@ -121,14 +129,6 @@ namespace tdef {
        *          projectile. Expressed in milliseconds.
        */
       utils::Duration m_freezeDuration;
-
-      /**
-       * @brief - The poison damage expressed in units per
-       *          second for this projectile. It will be
-       *          applied for the whold duration of the
-       *          effect.
-       */
-      float m_poison;
 
       /**
        * @brief - The duration of the poisoning effect of

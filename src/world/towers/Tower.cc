@@ -191,14 +191,22 @@ namespace tdef {
     pp.freezeSpeed = m_attack.slowdown;
     pp.freezeDuration = m_attack.sDuration;
 
-    pp.poison = m_attack.poison;
     pp.poisonDuration = m_attack.pDuration;
 
     info.spawnProjectile(std::make_shared<Projectile>(pp, m_target));
 
-    // TODO: Should create a damage simulation function
-    // on the mob to determine whether the projectile
-    // will kill it or not.
+    // Consider that the projectile won't kill
+    // the mob. This is probably false because
+    // it means that a tower would fire more
+    // projectiles that needed (as the mob's
+    // health does not reflect the health and
+    // the damage from flying projectiles) but
+    // handling this would require the mob to
+    // somehow provide a method to get the
+    // health where all projectiles directed
+    // towards a mob and all the ones that are
+    // exploding within the aoe. Quite hard
+    // to do right now.
     return false;
   }
 

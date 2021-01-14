@@ -29,7 +29,6 @@ namespace tdef {
       d.sDecraseSpeed = data.slowdown;
       d.sDuration = data.sDuration;
 
-      d.poison = data.poison;
       d.pDuration = data.pDuration;
 
       return mob->damage(d);

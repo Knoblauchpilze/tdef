@@ -134,8 +134,6 @@ namespace tdef {
 
     dd.damage = props.damage;
 
-    dd.aoeRadius = props.aoeRadius;
-
     dd.accuracy = props.accuracy;
 
     dd.speed = props.freezePercent;

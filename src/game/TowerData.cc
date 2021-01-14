@@ -25,6 +25,8 @@ namespace tdef {
       mobs::Damage d;
       d.hit = data.damage;
 
+      d.accuracy = data.accuracy;
+
       d.speed = data.speed;
       d.sDecraseSpeed = data.slowdown;
       d.sDuration = data.sDuration;

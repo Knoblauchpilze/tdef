@@ -62,6 +62,8 @@ namespace tdef {
     mobs::Damage d;
     d.hit = m_damage;
 
+    d.accuracy = m_accuracy;
+
     d.speed = m_freezePercent;
     d.sDecraseSpeed = m_freezeSpeed;
     d.sDuration = m_freezeDuration;

@@ -48,6 +48,11 @@ namespace tdef {
       // case the `pDuration` is set to a non-zero value.
       float hit;
 
+      // The accuracy of the damage: this value in the range
+      // `[0; 1]` defines a chance for the damage to miss the
+      // to apply its damage.
+      float accuracy;
+
       // A ratio in the range `[0; 1]` indicating how the
       // speed of the mob should be affected. A stun is
       // indicated by a value of `0`.

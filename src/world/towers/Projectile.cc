@@ -21,7 +21,6 @@ namespace tdef {
     m_freezeSpeed(props.freezeSpeed),
     m_freezeDuration(props.freezeDuration),
 
-    m_poison(props.poison),
     m_poisonDuration(props.poisonDuration)
   {
     setService("projectile");
@@ -67,7 +66,6 @@ namespace tdef {
     d.sDecraseSpeed = m_freezeSpeed;
     d.sDuration = m_freezeDuration;
 
-    d.poison = m_poison;
     d.pDuration = m_poisonDuration;
 
     for (unsigned id = 0; id < wounded.size() ; ++id) {

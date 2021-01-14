@@ -43,7 +43,9 @@ namespace tdef {
      */
     struct Damage {
       // The number of hit points to subtract for the full
-      // effect of the damage.
+      // effect of the damage. Note that this value applies
+      // every second for the duration of the poisoning in
+      // case the `pDuration` is set to a non-zero value.
       float hit;
 
       // A ratio in the range `[0; 1]` indicating how the
@@ -60,10 +62,6 @@ namespace tdef {
       // Measure how long the mob will be affected by the
       // slowing effect.
       utils::Duration sDuration;
-
-      // A value indicating how much damage the mob should
-      // take every second from being poisoned.
-      float poison;
 
       // Measure how long the mob will take damage from
       // the poisoning effect.

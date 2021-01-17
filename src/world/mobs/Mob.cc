@@ -50,10 +50,10 @@ namespace tdef {
     // mobs::Damage
     // V float hit;
     // V float accuracy;
-    // X float speed;
-    // X float sDecraseSpeed;
-    // X utils::Duration sDuration;
-    // X utils::Duration pDuration;
+    // V float speed;
+    // V float sDecraseSpeed;
+    // V utils::Duration sDuration;
+    // V utils::Duration pDuration;
 
     // m_defense
     // V float shield;
@@ -148,6 +148,92 @@ namespace tdef {
     }
 
     std::swap(m_path, np);
+  }
+
+  void
+  Mob::pause(const utils::TimeStamp& t) {
+    // The `pause` method should prepare the call to
+    // `resume` by shifting the origin of time-based
+    // effects so that they correspond to the moment
+    // where the pause was triggered.
+    // This is indeed the last moment where we know
+    // that the timestamps correspond to meaningful
+    // values.
+    // It will make the resume operation very easy
+    // as we only have to shift again the origin
+    // timestamps (given that the duration for each
+    // effect is consistent).
+
+    // Each timestamp will be updated so that the
+    // remaining duration corresponds to the value
+    // currently remaining and the time stamp is
+    // equivalent to the start of the pause moment.
+    utils::Duration elapsed = t - m_speed.tFreeze;
+
+    log(
+      "Freeze started at " + utils::timeToString(m_speed.tFreeze) +
+      " for " + utils::durationToString(m_speed.fDuration) +
+      ", " + utils::durationToString(elapsed) + " elapsed, " +
+      utils::durationToString(m_speed.fDuration - elapsed) + " remaining"
+    );
+
+    m_speed.tFreeze = t;
+    m_speed.fDuration = m_speed.fDuration - elapsed;
+
+    elapsed = t - m_speed.tStun;
+
+    log(
+      "Stun started at " + utils::timeToString(m_speed.tStun) +
+      " for " + utils::durationToString(m_speed.sDuration) +
+      ", " + utils::durationToString(elapsed) + " elapsed, " +
+      utils::durationToString(m_speed.sDuration - elapsed) + " remaining"
+    );
+
+    m_speed.tStun = t;
+    m_speed.sDuration = m_speed.sDuration - elapsed;
+
+    elapsed = t - m_poison.tPoison;
+
+    log(
+      "Poison started at " + utils::timeToString(m_poison.tPoison) +
+      " for " + utils::durationToString(m_poison.pDuration) +
+      ", " + utils::durationToString(elapsed) + " elapsed, " +
+      utils::durationToString(m_poison.pDuration - elapsed) + " remaining"
+    );
+
+    m_poison.tPoison = t;
+    m_poison.pDuration = m_poison.pDuration - elapsed;
+  }
+
+  void
+  Mob::resume(const utils::TimeStamp& t) {
+    // As the pause method handled the duration so
+    // that it really reflects how long the effects
+    // should be going on, we just have to offset
+    // the timestamps to the current one.
+    log(
+      "Moved speed to start from " + utils::timeToString(m_speed.tFreeze) +
+      " to " + utils::timeToString(t) +
+      ", end in " + utils::durationToString(m_speed.fDuration) +
+      " at " + utils::timeToString(t + m_speed.fDuration)
+    );
+    log(
+      "Moved stun to start from " + utils::timeToString(m_speed.tStun) +
+      " to " + utils::timeToString(t) +
+      ", end in " + utils::durationToString(m_speed.sDuration) +
+      " at " + utils::timeToString(t + m_speed.sDuration)
+    );
+    log(
+      "Moved poison to start from " + utils::timeToString(m_poison.tPoison) +
+      " to " + utils::timeToString(t) +
+      ", end in " + utils::durationToString(m_poison.pDuration) +
+      " at " + utils::timeToString(t + m_poison.pDuration)
+    );
+
+    m_speed.tFreeze = t;
+    m_speed.tStun = t;
+
+    m_poison.tPoison = t;
   }
 
   void

@@ -21,7 +21,7 @@ namespace tdef {
     }
 
     bool
-    basicDamaging(StepInfo& /*info*/, MobShPtr mob, DamageData& data) {
+    basicDamaging(StepInfo& info, MobShPtr mob, DamageData& data) {
       mobs::Damage d;
       d.hit = data.damage;
 
@@ -33,7 +33,7 @@ namespace tdef {
 
       d.pDuration = data.pDuration;
 
-      return mob->damage(d);
+      return mob->damage(info, d);
     }
 
     namespace basic {

@@ -27,9 +27,18 @@ namespace tdef {
   }
 
   bool
-  Mob::damage(const mobs::Damage& d) {
+  Mob::damage(StepInfo& info,
+              const mobs::Damage& d)
+  {
     // TODO: Handle the rest of the effect.
-    bool alive = WorldElement::damage(d.hit);
+    // float hit;
+    // float accuracy;
+    // float speed;
+    // float sDecraseSpeed;
+    // utils::Duration sDuration;
+    // utils::Duration pDuration;
+
+    bool alive = WorldElement::damage(info, d.hit);
     
     if (!alive) {
       markForDeletion(true);

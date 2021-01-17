@@ -33,6 +33,18 @@ namespace tdef {
                   const utils::Point2f& p,
                   int level = 0);
 
+    /**
+     * @brief - Returns the gold cost of a specific tower with
+     *          the specified level.
+     * @param type - the type of the tower.
+     * @param level - the level for which the cost should be
+     *                returned.
+     * @return - the gold cost for the level of the tower.
+     */
+    float
+    getCost(const Type& type,
+            int level = 0);
+
   }
 }
 

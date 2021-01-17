@@ -72,5 +72,39 @@ namespace tdef {
       }
     }
 
+    float
+    getCost(const Type& type,
+            int level)
+    {
+      switch (type) {
+        case Type::Sniper:
+          return sniper::getCost(level);
+        case Type::Cannon:
+          return cannon::getCost(level);
+        case Type::Freezing:
+          return freezing::getCost(level);
+        case Type::Venom:
+          return venom::getCost(level);
+        case Type::Splash:
+          return splash::getCost(level);
+        case Type::Blast:
+          return blast::getCost(level);
+        case Type::Multishot:
+          return multishot::getCost(level);
+        case Type::Minigun:
+          return minigun::getCost(level);
+        case Type::Antiair:
+          return antiair::getCost(level);
+        case Type::Tesla:
+          return tesla::getCost(level);
+        case Type::Missile:
+          return missile::getCost(level);
+        case Type::Basic:
+        default:
+          // Assume default is basic tower.
+          return basic::getCost(level);
+      }
+    }
+
   }
 }

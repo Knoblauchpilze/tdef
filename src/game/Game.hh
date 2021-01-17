@@ -10,6 +10,7 @@
 # include "Spawner.hh"
 # include "Wall.hh"
 # include "Menu.hh"
+# include "GameMenu.hh"
 
 namespace tdef {
 
@@ -179,7 +180,7 @@ namespace tdef {
        * @return - the generated menu.
        */
       MenuShPtr
-      generateTowersMenu(const olc::vi2d& dims) const;
+      generateTowersMenu(const olc::vi2d& dims);
 
       /**
        * @brief - Generate the menu displaying the upgrade
@@ -387,6 +388,12 @@ namespace tdef {
       };
 
       /**
+       * @brief - Convenience define to refer to a map of menus
+       *          adressed based on the type of tower it defines.
+       */
+      using TowerMenus = std::unordered_map<towers::Type, GameMenuShPtr>;
+
+      /**
        * @brief - The world for this game.
        */
       WorldShPtr m_world;
@@ -469,6 +476,14 @@ namespace tdef {
        *          generation method has been called.
        */
       WallDisplay m_wDisplay;
+
+      /**
+       * @brief - Defines the list of menus allowing to build a
+       *          new tower in the game. We need to de/activate
+       *          some entries based on the amount of gold the
+       *          player has at any moment.
+       */
+      TowerMenus m_tMenus;
   };
 
   using GameShPtr = std::shared_ptr<Game>;

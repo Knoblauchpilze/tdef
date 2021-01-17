@@ -57,6 +57,8 @@ namespace tdef {
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
 
+      static const float cost = 48.0f;
+
       Data
       generateData(int /*level*/) noexcept {
         Data dd;
@@ -97,7 +99,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -122,6 +131,8 @@ namespace tdef {
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
+
+      static const float cost = 80.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -163,7 +174,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -189,6 +207,8 @@ namespace tdef {
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
+
+      static const float cost = 60.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -230,7 +250,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -257,6 +284,8 @@ namespace tdef {
       // Expressed in percent of the speed that is
       // subtracted every second.
       static const float freezeSpeed = 12.0f;
+
+      static const float cost = 80.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -298,7 +327,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -324,6 +360,8 @@ namespace tdef {
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
+
+      static const float cost = 100.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -365,7 +403,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -391,6 +436,8 @@ namespace tdef {
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
+
+      static const float cost = 80.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -432,7 +479,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -457,6 +511,8 @@ namespace tdef {
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
+
+      static const float cost = 75.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -498,7 +554,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -525,6 +588,8 @@ namespace tdef {
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
+
+      static const float cost = 90.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -566,7 +631,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -592,6 +664,8 @@ namespace tdef {
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
+
+      static const float cost = 110.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -633,7 +707,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -658,6 +739,8 @@ namespace tdef {
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
+
+      static const float cost = 42.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -699,7 +782,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -724,6 +814,8 @@ namespace tdef {
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
+
+      static const float cost = 120.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -765,7 +857,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }
@@ -792,6 +891,8 @@ namespace tdef {
 
       static const float freezePercent = 0.0f;
       static const float freezeSpeed = 0.0f;
+
+      static const float cost = 150.0f;
 
       Data
       generateData(int /*level*/) noexcept {
@@ -833,7 +934,14 @@ namespace tdef {
 
         pp.attackCost = attackSpeed;
 
+        pp.cost = cost;
+
         return pp;
+      }
+
+      float
+      getCost(int /*level*/) noexcept {
+        return cost;
       }
 
     }

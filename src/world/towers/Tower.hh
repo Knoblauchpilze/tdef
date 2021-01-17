@@ -155,6 +155,11 @@ namespace tdef {
 
         float attackCost;
 
+        // Defines the cost in resource for a tower. This
+        // values scales with the level of the tower and
+        // we only represent the initial value here.
+        float cost;
+
         // The `type` defines a representation of the real
         // kind of the tower. If one is using the factory
         // towers with the same type should have similar

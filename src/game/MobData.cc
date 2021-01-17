@@ -15,6 +15,7 @@ namespace tdef {
 
       static const float health = 1.0f;
       static const float shield = 0.0f;
+      static const float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -24,6 +25,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }
@@ -41,6 +49,7 @@ namespace tdef {
 
       static const float health = 800.8f;
       static const float shield = 0.0f;
+      static const float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -50,6 +59,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }
@@ -67,6 +83,7 @@ namespace tdef {
 
       static const float health = 1.2f;
       static const float shield = 0.0f;
+      static const float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -76,6 +93,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }
@@ -93,6 +117,7 @@ namespace tdef {
 
       static const float health = 1.0f;
       static const float shield = 0.0f;
+      static const float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -102,6 +127,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }
@@ -119,6 +151,7 @@ namespace tdef {
 
       static const float health = 0.8f;
       static const float shield = 0.0f;
+      static const float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -128,6 +161,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }
@@ -145,6 +185,7 @@ namespace tdef {
 
       static const float health = 1.1f;
       static const float shield = 0.0f;
+      static const float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -154,6 +195,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }
@@ -171,6 +219,7 @@ namespace tdef {
 
       static const float health = 0.95f;
       static const float shield = 0.0f;
+      static const float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -180,6 +229,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }
@@ -197,6 +253,7 @@ namespace tdef {
 
       static const float health = 1.0f;
       static const float shield = 0.0f;
+      static const float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -206,6 +263,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }
@@ -222,7 +286,8 @@ namespace tdef {
       static const float lives = 1.0f;
 
       static const float health = 0.8f;
-      static const float shield = 0.4f;
+      static const float shield = 0.5f;
+      static const float shieldEfficiency = 0.8f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -232,6 +297,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }
@@ -249,6 +321,7 @@ namespace tdef {
 
       static const float health = 1.0f;
       static const float shield = 0.0f;
+      static const float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -258,6 +331,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }
@@ -275,6 +355,7 @@ namespace tdef {
 
       static const float health = 0.95f;
       static const float shield = 0.0f;
+      static const float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -284,6 +365,13 @@ namespace tdef {
 
         pp.speed = speed;
         pp.bounty = bounty;
+
+        pp.shield = shield;
+        pp.shieldEfficiency = shieldEfficiency;
+
+        pp.poisonable = poisonable;
+        pp.slowable = slowable;
+        pp.stunnable = stunnable;
 
         return pp;
       }

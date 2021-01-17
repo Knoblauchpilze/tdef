@@ -84,6 +84,29 @@ namespace tdef {
         d.hit = std::max(0.0f, m_damage * far / m_aoeRadius);
       }
 
+      // In case the target is already dead, do not
+      // process it. This can happen as we allow a
+      // projectile to keep targetting a dead target
+      // for the aoe.
+      if (m_target->isDeleted()) {
+        log("Mob " + mobs::toString(m_target->getType()) + " is already deleted");
+        continue;
+      }
+
+      bool alive = wounded[id]->damage(info, d);
+
+      if (!alive) {
+        log(
+          "Killed " + mobs::toString(m_target->getType()) +
+          " at " + m_target->getPos().toString() +
+          ", earned " + std::to_string(m_target->getBounty()) + " coin(s)" +
+          " (deleted: " + std::to_string(m_target->isDead()) + ")"
+        );
+
+        info.gold += m_target->getBounty();
+        continue;
+      }
+
       log(
         "Damaging " + mobs::toString(wounded[id]->getType()) +
         " at " + std::to_string(utils::d(t, wounded[id]->getPos())) +
@@ -91,7 +114,6 @@ namespace tdef {
         " with " + std::to_string(d.hit) + " damage" +
         ", health: " + std::to_string(wounded[id]->getHealth())
       );
-      wounded[id]->damage(info, d);
     }
 
     // The projectile is now obsolete.

@@ -78,10 +78,29 @@ namespace tdef {
      *          allowing a mob to defend itself.
      */
     struct DefenseData {
+      // Defines the shield as a percentage of the total
+      // health of the mob owning this data. This value
+      // is in the range `[0; 1]`.
       float shield;
 
+      // Defines the percentage of the incoming damage
+      // that is reduced by a functional shield.
+      float shieldEfficiency;
+
+      // Defines the durability of the shield. Starts
+      // with a value and decreases each time the shield
+      // absorbs some damage until it gets destroyed.
+      // Belongs to the range `[0; 1]`.
+      float shieldDurability;
+
+      // Whether or not the mob is poisonable.
       bool poisonable;
+
+      // Whether or not the mob is slowable.
       bool slowable;
+
+      // Whether or not the mob can be stunned. Separate
+      // from the slowable property.
       bool stunnable;
     };
 
@@ -104,7 +123,18 @@ namespace tdef {
         float bounty;
         float lives;
 
+        // Defines the amount of shield this mob has as a
+        // percentage of its total health. Typically if a
+        // value of `0.5` is specified this means that the
+        // shield is equal to `0.5 * health`.
+        // Should be in the range `[0; 1]`.
         float shield;
+
+        // Defines the amount of damage absorbed by the
+        // shield as long as it has some durability. The
+        // value is expressed as a percentage of the
+        // incoming damage and is in the range `[0; 1]`.
+        float shieldEfficiency;
 
         bool poisonable;
         bool slowable;
@@ -208,7 +238,128 @@ namespace tdef {
       mobs::DefenseData
       fromProps(const MProps& props) noexcept;
 
+      /**
+       * @brief - Used to apply the hit damage described by the
+       *          input structure to this mob. The mob will use
+       *          its shielding data to mitigate the damage.
+       * @param info - info about the damage to apply.
+       * @param d - the description of the damage to apply.
+       */
+      void
+      applyDamage(StepInfo& info,
+                  const mobs::Damage& d);
+
+      /**
+       * @brief - Used to apply the freezing damage described by the
+       *          input structure to this mob. In case the mob can't
+       *          be freezed nothing will happen.
+       * @param info - info about the damage to apply.
+       * @param d - the description of the damage to apply.
+       */
+      void
+      applyFreezing(StepInfo& info,
+                    const mobs::Damage& d);
+
+      /**
+       * @brief - Used to apply the poison damage described by the
+       *          input structure to this mob. In case the mob is
+       *          not poisonable nothing will happen.
+       * @param info - info about the damage to apply.
+       * @param d - the description of the damage to apply.
+       */
+      void
+      applyPoison(StepInfo& info,
+                  const mobs::Damage& d);
+
     private:
+
+      /**
+       * @brief - Convenience structure regrouping the props
+       *          needed to manage the speed of a mob. It is
+       *          mainly used to hold the freezing effect to
+       *          apply on top of the regular speed.
+       */
+      struct SpeedData {
+        // The base speed of the mob: this is the speed it
+        // will reach without any modifiers.
+        float bSpeed;
+
+        // The current speed of the mob. This includes the
+        // current modifiers (like freezing and stun) that
+        // might be applied.
+        float speed;
+
+        // Defines the timestamp at which the freezing has
+        // begun for this mob.
+        utils::TimeStamp tFreeze;
+
+        // Defines the duration of the freezing effect. The
+        // mob will start to accelerate after the timestamp
+        // reaches this value.
+        utils::Duration fDuration;
+
+        // Defines the speed to reach if the freezing effect
+        // lasts for long enough. If it were to last forever
+        // the `speed` would reach this value.
+        // Note that this is expressed in percentage of the
+        // base speed so it is in the range `[0; 1]`.
+        float fSpeed;
+
+        // Defines the speed at which the mob is slowed down
+        // during the duration of the freezing effect. Note
+        // that depending on the duration it might mean that
+        // the mob won't ever reach `fSpeed`. This is based
+        // on a percentage value, indicating how much of the
+        // current speed is lost each second.
+        // So a value of `0.12` indicates that each second
+        // the speed will be decreased by 12%. This value is
+        // in the range `[0; 1]`.
+        float sDecrease;
+
+        // Defines the timestamp when this mob was stunned.
+        utils::TimeStamp tStun;
+
+        // Defines the duration of the stun effect. When the
+        // current timestamp will reach this value the mob
+        // will start to accelerate back to the expected
+        // speed given the greezing effect.
+        utils::Duration sDuration;
+      };
+
+      /**
+       * @brief - Convenience structure regrouping the props
+       *          needed to manage the poisoning status for
+       *          this mob.
+       *          We handle stacking and poisoning duration.
+       */
+      struct PoisonData {
+        // The amount of damage per second that occur due to
+        // the poisoning effect.
+        float damage;
+
+        // Defines a counter indicating how many times this
+        // mob has been posioned. The more stack there are,
+        // the less efficient they will be (relatively, as
+        // in any new stack will always deal more damage but
+        // not as much as the first stack).
+        int stack;
+
+        // Defines the timestamp when this mob was first hit
+        // by a poison effect. The duration starts ticking
+        // from this point.
+        utils::TimeStamp tPoison;
+
+        // Defines the duration of the poisoning effect. If
+        // the current timestamp reaches this point the mob
+        // will no longer be poisoned.
+        utils::Duration pDuration;
+      };
+
+      /**
+       * @brief - A factor describing how the durability of
+       *          the shield is affected by each hit.
+       */
+      static constexpr const float sk_shieldHitDurab = 0.01f;
 
       /**
        * @brief - The type of the mob. This is mostly used
@@ -247,11 +398,6 @@ namespace tdef {
       float m_rArrival;
 
       /**
-       * @brief - Speed of the entity in cells per second.
-       */
-      float m_speed;
-
-      /**
        * @brief - The current path followed by this mob.
        */
       path::Path m_path;
@@ -271,6 +417,20 @@ namespace tdef {
        *          somewhat mitugate any incoming damage.
        */
       mobs::DefenseData m_defense;
+
+      /**
+       * @brief - Defines the common handler to regroup all the
+       *          properties needed to manage the speed of this
+       *          mob.
+       */
+      SpeedData m_speed;
+
+      /**
+       * @brief - Defines the common handler to regroup all the
+       *          properties needed to manage the poisoning of
+       *          this mob.
+       */
+      PoisonData m_poison;
   };
 
   using MobShPtr = std::shared_ptr<Mob>;

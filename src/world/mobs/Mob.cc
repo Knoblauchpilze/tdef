@@ -15,13 +15,29 @@ namespace tdef {
     m_energyRefill(props.refill),
 
     m_rArrival(props.arrival),
-    m_speed(props.speed),
     m_path(path::newPath(m_pos)),
 
     m_bounty(props.bounty),
     m_cost(props.lives),
 
-    m_defense(fromProps(props))
+    m_defense(fromProps(props)),
+
+    m_speed({
+      props.speed,
+      props.speed,
+      utils::now(),
+      utils::Duration::zero(),
+      1.0f,
+      0.0f,
+      utils::now(),
+      utils::Duration::zero()
+    }),
+    m_poison({
+      0.0f,
+      0,
+      utils::now(),
+      utils::Duration::zero()
+    })
   {
     setService("mob");
   }
@@ -31,20 +47,55 @@ namespace tdef {
               const mobs::Damage& d)
   {
     // TODO: Handle the rest of the effect.
-    // float hit;
-    // float accuracy;
-    // float speed;
-    // float sDecraseSpeed;
-    // utils::Duration sDuration;
-    // utils::Duration pDuration;
+    // mobs::Damage
+    // V float hit;
+    // V float accuracy;
+    // X float speed;
+    // X float sDecraseSpeed;
+    // X utils::Duration sDuration;
+    // X utils::Duration pDuration;
 
-    bool alive = WorldElement::damage(info, d.hit);
-    
-    if (!alive) {
-      markForDeletion(true);
+    // m_defense
+    // V float shield;
+    // V bool poisonable;
+    // V bool slowable;
+    // X bool stunnable;
+
+    // m_speed
+    // V float bSpeed;
+    // X float speed;
+    // V utils::TimeStamp tFreeze;
+    // V utils::Duration fDuration;
+    // V float fSpeed;
+    // V float sDecrease.
+    // X utils::TimeStamp tStun;
+    // X utils::Duration sDuration:
+
+    // m_poison
+    // V float damage;
+    // V int stack;
+    // V utils::TimeStamp tPoison;
+    // V utils::Duration pDuration;
+
+    // First thing is to determine whether the
+    // hit succeeded through the accuracy.
+    float rnd = info.rng.rndFloat(0.0f, 1.0f);
+    if (rnd > d.accuracy) {
+      log("Projectile failed to hit (accuracy: " + std::to_string(d.accuracy) + ", trial: " + std::to_string(rnd) + ")");
+      return true;
     }
-    
-    return alive;
+
+    // Handle each type of damage.
+    applyDamage(info, d);
+    applyFreezing(info, d);
+    applyPoison(info, d);
+
+    // Register this mob for deletion in case it
+    // is not alive anymore.
+    bool dead = isDead();
+    markForDeletion(dead);
+
+    return !dead;
   }
 
   void
@@ -55,7 +106,8 @@ namespace tdef {
     // In case we're already following a path, go
     // there.
     if (isEnRoute()) {
-      m_path.advance(m_speed, info.elapsed, m_rArrival);
+      // TODO: Handle speed and stun.
+      m_path.advance(m_speed.speed, info.elapsed, m_rArrival);
       m_pos = m_path.cur;
 
       return;
@@ -118,6 +170,100 @@ namespace tdef {
     log("Generated new path to " + e.toString());
 
     std::swap(m_path, np);
+  }
+
+  void
+  Mob::applyDamage(StepInfo& info,
+                   const mobs::Damage& d) {
+    // First, shield the incoming damage: this will
+    // reduce the durability of the shield based on
+    // a formula describing the impact of the damage.
+    // This only occurs if the shield durability is
+    // not exhausted.
+    float hit = d.hit;
+
+    if (m_defense.shieldDurability >= 0.0f) {
+      float remaining = hit * m_defense.shieldEfficiency;
+      float absorbed = hit - remaining;
+
+      // The durability loss is equivalent to 1% of the
+      // difference between the shield health and the
+      // amount absorbed.
+      // Note that `durabLoss` is negative or `0`.
+      float sHP = m_defense.shield * m_totalHealth;
+      float durabLoss = sk_shieldHitDurab * std::min(sHP - absorbed, 0.0f);
+
+      m_defense.shieldDurability += durabLoss;
+
+      hit = remaining;
+    }
+
+    // Handle the remaining damage if needed.
+    if (hit > 0.0f) {
+      WorldElement::damage(info, hit);
+    }
+  }
+
+  void
+  Mob::applyFreezing(StepInfo& info,
+                     const mobs::Damage& d)
+  {
+    // Mob is not slowable, abort.
+    if (!m_defense.slowable) {
+      return;
+    }
+
+    // Damage does not define freezing data, abort.
+    if (d.speed == 1.0f) {
+      return;
+    }
+
+    // Refresh the slowing effect if any.
+    m_speed.tFreeze = info.moment;
+
+    // Update freezed speed and refresh slowing effect.
+    // In case the new freeze speed is bigger than the
+    // current freeze speed we will wait for the freeze
+    // effect to wear off so that we benefit better
+    // from the current (stronger) applied effect.
+    if (m_speed.fSpeed >= d.speed) {
+      // The new speed would make the mob even slower.
+      m_speed.tFreeze = info.moment;
+      m_speed.fSpeed = d.speed;
+
+      m_speed.fDuration = d.sDuration;
+      // Convert the decrease provided in the input
+      // data to a value in the range `[0; 1]`.
+      m_speed.sDecrease = d.sDecraseSpeed / 100.0f;
+    }
+  }
+
+  void
+  Mob::applyPoison(StepInfo& info,
+                   const mobs::Damage& d)
+  {
+    // Mob is not poisonable, abort.
+    if (!m_defense.poisonable) {
+      return;
+    }
+
+    // Damage does not define poisoning data, abort.
+    if (d.pDuration == utils::Duration::zero()) {
+      return;
+    }
+
+    // We will register a new stack of poison for
+    // the mob. This will also refresh the duration
+    // of all the stack to last as long as the last
+    // one applied.
+    m_poison.tPoison = info.moment;
+    m_poison.pDuration = d.pDuration;
+
+    // The damage applied per stack is 100% for the
+    // first stack, then 50% for the second, 25% for
+    // the third etc.
+    m_poison.damage += std::pow(2.0f, -1.0f * m_poison.stack);
+    ++m_poison.stack;
   }
 
 }

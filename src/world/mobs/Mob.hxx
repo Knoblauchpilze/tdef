@@ -96,7 +96,7 @@ namespace tdef {
   inline
   float
   Mob::getSpeed() const noexcept {
-    return m_speed;
+    return m_speed.speed;
   }
 
   inline
@@ -126,7 +126,9 @@ namespace tdef {
   Mob::fromProps(const MProps& props) noexcept {
     mobs::DefenseData dd;
 
-    dd.shield = props.shield;
+    dd.shield = std::min(std::max(props.shield, 0.0f), 1.0f);
+    dd.shieldEfficiency = std::min(std::max(props.shieldEfficiency, 0.0f), 1.0f);
+    dd.shieldDurability = 1.0f;
 
     dd.poisonable = props.poisonable;
     dd.slowable = props.slowable;

@@ -535,74 +535,24 @@ namespace tdef {
 
   void
   Game::spawnTower(const utils::Point2f& p) {
-    // Generate the tower.
-    Tower::TProps pp;
-    towers::Data td;
-
-    bool valid = true;
-    switch (*m_tType) {
-      case towers::Type::Basic:
-        pp = towers::generateProps(towers::Type::Basic, p);
-        td = towers::generateData(towers::Type::Basic);
-        break;
-      case towers::Type::Sniper:
-        pp = towers::generateProps(towers::Type::Sniper, p);
-        td = towers::generateData(towers::Type::Sniper);
-        break;
-      case towers::Type::Freezing:
-        pp = towers::generateProps(towers::Type::Freezing, p);
-        td = towers::generateData(towers::Type::Freezing);
-        break;
-      case towers::Type::Cannon:
-        pp = towers::generateProps(towers::Type::Cannon, p);
-        td = towers::generateData(towers::Type::Cannon);
-        break;
-      case towers::Type::Venom:
-        pp = towers::generateProps(towers::Type::Venom, p);
-        td = towers::generateData(towers::Type::Venom);
-        break;
-      case towers::Type::Splash:
-        pp = towers::generateProps(towers::Type::Splash, p);
-        td = towers::generateData(towers::Type::Splash);
-        break;
-      case towers::Type::Blast:
-        pp = towers::generateProps(towers::Type::Blast, p);
-        td = towers::generateData(towers::Type::Blast);
-        break;
-      case towers::Type::Multishot:
-        pp = towers::generateProps(towers::Type::Multishot, p);
-        td = towers::generateData(towers::Type::Multishot);
-        break;
-      case towers::Type::Minigun:
-        pp = towers::generateProps(towers::Type::Minigun, p);
-        td = towers::generateData(towers::Type::Minigun);
-        break;
-      case towers::Type::Antiair:
-        pp = towers::generateProps(towers::Type::Antiair, p);
-        td = towers::generateData(towers::Type::Antiair);
-        break;
-      case towers::Type::Tesla:
-        pp = towers::generateProps(towers::Type::Tesla, p);
-        td = towers::generateData(towers::Type::Tesla);
-        break;
-      case towers::Type::Missile:
-        pp = towers::generateProps(towers::Type::Missile, p);
-        td = towers::generateData(towers::Type::Missile);
-        break;
-      default:
-        valid = false;
-        break;
-    }
-
-    if (!valid) {
+    // Generate the tower. Also make sure that the
+    // player owns enough gold to do so.
+    float c = towers::getCost(*m_tType);
+    if (m_gold < c) {
       log(
-        "Unknown tower type " + std::to_string(static_cast<int>(*m_tType)) +
-        " to generate",
-        utils::Level::Warning
+        "Can't afford tower " + towers::toString(*m_tType) + " costing " +
+        std::to_string(c) + " with only " +
+        std::to_string(m_gold) + " gold available",
+        utils::Level::Error
       );
 
       return;
     }
+
+    m_gold -= c;
+
+    Tower::TProps pp = towers::generateProps(*m_tType, p);
+    towers::Data td = towers::generateData(*m_tType);
 
     log("Generated tower " + std::to_string(static_cast<int>(*m_tType)) + " at " + p.toString());
 

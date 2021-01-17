@@ -7,9 +7,11 @@
 namespace tdef {
   namespace towers {
 
-    static const float INFINITE_PROJECTILE_SPEED = -1.0f;
-    static const float INFINITE_AIM_SPEED = 0.0f;
-    static const float INFINITE_ATTACK_SPEED = 100.0f;
+    static constexpr const float INFINITE_PROJECTILE_SPEED = -1.0f;
+    static constexpr const float INFINITE_AIM_SPEED = 0.0f;
+    static constexpr const float INFINITE_ATTACK_SPEED = 100.0f;
+
+    static constexpr const float NO_SPEED_DECREASE = 0.0f;
 
     float degToRad(float deg) noexcept {
       return deg * 3.1415926535f / 180.0f;
@@ -54,7 +56,7 @@ namespace tdef {
       static const int projectiles = 1;
       static const float acceleration = 0.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 48.0f;
@@ -94,7 +96,7 @@ namespace tdef {
         pp.projectiles = projectiles;
         pp.acceleration = acceleration;
 
-        pp.freezePercent = freezePercent;
+        pp.freezePercent = NO_SPEED_DECREASE;
         pp.freezeSpeed = freezeSpeed;
 
         pp.attackCost = attackSpeed;
@@ -129,7 +131,7 @@ namespace tdef {
       static const int projectiles = 1;
       static const float acceleration = 0.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 80.0f;
@@ -205,7 +207,7 @@ namespace tdef {
       static const int projectiles = 1;
       static const float acceleration = 0.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 60.0f;
@@ -281,8 +283,6 @@ namespace tdef {
       static const float acceleration = 0.0f;
 
       static const float freezePercent = 20.0f;
-      // Expressed in percent of the speed that is
-      // subtracted every second.
       static const float freezeSpeed = 12.0f;
 
       static const float cost = 80.0f;
@@ -358,7 +358,7 @@ namespace tdef {
       static const int projectiles = 1;
       static const float acceleration = 0.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 100.0f;
@@ -434,7 +434,7 @@ namespace tdef {
       static const int projectiles = 6;
       static const float acceleration = 0.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 80.0f;
@@ -509,7 +509,7 @@ namespace tdef {
       static const int projectiles = 1;
       static const float acceleration = 0.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 75.0f;
@@ -586,7 +586,7 @@ namespace tdef {
       static const int projectiles = 5;
       static const float acceleration = 0.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 90.0f;
@@ -662,7 +662,7 @@ namespace tdef {
       // TODO: 18 + Tower level.
       static const float acceleration = 18.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 110.0f;
@@ -737,7 +737,7 @@ namespace tdef {
       static const int projectiles = 1;
       static const float acceleration = 0.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 42.0f;
@@ -812,7 +812,7 @@ namespace tdef {
       static const int projectiles = 1;
       static const float acceleration = 0.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 120.0f;
@@ -889,7 +889,7 @@ namespace tdef {
       static const int projectiles = 1;
       static const float acceleration = 0.0f;
 
-      static const float freezePercent = 0.0f;
+      static const float freezePercent = NO_SPEED_DECREASE;
       static const float freezeSpeed = 0.0f;
 
       static const float cost = 150.0f;

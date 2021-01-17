@@ -147,7 +147,10 @@ namespace tdef {
         int projectiles;
         float acceleration;
 
+        // Defines the percentage of reduction of the speed
+        // of mobs.
         float freezePercent;
+
         // Defines the percentage of speed that is reduced
         // per second when an entity is within the range
         // of this tower.

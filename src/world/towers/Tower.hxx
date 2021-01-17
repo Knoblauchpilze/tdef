@@ -138,7 +138,8 @@ namespace tdef {
 
     dd.accuracy = props.accuracy;
 
-    dd.speed = props.freezePercent;
+    // Convert freeze percent to final speed value.
+    dd.speed = (100.0f - props.freezePercent) / 100.0f;
     dd.slowdown = props.freezeSpeed;
     dd.sDuration = utils::toMilliseconds(
       static_cast<int>(

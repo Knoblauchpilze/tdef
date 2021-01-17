@@ -90,13 +90,17 @@ namespace tdef {
        *          Note that in case the `hit` is negative
        *          it will correspond to some healing done
        *          to the element.
+       * @param info - the information to generate random numbers
+       *               and get an idea of the time frame for which
+       *               damage is applied.
        * @param hit - the amount of damage to apply to the
        *              element.
        * @return - `true` if the world element is alive
        *           even after taking the hit.
        */
       bool
-      damage(float hit);
+      damage(StepInfo& info,
+             float hit);
 
       /**
        * @brief - Interface method caled before the first

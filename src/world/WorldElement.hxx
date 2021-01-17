@@ -62,7 +62,9 @@ namespace tdef {
 
   inline
   bool
-  WorldElement::damage(float hit) {
+  WorldElement::damage(StepInfo& /*info*/,
+                       float hit)
+  {
     // In case the `hit` is in fact a healing
     // we can do that in the limit of the health
     // pool for this element.

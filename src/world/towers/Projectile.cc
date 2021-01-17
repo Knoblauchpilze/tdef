@@ -91,7 +91,7 @@ namespace tdef {
         " with " + std::to_string(d.hit) + " damage" +
         ", health: " + std::to_string(wounded[id]->getHealth())
       );
-      wounded[id]->damage(d);
+      wounded[id]->damage(info, d);
     }
 
     // The projectile is now obsolete.

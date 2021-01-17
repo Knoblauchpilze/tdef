@@ -167,11 +167,15 @@ namespace tdef {
        *          able to mitigate some of it.
        *          In case the mob is damaged to the point where it
        *          reaches `0` hp, we will mark it for deletion.
+       * @param info - the information to generate random numbers
+       *               and get an idea of the time frame for which
+       *               damage is applied.
        * @param d - the damage to apply.
        * @return - `true` if the mob is still alive.
        */
       bool
-      damage(const mobs::Damage& d);
+      damage(StepInfo& info,
+             const mobs::Damage& d);
 
       void
       init(StepInfo& info) override;

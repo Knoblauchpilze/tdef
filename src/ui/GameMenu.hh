@@ -1,6 +1,7 @@
 #ifndef    GAME_MENU_HH
 # define   GAME_MENU_HH
 
+# include <memory>
 # include "SimpleMenu.hh"
 
 namespace tdef {
@@ -77,6 +78,7 @@ namespace tdef {
       bool m_enabled;
   };
 
+  using GameMenuShPtr = std::shared_ptr<GameMenu>;
 }
 
 #endif    /* GAME_MENU_HH */

@@ -77,6 +77,8 @@ namespace tdef {
 
     pp.type = type;
 
+    pp.cost = 10.0f;
+
     return pp;
   }
 

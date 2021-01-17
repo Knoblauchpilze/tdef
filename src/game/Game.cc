@@ -11,9 +11,8 @@
 
 namespace {
 
-  tdef::MenuShPtr
-  generateTowerMenu(const tdef::towers::Type& type)
-  {
+  tdef::GameMenuShPtr
+  generateTowerMenu(const tdef::towers::Type& type) {
     return std::make_shared<tdef::GameMenu>(
       tdef::towers::toString(type),
       [type](std::vector<tdef::ActionShPtr>& actions) {
@@ -51,7 +50,9 @@ namespace tdef {
     m_tDisplay(),
     m_mDisplay(),
     m_sDisplay(),
-    m_wDisplay()
+    m_wDisplay(),
+
+    m_tMenus()
   {
     setService("game");
 
@@ -230,6 +231,36 @@ namespace tdef {
       fg = menu::newTextContent("Health: " + std::to_string(v));
       m_wDisplay.health->setContent(fg);
     }
+
+    // Update status for tower's construction.
+    // Note that we assume all the menus are
+    // already registered in the map. If this
+    // is not the case UB will arise.
+    towers::Type t = towers::Type::Basic;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Sniper;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Cannon;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Freezing;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Venom;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Splash;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Blast;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Multishot;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Minigun;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Antiair;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Tesla;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Missile;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+
   }
 
   MenuShPtr
@@ -267,7 +298,7 @@ namespace tdef {
   }
 
   MenuShPtr
-  Game::generateTowersMenu(const olc::vi2d& dims) const {
+  Game::generateTowersMenu(const olc::vi2d& dims) {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::Transparent);
     const olc::vi2d pos(0, 20);
@@ -282,18 +313,53 @@ namespace tdef {
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
-    m->addMenu(generateTowerMenu(towers::Type::Basic));
-    m->addMenu(generateTowerMenu(towers::Type::Sniper));
-    m->addMenu(generateTowerMenu(towers::Type::Cannon));
-    m->addMenu(generateTowerMenu(towers::Type::Freezing));
-    m->addMenu(generateTowerMenu(towers::Type::Venom));
-    m->addMenu(generateTowerMenu(towers::Type::Splash));
-    m->addMenu(generateTowerMenu(towers::Type::Blast));
-    m->addMenu(generateTowerMenu(towers::Type::Multishot));
-    m->addMenu(generateTowerMenu(towers::Type::Minigun));
-    m->addMenu(generateTowerMenu(towers::Type::Antiair));
-    m->addMenu(generateTowerMenu(towers::Type::Tesla));
-    m->addMenu(generateTowerMenu(towers::Type::Missile));
+    GameMenuShPtr tm = generateTowerMenu(towers::Type::Basic);
+    m_tMenus[towers::Type::Basic] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Sniper);
+    m_tMenus[towers::Type::Sniper] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Cannon);
+    m_tMenus[towers::Type::Cannon] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Freezing);
+    m_tMenus[towers::Type::Freezing] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Venom);
+    m_tMenus[towers::Type::Venom] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Splash);
+    m_tMenus[towers::Type::Splash] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Blast);
+    m_tMenus[towers::Type::Blast] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Multishot);
+    m_tMenus[towers::Type::Multishot] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Minigun);
+    m_tMenus[towers::Type::Minigun] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Antiair);
+    m_tMenus[towers::Type::Antiair] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Tesla);
+    m_tMenus[towers::Type::Tesla] = tm;
+    m->addMenu(tm);
+
+    tm = generateTowerMenu(towers::Type::Missile);
+    m_tMenus[towers::Type::Missile] = tm;
+    m->addMenu(tm);
 
     m->addMenu(
       std::make_shared<GameMenu>(

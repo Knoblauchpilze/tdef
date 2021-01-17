@@ -29,6 +29,15 @@ namespace tdef {
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
 
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
+
     }
 
     namespace sniper {
@@ -53,6 +62,15 @@ namespace tdef {
       Tower::TProps
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
+
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
 
     }
 
@@ -79,6 +97,15 @@ namespace tdef {
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
 
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
+
     }
 
     namespace freezing {
@@ -103,6 +130,15 @@ namespace tdef {
       Tower::TProps
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
+
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
 
     }
 
@@ -129,6 +165,15 @@ namespace tdef {
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
 
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
+
     }
 
     namespace splash {
@@ -153,6 +198,15 @@ namespace tdef {
       Tower::TProps
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
+
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
 
     }
 
@@ -179,6 +233,15 @@ namespace tdef {
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
 
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
+
     }
 
     namespace multishot {
@@ -203,6 +266,15 @@ namespace tdef {
       Tower::TProps
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
+
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
 
     }
 
@@ -229,6 +301,15 @@ namespace tdef {
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
 
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
+
     }
 
     namespace antiair {
@@ -253,6 +334,15 @@ namespace tdef {
       Tower::TProps
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
+
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
 
     }
 
@@ -279,6 +369,15 @@ namespace tdef {
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
 
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
+
     }
 
     namespace missile {
@@ -303,6 +402,15 @@ namespace tdef {
       Tower::TProps
       generateProps(const utils::Point2f& p,
                     int level = 0) noexcept;
+
+      /**
+       * @brief - Returns the cost to build the tower for the
+       *          specified level.
+       * @param level - the level of the tower.
+       * @return - the gold cost for this level.
+       */
+      float
+      getCost(int level = 0) noexcept;
 
     }
 

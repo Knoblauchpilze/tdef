@@ -26,6 +26,11 @@ namespace tdef {
 
   void
   GameMenu::enable(bool enabled) {
+    // Speed up similar assignment of the status.
+    if (enabled == m_enabled) {
+      return;
+    }
+
     menu::BackgroundDesc bg;
     bg = menu::newColoredBackground(enabled ? sk_activeBGColor : sk_disabledBGColor);
 

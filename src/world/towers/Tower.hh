@@ -318,6 +318,17 @@ namespace tdef {
     private:
 
       /**
+       * @brief - Defines a convenience structure to recall the
+       *          status of an upgrade for this tower. This is
+       *          used as a way to persist the upgrades made to
+       *          the towers.
+       */
+      struct UpgradeData {
+        towers::Upgrade type;
+        int level;
+      };
+
+      /**
        * @brief - The type of the tower. This is mostly used
        *          to quickly identify the tower but most of
        *          the precise behaviors are actually defined
@@ -329,7 +340,7 @@ namespace tdef {
        * @brief - Defines the list of upgrades that are possible
        *          to improve this tower.
        */
-      std::vector<towers::Upgrade> m_upgrades;
+      std::vector<UpgradeData> m_upgrades;
 
       /**
        * @brief - An indication of the energy left for this

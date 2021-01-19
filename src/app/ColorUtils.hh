@@ -54,11 +54,11 @@ namespace tdef {
 
   namespace alpha {
 
-    static constexpr int Opaque = 255;
-    static constexpr int AlmostOpaque = 192;
-    static constexpr int SemiOpaque = 128;
-    static constexpr int AlmostTransparent = 64;
-    static constexpr int Transparent = 0;
+    constexpr int Opaque = 255;
+    constexpr int AlmostOpaque = 192;
+    constexpr int SemiOpaque = 128;
+    constexpr int AlmostTransparent = 64;
+    constexpr int Transparent = 0;
 
   }
 

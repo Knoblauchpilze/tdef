@@ -359,7 +359,7 @@ namespace tdef {
        * @brief - A factor describing how the durability of
        *          the shield is affected by each hit.
        */
-      static constexpr const float sk_shieldHitDurab = 0.01f;
+      static constexpr float sk_shieldHitDurab = 0.01f;
 
       /**
        * @brief - The type of the mob. This is mostly used

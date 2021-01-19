@@ -39,6 +39,37 @@ namespace tdef {
       }
     }
 
+    inline
+    std::string
+    toString(const Upgrade& t) noexcept {
+      switch (t) {
+        case Upgrade::Range:
+          return "Range";
+        case Upgrade::Damage:
+          return "Damage";
+        case Upgrade::RotationSpeed:
+          return "RotationSpeed";
+        case Upgrade::AttackSpeed:
+          return "AttackSpeed";
+        case Upgrade::ProjectileSpeed:
+          return "ProjectileSpeed";
+        case Upgrade::FreezingPower:
+          return "FreezingPower";
+        case Upgrade::FreezingSpeed:
+          return "FreezingSpeed";
+        case Upgrade::FreezingDuration:
+          return "FreezingDuration";
+        case Upgrade::PoisonDuration:
+          return "PoisonDuration";
+        case Upgrade::StunChance:
+          return "StunChance";
+        case Upgrade::StunDuration:
+          return "StunDuration";
+        default:
+          return "Unknown";
+      }
+    }
+
   }
 
   inline
@@ -78,6 +109,9 @@ namespace tdef {
     pp.type = type;
 
     pp.cost = 10.0f;
+
+    pp.upgrades.push_back(towers::Upgrade::Range);
+    pp.upgrades.push_back(towers::Upgrade::Damage);
 
     return pp;
   }

@@ -1,7 +1,5 @@
 
 target_sources (tdef_lib PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/TowerData.cc
-  ${CMAKE_CURRENT_SOURCE_DIR}/TowerFactory.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/MobData.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/MobFactory.cc
   ${CMAKE_CURRENT_SOURCE_DIR}/SpawnerFactory.cc
@@ -10,4 +8,8 @@ target_sources (tdef_lib PRIVATE
 
 target_include_directories (tdef_lib PUBLIC
   "${CMAKE_CURRENT_SOURCE_DIR}"
+  )
+
+add_subdirectory (
+  ${CMAKE_CURRENT_SOURCE_DIR}/towers
   )

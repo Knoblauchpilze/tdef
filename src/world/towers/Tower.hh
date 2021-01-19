@@ -118,6 +118,34 @@ namespace tdef {
     std::string
     toString(const Type& t) noexcept;
 
+    /**
+     * @brief - Convenience enumeration defining the types
+     *          of upgrades that a tower can define.
+     */
+    enum class Upgrade {
+      Range,
+      Damage,
+      RotationSpeed,
+      AttackSpeed,
+      ProjectileSpeed,
+      FreezingPower,
+      FreezingSpeed,
+      FreezingDuration,
+      PoisonDuration,
+      StunChance,
+      StunDuration
+    };
+
+    /**
+     * @brief - Converts the input upgrade value to a string
+     *          and to an "Unknown" value if the enum can
+     *          not be interpreted.
+     * @param t - the upgrade to convert.
+     * @return - the string representation of the enum.
+     */
+    std::string
+    toString(const Upgrade& t) noexcept;
+
   }
 
   class Tower: public Block {
@@ -168,6 +196,10 @@ namespace tdef {
         // towers with the same type should have similar
         // properties but it's not guaranteed otherwise.
         towers::Type type;
+
+        // Defines the list of upgrades that can be applied
+        // to this tower.
+        std::vector<towers::Upgrade> upgrades;
       };
 
       static
@@ -209,6 +241,19 @@ namespace tdef {
        */
       float
       getAttackSpeed() const noexcept;
+
+      /**
+       * @brief - Used to perform the upgrade of the tower to
+       *          the provided level. In case the upgrade is
+       *          not possible for this tower nothing will be
+       *          changed.
+       * @param upgrade - the upgrade to perform.
+       * @param level - the level to which the corresponding
+       *                properties should be upgraded.
+       */
+      void
+      upgrade(const towers::Upgrade& upgrade,
+              int level);
 
       void
       step(StepInfo& info) override;
@@ -279,6 +324,12 @@ namespace tdef {
        *          through the `m_process` attribute.
        */
       towers::Type m_type;
+
+      /**
+       * @brief - Defines the list of upgrades that are possible
+       *          to improve this tower.
+       */
+      std::vector<towers::Upgrade> m_upgrades;
 
       /**
        * @brief - An indication of the energy left for this

@@ -1,6 +1,17 @@
 
 # include "TowerFactory.hh"
-# include "TowerData.hh"
+# include "Basic.hh"
+# include "Sniper.hh"
+# include "Cannon.hh"
+# include "Freezing.hh"
+# include "Venom.hh"
+# include "Splash.hh"
+# include "Blast.hh"
+# include "Multishot.hh"
+# include "Minigun.hh"
+# include "Antiair.hh"
+# include "Tesla.hh"
+# include "Missile.hh"
 
 namespace tdef {
   namespace towers {

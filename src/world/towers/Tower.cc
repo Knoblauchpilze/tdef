@@ -12,6 +12,7 @@ namespace tdef {
     Block(props, towers::toString(props.type)),
 
     m_type(props.type),
+    m_upgrades(props.upgrades),
 
     m_energy(props.energy),
     m_maxEnergy(props.maxEnergy),
@@ -31,6 +32,14 @@ namespace tdef {
     m_target(nullptr)
   {
     setService("tower");
+  }
+
+  void
+  Tower::upgrade(const towers::Upgrade& upgrade,
+                 int level)
+  {
+    // TODO: Handle this.
+    log("Should upgrade " + towers::toString(upgrade) + " to level " + std::to_string(level), utils::Level::Warning);
   }
 
   void

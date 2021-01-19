@@ -12,7 +12,7 @@ namespace tdef {
     Block(props, towers::toString(props.type)),
 
     m_type(props.type),
-    m_upgrades(props.upgrades),
+    m_upgrades(),
 
     m_energy(props.energy),
     m_maxEnergy(props.maxEnergy),
@@ -32,6 +32,15 @@ namespace tdef {
     m_target(nullptr)
   {
     setService("tower");
+
+    // Convert the upgrades to internal format.
+    for (unsigned id = 0u ; id < props.upgrades.size() ; ++id) {
+      UpgradeData ud;
+      ud.type = props.upgrades[id];
+      ud.level = 0;
+
+      m_upgrades.push_back(ud);
+    }
   }
 
   void

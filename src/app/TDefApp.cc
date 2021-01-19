@@ -164,7 +164,12 @@ namespace tdef {
 
       // Represent the orientation as a small line
       // centered on the block and oriented with a
-      // direction similar to the parent.
+      // direction similar to the parent. We only
+      // want to display it for towers.
+      if (bd.type != world::BlockType::Tower) {
+        continue;
+      }
+
       static const float len = 50.0f;
 
       olc::vf2d p = res.cf.tileCoordsToPixels(bd.p.x(), bd.p.y(), RelativePosition::BottomRight, bd.radius);

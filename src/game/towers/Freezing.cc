@@ -84,6 +84,29 @@ namespace tdef {
         return cost;
       }
 
+      float
+      getUpgradeCost(const Upgrade& upgrade,
+                     int level) noexcept
+      {
+        switch (upgrade) {
+          case Upgrade::Range:
+          case Upgrade::FreezingPower:
+          case Upgrade::FreezingSpeed:
+          case Upgrade::FreezingDuration:
+            return 49.0f * (level + 1);
+          case Upgrade::Damage:
+          case Upgrade::RotationSpeed:
+          case Upgrade::AttackSpeed:
+          case Upgrade::ProjectileSpeed:
+          case Upgrade::PoisonDuration:
+          case Upgrade::StunChance:
+          case Upgrade::StunDuration:
+          default:
+            // Default upgrade cost is null.
+            return 0.0f;
+        }
+      }
+
     }
 
   }

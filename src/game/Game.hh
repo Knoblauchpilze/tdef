@@ -66,6 +66,16 @@ namespace tdef {
       performAction(float x, float y);
 
       /**
+       * @brief - Used to trigger the uypgrade of the tower
+       *          currently displayed for the input upgrade
+       *          to the next level.
+       * @param upgrade - the upgrade to perform on the
+       *                  current tower.
+       */
+      void
+      upgradeTower(const towers::Upgrade& upgrade);
+
+      /**
        * @brief - Returns the total remaining lives for all
        *          the portals registered in the world.
        * @return - the remaining lives in any portal of the
@@ -302,6 +312,12 @@ namespace tdef {
       static constexpr int BASE_LIVES = 15;
 
       /**
+       * @brief - Used to define how many upgrades are available
+       *          for towers.
+       */
+      static constexpr unsigned UPGRADE_COUNT = 4;
+
+      /**
        * @brief - Convenience structure regrouping all the info
        *          on a tower display.
        */
@@ -314,9 +330,7 @@ namespace tdef {
         // The following items define the menus displaying the
         // various props of a tower.
         MenuShPtr type;
-        MenuShPtr range;
-        MenuShPtr damage;
-        MenuShPtr attackSpeed;
+        std::vector<GameMenuShPtr> props;
 
         // `tower` defines a pointer to the tower being displayed.
         // It allows to continuously update the values displayed

@@ -45,6 +45,20 @@ namespace tdef {
     getCost(const Type& type,
             int level = 0);
 
+    /**
+     * @brief - Returns the gold cost of a specific tower with
+     *          the specified level and upgrade type.
+     * @param type - the type of the tower.
+     * @param upgrade - the type of upgrade to perform.
+     * @param level - the level for which the cost should be
+     *                returned.
+     * @return - the gold cost for the level upgrade.
+     */
+    float
+    getUpgradeCost(const Type& type,
+                   const Upgrade& upgrade,
+                   int level = 0);
+
   }
 }
 

@@ -117,5 +117,40 @@ namespace tdef {
       }
     }
 
+    float
+    getUpgradeCost(const Type& type,
+                   const Upgrade& upgrade,
+                   int level)
+    {
+      switch (type) {
+        case Type::Sniper:
+          return sniper::getUpgradeCost(upgrade, level);
+        case Type::Cannon:
+          return cannon::getUpgradeCost(upgrade, level);
+        case Type::Freezing:
+          return freezing::getUpgradeCost(upgrade, level);
+        case Type::Venom:
+          return venom::getUpgradeCost(upgrade, level);
+        case Type::Splash:
+          return splash::getUpgradeCost(upgrade, level);
+        case Type::Blast:
+          return blast::getUpgradeCost(upgrade, level);
+        case Type::Multishot:
+          return multishot::getUpgradeCost(upgrade, level);
+        case Type::Minigun:
+          return minigun::getUpgradeCost(upgrade, level);
+        case Type::Antiair:
+          return antiair::getUpgradeCost(upgrade, level);
+        case Type::Tesla:
+          return tesla::getUpgradeCost(upgrade, level);
+        case Type::Missile:
+          return missile::getUpgradeCost(upgrade, level);
+        case Type::Basic:
+        default:
+          // Assume default is basic tower.
+          return basic::getUpgradeCost(upgrade, level);
+      }
+    }
+
   }
 }

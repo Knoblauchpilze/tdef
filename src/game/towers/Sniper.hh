@@ -38,6 +38,17 @@ namespace tdef {
       float
       getCost(int level = 0) noexcept;
 
+      /**
+       * @brief - Returns the cost to upgrade the property of
+       *          the tower to the specified level.
+       * @param type - the type of upgrade.
+       * @param level - the level to upgrade.
+       * @return - the gold cost for this upgrade.
+       */
+      float
+      getUpgradeCost(const Upgrade& upgrade,
+                     int level = 0) noexcept;
+
     }
 
   }

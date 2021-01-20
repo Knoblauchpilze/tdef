@@ -1,6 +1,7 @@
 #ifndef    TOWER_HH
 # define   TOWER_HH
 
+# include <map>
 # include <memory>
 # include <maths_utils/Point2.hh>
 # include "Block.hh"
@@ -146,6 +147,12 @@ namespace tdef {
     std::string
     toString(const Upgrade& t) noexcept;
 
+    /**
+     * @brief - Convenience structure to refer to a map of
+     *          upgrades.
+     */
+    using Upgrades = std::map<Upgrade, int>;
+
   }
 
   class Tower: public Block {
@@ -231,6 +238,26 @@ namespace tdef {
       getAttack() const noexcept;
 
       /**
+       * @brief - Fetch the status of upgrades for this tower.
+       * @return - the state of upgrades.
+       */
+      towers::Upgrades
+      getUpgrades() const noexcept;
+
+      /**
+       * @brief - Attempts to fetch the level for the provided
+       *          upgrade for this tower. In case the tower is
+       *          not providing the corresponding upgrade the
+       *          returned value will be `0`.
+       * @param upgrade - the type of upgrade for which the
+       *                  level should be fetched.
+       * @return - the level for this upgrade or `0` in case
+       *           the upgrade is not available.
+       */
+      int
+      getUpgradeLevel(const towers::Upgrade& upgrade) const noexcept;
+
+      /**
        * @brief - Returns an aggregated number measuring the
        *          attack speed for this tower. The higher the
        *          value the faster the tower is able to attack.
@@ -241,6 +268,9 @@ namespace tdef {
        */
       float
       getAttackSpeed() const noexcept;
+
+      float
+      getProjectileSpeed() const noexcept;
 
       /**
        * @brief - Used to perform the upgrade of the tower to

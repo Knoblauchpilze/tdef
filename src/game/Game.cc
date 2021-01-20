@@ -9,6 +9,8 @@
 # include "Spawner.hh"
 # include "Wall.hh"
 
+# include <iostream>
+
 namespace {
 
   tdef::GameMenuShPtr
@@ -20,6 +22,22 @@ namespace {
           std::make_shared<tdef::SimpleAction>(
             [type](tdef::Game& g) {
               g.setTowerType(type);
+            }
+          )
+        );
+      }
+    );
+  }
+
+  tdef::GameMenuShPtr
+  generateTowerUpgradeMenu(const tdef::towers::Upgrade& upg) {
+    return std::make_shared<tdef::GameMenu>(
+      tdef::towers::toString(upg),
+      [upg](std::vector<tdef::ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<tdef::SimpleAction>(
+            [upg](tdef::Game& g) {
+              g.upgradeTower(upg);
             }
           )
         );
@@ -152,6 +170,37 @@ namespace tdef {
     }
   }
 
+  void
+  Game::upgradeTower(const towers::Upgrade& upgrade) {
+    // Make sure there's a tower to upgrade.
+    if (m_tDisplay.tower == nullptr) {
+      log(
+        "Attempting to upgrade " + towers::toString(upgrade) + " with no active tower",
+        utils::Level::Error
+      );
+
+      return;
+    }
+
+    // Make sure there's enough money.
+    towers::Type t = m_tDisplay.tower->getType();
+    int level = m_tDisplay.tower->getUpgradeLevel(upgrade);
+    float cost = towers::getUpgradeCost(t, upgrade, level);
+    if (m_gold < cost) {
+      log(
+        "Upgrading " + towers::toString(upgrade) + " costs " + std::to_string(cost) +
+        " but only " + std::to_string(m_gold) + "available, aborting",
+        utils::Level::Error
+      );
+
+      return;
+    }
+
+    m_tDisplay.tower->upgrade(upgrade, level);
+    m_gold -= cost;
+    log("'Gold is now " + std::to_string(m_gold) + " due to cost " + std::to_string(cost));
+  }
+
   float
   Game::lives() const noexcept {
     float l = 0.0f;
@@ -189,17 +238,62 @@ namespace tdef {
       fg = menu::newTextContent("Type: " + t);
       m_tDisplay.type->setContent(fg);
 
-      float v = m_tDisplay.tower->getRange();
-      fg = menu::newTextContent("Range: " + std::to_string(v));
-      m_tDisplay.range->setContent(fg);
+      towers::Upgrades ug = m_tDisplay.tower->getUpgrades();
 
-      v = m_tDisplay.tower->getAttack();
-      fg = menu::newTextContent("Damage: " + std::to_string(v));
-      m_tDisplay.damage->setContent(fg);
+      unsigned id = 0u;
+      for (towers::Upgrades::const_iterator it = ug.cbegin() ;
+           it != ug.cend() && id < m_tDisplay.props.size() ;
+           ++it)
+      {
+        float v;
+        switch (it->first) {
+          case towers::Upgrade::Range:
+            v = m_tDisplay.tower->getRange();
+            break;
+          case towers::Upgrade::Damage:
+            v = m_tDisplay.tower->getAttack();
+            break;
+          case towers::Upgrade::RotationSpeed:
+            v = m_tDisplay.tower->getRotationSpeed();
+            break;
+          case towers::Upgrade::AttackSpeed:
+            v = m_tDisplay.tower->getAttackSpeed();
+            break;
+          case towers::Upgrade::ProjectileSpeed:
+            v = m_tDisplay.tower->getProjectileSpeed();
+            break;
+          case towers::Upgrade::FreezingPower:
+          case towers::Upgrade::FreezingSpeed:
+          case towers::Upgrade::FreezingDuration:
+          case towers::Upgrade::PoisonDuration:
+          case towers::Upgrade::StunChance:
+          case towers::Upgrade::StunDuration:
+          default:
+            // Unhandled for now.
+            log("Unhandled props " + towers::toString(it->first), utils::Level::Error);
+            v = -1.0f;
+            break;
+        }
 
-      v = m_tDisplay.tower->getAttackSpeed();
-      fg = menu::newTextContent("Attack speed: " + std::to_string(v));
-      m_tDisplay.attackSpeed->setContent(fg);
+        fg = menu::newTextContent(towers::toString(it->first) + " (" + std::to_string(it->second) + "): " + std::to_string(v));
+        m_tDisplay.props[id]->setContent(fg);
+        m_tDisplay.props[id]->enable(
+          m_gold >= towers::getUpgradeCost(
+            m_tDisplay.tower->getType(),
+            it->first,
+            it->second
+          )
+        );
+
+        ++id;
+      }
+
+      if (id < ug.size()) {
+        log(
+          "Only interpreted " + std::to_string(id) + " among " + std::to_string(ug.size()) + " available",
+          utils::Level::Error
+        );
+      }
     }
 
     if (m_mDisplay.mob != nullptr) {
@@ -260,7 +354,6 @@ namespace tdef {
     m_tMenus[t]->enable(m_gold >= towers::getCost(t));
     t = towers::Type::Missile;
     m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-
   }
 
   MenuShPtr
@@ -401,17 +494,12 @@ namespace tdef {
     m_tDisplay.type = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
     m_tDisplay.main->addMenu(m_tDisplay.type);
 
-    fg = menu::newTextContent("Range: 10");
-    m_tDisplay.range = std::make_shared<Menu>(pos, size, "prop2", bg, fg);
-    m_tDisplay.main->addMenu(m_tDisplay.range);
-
-    fg = menu::newTextContent("Damage: 10");
-    m_tDisplay.damage = std::make_shared<Menu>(pos, size, "prop3", bg, fg);
-    m_tDisplay.main->addMenu(m_tDisplay.damage);
-
-    fg = menu::newTextContent("Attack speed: 10");
-    m_tDisplay.attackSpeed = std::make_shared<Menu>(pos, size, "prop4", bg, fg);
-    m_tDisplay.main->addMenu(m_tDisplay.attackSpeed);
+    for (unsigned id = 0u ; id < UPGRADE_COUNT ; ++id) {
+      // TODO: Should allow the `GameMenu` to change the range. This
+      // will probably include creating a new class.
+      m_tDisplay.props.push_back(generateTowerUpgradeMenu(towers::Upgrade::Range));
+      m_tDisplay.main->addMenu(m_tDisplay.props.back());
+    }
 
     fg = menu::newTextContent("Sell");
     MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop5", bg, fg);

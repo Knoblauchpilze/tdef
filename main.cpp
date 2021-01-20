@@ -13,8 +13,8 @@
 # include "coordinates/TopViewFrame.hh"
 # include "TDefApp.hh"
 
-// TODO: Handle upgrade.
-// TODO: Refine menus.
+// TODO: In case of pause, the upgrade is not updating until the resume
+// is hit which is not working super well.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

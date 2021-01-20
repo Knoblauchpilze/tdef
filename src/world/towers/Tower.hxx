@@ -141,6 +141,33 @@ namespace tdef {
   }
 
   inline
+  towers::Upgrades
+  Tower::getUpgrades() const noexcept {
+    towers::Upgrades us;
+
+    for (unsigned id = 0u ; id < m_upgrades.size() ; ++id) {
+      us[m_upgrades[id].type] = m_upgrades[id].level;
+    }
+
+    return us;
+  }
+
+  inline
+  int
+  Tower::getUpgradeLevel(const towers::Upgrade& upgrade) const noexcept {
+    // Search for the upgrade in the list of available
+    // ones and return the level if available.
+    for (unsigned id = 0u ; id < m_upgrades.size() ; ++id) {
+      if (m_upgrades[id].type == upgrade) {
+        return m_upgrades[id].level;
+      }
+    }
+
+    // The upgrade is not available, return a null level.
+    return 0;
+  }
+
+  inline
   float
   Tower::getAttackSpeed() const noexcept {
     // In case the energy refill is set to `0`, use
@@ -153,6 +180,12 @@ namespace tdef {
     // Otherwise the attack speed is computed as the
     // ratio of the energy refill on the attack cost.
     return m_energyRefill / m_attackCost;
+  }
+
+  inline
+  float
+  Tower::getProjectileSpeed() const noexcept {
+    return m_projectileSpeed;
   }
 
   inline

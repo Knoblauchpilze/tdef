@@ -82,6 +82,12 @@ namespace tdef {
 
   inline
   void
+  WorldElement::markForDeletion(bool toDelete) {
+    m_deleted = toDelete;
+  }
+
+  inline
+  void
   WorldElement::assignProps(Props& pp,
                             const utils::Point2f& p,
                             const utils::Uuid& owner) noexcept
@@ -116,12 +122,6 @@ namespace tdef {
   void
   WorldElement::setOwner(const utils::Uuid& uuid) {
     m_owner = uuid;
-  }
-
-  inline
-  void
-  WorldElement::markForDeletion(bool toDelete) {
-    m_deleted = toDelete;
   }
 
 }

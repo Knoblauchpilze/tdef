@@ -86,6 +86,17 @@ namespace tdef {
     }
 
     // Remove elements marked for deletion.
+    m_blocks.erase(
+      std::remove_if(
+        m_blocks.begin(),
+        m_blocks.end(),
+        [](BlockShPtr block){
+          return block->isDeleted();
+        }
+      ),
+      m_blocks.end()
+    );
+
     m_mobs.erase(
       std::remove_if(
         m_mobs.begin(),

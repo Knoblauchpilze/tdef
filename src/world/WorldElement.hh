@@ -103,6 +103,15 @@ namespace tdef {
              float hit);
 
       /**
+       * @brief - Mark this item for deletion based on the
+       *          status provided in input.
+       * @param toDelete - `true` if the item should be
+       *                   marked for deletion.
+       */
+      void
+      markForDeletion(bool toDelete);
+
+      /**
        * @brief - Interface method caled before the first
        *          execution of this element with the info
        *          on the step at the moment of the spawn.
@@ -211,15 +220,6 @@ namespace tdef {
        */
       void
       setOwner(const utils::Uuid& uuid);
-
-      /**
-       * @brief - Mark this item for deletion based on the
-       *          status provided in input.
-       * @param toDelete - `true` if the item should be
-       *                   marked for deletion.
-       */
-      void
-      markForDeletion(bool toDelete);
 
     protected:
 

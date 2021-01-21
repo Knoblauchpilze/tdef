@@ -222,8 +222,7 @@ namespace tdef {
       ", " + std::to_string(m_gold) + " now available"
     );
 
-    // TODO: Make this available.
-    // m_tDisplay.tower->markForDeletion(true);
+    m_tDisplay.tower->markForDeletion(true);
 
     // Hide the upgrade menu.
     m_tDisplay.main->setVisible(false);
@@ -531,11 +530,24 @@ namespace tdef {
     }
 
     fg = menu::newTextContent("Sell");
-    MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop5", bg, fg);
-    m_tDisplay.main->addMenu(sm);
+    m_tDisplay.main->addMenu(
+      std::make_shared<SimpleMenu>(
+        pos, size,
+        bg, fg,
+        [](std::vector<ActionShPtr>& actions) {
+          actions.push_back(
+            std::make_shared<SimpleAction>(
+              [](Game& g) {
+                g.sellTower();
+              }
+            )
+          );
+        }
+      )
+    );
 
     fg = menu::newTextContent("Target mode");
-    sm = std::make_shared<Menu>(pos, size, "prop6", bg, fg);
+    MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop6", bg, fg);
     m_tDisplay.main->addMenu(sm);
 
     // This menu is hidden until the user clicks on

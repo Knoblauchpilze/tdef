@@ -66,7 +66,7 @@ namespace tdef {
       performAction(float x, float y);
 
       /**
-       * @brief - Used to trigger the uypgrade of the tower
+       * @brief - Used to trigger the upgrade of the tower
        *          currently displayed for the input upgrade
        *          to the next level.
        * @param upgrade - the upgrade to perform on the
@@ -74,6 +74,15 @@ namespace tdef {
        */
       void
       upgradeTower(const towers::Upgrade& upgrade);
+
+      /**
+       * @brief - Used to trigger the selling of the tower
+       *          currently displayed in the upgrade menu.
+       *          The tower will then be removed from the
+       *          game.
+       */
+      void
+      sellTower();
 
       /**
        * @brief - Returns the total remaining lives for all

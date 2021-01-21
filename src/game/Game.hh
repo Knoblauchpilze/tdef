@@ -303,7 +303,7 @@ namespace tdef {
        * @brief - The number of gold that the player is starting
        *          with.
        */
-      static constexpr int BASE_GOLD = 50;
+      static constexpr int BASE_GOLD = 5000;
 
       /**
        * @brief - The base number of lives available before the

@@ -273,6 +273,16 @@ namespace tdef {
       getProjectileSpeed() const noexcept;
 
       /**
+       * @brief - Returns the aggregated cost of this tower,
+       *          which corresponds to the total amount that
+       *          has been spent to perform the upgrades and
+       *          the initial buying cost.
+       * @return - the total cost of the tower.
+       */
+      float
+      getTotalCost() const noexcept;
+
+      /**
        * @brief - Used to perform the upgrade of the tower to
        *          the provided level. In case the upgrade is
        *          not possible for this tower nothing will be

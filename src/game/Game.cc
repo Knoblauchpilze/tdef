@@ -201,6 +201,35 @@ namespace tdef {
     log("Gold is now " + std::to_string(m_gold) + " due to cost " + std::to_string(cost));
   }
 
+  void
+  Game::sellTower() {
+    // Make sure there's a tower to upgrade.
+    if (m_tDisplay.tower == nullptr) {
+      log(
+        "Attempting to sell tower while none is selected",
+        utils::Level::Error
+      );
+
+      return;
+    }
+
+    float cost = m_tDisplay.tower->getTotalCost();
+    m_gold += cost;
+
+    log(
+      "Selling tower " + towers::toString(m_tDisplay.tower->getType()) +
+      " for " + std::to_string(cost) +
+      ", " + std::to_string(m_gold) + " now available"
+    );
+
+    // TODO: Make this available.
+    // m_tDisplay.tower->markForDeletion(true);
+
+    // Hide the upgrade menu.
+    m_tDisplay.main->setVisible(false);
+    m_tDisplay.tower = nullptr;
+  }
+
   float
   Game::lives() const noexcept {
     float l = 0.0f;

@@ -43,6 +43,12 @@ namespace tdef {
     }
   }
 
+  float
+  Tower::getTotalCost() const noexcept {
+    // TODO: Handle this.
+    return 1.0f;
+  }
+
   void
   Tower::upgrade(const towers::Upgrade& upgrade,
                  int level)

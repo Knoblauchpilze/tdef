@@ -71,6 +71,7 @@ namespace tdef {
 
         pp.cost = cost;
 
+        pp.upgrades.clear();
         pp.upgrades.push_back(towers::Upgrade::Range);
         pp.upgrades.push_back(towers::Upgrade::FreezingPower);
         pp.upgrades.push_back(towers::Upgrade::FreezingSpeed);

@@ -44,6 +44,13 @@ namespace tdef {
 
       ~SimpleMenu() = default;
 
+      /**
+       * @brief - Assigns a new action attached to this menu.
+       * @param action - the action attached to the menu.
+       */
+      void
+      setAction(menu::RegisterAction action);
+
     protected:
 
       virtual

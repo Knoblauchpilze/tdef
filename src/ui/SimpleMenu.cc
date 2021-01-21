@@ -15,6 +15,11 @@ namespace tdef {
   {}
 
   void
+  SimpleMenu::setAction(menu::RegisterAction action) {
+    m_callback = action;
+  }
+
+  void
   SimpleMenu::onClick(std::vector<ActionShPtr>& actions) const {
     // Trigger the callback.
     m_callback(actions);

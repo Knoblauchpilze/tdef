@@ -198,7 +198,7 @@ namespace tdef {
 
     m_tDisplay.tower->upgrade(upgrade, level);
     m_gold -= cost;
-    log("'Gold is now " + std::to_string(m_gold) + " due to cost " + std::to_string(cost));
+    log("Gold is now " + std::to_string(m_gold) + " due to cost " + std::to_string(cost));
   }
 
   float
@@ -495,8 +495,8 @@ namespace tdef {
     m_tDisplay.main->addMenu(m_tDisplay.type);
 
     for (unsigned id = 0u ; id < UPGRADE_COUNT ; ++id) {
-      // TODO: Should allow the `GameMenu` to change the range. This
-      // will probably include creating a new class.
+      // Generate a `Range` menu for now, it will be updated
+      // when a tower is selected.
       m_tDisplay.props.push_back(generateTowerUpgradeMenu(towers::Upgrade::Range));
       m_tDisplay.main->addMenu(m_tDisplay.props.back());
     }
@@ -688,6 +688,31 @@ namespace tdef {
 
     // Register the tower as the one being followed.
     m_tDisplay.tower = t;
+
+    // Update the menus to display the props of the
+    // tower.
+    towers::Upgrades ugs = t->getUpgrades();
+
+    unsigned id = 0u;
+    for (towers::Upgrades::const_iterator it = ugs.cbegin() ;
+         it != ugs.cend() && id < m_tDisplay.props.size();
+         ++it)
+    {
+      towers::Upgrade u = it->first;
+
+      m_tDisplay.props[id]->setAction(
+        [u](std::vector<tdef::ActionShPtr>& actions) {
+          actions.push_back(
+            std::make_shared<tdef::SimpleAction>(
+              [u](tdef::Game& g) {
+                g.upgradeTower(u);
+              }
+            )
+          );
+        }
+      );
+      ++id;
+    }
   }
 
   void

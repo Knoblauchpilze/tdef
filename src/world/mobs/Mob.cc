@@ -29,6 +29,7 @@ namespace tdef {
       utils::Duration::zero(),
       1.0f,
       0.0f,
+      props.acceleration,
       utils::now(),
       utils::Duration::zero()
     }),
@@ -43,10 +44,10 @@ namespace tdef {
   }
 
   bool
-  Mob::damage(StepInfo& info,
-              const mobs::Damage& d)
+  Mob::hit(StepInfo& info,
+           const mobs::Damage& d)
   {
-    // TODO: Handle the rest of the effect.
+    // TODO: Handle stunning effect.
     // mobs::Damage
     // V float hit;
     // V float accuracy;
@@ -63,7 +64,7 @@ namespace tdef {
 
     // m_speed
     // V float bSpeed;
-    // X float speed;
+    // V float speed;
     // V utils::TimeStamp tFreeze;
     // V utils::Duration fDuration;
     // V float fSpeed;
@@ -103,10 +104,22 @@ namespace tdef {
     // Refilll the energy.
     m_energy = std::min(m_energy + info.elapsed * m_energyRefill, m_maxEnergy);
 
+    // Handle the speed and poisoning effect.
+    updateSpeed(info);
+    updateHealth(info);
+
+    // Note that in case the mob is now dead (due to
+    // the damage applied in the above method) we do
+    // not want to pursue the process (and possibly
+    // lose a life).
+    if (isDead()) {
+      markForDeletion(true);
+      return;
+    }
+
     // In case we're already following a path, go
     // there.
     if (isEnRoute()) {
-      // TODO: Handle speed and stun.
       m_path.advance(m_speed.speed, info.elapsed, m_rArrival);
       m_pos = m_path.cur;
 
@@ -341,15 +354,89 @@ namespace tdef {
     // We will register a new stack of poison for
     // the mob. This will also refresh the duration
     // of all the stack to last as long as the last
-    // one applied.
-    m_poison.tPoison = info.moment;
-    m_poison.pDuration = d.pDuration;
+    // one applied. We only register the effect in
+    // case the expected duration of the poison will
+    // last longer than the one currently applied.
+    utils::TimeStamp cur = m_poison.tPoison + m_poison.pDuration;
+    utils::TimeStamp better = info.moment + d.pDuration;
+    if (cur < better) {
+      m_poison.tPoison = info.moment;
+      m_poison.pDuration = d.pDuration;
+    }
+
+    log(
+      "Poisoning mob for " + utils::durationToString(d.pDuration) +
+      " and for " + std::to_string(d.hit) +
+      " after " + std::to_string(m_poison.stack) + " stacks(s)" +
+      " already " + std::to_string(m_poison.damage) + " registered"
+    );
 
     // The damage applied per stack is 100% for the
     // first stack, then 50% for the second, 25% for
-    // the third etc.
-    m_poison.damage += std::pow(2.0f, -1.0f * m_poison.stack);
-    ++m_poison.stack;
+    // the third etc. Note that we clamp the number
+    // of poison stacks to a maximum amount.
+    if (m_poison.stack < sk_poisonStacksLimit) {
+      m_poison.damage += d.hit * std::pow(2.0f, -1.0f * m_poison.stack);
+      ++m_poison.stack;
+    }
+  }
+
+  void
+  Mob::updateSpeed(StepInfo& info) {
+    // First, handle stun effect.
+    if (m_speed.tStun + m_speed.sDuration >= info.moment) {
+      m_speed.speed = 0.0f;
+
+      return;
+    }
+
+    // Handle defreezing of mob.
+    if (m_speed.tFreeze + m_speed.fDuration < info.moment) {
+      // Mob is not freezed anymore
+      m_speed.fSpeed = 1.0f;
+      m_speed.sDecrease = 0.0f;
+    }
+
+    // Update the current speed of the mob based
+    // on the desired speed and the acceleration
+    // factor.
+    float target = m_speed.bSpeed * m_speed.fSpeed;
+
+    float mod = m_speed.sIncrease;
+    if (m_speed.sDecrease > 0.0f) {
+      mod = -m_speed.sDecrease;
+    }
+
+    // The modifier is a duration expressed in
+    // seconds so let's compute the delta.
+    float delta = m_speed.speed * mod * info.elapsed;
+
+    // Don't forget to clamp to the max speed and
+    // to the freezing speed.
+    m_speed.speed = std::min(std::max(m_speed.speed + delta, target), m_speed.bSpeed);
+  }
+
+  void
+  Mob::updateHealth(StepInfo& info) {
+    // Deactivate the poisoning in case the effect
+    // has finished.
+    if (m_poison.tPoison + m_poison.pDuration < info.moment) {
+      m_poison.damage = 0.0f;
+
+      // Also reset the stacks: the next application
+      // of poinson will start from scratch.
+      m_poison.stack = 0;
+
+      return;
+    }
+
+    if (m_poison.damage == 0.0f) {
+      return;
+    }
+
+    // Apply the damage per second.
+    log("Poison deals " + std::to_string(m_poison.damage) + " with " + std::to_string(m_poison.stack));
+    damage(info, m_poison.damage * info.elapsed);
   }
 
 }

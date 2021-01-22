@@ -93,7 +93,7 @@ namespace tdef {
         continue;
       }
 
-      bool alive = wounded[id]->damage(info, d);
+      bool alive = wounded[id]->hit(info, d);
 
       if (!alive) {
         log(

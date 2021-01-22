@@ -177,7 +177,11 @@ namespace tdef {
         float projectileSpeed;
         float accuracy;
 
+        // The duration of any effect applied by the tower. It
+        // usually refers to either a freezing or a poisoning
+        // effect. This duration is expressed in milliseconds.
         float duration;
+
         float shootAngle;
         int projectiles;
         float acceleration;

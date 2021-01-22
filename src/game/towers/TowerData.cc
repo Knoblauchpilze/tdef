@@ -25,7 +25,7 @@ namespace tdef {
 
       d.pDuration = data.pDuration;
 
-      return mob->damage(info, d);
+      return mob->hit(info, d);
     }
 
   }

@@ -170,10 +170,10 @@ namespace tdef {
   inline
   float
   Tower::getAttackSpeed() const noexcept {
-    // In case the energy refill is set to `0`, use
-    // a null attack speed as the tower cannot do
-    // more than one attack (at most).
-    if (m_energyRefill <= 0.0f) {
+    // In case the attack cost is set to `0`, use
+    // a null attack speed to indicate that the
+    // tower has an infinite attack speed.
+    if (m_attackCost <= 0.0f) {
       return 0.0f;
     }
 
@@ -208,17 +208,29 @@ namespace tdef {
     // Convert freeze percent to final speed value.
     dd.speed = (100.0f - props.freezePercent) / 100.0f;
     dd.slowdown = props.freezeSpeed;
-    dd.sDuration = utils::toMilliseconds(
-      static_cast<int>(
-        std::round(props.duration)
-      )
-    );
 
-    dd.pDuration = utils::toMilliseconds(
-      static_cast<int>(
-        std::round(props.duration)
-      )
-    );
+    dd.sDuration = utils::Duration::zero();
+    // Only assign the duration in case the freezing
+    // speed is not `0`.
+    if (props.freezePercent > 0.0f) {
+      dd.sDuration = utils::toMilliseconds(
+        static_cast<int>(
+          std::round(props.duration)
+        )
+      );
+    }
+
+    // Assume the duration refers to the poisoning
+    // in case the freezing speed is set to a non
+    // `zero` value.
+    dd.pDuration = utils::Duration::zero();
+    if (dd.sDuration == utils::Duration::zero()) {
+      dd.pDuration = utils::toMilliseconds(
+        static_cast<int>(
+          std::round(props.duration)
+        )
+      );
+    }
 
     return dd;
   }

@@ -5,17 +5,18 @@ namespace tdef {
   namespace mobs {
 
     namespace regular {
-      static const bool poisonable = true;
-      static const bool slowable = true;
-      static const bool stunnable = true;
+      static constexpr bool poisonable = true;
+      static constexpr bool slowable = true;
+      static constexpr bool stunnable = true;
 
-      static const float bounty = 1.0f;
-      static const float speed = 1.0f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 1.0f;
+      static constexpr float speed = 1.0f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 1.0f;
-      static const float shield = 0.0f;
-      static const float shieldEfficiency = 0.0f;
+      static constexpr float health = 1.0f;
+      static constexpr float shield = 0.0f;
+      static constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -24,6 +25,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;
@@ -39,17 +41,18 @@ namespace tdef {
     }
 
     namespace fast {
-      static const bool poisonable = true;
-      static const bool slowable = true;
-      static const bool stunnable = true;
+      static constexpr bool poisonable = true;
+      static constexpr bool slowable = true;
+      static constexpr bool stunnable = true;
 
-      static const float bounty = 0.7f;
-      static const float speed = 1.25f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 0.7f;
+      static constexpr float speed = 1.25f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 800.8f;
-      static const float shield = 0.0f;
-      static const float shieldEfficiency = 0.0f;
+      static constexpr float health = 800.8f;
+      static constexpr float shield = 0.0f;
+      static constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -58,6 +61,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;
@@ -73,17 +77,18 @@ namespace tdef {
     }
 
     namespace strong {
-      static const bool poisonable = true;
-      static const bool slowable = true;
-      static const bool stunnable = true;
+      static constexpr bool poisonable = true;
+      static constexpr bool slowable = true;
+      static constexpr bool stunnable = true;
 
-      static const float bounty = 1.2f;
-      static const float speed = 1.0f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 1.2f;
+      static constexpr float speed = 1.0f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 1.2f;
-      static const float shield = 0.0f;
-      static const float shieldEfficiency = 0.0f;
+      static constexpr float health = 1.2f;
+      static constexpr float shield = 0.0f;
+      static constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -92,6 +97,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;
@@ -107,17 +113,18 @@ namespace tdef {
     }
 
     namespace heli {
-      static const bool poisonable = true;
-      static const bool slowable = true;
-      static const bool stunnable = false;
+      static constexpr bool poisonable = true;
+      static constexpr bool slowable = true;
+      static constexpr bool stunnable = false;
 
-      static const float bounty = 1.0f;
-      static const float speed = 1.0f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 1.0f;
+      static constexpr float speed = 1.0f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 1.0f;
-      static const float shield = 0.0f;
-      static const float shieldEfficiency = 0.0f;
+      static constexpr float health = 1.0f;
+      static constexpr float shield = 0.0f;
+      static constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -126,6 +133,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;
@@ -141,17 +149,18 @@ namespace tdef {
     }
 
     namespace jet {
-      static const bool poisonable = true;
-      static const bool slowable = false;
-      static const bool stunnable = false;
+      static constexpr bool poisonable = true;
+      static constexpr bool slowable = false;
+      static constexpr bool stunnable = false;
 
-      static const float bounty = 1.0f;
-      static const float speed = 1.20f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 1.0f;
+      static constexpr float speed = 1.20f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 0.8f;
-      static const float shield = 0.0f;
-      static const float shieldEfficiency = 0.0f;
+      static constexpr float health = 0.8f;
+      static constexpr float shield = 0.0f;
+      static constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -160,6 +169,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;
@@ -175,17 +185,18 @@ namespace tdef {
     }
 
     namespace armored {
-      static const bool poisonable = true;
-      static const bool slowable = true;
-      static const bool stunnable = true;
+      static constexpr bool poisonable = true;
+      static constexpr bool slowable = true;
+      static constexpr bool stunnable = true;
 
-      static const float bounty = 1.1f;
-      static const float speed = 0.95f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 1.1f;
+      static constexpr float speed = 0.95f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 1.1f;
-      static const float shield = 0.0f;
-      static const float shieldEfficiency = 0.0f;
+      static constexpr float health = 1.1f;
+      static constexpr float shield = 0.0f;
+      static constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -194,6 +205,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;
@@ -209,17 +221,18 @@ namespace tdef {
     }
 
     namespace healer {
-      static const bool poisonable = true;
-      static const bool slowable = true;
-      static const bool stunnable = true;
+      static constexpr bool poisonable = true;
+      static constexpr bool slowable = true;
+      static constexpr bool stunnable = true;
 
-      static const float bounty = 1.15f;
-      static const float speed = 1.0f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 1.15f;
+      static constexpr float speed = 1.0f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 0.95f;
-      static const float shield = 0.0f;
-      static const float shieldEfficiency = 0.0f;
+      static constexpr float health = 0.95f;
+      static constexpr float shield = 0.0f;
+      static constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -228,6 +241,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;
@@ -243,17 +257,18 @@ namespace tdef {
     }
 
     namespace toxic {
-      static const bool poisonable = false;
-      static const bool slowable = true;
-      static const bool stunnable = true;
+      static constexpr bool poisonable = false;
+      static constexpr bool slowable = true;
+      static constexpr bool stunnable = true;
 
-      static const float bounty = 1.0f;
-      static const float speed = 1.0f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 1.0f;
+      static constexpr float speed = 1.0f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 1.0f;
-      static const float shield = 0.0f;
-      static const float shieldEfficiency = 0.0f;
+      static constexpr float health = 1.0f;
+      static constexpr float shield = 0.0f;
+      static constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -262,6 +277,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;
@@ -277,17 +293,18 @@ namespace tdef {
     }
 
     namespace icy {
-      static const bool poisonable = true;
-      static const bool slowable = false;
-      static const bool stunnable = false;
+      static constexpr bool poisonable = true;
+      static constexpr bool slowable = false;
+      static constexpr bool stunnable = false;
 
-      static const float bounty = 0.8f;
-      static const float speed = 1.05f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 0.8f;
+      static constexpr float speed = 1.05f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 0.8f;
-      static const float shield = 0.5f;
-      static const float shieldEfficiency = 0.8f;
+      static constexpr float health = 0.8f;
+      static constexpr float shield = 0.5f;
+      static constexpr float shieldEfficiency = 0.8f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -296,6 +313,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;
@@ -311,17 +329,18 @@ namespace tdef {
     }
 
     namespace fighter {
-      static const bool poisonable = true;
-      static const bool slowable = true;
-      static const bool stunnable = true;
+      static constexpr bool poisonable = true;
+      static constexpr bool slowable = true;
+      static constexpr bool stunnable = true;
 
-      static const float bounty = 1.0f;
-      static const float speed = 1.0f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 1.0f;
+      static constexpr float speed = 1.0f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 1.0f;
-      static const float shield = 0.0f;
-      static const float shieldEfficiency = 0.0f;
+      static constexpr float health = 1.0f;
+      static constexpr float shield = 0.0f;
+      static constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -330,6 +349,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;
@@ -345,17 +365,18 @@ namespace tdef {
     }
 
     namespace light {
-      static const bool poisonable = true;
-      static const bool slowable = true;
-      static const bool stunnable = true;
+      static constexpr bool poisonable = true;
+      static constexpr bool slowable = true;
+      static constexpr bool stunnable = true;
 
-      static const float bounty = 1.1f;
-      static const float speed = 1.0f;
-      static const float lives = 1.0f;
+      static constexpr float bounty = 1.1f;
+      static constexpr float speed = 1.0f;
+      static constexpr float acceleration = 1.0f;
+      static constexpr float lives = 1.0f;
 
-      static const float health = 0.95f;
-      static const float shield = 0.0f;
-      static const float shieldEfficiency = 0.0f;
+      static constexpr float health = 0.95f;
+      static constexpr float shield = 0.0f;
+      static constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
@@ -364,6 +385,7 @@ namespace tdef {
         pp.health = health;
 
         pp.speed = speed;
+        pp.acceleration = acceleration;
         pp.bounty = bounty;
 
         pp.shield = shield;

@@ -117,7 +117,17 @@ namespace tdef {
         float maxEnergy;
         float refill;
 
+        // Defines the base speed of the mob without any
+        // modifiers. This is the speed that is reached
+        // by the mob given enough free time.
         float speed;
+
+        // Defines the acceleration rate for this mob.
+        // It is applied to get back up to seepd in case
+        // it has been slowed down for some reasons.
+        // This is defined as unit of speed per second.
+        float acceleration;
+
         float arrival;
 
         float bounty;
@@ -204,8 +214,8 @@ namespace tdef {
        * @return - `true` if the mob is still alive.
        */
       bool
-      damage(StepInfo& info,
-             const mobs::Damage& d);
+      hit(StepInfo& info,
+          const mobs::Damage& d);
 
       void
       init(StepInfo& info) override;
@@ -271,6 +281,25 @@ namespace tdef {
       applyPoison(StepInfo& info,
                   const mobs::Damage& d);
 
+      /**
+       * @brief - Used every frame to update the speed of the mob
+       *          based on the current effects applied to it. The
+       *          aim of this method is to have a usable speed at
+       *          the end of the function.
+       * @param info - information about the elapsed step.
+       */
+      void
+      updateSpeed(StepInfo& info);
+
+      /**
+       * @brief - Used every frame to update the health of the
+       *          mob based on the damage it's taking from applied
+       *          effects.
+       * @param info - information about the elapsed step.
+       */
+      void
+      updateHealth(StepInfo& info);
+
     private:
 
       /**
@@ -316,6 +345,12 @@ namespace tdef {
         // in the range `[0; 1]`.
         float sDecrease;
 
+        // Defines the speed at which the mob is accelerating
+        // when the speed is slower than the desired one. As
+        // for the `sDecrease` it is expressed as a percentage
+        // of the speed that is gained each second.
+        float sIncrease;
+
         // Defines the timestamp when this mob was stunned.
         utils::TimeStamp tStun;
 
@@ -360,6 +395,12 @@ namespace tdef {
        *          the shield is affected by each hit.
        */
       static constexpr float sk_shieldHitDurab = 0.01f;
+
+      /**
+       * @brief - The maximum number of poison stacks to be
+       *          applied to a mob.
+       */
+      static constexpr int sk_poisonStacksLimit = 5;
 
       /**
        * @brief - The type of the mob. This is mostly used

@@ -53,6 +53,7 @@ namespace tdef {
     pp.refill = 0.01f;
 
     pp.speed = 1.0f;
+    pp.acceleration = 1.0f;
     pp.arrival = 0.0001f;
 
     pp.bounty = 1.0f;

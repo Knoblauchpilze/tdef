@@ -15,6 +15,7 @@
 
 // TODO: In case of pause, the upgrade is not updating until the resume
 // is hit which is not working super well.
+// TODO: Some mobs seem to have really high speed.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

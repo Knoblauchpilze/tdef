@@ -75,12 +75,14 @@ namespace tdef {
       return;
     }
 
-    log(
-      "Hitting mob " + mobs::toString(m_target->getType()) +
-      " at " + m_target->getPos().toString() +
-      " for " + std::to_string(m_attack.damage) + " damage" +
-      " (health: " + std::to_string(m_target->getHealth()) + ")"
-    );
+    if (m_attack.damage > 0.0f) {
+      log(
+        "Hitting mob " + mobs::toString(m_target->getType()) +
+        " at " + m_target->getPos().toString() +
+        " for " + std::to_string(m_attack.damage) + " damage" +
+        " (health: " + std::to_string(m_target->getHealth()) + ")"
+      );
+    }
 
     // Hit the mob with a devastating attack. Note that
     // in case the attack destroys the mob it will be

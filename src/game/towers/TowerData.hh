@@ -20,7 +20,7 @@ namespace tdef {
     /**
      * @brief - Defines a tower with infinite attack speed.
      */
-    constexpr float infinite_attack_speed = 100.0f;
+    constexpr float infinite_attack_speed = 0.0f;
 
     /**
      * @brief - Defines a tower with no speed decrease on

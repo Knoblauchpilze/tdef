@@ -683,7 +683,10 @@ namespace tdef {
     Tower::TProps pp = towers::generateProps(*m_tType, p);
     towers::Data td = towers::generateData(*m_tType);
 
-    log("Generated tower " + std::to_string(static_cast<int>(*m_tType)) + " at " + p.toString());
+    log(
+      "Generated tower " + towers::toString(*m_tType) + " at " + p.toString(),
+      utils::Level::Info
+    );
 
     TowerShPtr t = std::make_shared<Tower>(pp, td);
     m_world->spawn(t);

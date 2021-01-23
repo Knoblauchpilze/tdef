@@ -47,37 +47,6 @@ namespace tdef {
   Mob::hit(StepInfo& info,
            const mobs::Damage& d)
   {
-    // TODO: Handle stunning effect.
-    // mobs::Damage
-    // V float hit;
-    // V float accuracy;
-    // V float speed;
-    // V float sDecraseSpeed;
-    // V utils::Duration sDuration;
-    // V utils::Duration pDuration;
-
-    // m_defense
-    // V float shield;
-    // V bool poisonable;
-    // V bool slowable;
-    // X bool stunnable;
-
-    // m_speed
-    // V float bSpeed;
-    // V float speed;
-    // V utils::TimeStamp tFreeze;
-    // V utils::Duration fDuration;
-    // V float fSpeed;
-    // V float sDecrease.
-    // X utils::TimeStamp tStun;
-    // X utils::Duration sDuration:
-
-    // m_poison
-    // V float damage;
-    // V int stack;
-    // V utils::TimeStamp tPoison;
-    // V utils::Duration pDuration;
-
     // First thing is to determine whether the
     // hit succeeded through the accuracy.
     float rnd = info.rng.rndFloat(0.0f, 1.0f);
@@ -89,6 +58,7 @@ namespace tdef {
     // Handle each type of damage.
     applyDamage(info, d);
     applyFreezing(info, d);
+    applyStunning(info, d);
     applyPoison(info, d);
 
     // Register this mob for deletion in case it
@@ -330,11 +300,44 @@ namespace tdef {
       m_speed.tFreeze = info.moment;
       m_speed.fSpeed = d.speed;
 
-      m_speed.fDuration = d.sDuration;
+      m_speed.fDuration = d.fDuration;
       // Convert the decrease provided in the input
       // data to a value in the range `[0; 1]`.
       m_speed.sDecrease = d.sDecraseSpeed / 100.0f;
     }
+  }
+
+  void
+  Mob::applyStunning(StepInfo& info,
+                     const mobs::Damage& d)
+  {
+    // Mob is not stunnable, abort.
+    if (!m_defense.stunnable) {
+      return;
+    }
+
+    // Damage does not define stunning data, abort.
+    if (d.stunProb == 0.0f) {
+      return;
+    }
+
+    // Check whether the mob is stunned.
+    if (info.rng.rndFloat(0.0f, 1.0f) > d.stunProb) {
+      return;
+    }
+
+    // The mob is now stunned: we will only apply
+    // the effect in case the new stun effect is
+    // lasting longer than the currently applied
+    // one.
+    utils::TimeStamp cur = m_speed.tStun + m_speed.sDuration;
+    utils::TimeStamp better = info.moment + d.sDuration;
+    if (cur > better) {
+      return;
+    }
+
+    m_speed.tStun = info.moment;
+    m_speed.sDuration = d.sDuration;
   }
 
   void
@@ -402,18 +405,46 @@ namespace tdef {
     // factor.
     float target = m_speed.bSpeed * m_speed.fSpeed;
 
+    // Compute the modifier that will be applied
+    // to the speed of this mob. This will either
+    // be equal tot he `sDecrease` in case the
+    // current speed is larger than the desired
+    // speed and `sIncrease` in case the current
+    // speed is smaller.
     float mod = m_speed.sIncrease;
-    if (m_speed.sDecrease > 0.0f) {
+    if (m_speed.speed > target) {
       mod = -m_speed.sDecrease;
     }
 
     // The modifier is a duration expressed in
-    // seconds so let's compute the delta.
-    float delta = m_speed.speed * mod * info.elapsed;
+    // seconds so let's compute the delta. Note
+    // though that in case the speed is very
+    // small it would also mean that the rate
+    // of acceleration/deceleration would be
+    // also very slow.
+    // So we take the max between the current
+    // speed and the target speed so that we
+    // always vary the quickest.
+    float delta = std::max(m_speed.speed, target) * mod * info.elapsed;
 
-    // Don't forget to clamp to the max speed and
-    // to the freezing speed.
-    m_speed.speed = std::min(std::max(m_speed.speed + delta, target), m_speed.bSpeed);
+    // Don't forget to clamp the final speed to be
+    // consistent with what we desire.
+    // We can't really use a min/max approach as
+    // the only real bounds would be `0` and the
+    // `base speed` but this tells nothing as to a
+    // freezed speed for example (typically this
+    // is *not* a lower bound as if the mob was
+    // stunned we will have a lower speed than the
+    // target).
+    // So we follow an approach where we clamp in
+    // accordance to the speed modifier (so whether
+    // or not we're accelerating).
+    if (mod > 0) {
+      m_speed.speed = std::min(std::max(m_speed.speed + delta, 0.0f), target);
+    }
+    else {
+      m_speed.speed = std::max(m_speed.speed + delta, target);
+    }
   }
 
   void
@@ -435,7 +466,6 @@ namespace tdef {
     }
 
     // Apply the damage per second.
-    log("Poison deals " + std::to_string(m_poison.damage) + " with " + std::to_string(m_poison.stack));
     damage(info, m_poison.damage * info.elapsed);
   }
 

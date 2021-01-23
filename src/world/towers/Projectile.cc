@@ -19,8 +19,11 @@ namespace tdef {
 
     m_freezePercent(props.freezePercent),
     m_freezeSpeed(props.freezeSpeed),
-    m_freezeDuration(props.freezeDuration),
 
+    m_stunProb(std::min(std::max(props.stunProb, 0.0f), 1.0f)),
+
+    m_freezeDuration(props.freezeDuration),
+    m_stunDuration(props.stunDuration),
     m_poisonDuration(props.poisonDuration)
   {
     setService("projectile");
@@ -66,8 +69,10 @@ namespace tdef {
 
     d.speed = m_freezePercent;
     d.sDecraseSpeed = m_freezeSpeed;
-    d.sDuration = m_freezeDuration;
+    d.stunProb = m_stunProb;
 
+    d.fDuration = m_freezeDuration;
+    d.sDuration = m_stunDuration;
     d.pDuration = m_poisonDuration;
 
     for (unsigned id = 0; id < wounded.size() ; ++id) {

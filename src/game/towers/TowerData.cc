@@ -21,8 +21,11 @@ namespace tdef {
 
       d.speed = data.speed;
       d.sDecraseSpeed = data.slowdown;
-      d.sDuration = data.sDuration;
 
+      d.stunProb = data.stunProb;
+
+      d.fDuration = data.fDuration;
+      d.sDuration = data.sDuration;
       d.pDuration = data.pDuration;
 
       return mob->hit(info, d);

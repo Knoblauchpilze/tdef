@@ -209,27 +209,32 @@ namespace tdef {
     dd.speed = (100.0f - props.freezePercent) / 100.0f;
     dd.slowdown = props.freezeSpeed;
 
-    dd.sDuration = utils::Duration::zero();
+    utils::Duration d = utils::toMilliseconds(static_cast<int>(std::round(props.duration)));
+
+    dd.fDuration = utils::Duration::zero();
     // Only assign the duration in case the freezing
     // speed is not `0`.
     if (props.freezePercent > 0.0f) {
-      dd.sDuration = utils::toMilliseconds(
-        static_cast<int>(
-          std::round(props.duration)
-        )
-      );
+      dd.fDuration = d;
+    }
+
+    // Only assign the duration in case the stun prob
+    // is not `0` and the freezing percentage indicates
+    // no freezing.
+    dd.stunProb = 0.0f;
+    if (dd.fDuration == utils::Duration::zero()) {
+      dd.stunProb = props.stunProb;
+      dd.sDuration = d;
     }
 
     // Assume the duration refers to the poisoning
-    // in case the freezing speed is set to a non
-    // `zero` value.
+    // in case the freezing speed is set to a `zero`
+    // value and no stun chance is defined.
     dd.pDuration = utils::Duration::zero();
-    if (dd.sDuration == utils::Duration::zero()) {
-      dd.pDuration = utils::toMilliseconds(
-        static_cast<int>(
-          std::round(props.duration)
-        )
-      );
+    if (dd.fDuration == utils::Duration::zero() &&
+        dd.stunProb <= 0.0f)
+    {
+      dd.pDuration = d;
     }
 
     return dd;

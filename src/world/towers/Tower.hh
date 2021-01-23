@@ -56,7 +56,17 @@ namespace tdef {
       // target is reduced every second.
       float slowdown;
 
-      // The duration of the slow factor applied to the
+      // Defines the chances that the target of the damage
+      // becomes stunned. This value is in the range `[0; 1]`
+      // where `0` means no chance to be stunned and `1` a
+      // 100% chance to be stunned.
+      float stunProb;
+
+      // The duration of the freezing factor applied to the
+      // target of the damage.
+      utils::Duration fDuration;
+
+      // The duration of the stunning effect applied to the
       // target of the damage.
       utils::Duration sDuration;
 
@@ -195,6 +205,15 @@ namespace tdef {
         // of this tower.
         float freezeSpeed;
 
+        // Defines a value in the range `[0; 1]` indicating
+        // how likely it is for the tower to stun an enemy.
+        float stunProb;
+
+        // Defines the amount of energy that each shot fired
+        // by the tire cost. If this value is `0` it means
+        // that the tower can shoot indefinitely often. In
+        // any other case the speed at which shots are fired
+        // will depend on the energy refill.
         float attackCost;
 
         // Defines the cost in resource for a tower. This

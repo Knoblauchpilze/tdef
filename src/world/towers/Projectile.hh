@@ -25,12 +25,24 @@ namespace tdef {
 
         float freezePercent;
         float freezeSpeed;
+
+        // A value in the range `[0; 1]` indicating how
+        // likely it is that this projectil stuns the
+        // target.
+        float stunProb;
+
+        // Duration of the freezing effect applied by the
+        // projectile, expressed in milliseconds.
         utils::Duration freezeDuration;
 
-        // Note that in case of the duration being
-        // not null we will consider that damage
-        // is indeed applied as poison and will be
-        // applied for this duration.
+        // Duration of the stunning effect applied by the
+        // projectile, expressed in milliseconds.
+        utils::Duration stunDuration;
+
+        // Duration of the poisoning effect applied by the
+        // projectile, expressed in milliseconds. Note that
+        // in case the duration is not zero we will assign
+        // the damage as poison damage.
         utils::Duration poisonDuration;
       };
 
@@ -125,10 +137,23 @@ namespace tdef {
       float m_freezeSpeed;
 
       /**
+       * @brief - A value in the range `[0; 1]` indicating how
+       *          likely it is for this projectile to stun its
+       *          target.
+       */
+      float m_stunProb;
+
+      /**
        * @brief - The duration of the freeze effect for this
        *          projectile. Expressed in milliseconds.
        */
       utils::Duration m_freezeDuration;
+
+      /**
+       * @brief - The duration of the stun effect for this
+       *          projectile. Expressed in milliseconds.
+       */
+      utils::Duration m_stunDuration;
 
       /**
        * @brief - The duration of the poisoning effect of

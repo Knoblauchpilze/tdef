@@ -19,13 +19,17 @@ namespace tdef {
       constexpr float projectileSpeed = infinite_projectile_speed;
       constexpr float accuracy = 1.0f;
 
-      constexpr float duration = 0.0f;
+      // TODO: 2.0 + 0.1 * Tower level
+      constexpr float duration = 2000.0f;
       constexpr float shootAngle = 360.0f;
       constexpr int projectiles = 1;
       constexpr float acceleration = 0.0f;
 
       constexpr float freezePercent = no_speed_decrease;
       constexpr float freezeSpeed = 0.0f;
+
+      // TODO: 15.0 + 1 * Tower upgrade level
+      constexpr float stunProb = 0.15f;
 
       constexpr float cost = 75.0f;
 
@@ -66,6 +70,8 @@ namespace tdef {
 
         pp.freezePercent = freezePercent;
         pp.freezeSpeed = freezeSpeed;
+
+        pp.stunProb = stunProb;
 
         pp.attackCost = attackSpeed;
 

@@ -56,7 +56,6 @@ namespace tdef {
         pp.damage = damage;
         pp.aoeRadius = aoeRadius;
 
-        pp.attackSpeed = attackSpeed;
         pp.rotation = rotation;
         pp.aimSpeed = aimSpeed;
         pp.projectileSpeed = projectileSpeed;

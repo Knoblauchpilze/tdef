@@ -25,6 +25,13 @@ namespace tdef {
     m_aoeRadius(props.aoeRadius),
     m_shootAngle(props.shootAngle),
     m_projectileSpeed(props.projectileSpeed),
+    m_aimSpeed(
+      utils::toMilliseconds(
+        static_cast<int>(
+          std::round(props.aimSpeed)
+        )
+      )
+    ),
 
     m_attack(fromProps(props)),
     m_processes(desc),
@@ -69,6 +76,8 @@ namespace tdef {
       // yet.
       return;
     }
+
+    // TODO: Handle aiming speed.
 
     // Check whether we can attack.
     if (m_energy < m_attackCost) {

@@ -166,7 +166,7 @@ namespace tdef {
       spriteCoords(const Pack& pack,
                    const olc::vi2d& coord,
                    int id = 0) const;
-  
+
     private:
 
       /**

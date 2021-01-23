@@ -303,9 +303,7 @@ namespace tdef {
       m_speed.fSpeed = d.speed;
 
       m_speed.fDuration = d.fDuration;
-      // Convert the decrease provided in the input
-      // data to a value in the range `[0; 1]`.
-      m_speed.sDecrease = d.sDecraseSpeed / 100.0f;
+      m_speed.sDecrease = d.sDecraseSpeed;
     }
   }
 

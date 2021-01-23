@@ -117,24 +117,28 @@ namespace tdef {
       MobShPtr m = std::dynamic_pointer_cast<Mob>(we);
       if (m != nullptr) {
         displayMob(m);
+        updateUI();
         return;
       }
 
       TowerShPtr t = std::dynamic_pointer_cast<Tower>(we);
       if (t != nullptr) {
         displayTower(t);
+        updateUI();
         return;
       }
 
       SpawnerShPtr s = std::dynamic_pointer_cast<Spawner>(we);
       if (s != nullptr) {
         displaySpawner(s);
+        updateUI();
         return;
       }
 
       WallShPtr w = std::dynamic_pointer_cast<Wall>(we);
       if (w != nullptr) {
         displayWall(w);
+        updateUI();
         return;
       }
 
@@ -199,6 +203,8 @@ namespace tdef {
     m_tDisplay.tower->upgrade(upgrade, level);
     m_gold -= cost;
     log("Gold is now " + std::to_string(m_gold) + " due to cost " + std::to_string(cost));
+
+    updateUI();
   }
 
   void
@@ -227,6 +233,8 @@ namespace tdef {
     // Hide the upgrade menu.
     m_tDisplay.main->setVisible(false);
     m_tDisplay.tower = nullptr;
+
+    updateUI();
   }
 
   float
@@ -247,141 +255,14 @@ namespace tdef {
 
   void
   Game::step(float tDelta) {
+    // Step the world.
     m_world->step(tDelta);
 
-    // Update the status based on the game data.
+    // Update lives.
     m_lives = lives();
 
-    int v = static_cast<int>(m_lives);
-    menu::MenuContentDesc fg = menu::newTextContent("Lives: " + std::to_string(v));
-    m_mLives->setContent(fg);
-
-    v = static_cast<int>(m_gold);
-    fg = menu::newTextContent("Gold: " + std::to_string(v));
-    m_mGold->setContent(fg);
-
-    // Update display values for visible menus.
-    if (m_tDisplay.tower != nullptr) {
-      std::string t = towers::toString(m_tDisplay.tower->getType());
-      fg = menu::newTextContent("Type: " + t);
-      m_tDisplay.type->setContent(fg);
-
-      towers::Upgrades ug = m_tDisplay.tower->getUpgrades();
-
-      unsigned id = 0u;
-      for (towers::Upgrades::const_iterator it = ug.cbegin() ;
-           it != ug.cend() && id < m_tDisplay.props.size() ;
-           ++it)
-      {
-        float v;
-        switch (it->first) {
-          case towers::Upgrade::Range:
-            v = m_tDisplay.tower->getRange();
-            break;
-          case towers::Upgrade::Damage:
-            v = m_tDisplay.tower->getAttack();
-            break;
-          case towers::Upgrade::RotationSpeed:
-            v = m_tDisplay.tower->getRotationSpeed();
-            break;
-          case towers::Upgrade::AttackSpeed:
-            v = m_tDisplay.tower->getAttackSpeed();
-            break;
-          case towers::Upgrade::ProjectileSpeed:
-            v = m_tDisplay.tower->getProjectileSpeed();
-            break;
-          case towers::Upgrade::FreezingPower:
-          case towers::Upgrade::FreezingSpeed:
-          case towers::Upgrade::FreezingDuration:
-          case towers::Upgrade::PoisonDuration:
-          case towers::Upgrade::StunChance:
-          case towers::Upgrade::StunDuration:
-          default:
-            // Unhandled for now.
-            log("Unhandled props " + towers::toString(it->first), utils::Level::Error);
-            v = -1.0f;
-            break;
-        }
-
-        fg = menu::newTextContent(towers::toString(it->first) + " (" + std::to_string(it->second) + "): " + std::to_string(v));
-        m_tDisplay.props[id]->setContent(fg);
-        m_tDisplay.props[id]->enable(
-          m_gold >= towers::getUpgradeCost(
-            m_tDisplay.tower->getType(),
-            it->first,
-            it->second
-          )
-        );
-
-        ++id;
-      }
-
-      if (id < ug.size()) {
-        log(
-          "Only interpreted " + std::to_string(id) + " among " + std::to_string(ug.size()) + " available",
-          utils::Level::Error
-        );
-      }
-    }
-
-    if (m_mDisplay.mob != nullptr) {
-      std::string t = mobs::toString(m_mDisplay.mob->getType());
-      fg = menu::newTextContent("Type: " + t);
-      m_mDisplay.type->setContent(fg);
-
-      float v = m_mDisplay.mob->getHealth();
-      fg = menu::newTextContent("Health: " + std::to_string(v));
-      m_mDisplay.health->setContent(fg);
-
-      v = m_mDisplay.mob->getSpeed();
-      fg = menu::newTextContent("Speed: " + std::to_string(v));
-      m_mDisplay.speed->setContent(fg);
-
-      v = m_mDisplay.mob->getBounty();
-      fg = menu::newTextContent("Bounty: " + std::to_string(v));
-      m_mDisplay.bounty->setContent(fg);
-    }
-
-    if (m_sDisplay.spawner != nullptr) {
-      float v = m_sDisplay.spawner->getHealth();
-      fg = menu::newTextContent("Health: " + std::to_string(v));
-      m_sDisplay.health->setContent(fg);
-    }
-    
-    if (m_wDisplay.wall != nullptr) {
-      float v = m_wDisplay.wall->getHealth();
-      fg = menu::newTextContent("Health: " + std::to_string(v));
-      m_wDisplay.health->setContent(fg);
-    }
-
-    // Update status for tower's construction.
-    // Note that we assume all the menus are
-    // already registered in the map. If this
-    // is not the case UB will arise.
-    towers::Type t = towers::Type::Basic;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Sniper;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Cannon;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Freezing;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Venom;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Splash;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Blast;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Multishot;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Minigun;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Antiair;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Tesla;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
-    t = towers::Type::Missile;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    // And redraw the UI.
+    updateUI();
   }
 
   MenuShPtr
@@ -789,6 +670,142 @@ namespace tdef {
 
     // Register the wall as the one being followed.
     m_wDisplay.wall = w;
+  }
+
+  void
+  Game::updateUI() {
+    // Update status menu.
+    int v = static_cast<int>(m_lives);
+    menu::MenuContentDesc fg = menu::newTextContent("Lives: " + std::to_string(v));
+    m_mLives->setContent(fg);
+
+    v = static_cast<int>(m_gold);
+    fg = menu::newTextContent("Gold: " + std::to_string(v));
+    m_mGold->setContent(fg);
+
+    // Update display values for visible menus.
+    if (m_tDisplay.tower != nullptr) {
+      std::string t = towers::toString(m_tDisplay.tower->getType());
+      fg = menu::newTextContent("Type: " + t);
+      m_tDisplay.type->setContent(fg);
+
+      towers::Upgrades ug = m_tDisplay.tower->getUpgrades();
+
+      unsigned id = 0u;
+      for (towers::Upgrades::const_iterator it = ug.cbegin() ;
+           it != ug.cend() && id < m_tDisplay.props.size() ;
+           ++it)
+      {
+        float v;
+        switch (it->first) {
+          case towers::Upgrade::Range:
+            v = m_tDisplay.tower->getRange();
+            break;
+          case towers::Upgrade::Damage:
+            v = m_tDisplay.tower->getAttack();
+            break;
+          case towers::Upgrade::RotationSpeed:
+            v = m_tDisplay.tower->getRotationSpeed();
+            break;
+          case towers::Upgrade::AttackSpeed:
+            v = m_tDisplay.tower->getAttackSpeed();
+            break;
+          case towers::Upgrade::ProjectileSpeed:
+            v = m_tDisplay.tower->getProjectileSpeed();
+            break;
+          case towers::Upgrade::FreezingPower:
+          case towers::Upgrade::FreezingSpeed:
+          case towers::Upgrade::FreezingDuration:
+          case towers::Upgrade::PoisonDuration:
+          case towers::Upgrade::StunChance:
+          case towers::Upgrade::StunDuration:
+          default:
+            // Unhandled for now.
+            // TODO: Handle this.
+            // log("Unhandled props " + towers::toString(it->first), utils::Level::Error);
+            v = -1.0f;
+            break;
+        }
+
+        fg = menu::newTextContent(towers::toString(it->first) + " (" + std::to_string(it->second) + "): " + std::to_string(v));
+        m_tDisplay.props[id]->setContent(fg);
+        m_tDisplay.props[id]->enable(
+          m_gold >= towers::getUpgradeCost(
+            m_tDisplay.tower->getType(),
+            it->first,
+            it->second
+          )
+        );
+
+        ++id;
+      }
+
+      if (id < ug.size()) {
+        log(
+          "Only interpreted " + std::to_string(id) + " among " + std::to_string(ug.size()) + " available",
+          utils::Level::Error
+        );
+      }
+    }
+
+    if (m_mDisplay.mob != nullptr) {
+      std::string t = mobs::toString(m_mDisplay.mob->getType());
+      fg = menu::newTextContent("Type: " + t);
+      m_mDisplay.type->setContent(fg);
+
+      float v = m_mDisplay.mob->getHealth();
+      fg = menu::newTextContent("Health: " + std::to_string(v));
+      m_mDisplay.health->setContent(fg);
+
+      v = m_mDisplay.mob->getSpeed();
+      fg = menu::newTextContent("Speed: " + std::to_string(v));
+      m_mDisplay.speed->setContent(fg);
+
+      v = m_mDisplay.mob->getBounty();
+      fg = menu::newTextContent("Bounty: " + std::to_string(v));
+      m_mDisplay.bounty->setContent(fg);
+    }
+
+    if (m_sDisplay.spawner != nullptr) {
+      float v = m_sDisplay.spawner->getHealth();
+      fg = menu::newTextContent("Health: " + std::to_string(v));
+      m_sDisplay.health->setContent(fg);
+    }
+    
+    if (m_wDisplay.wall != nullptr) {
+      float v = m_wDisplay.wall->getHealth();
+      fg = menu::newTextContent("Health: " + std::to_string(v));
+      m_wDisplay.health->setContent(fg);
+    }
+
+    // Update status for tower's construction.
+    // Note that we assume all the menus are
+    // already registered in the map. If this
+    // is not the case UB will arise.
+    towers::Type t = towers::Type::Basic;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Sniper;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Cannon;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Freezing;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Venom;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Splash;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Blast;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Multishot;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Minigun;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Antiair;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Tesla;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    t = towers::Type::Missile;
+    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
   }
 
 }

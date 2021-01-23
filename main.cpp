@@ -13,8 +13,6 @@
 # include "coordinates/TopViewFrame.hh"
 # include "TDefApp.hh"
 
-// TODO: In case of pause, the upgrade is not updating until the resume
-// is hit which is not working super well.
 // TODO: Some mobs seem to have really high speed.
 // TODO: Projectiles seem to keep being alive for some time.
 

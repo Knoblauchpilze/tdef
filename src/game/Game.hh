@@ -306,6 +306,14 @@ namespace tdef {
       void
       updateGold(float earned);
 
+      /**
+       * @brief - Used during the step function and by any process
+       *          that needs to update the UI and the text content
+       *          of menus.
+       */
+      void
+      updateUI();
+
     private:
 
       /**

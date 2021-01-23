@@ -1,6 +1,7 @@
 
 # include "Game.hh"
 # include <cxxabi.h>
+# include <maths_utils/AngleUtils.hh>
 # include "TowerFactory.hh"
 # include "GameMenu.hh"
 # include "SimpleAction.hh"
@@ -8,8 +9,6 @@
 # include "Tower.hh"
 # include "Spawner.hh"
 # include "Wall.hh"
-
-# include <iostream>
 
 namespace {
 
@@ -387,8 +386,8 @@ namespace tdef {
   Game::generateUpgradeMenu(const olc::vi2d& dims) {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
-    const olc::vi2d pos(dims.x - 150, 20);
-    const olc::vf2d size(150, dims.y - 20 - 50);
+    const olc::vi2d pos(dims.x - 250, 20);
+    const olc::vf2d size(250, dims.y - 20 - 50);
 
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
@@ -697,37 +696,85 @@ namespace tdef {
            ++it)
       {
         float v;
+        bool intVal = false;
+        std::string unit;
+
         switch (it->first) {
           case towers::Upgrade::Range:
             v = m_tDisplay.tower->getRange();
             break;
           case towers::Upgrade::Damage:
             v = m_tDisplay.tower->getAttack();
+            intVal = true;
             break;
           case towers::Upgrade::RotationSpeed:
-            v = m_tDisplay.tower->getRotationSpeed();
+            v = utils::radToDeg(m_tDisplay.tower->getRotationSpeed());
+            intVal = true;
+            unit = "deg";
             break;
           case towers::Upgrade::AttackSpeed:
             v = m_tDisplay.tower->getAttackSpeed();
             break;
           case towers::Upgrade::ProjectileSpeed:
             v = m_tDisplay.tower->getProjectileSpeed();
+            intVal = true;
             break;
           case towers::Upgrade::FreezingPower:
+            v = m_tDisplay.tower->getFreezingPower();
+            intVal = true;
+            unit = "%";
+            break;
           case towers::Upgrade::FreezingSpeed:
+            v = m_tDisplay.tower->getFreezingSpeed();
+            intVal = true;
+            unit = "%";
+            break;
           case towers::Upgrade::FreezingDuration:
+            v = utils::toMilliseconds(m_tDisplay.tower->getFreezingDuration()) / 1000.0f;
+            intVal = true;
+            unit = "s";
+            break;
           case towers::Upgrade::PoisonDuration:
+            v = utils::toMilliseconds(m_tDisplay.tower->getPoisonDuration()) / 1000.0f;
+            intVal = true;
+            unit = "s";
+            break;
           case towers::Upgrade::StunChance:
+            v = m_tDisplay.tower->getStunChance();
+            intVal = true;
+            unit = "%";
+            break;
           case towers::Upgrade::StunDuration:
+            v = utils::toMilliseconds(m_tDisplay.tower->getStunDuration()) / 1000.0f;
+            intVal = true;
+            unit = "s";
+            break;
           default:
             // Unhandled for now.
-            // TODO: Handle this.
-            // log("Unhandled props " + towers::toString(it->first), utils::Level::Error);
+            log("Unhandled props " + towers::toString(it->first), utils::Level::Error);
             v = -1.0f;
             break;
         }
 
-        fg = menu::newTextContent(towers::toString(it->first) + " (" + std::to_string(it->second) + "): " + std::to_string(v));
+        std::string msg = towers::toString(it->first);
+        msg += "(";
+        msg += std::to_string(it->second);
+        msg += "):";
+        if (intVal) {
+          msg += std::to_string(static_cast<int>(std::round(v)));
+        }
+        else {
+          // Only display 2 decimals.
+          std::stringstream out;
+          out << std::fixed << std::setprecision(2) << v;
+          msg += out.str();
+        }
+        if (!unit.empty()) {
+          msg += " ";
+          msg += unit;
+        }
+
+        fg = menu::newTextContent(msg);
         m_tDisplay.props[id]->setContent(fg);
         m_tDisplay.props[id]->enable(
           m_gold >= towers::getUpgradeCost(
@@ -771,7 +818,7 @@ namespace tdef {
       fg = menu::newTextContent("Health: " + std::to_string(v));
       m_sDisplay.health->setContent(fg);
     }
-    
+
     if (m_wDisplay.wall != nullptr) {
       float v = m_wDisplay.wall->getHealth();
       fg = menu::newTextContent("Health: " + std::to_string(v));

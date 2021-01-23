@@ -91,7 +91,6 @@ namespace tdef {
     pp.damage = 0.2f;
     pp.aoeRadius = 0.0f;
 
-    pp.attackSpeed = 1.0f;
     pp.aimSpeed = 1.0f;
     pp.projectileSpeed = 1.0f;
     pp.accuracy = 1.0f;
@@ -189,6 +188,42 @@ namespace tdef {
   }
 
   inline
+  float
+  Tower::getFreezingPower() const noexcept {
+    return std::min(std::max(100.0f * (1.0f - m_attack.speed), 0.0f), 100.0f);
+  }
+
+  inline
+  float
+  Tower::getFreezingSpeed() const noexcept {
+    return std::min(std::max(100.0f * m_attack.slowdown, 0.0f), 100.0f);
+  }
+
+  inline
+  utils::Duration
+  Tower::getFreezingDuration() const noexcept {
+    return m_attack.fDuration;
+  }
+
+  inline
+  utils::Duration
+  Tower::getPoisonDuration() const noexcept {
+    return m_attack.pDuration;
+  }
+
+  inline
+  float
+  Tower::getStunChance() const noexcept {
+    return std::min(std::max(100.0f * m_attack.stunProb, 0.0f), 100.0f);
+  }
+
+  inline
+  utils::Duration
+  Tower::getStunDuration() const noexcept {
+    return m_attack.sDuration;
+  }
+
+  inline
   void
   Tower::pause(const utils::TimeStamp& /*t*/) {}
 
@@ -207,7 +242,7 @@ namespace tdef {
 
     // Convert freeze percent to final speed value.
     dd.speed = (100.0f - props.freezePercent) / 100.0f;
-    dd.slowdown = props.freezeSpeed;
+    dd.slowdown = props.freezeSpeed / 100.0f;
 
     utils::Duration d = utils::toMilliseconds(static_cast<int>(std::round(props.duration)));
 

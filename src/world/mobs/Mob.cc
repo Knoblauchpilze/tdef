@@ -114,14 +114,16 @@ namespace tdef {
       markForDeletion(true);
 
       log(
-        "Mob made it through (health: " + std::to_string(getHealth()) + ")" +
-        ", lives: " + std::to_string(p->getLives())
+        "Mob made it through (health: " +
+        std::to_string(getHealth()) + "/" + std::to_string(getTotalHealth()) + ")" +
+        ", lives: " + std::to_string(p->getLives()),
+        utils::Level::Info
       );
 
       return;
     }
 
-    log("Found portal at " + bp.toString() + " (d: " + std::to_string(d) + ")");
+    log("Found portal at " + bp.toString() + " (d: " + std::to_string(d) + ")", utils::Level::Verbose);
 
     // Generate a path to the portal and go there.
     path::Path np = path::newPath(m_pos);

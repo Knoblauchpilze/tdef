@@ -174,7 +174,7 @@ namespace tdef {
       key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        log("Spawner at " + p.toString());
+        log("Generated spawner at " + p.toString(), utils::Level::Verbose);
         Spawner::SProps pp = spawners::generateProps(p);
         SpawnerShPtr b = std::make_shared<Spawner>(pp);
         m_blocks.push_back(b);
@@ -190,7 +190,7 @@ namespace tdef {
       key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        log("Wall at " + p.toString());
+        log("Generated wall at " + p.toString(), utils::Level::Verbose);
         WallShPtr b = std::make_shared<Wall>(Wall::newProps(p));
         m_blocks.push_back(b);
         --id;
@@ -205,7 +205,7 @@ namespace tdef {
       key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        log("Portal at " + p.toString());
+        log("Generated portal at " + p.toString(), utils::Level::Verbose);
         PortalShPtr b = std::make_shared<Portal>(Portal::newProps(p));
         m_blocks.push_back(b);
         --id;
@@ -224,8 +224,8 @@ namespace tdef {
         towers::Data td;
 
         if (id % 4 == 0) {
-          pp = towers::generateProps(towers::Type::Basic, p);
-          td = towers::generateData(towers::Type::Basic);
+          pp = towers::generateProps(towers::Type::Blast, p);
+          td = towers::generateData(towers::Type::Blast);
         }
         else if (id % 4 == 1) {
           pp = towers::generateProps(towers::Type::Sniper, p);
@@ -236,11 +236,11 @@ namespace tdef {
           td = towers::generateData(towers::Type::Freezing);
         }
         else {
-          pp = towers::generateProps(towers::Type::Cannon, p);
-          td = towers::generateData(towers::Type::Cannon);
+          pp = towers::generateProps(towers::Type::Venom, p);
+          td = towers::generateData(towers::Type::Venom);
         }
 
-        log("Generated tower " + std::to_string(static_cast<int>(pp.type)) + " at " + p.toString());
+        log("Generated tower " + towers::toString(pp.type) + " at " + p.toString(), utils::Level::Verbose);
 
         TowerShPtr b = std::make_shared<Tower>(pp, td);
         m_blocks.push_back(b);
@@ -274,7 +274,12 @@ namespace tdef {
         MobShPtr m = std::make_shared<Mob>(pp);
         m_mobs.push_back(m);
 
-        log("Generating mob " + std::to_string(static_cast<int>(pp.type)) + " at " + std::to_string(p.x()) + "x" + std::to_string(p.y()) + " with radius " + std::to_string(pp.radius));
+        log(
+          "Generated mob " + mobs::toString(pp.type) +
+          " at " + p.toString() +
+          " with radius " + std::to_string(pp.radius),
+          utils::Level::Verbose
+        );
 
         --id;
       }

@@ -80,7 +80,8 @@ namespace tdef {
         "Hitting mob " + mobs::toString(m_target->getType()) +
         " at " + m_target->getPos().toString() +
         " for " + std::to_string(m_attack.damage) + " damage" +
-        " (health: " + std::to_string(m_target->getHealth()) + ")"
+        " (health: " + std::to_string(m_target->getHealth()) + ")",
+        utils::Level::Verbose
       );
     }
 

@@ -49,11 +49,20 @@ namespace tdef {
       /**
        * @brief - Fetch the current health for this world
        *          element. This value corresponds to the
-       *          total health pool.
+       *          current health pool.
        * @return - the current health.
        */
       float
       getHealth() const noexcept;
+
+      /**
+       * @brief - Fetch the total health for this world
+       *          element. This value corresponds to the
+       *          total health pool.
+       * @return - the total health.
+       */
+      float
+      getTotalHealth() const noexcept;
 
       /**
        * @brief - Retrieve the ratio of current health over

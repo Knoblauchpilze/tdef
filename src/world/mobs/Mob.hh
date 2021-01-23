@@ -64,8 +64,16 @@ namespace tdef {
       // for the mob to actually reach the slowed speed.
       float sDecraseSpeed;
 
+      // A value in the range `[0; 1]` indicating how
+      // likely it is for the mob to be stunned.
+      float stunProb;
+
       // Measure how long the mob will be affected by the
       // slowing effect.
+      utils::Duration fDuration;
+
+      // Measure how long the mob will be affected by the
+      // stunning effect.
       utils::Duration sDuration;
 
       // Measure how long the mob will take damage from
@@ -268,6 +276,17 @@ namespace tdef {
        */
       void
       applyFreezing(StepInfo& info,
+                    const mobs::Damage& d);
+
+      /**
+       * @brief - Used to apply the stunning damage described by the
+       *          input structure to this mob. In case the mob can't
+       *          be stunned nothing will happend.
+       * @param info - info about the damage to apply.
+       * @param d - the description of the damage to apply.
+       */
+      void
+      applyStunning(StepInfo& info,
                     const mobs::Damage& d);
 
       /**

@@ -22,8 +22,11 @@ namespace tdef {
 
     pp.freezePercent = 0.0f;
     pp.freezeSpeed = 0.0f;
-    pp.freezeDuration = utils::Duration::zero();
 
+    pp.stunProb = 0.0f;
+
+    pp.freezeDuration = utils::Duration::zero();
+    pp.stunDuration = utils::Duration::zero();
     pp.poisonDuration = utils::Duration::zero();
 
     return pp;

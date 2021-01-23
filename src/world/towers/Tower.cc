@@ -216,8 +216,11 @@ namespace tdef {
 
     pp.freezePercent = m_attack.speed;
     pp.freezeSpeed = m_attack.slowdown;
-    pp.freezeDuration = m_attack.sDuration;
 
+    pp.stunProb = m_attack.stunProb;
+
+    pp.freezeDuration = m_attack.fDuration;
+    pp.stunDuration = m_attack.sDuration;
     pp.poisonDuration = m_attack.pDuration;
 
     info.spawnProjectile(std::make_shared<Projectile>(pp, m_target));

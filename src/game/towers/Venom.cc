@@ -28,6 +28,8 @@ namespace tdef {
       constexpr float freezePercent = no_speed_decrease;
       constexpr float freezeSpeed = 0.0f;
 
+      constexpr float stunProb = 0.0f;
+
       constexpr float cost = 100.0f;
 
       Data
@@ -67,6 +69,8 @@ namespace tdef {
 
         pp.freezePercent = freezePercent;
         pp.freezeSpeed = freezeSpeed;
+
+        pp.stunProb = stunProb;
 
         pp.attackCost = attackSpeed;
 

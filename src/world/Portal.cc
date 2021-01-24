@@ -12,8 +12,8 @@ namespace tdef {
   }
 
   void
-  Portal::breach() {
-    --m_lives;
+  Portal::breach(float lives) {
+    m_lives -= lives;
   }
 
 }

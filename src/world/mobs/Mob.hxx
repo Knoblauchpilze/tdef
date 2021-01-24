@@ -90,8 +90,8 @@ namespace tdef {
 
   inline
   float
-  Mob::getCost() const noexcept {
-    return m_cost;
+  Mob::getExpReward() const noexcept {
+    return m_exp;
   }
 
   inline

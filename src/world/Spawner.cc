@@ -38,18 +38,18 @@ namespace tdef {
       return;
     }
 
-    // Spawn a new entity and prepare it.
     m_stock -= m_threshold;
-
-    MobShPtr mob = spawn(info);
-    if (mob == nullptr) {
-      log("Spawner generated null entity, discarding it");
-      return;
-    }
 
     // Generate the size of the wave.
     int size = info.rng.rndInt(m_minWaveSize, m_maxWaveSize);
     for (int id = 0u ; id < size ; ++id) {
+    // Spawn a new entity and prepare it.
+      MobShPtr mob = spawn(info);
+      if (mob == nullptr) {
+        log("Spawner generated null entity, discarding it");
+        continue;
+      }
+
       info.spawnMob(mob);
     }
   }

@@ -5,6 +5,18 @@
 # include "Locator.hh"
 # include "Projectile.hh"
 
+namespace {
+
+  static constexpr int max_level = 20;
+
+  int
+  levelFromExperience(float /*exp*/) noexcept {
+    // TODO: Handle this.
+    return 0;
+  }
+
+}
+
 namespace tdef {
 
   Tower::Tower(const TProps& props,
@@ -13,6 +25,7 @@ namespace tdef {
 
     m_type(props.type),
     m_upgrades(),
+    m_exp(ExperienceData{0.0f, 0}),
 
     m_energy(props.energy),
     m_maxEnergy(props.maxEnergy),
@@ -96,19 +109,26 @@ namespace tdef {
 
     // Hit the mob with a devastating attack. Note that
     // in case the attack destroys the mob it will be
-    // marked as deleted automatically.
+    // marked as deleted automatically. Alos, note that
+    // we only want to claim the reward in case the mob
+    // is not already dead.
     m_energy -= m_attackCost;
-    if (attack(info)) {
+    if (m_target->isDead() || attack(info)) {
       return;
     }
+
+    info.gold += m_target->getBounty();
+    m_exp.exp += m_target->getExpReward();
+    m_exp.level = levelFromExperience(m_exp.exp);
 
     log(
       "Killed " + mobs::toString(m_target->getType()) +
       " at " + m_target->getPos().toString() +
-      ", earned " + std::to_string(m_target->getBounty()) + " coin(s)"
+      ", earned " + std::to_string(m_target->getBounty()) + " coin(s)" +
+      ", exp is now " + std::to_string(m_exp.exp) +
+      " (level: " + std::to_string(m_exp.level) + ")" +
+      " deleted: " + std::to_string(m_target->isDeleted())
     );
-
-    info.gold += m_target->getBounty();
 
     // Clear the target.
     m_target.reset();
@@ -247,7 +267,7 @@ namespace tdef {
     // towards a mob and all the ones that are
     // exploding within the aoe. Quite hard
     // to do right now.
-    return false;
+    return true;
   }
 
 }

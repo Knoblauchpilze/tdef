@@ -152,6 +152,14 @@ namespace tdef {
       void
       setContent(const menu::MenuContentDesc& mcd);
 
+      /**
+       * @brief - Replace the existing text with the new one. It
+       *          will keep every other foreground properties in
+       *          a similar state.
+       */
+      void
+      setText(const std::string& text);
+
     protected:
 
       /**

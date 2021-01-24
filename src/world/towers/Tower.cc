@@ -8,19 +8,19 @@
 
 namespace {
 
-  static constexpr int max_level = 20;
-  static constexpr int max_level_exp_count = 2000.0f;
+  // constexpr int max_level = 20;
+  // constexpr int max_level_exp_count = 2000.0f;
 
-  int
-  levelFromExperience(float exp) noexcept {
-    // We use a simple strategy where the max level
-    // corresponds to the maximum experience count.
-    // A linear relation is used between 0 and the
-    // max value and any experience larger than the
-    // maximum will result in the same level.
-    int lvl = static_cast<int>(std::round(max_level * exp / max_level_exp_count));
-    return utils::clamp(lvl, 0, max_level);
-  }
+  // int
+  // levelFromExperience(float exp) noexcept {
+  //   // We use a simple strategy where the max level
+  //   // corresponds to the maximum experience count.
+  //   // A linear relation is used between 0 and the
+  //   // max value and any experience larger than the
+  //   // maximum will result in the same level.
+  //   int lvl = static_cast<int>(std::round(max_level * exp / max_level_exp_count));
+  //   return utils::clamp(lvl, 0, max_level);
+  // }
 
 }
 
@@ -122,11 +122,11 @@ namespace tdef {
       return;
     }
 
-    if (m_attack.damage > 0.0f) {
+    if (m_attack.damage(m_exp.level) > 0.0f) {
       log(
         "Hitting mob " + mobs::toString(m_target->getType()) +
         " at " + m_target->getPos().toString() +
-        " for " + std::to_string(m_attack.damage) + " damage" +
+        " for " + std::to_string(m_attack.damage(m_exp.level)) + " damage" +
         " (health: " + std::to_string(m_target->getHealth()) + ")",
         utils::Level::Verbose
       );
@@ -144,15 +144,15 @@ namespace tdef {
 
     info.gold += m_target->getBounty();
     m_exp.exp += m_target->getExpReward();
-    m_exp.level = levelFromExperience(m_exp.exp);
+    m_exp.level++;
+    // m_exp.level = levelFromExperience(m_exp.exp);
 
     log(
       "Killed " + mobs::toString(m_target->getType()) +
       " at " + m_target->getPos().toString() +
       ", earned " + std::to_string(m_target->getBounty()) + " coin(s)" +
       ", exp is now " + std::to_string(m_exp.exp) +
-      " (level: " + std::to_string(m_exp.level) + ")" +
-      " deleted: " + std::to_string(m_target->isDeleted())
+      " (level: " + std::to_string(m_exp.level) + ")"
     );
 
     // Clear the target.
@@ -176,7 +176,7 @@ namespace tdef {
         m_target.reset();
       }
 
-      if (d < m_minRange || d > m_maxRange) {
+      if (d < m_minRange(m_exp.level) || d > m_maxRange(m_exp.level)) {
         m_target.reset();
       }
     }
@@ -189,8 +189,8 @@ namespace tdef {
       // Find the closest mob.
       towers::PickData pd;
       pd.pos = m_pos;
-      pd.minRange = m_minRange;
-      pd.maxRange = m_maxRange;
+      pd.minRange = m_minRange(m_exp.level);
+      pd.maxRange = m_maxRange(m_exp.level);
 
       m_target = m_processes.pickMob(info, pd);
 
@@ -243,7 +243,7 @@ namespace tdef {
     // best as we can for this frame. In order to
     // shot at it we need to determine whether it
     // lies within the firing cone.
-    return std::abs(m_orientation - theta) <= m_shootAngle;
+    return std::abs(m_orientation - theta) <= m_shootAngle(m_exp.level);
   }
 
   bool
@@ -256,27 +256,50 @@ namespace tdef {
     // overload the simulation with useless objects.
 
     // Case of an infinite projectile speed.
-    if (hasInfiniteProjectileSpeed(m_projectileSpeed)) {
-      return m_processes.damage(info, m_target, m_attack);
+    if (hasInfiniteProjectileSpeed(m_projectileSpeed(m_exp.level))) {
+      // Convert to get the current damage values for
+      // the tower given its level.
+      towers::Damage dd;
+      dd.damage = m_attack.damage(m_exp.level);
+      dd.accuracy = m_attack.accuracy(m_exp.level);
+      dd.speed = m_attack.speed(m_exp.level);
+      dd.slowdown = m_attack.slowdown(m_exp.level);
+      dd.stunProb = m_attack.stunProb(m_exp.level);
+      dd.critProb = m_attack.critProb(m_exp.level);
+      dd.critMultiplier = m_attack.critMultiplier(m_exp.level);
+
+      // Convert durations from raw milliseconds to a
+      // usable time data.
+      int ms = static_cast<int>(std::round(m_attack.fDuration(m_exp.level)));
+      dd.fDuration = utils::toMilliseconds(ms);
+      ms = static_cast<int>(std::round(m_attack.sDuration(m_exp.level)));
+      dd.sDuration = utils::toMilliseconds(ms);
+      ms = static_cast<int>(std::round(m_attack.pDuration(m_exp.level)));
+      dd.pDuration = utils::toMilliseconds(ms);
+
+      return m_processes.damage(info, m_target, dd);
     }
 
     // Otherwise we need to create a projectile.
     Projectile::PProps pp = Projectile::newProps(getPos(), getOwner());
-    pp.speed = m_projectileSpeed;
+    pp.speed = m_projectileSpeed(m_exp.level);
 
-    pp.damage = m_attack.damage;
-    pp.aoeRadius = m_aoeRadius;
+    pp.damage = m_attack.damage(m_exp.level);
+    pp.aoeRadius = m_aoeRadius(m_exp.level);
 
-    pp.accuracy = m_attack.accuracy;
+    pp.accuracy = m_attack.accuracy(m_exp.level);
 
-    pp.freezePercent = m_attack.speed;
-    pp.freezeSpeed = m_attack.slowdown;
+    pp.freezePercent = m_attack.speed(m_exp.level);
+    pp.freezeSpeed = m_attack.slowdown(m_exp.level);
 
-    pp.stunProb = m_attack.stunProb;
+    pp.stunProb = m_attack.stunProb(m_exp.level);
 
-    pp.freezeDuration = m_attack.fDuration;
-    pp.stunDuration = m_attack.sDuration;
-    pp.poisonDuration = m_attack.pDuration;
+    int ms = static_cast<int>(std::round(m_attack.fDuration(m_exp.level)));
+    pp.freezeDuration = utils::toMilliseconds(ms);
+    ms = static_cast<int>(std::round(m_attack.sDuration(m_exp.level)));
+    pp.stunDuration = utils::toMilliseconds(ms);
+    ms = static_cast<int>(std::round(m_attack.pDuration(m_exp.level)));
+    pp.poisonDuration = utils::toMilliseconds(ms);
 
     info.spawnProjectile(std::make_shared<Projectile>(pp, m_target));
 

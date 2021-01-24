@@ -2,9 +2,18 @@
 # define   TOWER_HXX
 
 # include "Tower.hh"
+# include <maths_utils/ComparisonUtils.hh>
 
 namespace tdef {
   namespace towers {
+
+    inline
+    Upgradable
+    buildConstantUpgradable(float value) noexcept {
+      return [value](int /*level*/) {
+        return value;
+      };
+    }
 
     inline
     std::string
@@ -85,27 +94,27 @@ namespace tdef {
     pp.maxEnergy = 1.0f;
     pp.refill = 0.1f;
 
-    pp.minRange = 0.0f;
-    pp.maxRange = 3.0f;
+    pp.minRange = towers::buildConstantUpgradable(0.0f);
+    pp.maxRange = towers::buildConstantUpgradable(3.0f);
 
-    pp.damage = 0.2f;
-    pp.aoeRadius = 0.0f;
+    pp.damage = towers::buildConstantUpgradable(0.2f);
+    pp.aoeRadius = towers::buildConstantUpgradable(0.0f);
 
-    pp.aimSpeed = 1.0f;
-    pp.projectileSpeed = 1.0f;
-    pp.accuracy = 1.0f;
+    pp.aimSpeed = towers::buildConstantUpgradable(1.0f);
+    pp.projectileSpeed = towers::buildConstantUpgradable(1.0f);
+    pp.accuracy = towers::buildConstantUpgradable(1.0f);
 
-    pp.duration = 0.0f;
-    pp.shootAngle = 0.0f;
-    pp.projectiles = 1;
-    pp.acceleration = 0.0f;
+    pp.duration = towers::buildConstantUpgradable(0.0f);
+    pp.shootAngle = towers::buildConstantUpgradable(0.0f);
+    pp.projectiles = towers::buildConstantUpgradable(1.0f);
+    pp.acceleration = towers::buildConstantUpgradable(0.0f);
 
-    pp.freezePercent = 0.0f;
-    pp.freezeSpeed = 0.0f;
+    pp.freezePercent = towers::buildConstantUpgradable(0.0f);
+    pp.freezeSpeed = towers::buildConstantUpgradable(0.0f);
 
-    pp.stunProb = 0.0f;
-    pp.critProb = 0.0f;
-    pp.critMultiplier = 1.0f;
+    pp.stunProb = towers::buildConstantUpgradable(0.0f);
+    pp.critProb = towers::buildConstantUpgradable(0.0f);
+    pp.critMultiplier = towers::buildConstantUpgradable(1.0f);
 
     pp.attackCost = 0.5f;
 
@@ -134,13 +143,13 @@ namespace tdef {
   inline
   float
   Tower::getRange() const noexcept {
-    return m_maxRange;
+    return m_maxRange(m_exp.level);
   }
 
   inline
   float
   Tower::getAttack() const noexcept {
-    return m_attack.damage;
+    return m_attack.damage(m_exp.level);
   }
 
   inline
@@ -188,43 +197,43 @@ namespace tdef {
   inline
   float
   Tower::getProjectileSpeed() const noexcept {
-    return m_projectileSpeed;
+    return m_projectileSpeed(m_exp.level);
   }
 
   inline
   float
   Tower::getFreezingPower() const noexcept {
-    return std::min(std::max(100.0f * (1.0f - m_attack.speed), 0.0f), 100.0f);
+    return utils::clamp(100.0f * (1.0f - m_attack.speed(m_exp.level)), 0.0f, 100.0f);
   }
 
   inline
   float
   Tower::getFreezingSpeed() const noexcept {
-    return std::min(std::max(100.0f * m_attack.slowdown, 0.0f), 100.0f);
+    return utils::clamp(100.0f * m_attack.slowdown(m_exp.level), 0.0f, 100.0f);
   }
 
   inline
-  utils::Duration
+  float
   Tower::getFreezingDuration() const noexcept {
-    return m_attack.fDuration;
+    return m_attack.fDuration(m_exp.level);
   }
 
   inline
-  utils::Duration
+  float
   Tower::getPoisonDuration() const noexcept {
-    return m_attack.pDuration;
+    return m_attack.pDuration(m_exp.level);
   }
 
   inline
   float
   Tower::getStunChance() const noexcept {
-    return std::min(std::max(100.0f * m_attack.stunProb, 0.0f), 100.0f);
+    return utils::clamp(100.0f * m_attack.stunProb(m_exp.level), 0.0f, 100.0f);
   }
 
   inline
-  utils::Duration
+  float
   Tower::getStunDuration() const noexcept {
-    return m_attack.sDuration;
+    return m_attack.sDuration(m_exp.level);
   }
 
   inline
@@ -236,44 +245,49 @@ namespace tdef {
   Tower::resume(const utils::TimeStamp& /*t*/) {}
 
   inline
-  towers::Damage
+  Tower::DamageData
   Tower::fromProps(const TProps& props) noexcept {
-    towers::Damage dd;
+    DamageData dd;
 
     dd.damage = props.damage;
 
     dd.accuracy = props.accuracy;
 
     // Convert freeze percent to final speed value.
-    dd.speed = (100.0f - props.freezePercent) / 100.0f;
-    dd.slowdown = props.freezeSpeed / 100.0f;
+    dd.speed = props.freezePercent;
+    dd.slowdown = props.freezeSpeed;
 
-    utils::Duration d = utils::toMilliseconds(static_cast<int>(std::round(props.duration)));
-
-    dd.fDuration = utils::Duration::zero();
     // Only assign the duration in case the freezing
-    // speed is not `0`.
-    if (props.freezePercent > 0.0f) {
-      dd.fDuration = d;
+    // speed is not `0` for the first level (we will
+    // consider that it is also `0` for any other
+    // level).
+    bool noFreezing = true;
+    dd.fDuration = towers::buildConstantUpgradable(0.0f);
+    if (props.freezePercent(0) > 0.0f) {
+      dd.fDuration = props.duration;
+
+      noFreezing = false;
     }
 
     // Only assign the duration in case the stun prob
     // is not `0` and the freezing percentage indicates
     // no freezing.
-    dd.stunProb = 0.0f;
-    if (dd.fDuration == utils::Duration::zero()) {
+    bool noStunning = true;
+    dd.stunProb = towers::buildConstantUpgradable(0.0f);
+    dd.sDuration = towers::buildConstantUpgradable(0.0f);
+    if (noFreezing) {
       dd.stunProb = props.stunProb;
-      dd.sDuration = d;
+      dd.sDuration = props.duration;
+
+      noStunning = false;
     }
 
     // Assume the duration refers to the poisoning
     // in case the freezing speed is set to a `zero`
     // value and no stun chance is defined.
-    dd.pDuration = utils::Duration::zero();
-    if (dd.fDuration == utils::Duration::zero() &&
-        dd.stunProb <= 0.0f)
-    {
-      dd.pDuration = d;
+    dd.pDuration = towers::buildConstantUpgradable(0.0f);
+    if (noFreezing && noStunning) {
+      dd.pDuration = props.duration;
     }
 
     dd.critProb = props.critProb;

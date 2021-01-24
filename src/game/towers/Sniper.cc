@@ -29,9 +29,7 @@ namespace tdef {
 
       constexpr float stunProb = 0.0f;
 
-      // TODO: 0.2 + 0.016 * Tower level
       constexpr float critProb = 0.2f;
-      // TODO: 1.5 + 0.05 * Tower level
       constexpr float critMultiplier = 1.5f;
 
       constexpr float cost = 80.0f;
@@ -54,29 +52,33 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.minRange = minRange;
-        pp.maxRange = maxRange;
+        pp.minRange = buildConstantUpgradable(minRange);
+        pp.maxRange = buildConstantUpgradable(maxRange);
 
-        pp.damage = damage;
-        pp.aoeRadius = aoeRadius;
+        pp.damage = buildConstantUpgradable(damage);
+        pp.aoeRadius = buildConstantUpgradable(aoeRadius);
 
         pp.rotation = rotation;
-        pp.aimSpeed = aimSpeed;
-        pp.projectileSpeed = projectileSpeed;
-        pp.accuracy = accuracy;
+        pp.aimSpeed = buildConstantUpgradable(aimSpeed);
+        pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);
+        pp.accuracy = buildConstantUpgradable(accuracy);
 
-        pp.duration = duration;
-        pp.shootAngle = shootAngle;
-        pp.projectiles = projectiles;
-        pp.acceleration = acceleration;
+        pp.duration = buildConstantUpgradable(duration);
+        pp.shootAngle = buildConstantUpgradable(shootAngle);
+        pp.projectiles = buildConstantUpgradable(projectiles);
+        pp.acceleration = buildConstantUpgradable(acceleration);
 
-        pp.freezePercent = freezePercent;
-        pp.freezeSpeed = freezeSpeed;
+        pp.freezePercent = buildConstantUpgradable(freezePercent);
+        pp.freezeSpeed = buildConstantUpgradable(freezeSpeed);
 
-        pp.stunProb = stunProb;
+        pp.stunProb = buildConstantUpgradable(stunProb);
 
-        pp.critProb = critProb;
-        pp.critMultiplier = critMultiplier;
+        pp.critProb = [](int level) {
+          return critProb + 0.016f * level;
+        };
+        pp.critMultiplier = [](int level) {
+          return critMultiplier + 0.05f * level;
+        };
 
         pp.attackCost = attackSpeed;
 

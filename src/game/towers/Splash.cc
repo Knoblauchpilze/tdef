@@ -21,7 +21,6 @@ namespace tdef {
 
       constexpr float duration = 0.0f;
       constexpr float shootAngle = 360.0f;
-      // TODO: 6 + 0.35 * Tower level
       constexpr int projectiles = 6;
       constexpr float acceleration = 0.0f;
 
@@ -53,29 +52,31 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.minRange = minRange;
-        pp.maxRange = maxRange;
+        pp.minRange = buildConstantUpgradable(minRange);
+        pp.maxRange = buildConstantUpgradable(maxRange);
 
-        pp.damage = damage;
-        pp.aoeRadius = aoeRadius;
+        pp.damage = buildConstantUpgradable(damage);
+        pp.aoeRadius = buildConstantUpgradable(aoeRadius);
 
         pp.rotation = rotation;
-        pp.aimSpeed = aimSpeed;
-        pp.projectileSpeed = projectileSpeed;
-        pp.accuracy = accuracy;
+        pp.aimSpeed = buildConstantUpgradable(aimSpeed);
+        pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);
+        pp.accuracy = buildConstantUpgradable(accuracy);
 
-        pp.duration = duration;
-        pp.shootAngle = shootAngle;
-        pp.projectiles = projectiles;
-        pp.acceleration = acceleration;
+        pp.duration = buildConstantUpgradable(duration);
+        pp.shootAngle = buildConstantUpgradable(shootAngle);
+        pp.projectiles = [](int level) {
+          return projectiles + 0.35f * level;
+        };
+        pp.acceleration = buildConstantUpgradable(acceleration);
 
-        pp.freezePercent = freezePercent;
-        pp.freezeSpeed = freezeSpeed;
+        pp.freezePercent = buildConstantUpgradable(freezePercent);
+        pp.freezeSpeed = buildConstantUpgradable(freezeSpeed);
 
-        pp.stunProb = stunProb;
+        pp.stunProb = buildConstantUpgradable(stunProb);
 
-        pp.critProb = critProb;
-        pp.critMultiplier = critMultiplier;
+        pp.critProb = buildConstantUpgradable(critProb);
+        pp.critMultiplier = buildConstantUpgradable(critMultiplier);
 
         pp.attackCost = attackSpeed;
 

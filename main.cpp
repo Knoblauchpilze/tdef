@@ -15,6 +15,7 @@
 
 // TODO: Some mobs seem to have really high speed.
 // TODO: Projectiles seem to keep being alive for some time.
+// TODO: In case of projectiles, the tower never get the sweet XP.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

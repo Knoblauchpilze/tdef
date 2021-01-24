@@ -734,12 +734,14 @@ namespace tdef {
             unit = "%";
             break;
           case towers::Upgrade::FreezingDuration:
-            v = utils::toMilliseconds(m_tDisplay.tower->getFreezingDuration()) / 1000.0f;
+            // Convert milliseconds to seconds.
+            v = m_tDisplay.tower->getFreezingDuration() / 1000.0f;
             intVal = true;
             unit = "s";
             break;
           case towers::Upgrade::PoisonDuration:
-            v = utils::toMilliseconds(m_tDisplay.tower->getPoisonDuration()) / 1000.0f;
+            // Convert milliseconds to seconds.
+            v = m_tDisplay.tower->getPoisonDuration() / 1000.0f;
             intVal = true;
             unit = "s";
             break;
@@ -749,7 +751,8 @@ namespace tdef {
             unit = "%";
             break;
           case towers::Upgrade::StunDuration:
-            v = utils::toMilliseconds(m_tDisplay.tower->getStunDuration()) / 1000.0f;
+            // Convert milliseconds to seconds.
+            v = m_tDisplay.tower->getStunDuration() / 1000.0f;
             intVal = true;
             unit = "s";
             break;

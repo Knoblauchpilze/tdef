@@ -29,6 +29,22 @@ namespace tdef {
     constexpr float no_speed_decrease = 0.0f;
 
     /**
+     * @brief - Used to convert a freeze percentage to the
+     *          corresponding speed ratio which describes
+     *          the freezing as a percentage of the base
+     *          speed.
+     *          This is used to convert between a human
+     *          readable value and the internal engine
+     *          syntax.
+     *          The percentage is assumed to be in the range
+     *          `[0; 100]`.
+     * @param freezePercentage - the percentage to convert.
+     * @return - the corresponding speed ratio.
+     */
+    constexpr float
+    freezePercentageToSpeedRatio(float freezePercentage) noexcept;
+
+    /**
      * @brief - Basic target picking method which just pick
      *          the closest mob from a position.
      * @param info - the data to use to pick a target.
@@ -52,5 +68,7 @@ namespace tdef {
 
   }
 }
+
+# include "TowerData.hxx"
 
 #endif    /* TOWER_DATA_HH */

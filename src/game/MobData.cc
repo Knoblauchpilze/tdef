@@ -53,7 +53,7 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
-      static constexpr float health = 800.8f;
+      static constexpr float health = 200.8f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
 

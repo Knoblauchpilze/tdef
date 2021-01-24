@@ -19,7 +19,6 @@ namespace tdef {
       constexpr float projectileSpeed = infinite_projectile_speed;
       constexpr float accuracy = 1.0f;
 
-      // TODO: 2.0 + 0.1 * Tower level
       constexpr float duration = 2000.0f;
       constexpr float shootAngle = 360.0f;
       constexpr int projectiles = 1;
@@ -28,7 +27,6 @@ namespace tdef {
       constexpr float freezePercent = no_speed_decrease;
       constexpr float freezeSpeed = 0.0f;
 
-      // TODO: 15.0 + 1 * Tower upgrade level
       constexpr float stunProb = 0.15f;
 
       constexpr float critProb = 0.0f;
@@ -54,29 +52,33 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.minRange = minRange;
-        pp.maxRange = maxRange;
+        pp.minRange = buildConstantUpgradable(minRange);
+        pp.maxRange = buildConstantUpgradable(maxRange);
 
-        pp.damage = damage;
-        pp.aoeRadius = aoeRadius;
+        pp.damage = buildConstantUpgradable(damage);
+        pp.aoeRadius = buildConstantUpgradable(aoeRadius);
 
         pp.rotation = rotation;
-        pp.aimSpeed = aimSpeed;
-        pp.projectileSpeed = projectileSpeed;
-        pp.accuracy = accuracy;
+        pp.aimSpeed = buildConstantUpgradable(aimSpeed);
+        pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);
+        pp.accuracy = buildConstantUpgradable(accuracy);
 
-        pp.duration = duration;
-        pp.shootAngle = shootAngle;
-        pp.projectiles = projectiles;
-        pp.acceleration = acceleration;
+        pp.duration = [](int level) {
+          return duration + 100.0f * level;
+        };
+        pp.shootAngle = buildConstantUpgradable(shootAngle);
+        pp.projectiles = buildConstantUpgradable(projectiles);
+        pp.acceleration = buildConstantUpgradable(acceleration);
 
-        pp.freezePercent = freezePercent;
-        pp.freezeSpeed = freezeSpeed;
+        pp.freezePercent = buildConstantUpgradable(freezePercent);
+        pp.freezeSpeed = buildConstantUpgradable(freezeSpeed);
 
-        pp.stunProb = stunProb;
+        pp.stunProb = [](int level) {
+          return stunProb + 0.01f * level;
+        };
 
-        pp.critProb = critProb;
-        pp.critMultiplier = critMultiplier;
+        pp.critProb = buildConstantUpgradable(critProb);
+        pp.critMultiplier = buildConstantUpgradable(critMultiplier);
 
         pp.attackCost = attackSpeed;
 

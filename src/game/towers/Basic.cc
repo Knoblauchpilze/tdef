@@ -10,7 +10,6 @@ namespace tdef {
       constexpr float minRange = 0.0f;
       constexpr float maxRange = 2.0f;
 
-      // TODO: 7.5f * (1.0 + 0.04 * Tower level)
       constexpr float damage = 7.5f;
       constexpr float aoeRadius = 0.0f;
 
@@ -53,29 +52,31 @@ namespace tdef {
         pp.maxEnergy = attackSpeed;
         pp.refill = 1.0f;
 
-        pp.minRange = minRange;
-        pp.maxRange = maxRange;
+        pp.minRange = buildConstantUpgradable(minRange);
+        pp.maxRange = buildConstantUpgradable(maxRange);
 
-        pp.damage = damage;
-        pp.aoeRadius = aoeRadius;
+        pp.damage = [](int level) {
+          return damage * (1.0f + 0.04f * level);
+        };
+        pp.aoeRadius = buildConstantUpgradable(aoeRadius);
 
         pp.rotation = rotation;
-        pp.aimSpeed = aimSpeed;
-        pp.projectileSpeed = projectileSpeed;
-        pp.accuracy = accuracy;
+        pp.aimSpeed = buildConstantUpgradable(aimSpeed);
+        pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);
+        pp.accuracy = buildConstantUpgradable(accuracy);
 
-        pp.duration = duration;
-        pp.shootAngle = shootAngle;
-        pp.projectiles = projectiles;
-        pp.acceleration = acceleration;
+        pp.duration = buildConstantUpgradable(duration);
+        pp.shootAngle = buildConstantUpgradable(shootAngle);
+        pp.projectiles = buildConstantUpgradable(projectiles);
+        pp.acceleration = buildConstantUpgradable(acceleration);
 
-        pp.freezePercent = no_speed_decrease;
-        pp.freezeSpeed = freezeSpeed;
+        pp.freezePercent = buildConstantUpgradable(no_speed_decrease);
+        pp.freezeSpeed = buildConstantUpgradable(freezeSpeed);
 
-        pp.stunProb = stunProb;
+        pp.stunProb = buildConstantUpgradable(stunProb);
 
-        pp.critProb = critProb;
-        pp.critMultiplier = critMultiplier;
+        pp.critProb = buildConstantUpgradable(critProb);
+        pp.critMultiplier = buildConstantUpgradable(critMultiplier);
 
         pp.attackCost = attackSpeed;
 

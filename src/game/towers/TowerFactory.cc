@@ -16,7 +16,7 @@
 namespace tdef {
   namespace towers {
 
-    Data
+    Processes
     generateData(const Type& type, int level) {
       switch (type) {
         case Type::Sniper:

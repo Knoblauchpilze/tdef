@@ -24,6 +24,13 @@ namespace tdef {
     };
 
     /**
+     * @brief - Defines a generic function that can be used
+     *          to obtain a value for a property for a given
+     *          level.
+     */
+    using Upgradable = std::function<float(int)>;
+
+    /**
      * @brief - Defines a generic function signature that
      *          can be used by a tower to pick a new mob
      *          to target.
@@ -34,7 +41,7 @@ namespace tdef {
      * @brief - Convenience structure defining all props
      *          defining the data performed by a tower.
      */
-    struct DamageData {
+    struct Damage {
       // The main damage dealt by the tower. This defines
       // the raw data unshielded and can represent some
       // sort of poisoning in case the `pDuration` is not
@@ -91,7 +98,7 @@ namespace tdef {
      *          the mob is still alive or has been damaged
      *          enough that it should be killed.
      */
-    using DoDamage = std::function<bool(StepInfo&, MobShPtr, DamageData&)>;
+    using DoDamage = std::function<bool(StepInfo&, MobShPtr, Damage&)>;
 
     /**
      * @brief - Convenience structure defining the needed
@@ -103,7 +110,7 @@ namespace tdef {
      *          conditions are met to pick a new target
      *          or the way a mob is affected by the tower.
      */
-    struct Data {
+    struct Processes {
       TargetPicker pickMob;
       DoDamage damage;
     };
@@ -308,7 +315,7 @@ namespace tdef {
        *               use during the behavior of this tower.
        */
       Tower(const TProps& props,
-            const towers::Data& desc);
+            const towers::Processes& desc);
 
       /**
        * @brief - Fetch the type for this tower.
@@ -440,7 +447,7 @@ namespace tdef {
        * @return - the corresponding tower damage data.
        */
       static
-      towers::DamageData
+      towers::Damage
       fromProps(const TProps& props) noexcept;
 
       /**
@@ -604,13 +611,13 @@ namespace tdef {
       /**
        * @brief - Defines the damage data for this tower.
        */
-      towers::DamageData m_attack;
+      towers::Damage m_attack;
 
       /**
        * @brief - Defines the custom processes attached to
        *          this tower.
        */
-      towers::Data m_processes;
+      towers::Processes m_processes;
 
       /**
        * @brief - The target for this tower. Until it is

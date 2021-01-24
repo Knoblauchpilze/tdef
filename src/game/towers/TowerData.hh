@@ -48,7 +48,7 @@ namespace tdef {
      * @return - `true` if the mob is still alive.
      */
     bool
-    basicDamaging(StepInfo& info, MobShPtr mob, DamageData& data);
+    basicDamaging(StepInfo& info, MobShPtr mob, Damage& data);
 
   }
 }

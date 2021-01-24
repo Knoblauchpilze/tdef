@@ -34,9 +34,9 @@ namespace tdef {
 
       constexpr float cost = 42.0f;
 
-      Data
+      Processes
       generateData(int /*level*/) noexcept {
-        Data dd;
+        Processes dd;
 
         dd.pickMob = basicTargetPicking;
         dd.damage = basicDamaging;

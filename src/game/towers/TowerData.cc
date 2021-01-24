@@ -13,7 +13,7 @@ namespace tdef {
     }
 
     bool
-    basicDamaging(StepInfo& info, MobShPtr mob, DamageData& data) {
+    basicDamaging(StepInfo& info, MobShPtr mob, Damage& data) {
       mobs::Damage d;
       d.hit = data.damage;
 

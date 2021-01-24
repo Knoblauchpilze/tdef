@@ -103,6 +103,10 @@ namespace tdef {
     pp.freezePercent = 0.0f;
     pp.freezeSpeed = 0.0f;
 
+    pp.stunProb = 0.0f;
+    pp.critProb = 0.0f;
+    pp.critMultiplier = 1.0f;
+
     pp.attackCost = 0.5f;
 
     pp.type = type;
@@ -271,6 +275,9 @@ namespace tdef {
     {
       dd.pDuration = d;
     }
+
+    dd.critProb = props.critProb;
+    dd.critMultiplier = props.critMultiplier;
 
     return dd;
   }

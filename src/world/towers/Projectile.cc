@@ -21,6 +21,8 @@ namespace tdef {
     m_freezeSpeed(props.freezeSpeed),
 
     m_stunProb(std::min(std::max(props.stunProb, 0.0f), 1.0f)),
+    m_critProb(std::min(std::max(props.critProb, 0.0f), 1.0f)),
+    m_critMultiplier(props.critMultiplier),
 
     m_freezeDuration(props.freezeDuration),
     m_stunDuration(props.stunDuration),
@@ -61,9 +63,15 @@ namespace tdef {
 
     wounded.push_back(m_target);
 
+    // Give a chance to critical hits.
+    float damage = m_damage;
+    if (m_critProb > 0.0f && info.rng.rndFloat(0.0f, 1.0f) < m_critProb) {
+      damage = m_damage * m_critMultiplier;
+    }
+
     // Apply damage to all the mobs.
     mobs::Damage d;
-    d.hit = m_damage;
+    d.hit = damage;
 
     d.accuracy = m_accuracy;
 
@@ -82,11 +90,11 @@ namespace tdef {
       // and for the other mob we will apply damage
       // based on the distance.
       if (wounded[id] == m_target) {
-        d.hit = m_damage;
+        d.hit = damage;
       }
       else {
         float far = utils::d(t, wounded[id]->getPos());
-        d.hit = std::max(0.0f, m_damage * far / m_aoeRadius);
+        d.hit = std::max(0.0f, damage * far / m_aoeRadius);
       }
 
       // In case the target is already dead, do not

@@ -24,6 +24,8 @@ namespace tdef {
     pp.freezeSpeed = 0.0f;
 
     pp.stunProb = 0.0f;
+    pp.critProb = 0.0f;
+    pp.critMultiplier = 1.0f;
 
     pp.freezeDuration = utils::Duration::zero();
     pp.stunDuration = utils::Duration::zero();

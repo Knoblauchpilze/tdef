@@ -30,6 +30,9 @@ namespace tdef {
 
       constexpr float stunProb = 0.0f;
 
+      constexpr float critProb = 0.0f;
+      constexpr float critMultiplier = 1.0f;
+
       constexpr float cost = 60.0f;
 
       Data
@@ -70,6 +73,9 @@ namespace tdef {
         pp.freezeSpeed = freezeSpeed;
 
         pp.stunProb = stunProb;
+
+        pp.critProb = critProb;
+        pp.critMultiplier = critMultiplier;
 
         pp.attackCost = attackSpeed;
 

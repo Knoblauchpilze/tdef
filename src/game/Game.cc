@@ -260,6 +260,13 @@ namespace tdef {
     // Update lives.
     m_lives = lives();
 
+    // Disable the mob display in case it is either
+    // dead or not in this world anymore.
+    if (m_mDisplay.mob != nullptr && m_mDisplay.mob->isDeleted()) {
+      m_mDisplay.main->setVisible(false);
+      m_mDisplay.mob = nullptr;
+    }
+
     // And redraw the UI.
     updateUI();
   }
@@ -561,7 +568,7 @@ namespace tdef {
     m_gold -= c;
 
     Tower::TProps pp = towers::generateProps(*m_tType, p);
-    towers::Data td = towers::generateData(*m_tType);
+    towers::Processes td = towers::generateData(*m_tType);
 
     log(
       "Generated tower " + towers::toString(*m_tType) + " at " + p.toString(),

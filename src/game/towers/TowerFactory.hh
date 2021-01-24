@@ -14,7 +14,7 @@ namespace tdef {
      *                generated.
      * @return - the generated data.
      */
-    Data
+    Processes
     generateData(const Type& type,
                  int level = 0);
 

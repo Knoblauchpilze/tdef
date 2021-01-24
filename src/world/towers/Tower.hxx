@@ -236,9 +236,9 @@ namespace tdef {
   Tower::resume(const utils::TimeStamp& /*t*/) {}
 
   inline
-  towers::DamageData
+  towers::Damage
   Tower::fromProps(const TProps& props) noexcept {
-    towers::DamageData dd;
+    towers::Damage dd;
 
     dd.damage = props.damage;
 

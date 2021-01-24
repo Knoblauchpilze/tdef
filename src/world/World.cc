@@ -221,7 +221,7 @@ namespace tdef {
 
       if (used.count(key) == 0) {
         Tower::TProps pp;
-        towers::Data td;
+        towers::Processes td;
 
         if (id % 4 == 0) {
           pp = towers::generateProps(towers::Type::Blast, p);

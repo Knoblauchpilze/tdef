@@ -26,7 +26,7 @@ namespace {
 namespace tdef {
 
   Tower::Tower(const TProps& props,
-               const towers::Data& desc):
+               const towers::Processes& desc):
     Block(props, towers::toString(props.type)),
 
     m_type(props.type),

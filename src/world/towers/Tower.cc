@@ -8,11 +8,17 @@
 namespace {
 
   static constexpr int max_level = 20;
+  static constexpr int max_level_exp_count = 2000.0f;
 
   int
-  levelFromExperience(float /*exp*/) noexcept {
-    // TODO: Handle this.
-    return 0;
+  levelFromExperience(float exp) noexcept {
+    // We use a simple strategy where the max level
+    // corresponds to the maximum experience count.
+    // A linear relation is used between 0 and the
+    // max value and any experience larger than the
+    // maximum will result in the same level.
+    int lvl = static_cast<int>(std::round(max_level * exp / max_level_exp_count));
+    return std::min(std::max(lvl, 0), max_level);
   }
 
 }

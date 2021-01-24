@@ -2,6 +2,7 @@
 # define   COLOR_UTILS_HXX
 
 # include "ColorUtils.hh"
+# include <maths_utils/ComparisonUtils.hh>
 
 namespace tdef {
 
@@ -12,7 +13,7 @@ namespace tdef {
                 float ratio,
                 int alpha) noexcept
   {
-    ratio = std::min(std::max(ratio, 0.0f), 1.0f);
+    ratio = utils::clamp(ratio, 0.0f, 1.0f);
 
     return olc::Pixel(
       static_cast<int>((1.0f - ratio) * low.r + ratio * high.r),
@@ -65,9 +66,9 @@ namespace tdef {
     // and both saturation and luminance are in the range
     // `[0; 100]` so we need to convert them in the range
     // `[0; 255]`.
-    int h = std::min(std::max(static_cast<int>(255.0f * H / 360.0f), 0), 255);
-    int s = std::min(std::max(static_cast<int>(255.0f * S), 0), 255);
-    int l = std::min(std::max(static_cast<int>(255.0f * L), 0), 255);
+    int h = utils::clamp(static_cast<int>(255.0f * H / 360.0f), 0, 255);
+    int s = utils::clamp(static_cast<int>(255.0f * S), 0, 255);
+    int l = utils::clamp(static_cast<int>(255.0f * L), 0, 255);
 
     return olc::Pixel(h, s, l, rgb.a);
   }
@@ -106,9 +107,9 @@ namespace tdef {
       R = C; G = 0.0f; B = X;
     }
 
-    int r = std::min(std::max(static_cast<int>((R + m) * 255.0f), 0), 255);
-    int g = std::min(std::max(static_cast<int>((G + m) * 255.0f), 0), 255);
-    int b = std::min(std::max(static_cast<int>((B + m) * 255.0f), 0), 255);
+    int r = utils::clamp(static_cast<int>((R + m) * 255.0f), 0, 255);
+    int g = utils::clamp(static_cast<int>((G + m) * 255.0f), 0, 255);
+    int b = utils::clamp(static_cast<int>((B + m) * 255.0f), 0, 255);
 
     return olc::Pixel(r, g, b, hsl.a);
   }
@@ -131,7 +132,7 @@ namespace tdef {
     // `[0; 255]` we're checking against `0.01 * 255`.
     float nL = (hsl.b < 2 ? hsl.b + 255.0f / factor : hsl.b * factor);
 
-    hsl.b = std::min(std::max(static_cast<int>(nL), 0), 255);
+    hsl.b = utils::clamp(static_cast<int>(nL), 0, 255);
 
     return HSLToRGB(hsl);
   }

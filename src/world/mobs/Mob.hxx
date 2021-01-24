@@ -2,6 +2,7 @@
 # define   MOB_HXX
 
 # include "Mob.hh"
+# include <maths_utils/ComparisonUtils.hh>
 
 namespace tdef {
   namespace mobs {
@@ -119,8 +120,8 @@ namespace tdef {
   Mob::fromProps(const MProps& props) noexcept {
     mobs::DefenseData dd;
 
-    dd.shield = std::min(std::max(props.shield, 0.0f), 1.0f);
-    dd.shieldEfficiency = std::min(std::max(props.shieldEfficiency, 0.0f), 1.0f);
+    dd.shield = utils::clamp(props.shield, 0.0f, 1.0f);
+    dd.shieldEfficiency = utils::clamp(props.shieldEfficiency, 0.0f, 1.0f);
     dd.shieldDurability = 1.0f;
 
     dd.poisonable = props.poisonable;

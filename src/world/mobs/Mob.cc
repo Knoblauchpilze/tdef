@@ -1,7 +1,9 @@
 
 # include "Mob.hh"
+# include <maths_utils/ComparisonUtils.hh>
 # include "Portal.hh"
 # include "Locator.hh"
+
 
 namespace tdef {
 
@@ -441,7 +443,7 @@ namespace tdef {
     // accordance to the speed modifier (so whether
     // or not we're accelerating).
     if (mod > 0) {
-      m_speed.speed = std::min(std::max(m_speed.speed + delta, 0.0f), target);
+      m_speed.speed = utils::clamp(m_speed.speed + delta, 0.0f, target);
     }
     else {
       m_speed.speed = std::max(m_speed.speed + delta, target);

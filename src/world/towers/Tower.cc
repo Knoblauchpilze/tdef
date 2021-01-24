@@ -1,6 +1,7 @@
 
 # include "Tower.hh"
 # include <maths_utils/LocationUtils.hh>
+# include <maths_utils/ComparisonUtils.hh>
 # include "Mob.hh"
 # include "Locator.hh"
 # include "Projectile.hh"
@@ -18,7 +19,7 @@ namespace {
     // max value and any experience larger than the
     // maximum will result in the same level.
     int lvl = static_cast<int>(std::round(max_level * exp / max_level_exp_count));
-    return std::min(std::max(lvl, 0), max_level);
+    return utils::clamp(lvl, 0, max_level);
   }
 
 }

@@ -1,6 +1,7 @@
 
 # include "Projectile.hh"
 # include <maths_utils/LocationUtils.hh>
+# include <maths_utils/ComparisonUtils.hh>
 # include "Locator.hh"
 
 namespace tdef {
@@ -20,8 +21,8 @@ namespace tdef {
     m_freezePercent(props.freezePercent),
     m_freezeSpeed(props.freezeSpeed),
 
-    m_stunProb(std::min(std::max(props.stunProb, 0.0f), 1.0f)),
-    m_critProb(std::min(std::max(props.critProb, 0.0f), 1.0f)),
+    m_stunProb(utils::clamp(props.stunProb, 0.0f, 1.0f)),
+    m_critProb(utils::clamp(props.critProb, 0.0f, 1.0f)),
     m_critMultiplier(props.critMultiplier),
 
     m_freezeDuration(props.freezeDuration),

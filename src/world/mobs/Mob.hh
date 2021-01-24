@@ -138,8 +138,17 @@ namespace tdef {
 
         float arrival;
 
+        // The amount of gold that this mob yields when
+        // killed.
         float bounty;
+
+        // The amount of lives that this mob is worth if
+        // it passes through a portal.
         float lives;
+
+        // The amount of experience that this mob yields
+        // when it is killed.
+        float exp;
 
         // Defines the amount of shield this mob has as a
         // percentage of its total health. Typically if a
@@ -195,7 +204,7 @@ namespace tdef {
       getBounty() const noexcept;
 
       float
-      getCost() const noexcept;
+      getExpReward() const noexcept;
 
       float
       getSpeed() const noexcept;
@@ -471,6 +480,12 @@ namespace tdef {
        * @brief - The cost to let this mob pass through a portal.
        */
       float m_cost;
+
+      /**
+       * @brief - The amount of experience given by this mob
+       *          if killed.
+       */
+      float m_exp;
 
       /**
        * @brief - The defense properties of this mob. Used to

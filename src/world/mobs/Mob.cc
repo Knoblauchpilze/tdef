@@ -19,6 +19,7 @@ namespace tdef {
 
     m_bounty(props.bounty),
     m_cost(props.lives),
+    m_exp(props.exp),
 
     m_defense(fromProps(props)),
 
@@ -110,7 +111,7 @@ namespace tdef {
     if (d < m_rArrival) {
       // We arrived at the portal, hit it and then
       // mark the mob for deletion.
-      p->breach();
+      p->breach(m_cost);
       markForDeletion(true);
 
       log(

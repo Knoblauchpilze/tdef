@@ -35,9 +35,11 @@ namespace tdef {
        * @brief - Method to handle the breaching of the portal
        *          by an entity. This allows to specialize what
        *          needs to be done in this case.
+       * @param lives - the number of lives that this portal
+       *                has been breached to.
        */
       void
-      breach();
+      breach(float lives);
 
     private:
 

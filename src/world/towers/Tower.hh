@@ -469,6 +469,21 @@ namespace tdef {
       };
 
       /**
+       * @brief - Defines a convenience structure regrouping the
+       *          properties of the experience gained by this
+       *          tower so far.
+       */
+      struct ExperienceData {
+        // The total amount of experience gained by this tower.
+        float exp;
+
+        // The current level of the tower. Saved as a speed up
+        // to avoid recomputing it from the raw experience when
+        // needed.
+        int level;
+      };
+
+      /**
        * @brief - The type of the tower. This is mostly used
        *          to quickly identify the tower but most of
        *          the precise behaviors are actually defined
@@ -481,6 +496,13 @@ namespace tdef {
        *          to improve this tower.
        */
       std::vector<UpgradeData> m_upgrades;
+
+      /**
+       * @brief - Defines the experience data for this tower.
+       *          The experience is used to offset and improve
+       *          the effectiveness of some processes.
+       */
+      ExperienceData m_exp;
 
       /**
        * @brief - An indication of the energy left for this

@@ -55,6 +55,17 @@ namespace tdef {
 
   inline
   void
+  Menu::setText(const std::string& text) {
+    m_fg.text = text;
+
+    // Update the parent's display if possible.
+    if (m_parent != nullptr) {
+      m_parent->updateChildren();
+    }
+  }
+
+  inline
+  void
   Menu::onClick(std::vector<ActionShPtr>& /*actions*/) const {
     // Nothing to do.
   }

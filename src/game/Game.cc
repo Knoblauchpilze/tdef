@@ -199,7 +199,7 @@ namespace tdef {
       return;
     }
 
-    m_tDisplay.tower->upgrade(upgrade, level);
+    m_tDisplay.tower->upgrade(upgrade, level + 1);
     m_gold -= cost;
     log("Gold is now " + std::to_string(m_gold) + " due to cost " + std::to_string(cost));
 
@@ -675,18 +675,15 @@ namespace tdef {
   Game::updateUI() {
     // Update status menu.
     int v = static_cast<int>(m_lives);
-    menu::MenuContentDesc fg = menu::newTextContent("Lives: " + std::to_string(v));
-    m_mLives->setContent(fg);
+    m_mLives->setText("Lives: " + std::to_string(v));
 
     v = static_cast<int>(m_gold);
-    fg = menu::newTextContent("Gold: " + std::to_string(v));
-    m_mGold->setContent(fg);
+    m_mGold->setText("Gold: " + std::to_string(v));
 
     // Update display values for visible menus.
     if (m_tDisplay.tower != nullptr) {
       std::string t = towers::toString(m_tDisplay.tower->getType());
-      fg = menu::newTextContent("Type: " + t);
-      m_tDisplay.type->setContent(fg);
+      m_tDisplay.type->setText("Type: " + t);
 
       towers::Upgrades ug = m_tDisplay.tower->getUpgrades();
 
@@ -774,8 +771,7 @@ namespace tdef {
           msg += unit;
         }
 
-        fg = menu::newTextContent(msg);
-        m_tDisplay.props[id]->setContent(fg);
+        m_tDisplay.props[id]->setText(msg);
         m_tDisplay.props[id]->enable(
           m_gold >= towers::getUpgradeCost(
             m_tDisplay.tower->getType(),
@@ -797,32 +793,26 @@ namespace tdef {
 
     if (m_mDisplay.mob != nullptr) {
       std::string t = mobs::toString(m_mDisplay.mob->getType());
-      fg = menu::newTextContent("Type: " + t);
-      m_mDisplay.type->setContent(fg);
+      m_mDisplay.type->setText("Type: " + t);
 
       float v = m_mDisplay.mob->getHealth();
-      fg = menu::newTextContent("Health: " + std::to_string(v));
-      m_mDisplay.health->setContent(fg);
+      m_mDisplay.health->setText("Health: " + std::to_string(v));
 
       v = m_mDisplay.mob->getSpeed();
-      fg = menu::newTextContent("Speed: " + std::to_string(v));
-      m_mDisplay.speed->setContent(fg);
+      m_mDisplay.speed->setText("Speed: " + std::to_string(v));
 
       v = m_mDisplay.mob->getBounty();
-      fg = menu::newTextContent("Bounty: " + std::to_string(v));
-      m_mDisplay.bounty->setContent(fg);
+      m_mDisplay.bounty->setText("Bounty: " + std::to_string(v));
     }
 
     if (m_sDisplay.spawner != nullptr) {
       float v = m_sDisplay.spawner->getHealth();
-      fg = menu::newTextContent("Health: " + std::to_string(v));
-      m_sDisplay.health->setContent(fg);
+      m_sDisplay.health->setText("Health: " + std::to_string(v));
     }
 
     if (m_wDisplay.wall != nullptr) {
       float v = m_wDisplay.wall->getHealth();
-      fg = menu::newTextContent("Health: " + std::to_string(v));
-      m_wDisplay.health->setContent(fg);
+      m_wDisplay.health->setText("Health: " + std::to_string(v));
     }
 
     // Update status for tower's construction.

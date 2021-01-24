@@ -62,6 +62,14 @@ namespace tdef {
       // 100% chance to be stunned.
       float stunProb;
 
+      // Defines the likelihood of a critical hit for the
+      // tower. This value is in the range `[0; 1]`.
+      float critProb;
+
+      // Defines the multiplier to apply to the damage in
+      // case a critical hit is performed.
+      float critMultiplier;
+
       // The duration of the freezing factor applied to the
       // target of the damage.
       utils::Duration fDuration;
@@ -204,6 +212,10 @@ namespace tdef {
         // the proximity with the center of the area.
         float aoeRadius;
 
+        // The aiming speed of the tower. The value is not
+        // directly expressing a duration: instead it is used
+        // to derive a duration through the following formula:
+        // `100 / aimSpeed seconds`.
         float aimSpeed;
 
         // The speed of the projectiles shot by this tower.
@@ -245,6 +257,20 @@ namespace tdef {
         // Defines a value in the range `[0; 1]` indicating
         // how likely it is for the tower to stun an enemy.
         float stunProb;
+
+        // Defines a value in the range `[0; 1]` indicating
+        // how likely it is for the tower to land a critical
+        // hit. Critical hit do more damage.
+        float critProb;
+
+        // Defines a multiplier indicating how much damage
+        // is dealt additionally to a regular hit when a
+        // critical hit is performed.
+        // This value is used to multiply the base damage
+        // so a value larger than `1` indicates more damage
+        // while a value smaller than `1` indicates less
+        // damage.
+        float critMultiplier;
 
         // Defines the amount of energy that each shot fired
         // by the tire cost. If this value is `0` it means
@@ -573,7 +599,7 @@ namespace tdef {
        *          somehow prepare the hit. It resets as soon
        *          as the target exits the aim cone.
        */
-      utils::Duration m_aimSpeed;
+      float m_aimSpeed;
 
       /**
        * @brief - Defines the damage data for this tower.

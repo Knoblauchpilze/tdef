@@ -21,15 +21,38 @@ namespace tdef {
         float damage;
         float aoeRadius;
 
+        // A value in the range `[0; 1]` defining the chance
+        // to miss a hit where `0` means that the tower will
+        // always miss and `1` that it will never miss.
         float accuracy;
 
+        // Defines the percentage of reduction of the speed
+        // of mobs. Value in the range `[0; 1]`.
         float freezePercent;
+
+        // Defines the percentage of speed that is reduced
+        // per second when an entity is within the range
+        // of this tower. Value in the range `[0; 1]`.
         float freezeSpeed;
 
         // A value in the range `[0; 1]` indicating how
         // likely it is that this projectil stuns the
         // target.
         float stunProb;
+
+        // Defines a value in the range `[0; 1]` indicating
+        // how likely it is for the tower to land a critical
+        // hit. Critical hit do more damage.
+        float critProb;
+
+        // Defines a multiplier indicating how much damage
+        // is dealt additionally to a regular hit when a
+        // critical hit is performed.
+        // This value is used to multiply the base damage
+        // so a value larger than `1` indicates more damage
+        // while a value smaller than `1` indicates less
+        // damage.
+        float critMultiplier;
 
         // Duration of the freezing effect applied by the
         // projectile, expressed in milliseconds.
@@ -142,6 +165,19 @@ namespace tdef {
        *          target.
        */
       float m_stunProb;
+
+      /**
+       * @brief - A value in the range `[0; 1]` defining how
+       *          likely it is for this projectile to land a
+       *          critical hit (dealing more damage).
+       */
+      float m_critProb;
+
+      /**
+       * @brief - A value defining the multiplier to compute
+       *          the damage for a critical hit.
+       */
+      float m_critMultiplier;
 
       /**
        * @brief - The duration of the freeze effect for this

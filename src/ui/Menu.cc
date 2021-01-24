@@ -195,13 +195,6 @@ namespace tdef {
           break;
       }
 
-      if (m_fg.text.substr(0, 13) == "RotationSpeed") {
-        log(
-          "Drawing \"" + m_fg.text + "\" with color " +
-          std::to_string(m_fg.color.r) + "x" + std::to_string(m_fg.color.g) + "x" + std::to_string(m_fg.color.b)
-        );
-      }
-
       pge->DrawStringDecal(p, m_fg.text, m_fg.color);
 
       return;

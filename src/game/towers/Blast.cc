@@ -31,6 +31,9 @@ namespace tdef {
       // TODO: 15.0 + 1 * Tower upgrade level
       constexpr float stunProb = 0.15f;
 
+      constexpr float critProb = 0.0f;
+      constexpr float critMultiplier = 1.0f;
+
       constexpr float cost = 75.0f;
 
       Data
@@ -71,6 +74,9 @@ namespace tdef {
         pp.freezeSpeed = freezeSpeed;
 
         pp.stunProb = stunProb;
+
+        pp.critProb = critProb;
+        pp.critMultiplier = critMultiplier;
 
         pp.attackCost = attackSpeed;
 

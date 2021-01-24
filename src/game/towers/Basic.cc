@@ -10,6 +10,7 @@ namespace tdef {
       constexpr float minRange = 0.0f;
       constexpr float maxRange = 2.0f;
 
+      // TODO: 7.5f * (1.0 + 0.04 * Tower level)
       constexpr float damage = 7.5f;
       constexpr float aoeRadius = 0.0f;
 
@@ -28,6 +29,9 @@ namespace tdef {
       constexpr float freezeSpeed = 0.0f;
 
       constexpr float stunProb = 0.0f;
+
+      constexpr float critProb = 0.0f;
+      constexpr float critMultiplier = 1.0f;
 
       constexpr float cost = 48.0f;
 
@@ -69,6 +73,9 @@ namespace tdef {
         pp.freezeSpeed = freezeSpeed;
 
         pp.stunProb = stunProb;
+
+        pp.critProb = critProb;
+        pp.critMultiplier = critMultiplier;
 
         pp.attackCost = attackSpeed;
 

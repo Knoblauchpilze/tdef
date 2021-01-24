@@ -44,13 +44,7 @@ namespace tdef {
     m_aoeRadius(props.aoeRadius),
     m_shootAngle(props.shootAngle),
     m_projectileSpeed(props.projectileSpeed),
-    m_aimSpeed(
-      utils::toMilliseconds(
-        static_cast<int>(
-          std::round(props.aimSpeed)
-        )
-      )
-    ),
+    m_aimSpeed(props.aimSpeed),
 
     m_attack(fromProps(props)),
     m_processes(desc),
@@ -79,8 +73,32 @@ namespace tdef {
   Tower::upgrade(const towers::Upgrade& upgrade,
                  int level)
   {
-    // TODO: Handle this.
-    log("Should upgrade " + towers::toString(upgrade) + " to level " + std::to_string(level), utils::Level::Warning);
+    // First, determine whether this upgrade is possible
+    // for this tower.
+    unsigned id = 0u;
+    while (id < m_upgrades.size() && m_upgrades[id].type != upgrade) {
+      ++id;
+    }
+
+    if (id >= m_upgrades.size()) {
+      log(
+        "Failed to upgrade " + towers::toString(upgrade) + " in tower not defining it",
+        utils::Level::Error
+      );
+
+      return;
+    }
+
+    log(
+      "Upgrading " + towers::toString(upgrade) +
+      " from " + std::to_string(m_upgrades[id].level) +
+      " to level " + std::to_string(level),
+      utils::Level::Info
+    );
+
+    // Handle the upgrade: this basically consists in
+    // increasing the level of the property by `1`.
+    m_upgrades[id].level = level;
   }
 
   void

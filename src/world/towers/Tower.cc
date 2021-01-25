@@ -5,6 +5,7 @@
 # include "Mob.hh"
 # include "Locator.hh"
 # include "Projectile.hh"
+# include "TowerFactory.hh"
 
 namespace {
 
@@ -66,8 +67,23 @@ namespace tdef {
 
   float
   Tower::getTotalCost() const noexcept {
-    // TODO: Handle this.
-    return 1.0f;
+    // The total cost is the initial cost plus the
+    // cost of each upgrade.
+    float cost = towers::getCost(getType(), m_exp.level);
+
+    for (unsigned id = 0u ; id < m_upgrades.size() ; ++id) {
+      float uc = 0.0f;
+
+      for (int lvl = 0 ; lvl < m_upgrades[id].level ; ++lvl) {
+        uc += towers::getUpgradeCost(getType(), m_upgrades[id].type, lvl);
+      }
+
+      cost += uc;
+    }
+
+    log("Tower cost in total " + std::to_string(cost), utils::Level::Verbose);
+
+    return cost;
   }
 
   void

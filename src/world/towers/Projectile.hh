@@ -9,6 +9,9 @@
 
 namespace tdef {
 
+  // Forward declaration of the Tower class.
+  class Tower;
+
   class Projectile: public WorldElement {
     public:
 
@@ -78,9 +81,14 @@ namespace tdef {
        * @brief - Creates a new projectile with the specified
        *          properties.
        * @param props - the properties defining this projectile.
+       * @param owner - defines the tower that fired this projectile.
+       *                It is used as a way to transmit the exp gain
+       *                to the tower in case this projectile kills a
+       *                mob.
        * @param mob - the mob which is targeted by this projectile.
        */
       Projectile(const PProps& props,
+                 Tower* owner,
                  MobShPtr mob);
 
       void
@@ -116,6 +124,14 @@ namespace tdef {
        *          it hits it.
        */
       MobShPtr m_target;
+
+      /**
+       * @brief - The parent tower of this projectile: it
+       *          corresponds to the tower that fired the
+       *          projectile and is used to propagate any
+       *          experience gain to it.
+       */
+      Tower* m_tower;
 
       /**
        * @brief - The travelling speed for this projectile.

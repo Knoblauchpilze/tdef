@@ -3,14 +3,17 @@
 # include <maths_utils/LocationUtils.hh>
 # include <maths_utils/ComparisonUtils.hh>
 # include "Locator.hh"
+# include "Tower.hh"
 
 namespace tdef {
 
   Projectile::Projectile(const PProps& props,
+                         Tower* tower,
                          MobShPtr mob):
     WorldElement(props, "projectile"),
 
     m_target(mob),
+    m_tower(tower),
 
     m_speed(props.speed),
 
@@ -108,7 +111,6 @@ namespace tdef {
       }
 
       bool alive = wounded[id]->hit(info, d);
-
       if (!alive) {
         log(
           "Killed " + mobs::toString(m_target->getType()) +
@@ -118,6 +120,12 @@ namespace tdef {
         );
 
         info.gold += m_target->getBounty();
+
+        // Propagate the experience gain.
+        if (m_tower != nullptr) {
+          m_tower->gainExp(m_target->getExpReward());
+        }
+
         continue;
       }
 

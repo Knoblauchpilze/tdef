@@ -122,7 +122,7 @@ namespace tdef {
         info.gold += m_target->getBounty();
 
         // Propagate the experience gain.
-        if (m_tower != nullptr) {
+        if (m_tower != nullptr && !m_tower->isDeleted()) {
           m_tower->gainExp(m_target->getExpReward());
         }
 

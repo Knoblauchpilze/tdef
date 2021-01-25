@@ -111,6 +111,13 @@ namespace tdef {
       void
       spawn(BlockShPtr block);
 
+      /**
+       * @brief - Used to force the update of elements to
+       *          be deleted and delete them right away.
+       */
+      void
+      forceDelete();
+
     private:
 
       /**

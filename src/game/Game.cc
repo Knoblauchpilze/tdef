@@ -228,6 +228,7 @@ namespace tdef {
     );
 
     m_tDisplay.tower->markForDeletion(true);
+    m_world->forceDelete();
 
     // Hide the upgrade menu.
     m_tDisplay.main->setVisible(false);

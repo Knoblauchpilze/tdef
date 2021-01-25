@@ -85,43 +85,12 @@ namespace tdef {
       m_mobs.push_back(si.mSpawned[id]);
     }
 
-    // Remove elements marked for deletion.
-    m_blocks.erase(
-      std::remove_if(
-        m_blocks.begin(),
-        m_blocks.end(),
-        [](BlockShPtr block){
-          return block->isDeleted();
-        }
-      ),
-      m_blocks.end()
-    );
-
-    m_mobs.erase(
-      std::remove_if(
-        m_mobs.begin(),
-        m_mobs.end(),
-        [](MobShPtr mob){
-          return mob->isDeleted();
-        }
-      ),
-      m_mobs.end()
-    );
-
     for (unsigned id = 0u ; id < si.pSpawned.size() ; ++id) {
       m_projectiles.push_back(si.pSpawned[id]);
     }
 
-    m_projectiles.erase(
-      std::remove_if(
-        m_projectiles.begin(),
-        m_projectiles.end(),
-        [](ProjectileShPtr proj){
-          return proj->isDeleted();
-        }
-      ),
-      m_projectiles.end()
-    );
+    // Remove elements marked for deletion.
+    forceDelete();
 
     // Handle cases where some gold was earned.
     if (si.gold > 0.0f) {
@@ -146,6 +115,45 @@ namespace tdef {
     for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
       m_mobs[id]->worldUpdate(m_loc);
     }
+  }
+
+  void
+  World::forceDelete() {
+    // First remove blocks.
+    m_blocks.erase(
+      std::remove_if(
+        m_blocks.begin(),
+        m_blocks.end(),
+        [](BlockShPtr block){
+          return block->isDeleted();
+        }
+      ),
+      m_blocks.end()
+    );
+
+    // Then remove mobs.
+    m_mobs.erase(
+      std::remove_if(
+        m_mobs.begin(),
+        m_mobs.end(),
+        [](MobShPtr mob){
+          return mob->isDeleted();
+        }
+      ),
+      m_mobs.end()
+    );
+
+    // And finish with projectiles.
+    m_projectiles.erase(
+      std::remove_if(
+        m_projectiles.begin(),
+        m_projectiles.end(),
+        [](ProjectileShPtr proj){
+          return proj->isDeleted();
+        }
+      ),
+      m_projectiles.end()
+    );
   }
 
   void

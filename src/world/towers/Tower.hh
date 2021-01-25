@@ -449,6 +449,15 @@ namespace tdef {
       getTotalCost() const noexcept;
 
       /**
+       * @brief - Allows to credit the tower with the provided
+       *          amount of experience. This will update the
+       *          level of the tower if needed.
+       * @param exp - the amount of experience to credit.
+       */
+      void
+      gainExp(float exp) noexcept;
+
+      /**
        * @brief - Used to perform the upgrade of the tower to
        *          the provided level. In case the upgrade is
        *          not possible for this tower nothing will be

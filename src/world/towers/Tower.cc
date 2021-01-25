@@ -8,19 +8,19 @@
 
 namespace {
 
-  // constexpr int max_level = 20;
-  // constexpr int max_level_exp_count = 2000.0f;
+  constexpr int max_level = 20;
+  constexpr int max_level_exp_count = 2000.0f;
 
-  // int
-  // levelFromExperience(float exp) noexcept {
-  //   // We use a simple strategy where the max level
-  //   // corresponds to the maximum experience count.
-  //   // A linear relation is used between 0 and the
-  //   // max value and any experience larger than the
-  //   // maximum will result in the same level.
-  //   int lvl = static_cast<int>(std::round(max_level * exp / max_level_exp_count));
-  //   return utils::clamp(lvl, 0, max_level);
-  // }
+  int
+  levelFromExperience(float exp) noexcept {
+    // We use a simple strategy where the max level
+    // corresponds to the maximum experience count.
+    // A linear relation is used between 0 and the
+    // max value and any experience larger than the
+    // maximum will result in the same level.
+    int lvl = static_cast<int>(std::round(max_level * exp / max_level_exp_count));
+    return utils::clamp(lvl, 0, max_level);
+  }
 
 }
 
@@ -68,6 +68,22 @@ namespace tdef {
   Tower::getTotalCost() const noexcept {
     // TODO: Handle this.
     return 1.0f;
+  }
+
+  void
+  Tower::gainExp(float exp) noexcept {
+    // Gain the experience.
+    m_exp.exp += exp;
+
+    // And update the level.
+    m_exp.level = levelFromExperience(m_exp.exp);
+
+    log(
+      "Tower gained " + std::to_string(exp) +
+      " xp to reach " + std::to_string(m_exp.exp) +
+      " and level " + std::to_string(m_exp.level),
+      utils::Level::Verbose
+    );
   }
 
   void
@@ -143,9 +159,7 @@ namespace tdef {
     }
 
     info.gold += m_target->getBounty();
-    m_exp.exp += m_target->getExpReward();
-    m_exp.level++;
-    // m_exp.level = levelFromExperience(m_exp.exp);
+    gainExp(m_target->getExpReward());
 
     log(
       "Killed " + mobs::toString(m_target->getType()) +
@@ -301,7 +315,7 @@ namespace tdef {
     ms = static_cast<int>(std::round(m_attack.pDuration(m_exp.level)));
     pp.poisonDuration = utils::toMilliseconds(ms);
 
-    info.spawnProjectile(std::make_shared<Projectile>(pp, m_target));
+    info.spawnProjectile(std::make_shared<Projectile>(pp, this, m_target));
 
     // Consider that the projectile won't kill
     // the mob. This is probably false because

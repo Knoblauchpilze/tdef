@@ -5,6 +5,7 @@
 # include "Mob.hh"
 # include "Locator.hh"
 # include "Projectile.hh"
+# include "TowerData.hh"
 # include "TowerFactory.hh"
 
 namespace {
@@ -21,6 +22,21 @@ namespace {
     // maximum will result in the same level.
     int lvl = static_cast<int>(std::round(max_level * exp / max_level_exp_count));
     return utils::clamp(lvl, 0, max_level);
+  }
+
+  utils::Duration
+  aimDuration(float aimSpeed) noexcept {
+    // Handle instantaneous aiming speed.
+    if (aimSpeed == tdef::towers::infinite_aim_speed) {
+      return utils::Duration::zero();
+    }
+
+    // Otherwise the aiming speed is used
+    // to compute a ratio giving the time
+    // to aim.
+    float secs = 100.0f / aimSpeed;
+
+    return utils::toMilliseconds(static_cast<int>(std::round(1000.0f * secs)));
   }
 
 }
@@ -44,9 +60,16 @@ namespace tdef {
     m_minRange(props.minRange),
     m_maxRange(props.maxRange),
     m_aoeRadius(props.aoeRadius),
-    m_shootAngle(props.shootAngle),
-    m_projectileSpeed(props.projectileSpeed),
-    m_aimSpeed(props.aimSpeed),
+
+    m_shooting(
+      ShootingData{
+        props.shootAngle,
+        props.projectileSpeed,
+        props.aimSpeed,
+        false,
+        utils::now()
+      }
+    ),
 
     m_attack(fromProps(props)),
     m_processes(desc),
@@ -143,11 +166,24 @@ namespace tdef {
     if (!pickAndAlignWithTarget(info) || m_target == nullptr) {
       // Can't do anything: we didn't find a
       // target or we are not aligned with it
-      // yet.
+      // yet. The tower is not aiming anymore.
+      m_shooting.aiming = false;
+
       return;
     }
 
-    // TODO: Handle aiming speed.
+    // In case we're not aiming yet, do it.
+    if (!m_shooting.aiming) {
+      m_shooting.aiming = true;
+      m_shooting.aimStart = info.moment;
+    }
+
+    // Determine whether the aiming period is
+    // over.
+    utils::Duration d = aimDuration(m_shooting.aimSpeed(m_exp.level));
+    if (m_shooting.aimStart + d > info.moment) {
+      return;
+    }
 
     // Check whether we can attack.
     if (m_energy < m_attackCost) {
@@ -273,7 +309,7 @@ namespace tdef {
     // best as we can for this frame. In order to
     // shot at it we need to determine whether it
     // lies within the firing cone.
-    return std::abs(m_orientation - theta) <= m_shootAngle(m_exp.level);
+    return std::abs(m_orientation - theta) <= m_shooting.shootAngle(m_exp.level);
   }
 
   bool
@@ -286,7 +322,7 @@ namespace tdef {
     // overload the simulation with useless objects.
 
     // Case of an infinite projectile speed.
-    if (hasInfiniteProjectileSpeed(m_projectileSpeed(m_exp.level))) {
+    if (hasInfiniteProjectileSpeed(m_shooting.projectileSpeed(m_exp.level))) {
       // Convert to get the current damage values for
       // the tower given its level.
       towers::Damage dd;
@@ -312,7 +348,7 @@ namespace tdef {
 
     // Otherwise we need to create a projectile.
     Projectile::PProps pp = Projectile::newProps(getPos(), getOwner());
-    pp.speed = m_projectileSpeed(m_exp.level);
+    pp.speed = m_shooting.projectileSpeed(m_exp.level);
 
     pp.damage = m_attack.damage(m_exp.level);
     pp.aoeRadius = m_aoeRadius(m_exp.level);

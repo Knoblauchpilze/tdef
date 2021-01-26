@@ -20,7 +20,7 @@ namespace tdef {
       constexpr float accuracy = 1.0f;
 
       constexpr float duration = 2000.0f;
-      constexpr float shootAngle = 360.0f;
+      constexpr float shootAngle = utils::degToRad(360.0f);
       constexpr int projectiles = 1;
       constexpr float acceleration = 0.0f;
 

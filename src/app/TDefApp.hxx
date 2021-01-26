@@ -25,6 +25,19 @@ namespace tdef {
     p.sSize = olc::vi2d(64, 64);
     p.layout = olc::vi2d(1, 1);
     m_wPackID = m_packs->registerPack(p);
+
+    // Assign a specific tint to the regular
+    // drawing layer so that we have a built
+    // in transparency.
+    // We can't do it directly when drawing
+    // in the rendering function because as
+    // the whole layer will be drawn as one
+    // quad in opengl with an opaque alpha,
+    // we will lose this info.
+    // This means that everything is indeed
+    // transparent but that's the only way
+    // for now to achieve it.
+    setLayerTint(Layer::Draw, olc::Pixel(255, 255, 255, alpha::SemiOpaque));
   }
 
   inline

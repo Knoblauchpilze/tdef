@@ -56,6 +56,16 @@ namespace tdef {
     protected:
 
       /**
+       * @brief - Convenience define refering to a drawing layer.
+       */
+      enum class Layer {
+        Draw,
+        DrawDecal,
+        UI,
+        Debug
+      };
+
+      /**
        * @brief - Convenience structure defining the resources
        *          that can be displayed in any app. It contains
        *          pointers to the world's data, to the frames
@@ -74,6 +84,16 @@ namespace tdef {
 
       bool
       hasUI() const noexcept;
+
+      /**
+       * @brief - Used to assign a certain tint to the layer
+       *          defined by the input descriptor.
+       * @param layer - the layer for which a tint should be
+       *                assigned.
+       * @param tint - the tint to associate to the layer.
+       */
+      void
+      setLayerTint(const Layer& layer, const olc::Pixel& tint);
 
       /**
        * @brief - Another interface method allowing to clear

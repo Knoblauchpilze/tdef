@@ -39,11 +39,6 @@ namespace tdef {
 
   bool
   PGEApp::OnUserCreate() {
-    // Load elements.
-    loadWorld();
-    loadMenuResources();
-    loadResources();
-
     // The debug layer is the default layer: it is always
     // provided by the pixel game engine.
     m_dLayer = 0u;
@@ -63,6 +58,11 @@ namespace tdef {
 
     m_mDecalLayer = CreateLayer();
     EnableLayer(m_mDecalLayer, true);
+
+    // Load elements.
+    loadWorld();
+    loadMenuResources();
+    loadResources();
 
     return true;
   }

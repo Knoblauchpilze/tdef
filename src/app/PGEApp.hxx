@@ -134,6 +134,26 @@ namespace tdef {
 
   inline
   void
+  PGEApp::setLayerTint(const Layer& layer, const olc::Pixel& tint) {
+    switch (layer) {
+      case Layer::Draw:
+        SetLayerTint(m_mLayer, tint);
+        break;
+      case Layer::DrawDecal:
+        SetLayerTint(m_mDecalLayer, tint);
+        break;
+      case Layer::UI:
+        SetLayerTint(m_uiLayer, tint);
+        break;
+      case Layer::Debug:
+      default:
+        SetLayerTint(m_dLayer, tint);
+        break;
+    }
+  }
+
+  inline
+  void
   PGEApp::clearLayer() {
     // Clear the canvas with a neutral fully transparent color.
     SetPixelMode(olc::Pixel::ALPHA);

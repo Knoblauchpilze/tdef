@@ -197,7 +197,7 @@ namespace tdef {
   inline
   float
   Tower::getProjectileSpeed() const noexcept {
-    return m_projectileSpeed(m_exp.level);
+    return m_shooting.projectileSpeed(m_exp.level);
   }
 
   inline
@@ -239,13 +239,13 @@ namespace tdef {
   inline
   float
   Tower::getMinReachableOrientation() const noexcept {
-    return m_orientation - m_shootAngle(m_exp.level) / 2.0f;
+    return m_orientation - m_shooting.shootAngle(m_exp.level) / 2.0f;
   }
 
   inline
   float
   Tower::getMaxReachableOrientation() const noexcept {
-    return m_orientation + m_shootAngle(m_exp.level) / 2.0f;
+    return m_orientation + m_shooting.shootAngle(m_exp.level) / 2.0f;
   }
 
   inline

@@ -637,6 +637,46 @@ namespace tdef {
       };
 
       /**
+       * @brief - Defines a convenience structure regrouping the
+       *          propertis defining the shooting angle and time
+       *          for this tower.
+       */
+      struct ShootingData {
+        // The definition of a cone within which a
+        // tower can shoot. When the angle between
+        // the target and the tower is less than
+        // this value a shot is possible. It is
+        // expressed in radians.
+        towers::Upgradable shootAngle;
+
+        // The speed at which projectiles are fired
+        // by this tower. In case this value is set
+        // to a negative number we consider that the
+        // projectile has indeed infinite speed and
+        // won't create the related objects.
+        towers::Upgradable projectileSpeed;
+
+        // The duration of the aiming process for the
+        // tower. It indicates an interval where the
+        // tower needs to be aligned with the target
+        // (or at least within the shooting angle) to
+        // somehow prepare the hit. It resets as soon
+        // as the target exits the aim cone.
+        towers::Upgradable aimSpeed;
+
+        // Defines whether or not the tower is aiming
+        // right now. This helps determining whether
+        // or not the `aimStart` is relevant.
+        bool aiming;
+
+        // Defines the timestamp at which the current
+        // aiming operation started. This helps define
+        // when the shoot can actually occur based on
+        // the aiming speed.
+        utils::TimeStamp aimStart;
+      };
+
+      /**
        * @brief - The type of the tower. This is mostly used
        *          to quickly identify the tower but most of
        *          the precise behaviors are actually defined
@@ -701,32 +741,9 @@ namespace tdef {
       towers::Upgradable m_aoeRadius;
 
       /**
-       * @brief - The definition of a cone within which a
-       *          tower can shoot. When the angle between
-       *          the target and the tower is less than
-       *          this value a shot is possible. It is
-       *          expressed in radians.
+       * @brief - Defines the shooting data for this tower.
        */
-      towers::Upgradable m_shootAngle;
-
-      /**
-       * @brief - The speed at which projectiles are fired
-       *          by this tower. In case this value is set
-       *          to a negative number we consider that the
-       *          projectile has indeed infinite speed and
-       *          won't create the related objects.
-       */
-      towers::Upgradable m_projectileSpeed;
-
-      /**
-       * @brief - The duration of the aiming process for the
-       *          tower. It indicates an interval where the
-       *          tower needs to be aligned with the target
-       *          (or at least within the shooting angle) to
-       *          somehow prepare the hit. It resets as soon
-       *          as the target exits the aim cone.
-       */
-      towers::Upgradable m_aimSpeed;
+      ShootingData m_shooting;
 
       /**
        * @brief - Defines the damage data for this tower.

@@ -15,6 +15,7 @@
 
 // TODO: Some mobs seem to have really high speed.
 // TODO: Projectiles seem to keep being alive for some time.
+// TODO: Somehow materialize the aiming speed.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

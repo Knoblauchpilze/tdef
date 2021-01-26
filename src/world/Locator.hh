@@ -54,6 +54,9 @@ namespace tdef {
       float orientation;
       BlockType type;
 
+      float coneMin;
+      float coneMax;
+
       // The `id` defines a custom value which is interpreted
       // from the `type` of the block.
       int id;

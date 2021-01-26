@@ -237,6 +237,18 @@ namespace tdef {
   }
 
   inline
+  float
+  Tower::getMinReachableOrientation() const noexcept {
+    return m_orientation - m_shootAngle(m_exp.level) / 2.0f;
+  }
+
+  inline
+  float
+  Tower::getMaxReachableOrientation() const noexcept {
+    return m_orientation + m_shootAngle(m_exp.level) / 2.0f;
+  }
+
+  inline
   void
   Tower::pause(const utils::TimeStamp& /*t*/) {}
 

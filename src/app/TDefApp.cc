@@ -1,5 +1,6 @@
 
 # include "TDefApp.hh"
+# include <maths_utils/ComparisonUtils.hh>
 
 namespace tdef {
 
@@ -173,15 +174,20 @@ namespace tdef {
       static const float len = 50.0f;
 
       olc::vf2d p = res.cf.tileCoordsToPixels(bd.p.x(), bd.p.y(), RelativePosition::BottomRight, bd.radius);
+      olc::vf2d e;
 
-      DrawLine(
-        olc::vf2d(p.x, p.y),
-        olc::vf2d(
-          p.x + len * std::cos(bd.orientation),
-          p.y + len * std::sin(bd.orientation)
-        ),
-        olc::RED
-      );
+      e.x = p.x + len * std::cos(bd.orientation);
+      e.y = p.y + len * std::sin(bd.orientation);
+      DrawLine(p, e, olc::RED);
+
+      // Draw the angle if it is not a 360° angle.
+      if (!utils::fuzzyEqual(bd.coneMax - bd.coneMin, 6.283185307f)) {
+
+        olc::vf2d eMin(p.x + len * std::cos(bd.coneMin), p.y + len * std::sin(bd.coneMin));
+        olc::vf2d eMax(p.x + len * std::cos(bd.coneMax), p.y + len * std::sin(bd.coneMax));
+
+        FillTriangle(p, eMin, eMax, olc::GREEN);
+      }
     }
 
     // Fetch projectiles to display.

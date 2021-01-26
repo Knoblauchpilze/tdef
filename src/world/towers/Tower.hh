@@ -439,6 +439,26 @@ namespace tdef {
       getStunDuration() const noexcept;
 
       /**
+       * @brief - Returns the lowest orientation that can be
+       *          targeted by this tower given the current
+       *          orientation and shooting angle.
+       * @return - the minimum orientation that can be reached
+       *           by this tower given the current orientation.
+       */
+      float
+      getMinReachableOrientation() const noexcept;
+
+      /**
+       * @brief - Returns the highest orientation that can be
+       *          targeted by this tower given the current
+       *          orientation and shooting angle.
+       * @return - the maximum orientation that can be reached
+       *           by this tower given the current orientation.
+       */
+      float
+      getMaxReachableOrientation() const noexcept;
+
+      /**
        * @brief - Returns the aggregated cost of this tower,
        *          which corresponds to the total amount that
        *          has been spent to perform the upgrades and

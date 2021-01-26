@@ -115,6 +115,10 @@ namespace tdef {
     for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
       m_mobs[id]->worldUpdate(m_loc);
     }
+
+    for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
+      m_projectiles[id]->worldUpdate(m_loc);
+    }
   }
 
   void
@@ -232,8 +236,8 @@ namespace tdef {
         towers::Processes td;
 
         if (id % 4 == 0) {
-          pp = towers::generateProps(towers::Type::Blast, p);
-          td = towers::generateData(towers::Type::Blast);
+          pp = towers::generateProps(towers::Type::Multishot, p);
+          td = towers::generateData(towers::Type::Multishot);
         }
         else if (id % 4 == 1) {
           pp = towers::generateProps(towers::Type::Sniper, p);

@@ -20,8 +20,7 @@ namespace tdef {
     world::BlockType bt = world::BlockType::Wall;
     int var = 0;
 
-    float cmin = b->getOrientation();
-    float cmax = b->getOrientation();
+    float cone = 0.0f;
 
     if (std::dynamic_pointer_cast<Spawner>(b) != nullptr) {
       bt = world::BlockType::Spawner;
@@ -74,8 +73,7 @@ namespace tdef {
           break;
       }
 
-      cmin = t->getMinReachableOrientation();
-      cmax = t->getMaxReachableOrientation();
+      cone = t->getAimingCone();
     }
 
     world::Block bd;
@@ -86,8 +84,7 @@ namespace tdef {
     bd.health = b->getHealthRatio();
     bd.type = bt;
 
-    bd.coneMin = cmin;
-    bd.coneMax = cmax;
+    bd.cone = cone;
 
     bd.id = var;
 

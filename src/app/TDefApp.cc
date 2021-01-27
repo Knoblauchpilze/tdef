@@ -180,11 +180,13 @@ namespace tdef {
       e.y = p.y + len * std::sin(bd.orientation);
       DrawLine(p, e, olc::RED);
 
-      // Draw the angle if it is not a 360° angle.
-      if (!utils::fuzzyEqual(bd.coneMax - bd.coneMin, 6.283185307f)) {
+      // Draw the aiming cone if it is not `0` rad wide.
+      if (!utils::fuzzyEqual(bd.cone, 0.0f)) {
+        float min = bd.orientation - bd.cone / 2.0f;
+        float max = bd.orientation + bd.cone / 2.0f;
 
-        olc::vf2d eMin(p.x + len * std::cos(bd.coneMin), p.y + len * std::sin(bd.coneMin));
-        olc::vf2d eMax(p.x + len * std::cos(bd.coneMax), p.y + len * std::sin(bd.coneMax));
+        olc::vf2d eMin(p.x + len * std::cos(min), p.y + len * std::sin(min));
+        olc::vf2d eMax(p.x + len * std::cos(max), p.y + len * std::sin(max));
 
         FillTriangle(p, eMin, eMax, olc::GREEN);
       }

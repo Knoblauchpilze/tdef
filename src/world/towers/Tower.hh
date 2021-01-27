@@ -439,24 +439,13 @@ namespace tdef {
       getStunDuration() const noexcept;
 
       /**
-       * @brief - Returns the lowest orientation that can be
-       *          targeted by this tower given the current
-       *          orientation and shooting angle.
-       * @return - the minimum orientation that can be reached
-       *           by this tower given the current orientation.
+       * @brief - Returns a value in radians describing the
+       *          current extent of the aiming cone of the
+       *          tower.
+       * @return - the aiming cone of the tower.
        */
       float
-      getMinReachableOrientation() const noexcept;
-
-      /**
-       * @brief - Returns the highest orientation that can be
-       *          targeted by this tower given the current
-       *          orientation and shooting angle.
-       * @return - the maximum orientation that can be reached
-       *           by this tower given the current orientation.
-       */
-      float
-      getMaxReachableOrientation() const noexcept;
+      getAimingCone() const noexcept;
 
       /**
        * @brief - Returns the aggregated cost of this tower,
@@ -582,6 +571,17 @@ namespace tdef {
       hasInfiniteProjectileSpeed(float speed) noexcept;
 
       /**
+       * @brief - Convenience method to allow the determination of an
+       *          infinite aiming speed for a tower in a single func.
+       * @param speed - the aiming speed to analyze.
+       * @return - `true` if the input speed describes a tower with
+       *           infinite aiming speed.
+       */
+      static
+      bool
+      hasInfiniteAimingSpeed(float speed) noexcept;
+
+      /**
        * @brief - This method is used to align the tower with the
        *          selected target. In case no target is defined
        *          yet the picking process will also be handled.
@@ -674,6 +674,13 @@ namespace tdef {
         // when the shoot can actually occur based on
         // the aiming speed.
         utils::TimeStamp aimStart;
+
+        // Defines the extent in radians of the current
+        // aiming cone. This value decreases when the
+        // aiming process is going on and reaches `0`
+        // when the aiming is done. This allows to show
+        // to the user the aiming process.
+        float aimingCone;
       };
 
       /**

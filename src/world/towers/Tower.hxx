@@ -129,12 +129,6 @@ namespace tdef {
   }
 
   inline
-  bool
-  Tower::hasInfiniteProjectileSpeed(float speed) noexcept {
-    return speed < 0.0f;
-  }
-
-  inline
   const towers::Type&
   Tower::getType() const noexcept {
     return m_type;
@@ -238,14 +232,8 @@ namespace tdef {
 
   inline
   float
-  Tower::getMinReachableOrientation() const noexcept {
-    return m_orientation - m_shooting.shootAngle(m_exp.level) / 2.0f;
-  }
-
-  inline
-  float
-  Tower::getMaxReachableOrientation() const noexcept {
-    return m_orientation + m_shooting.shootAngle(m_exp.level) / 2.0f;
+  Tower::getAimingCone() const noexcept {
+    return m_shooting.aimingCone;
   }
 
   inline
@@ -306,6 +294,18 @@ namespace tdef {
     dd.critMultiplier = props.critMultiplier;
 
     return dd;
+  }
+
+  inline
+  bool
+  Tower::hasInfiniteProjectileSpeed(float speed) noexcept {
+    return speed < 0.0f;
+  }
+
+  inline
+  bool
+  Tower::hasInfiniteAimingSpeed(float speed) noexcept {
+    return speed <= 0.0f;
   }
 
 }

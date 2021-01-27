@@ -10,8 +10,19 @@
 
 namespace {
 
+  // Defines the maximum experience level reachable
+  // by a tower.
   constexpr int max_level = 20;
+
+  // Defines the experience points to gain to reach
+  // the maximum level.
   constexpr int max_level_exp_count = 2000.0f;
+
+  // Defines the width of the aiming cone at the
+  // beginning of the aiming process. This value
+  // is progressively decreased to `0` while the
+  // tower is aiming.
+  constexpr float init_aiming_cone = 3.1415926535f;
 
   int
   levelFromExperience(float exp) noexcept {
@@ -67,7 +78,8 @@ namespace tdef {
         props.projectileSpeed,
         props.aimSpeed,
         false,
-        utils::now()
+        utils::now(),
+        0.0f
       }
     ),
 
@@ -166,8 +178,12 @@ namespace tdef {
     if (!pickAndAlignWithTarget(info) || m_target == nullptr) {
       // Can't do anything: we didn't find a
       // target or we are not aligned with it
-      // yet. The tower is not aiming anymore.
+      // yet. The tower is not aiming anymore,
+      // so reset the props.
       m_shooting.aiming = false;
+      if (!hasInfiniteAimingSpeed(m_shooting.aimSpeed(m_exp.level))) {
+        m_shooting.aimingCone = init_aiming_cone;
+      }
 
       return;
     }
@@ -179,9 +195,15 @@ namespace tdef {
     }
 
     // Determine whether the aiming period is
-    // over.
+    // over and adapt the aiming cone to show
+    // the current progress.
     utils::Duration d = aimDuration(m_shooting.aimSpeed(m_exp.level));
     if (m_shooting.aimStart + d > info.moment) {
+      float e = utils::toMilliseconds(info.moment - m_shooting.aimStart);
+      float t = utils::toMilliseconds(d);
+
+      m_shooting.aimingCone = init_aiming_cone * utils::clamp(1.0f - e / t, 0.0f, 1.0f);
+
       return;
     }
 
@@ -190,12 +212,19 @@ namespace tdef {
       return;
     }
 
+    // Reset the aiming process as we fired a shot.
+    m_shooting.aimStart = info.moment;
+    if (!hasInfiniteAimingSpeed(m_shooting.aimSpeed(m_exp.level))) {
+      m_shooting.aimingCone = init_aiming_cone;
+    }
+
     if (m_attack.damage(m_exp.level) > 0.0f) {
       log(
         "Hitting mob " + mobs::toString(m_target->getType()) +
         " at " + m_target->getPos().toString() +
         " for " + std::to_string(m_attack.damage(m_exp.level)) + " damage" +
-        " (health: " + std::to_string(m_target->getHealth()) + ")",
+        " (health: " + std::to_string(m_target->getHealth()) + ", " +
+        " accuracy: " + std::to_string(m_attack.accuracy(m_exp.level)) + ")",
         utils::Level::Verbose
       );
     }

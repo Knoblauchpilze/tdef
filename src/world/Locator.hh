@@ -54,8 +54,10 @@ namespace tdef {
       float orientation;
       BlockType type;
 
-      float coneMin;
-      float coneMax;
+      // The width in radians of the aiming cone for this
+      // block. Mostly useful in case the block represents
+      // a tower. Set to `0` otherwise.
+      float cone;
 
       // The `id` defines a custom value which is interpreted
       // from the `type` of the block.

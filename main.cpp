@@ -15,8 +15,6 @@
 
 // TODO: Some mobs seem to have really high speed.
 // TODO: Projectiles seem to keep being alive for some time.
-// TODO: Make sure that mobs are actually losing life (see
-// when a sniper shoots a fast mob).
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

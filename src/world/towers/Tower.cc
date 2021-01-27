@@ -79,7 +79,8 @@ namespace tdef {
         props.aimSpeed,
         false,
         utils::now(),
-        0.0f
+        0.0f,
+        utils::now()
       }
     ),
 
@@ -252,6 +253,29 @@ namespace tdef {
 
     // Clear the target.
     m_target.reset();
+  }
+
+  void
+  Tower::pause(const utils::TimeStamp& t) {
+    // Similarly to what happen for `Mob`, the goal
+    // of this method is to prepare the resume call
+    // which will make the process advance again.
+    // Note that as the aiming speed needs to keep
+    // track of the actual starting time, we can't
+    // just reduce the aiming time as we're doing
+    // in the case of `Mob`.
+    // Instead we will just register this time and
+    // let the process of `resume` handle things.
+    m_shooting.pauseTime = t;
+  }
+
+  void
+  Tower::resume(const utils::TimeStamp& t) {
+    // Update the start of the aiming time so that
+    // it corresponds to a time in the past similar
+    // to how it was when the process was paused.
+    utils::Duration e = m_shooting.pauseTime - m_shooting.aimStart;
+    m_shooting.aimStart = t - e;
   }
 
   bool

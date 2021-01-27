@@ -15,7 +15,6 @@
 
 // TODO: Some mobs seem to have really high speed.
 // TODO: Projectiles seem to keep being alive for some time.
-// TODO: Pause the aiming speed.
 // TODO: Make sure that mobs are actually losing life (see
 // when a sniper shoots a fast mob).
 

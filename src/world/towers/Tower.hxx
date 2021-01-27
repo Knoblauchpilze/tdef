@@ -237,14 +237,6 @@ namespace tdef {
   }
 
   inline
-  void
-  Tower::pause(const utils::TimeStamp& /*t*/) {}
-
-  inline
-  void
-  Tower::resume(const utils::TimeStamp& /*t*/) {}
-
-  inline
   Tower::DamageData
   Tower::fromProps(const TProps& props) noexcept {
     DamageData dd;

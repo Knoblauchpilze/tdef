@@ -99,6 +99,42 @@ namespace tdef {
   }
 
   void
+  World::pause(float /*tDelta*/) {
+    // Pause each element.
+    utils::TimeStamp t = utils::now();
+
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      m_blocks[id]->pause(t);
+    }
+
+    for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
+      m_mobs[id]->pause(t);
+    }
+
+    for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
+      m_projectiles[id]->pause(t);
+    }
+  }
+
+  void
+  World::resume(float /*tDelta*/) {
+    // Resume each element.
+    utils::TimeStamp t = utils::now();
+
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      m_blocks[id]->resume(t);
+    }
+
+    for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
+      m_mobs[id]->resume(t);
+    }
+
+    for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
+      m_projectiles[id]->resume(t);
+    }
+  }
+
+  void
   World::spawn(BlockShPtr block) {
     if (block == nullptr) {
       log("Failed to spawn null block", utils::Level::Error);

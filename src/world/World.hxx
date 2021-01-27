@@ -14,18 +14,6 @@ namespace tdef {
     return m_loc;
   }
 
-  inline
-  void
-  World::pause(float /*tDelta*/) {
-    // Nothing to do for now.
-  }
-
-  inline
-  void
-  World::resume(float /*tDelta*/) {
-    // Nothing to do for now.
-  }
-
 }
 
 #endif    /* WORLD_HXX */

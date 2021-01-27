@@ -156,41 +156,50 @@ namespace tdef {
     // remaining duration corresponds to the value
     // currently remaining and the time stamp is
     // equivalent to the start of the pause moment.
-    utils::Duration elapsed = t - m_speed.tFreeze;
+    if (m_speed.fDuration != utils::Duration::zero()) {
+      utils::Duration elapsed = t - m_speed.tFreeze;
 
-    log(
-      "Freeze started at " + utils::timeToString(m_speed.tFreeze) +
-      " for " + utils::durationToString(m_speed.fDuration) +
-      ", " + utils::durationToString(elapsed) + " elapsed, " +
-      utils::durationToString(m_speed.fDuration - elapsed) + " remaining"
-    );
+      log(
+        "Freeze started at " + utils::timeToString(m_speed.tFreeze) +
+        " for " + utils::durationToString(m_speed.fDuration) +
+        ", " + utils::durationToString(elapsed) + " elapsed, " +
+        utils::durationToString(m_speed.fDuration - elapsed) + " remaining",
+        utils::Level::Verbose
+      );
 
-    m_speed.tFreeze = t;
-    m_speed.fDuration = m_speed.fDuration - elapsed;
+      m_speed.tFreeze = t;
+      m_speed.fDuration = m_speed.fDuration - elapsed;
+    }
 
-    elapsed = t - m_speed.tStun;
+    if (m_speed.sDuration != utils::Duration::zero()) {
+      utils::Duration elapsed = t - m_speed.tStun;
 
-    log(
-      "Stun started at " + utils::timeToString(m_speed.tStun) +
-      " for " + utils::durationToString(m_speed.sDuration) +
-      ", " + utils::durationToString(elapsed) + " elapsed, " +
-      utils::durationToString(m_speed.sDuration - elapsed) + " remaining"
-    );
+      log(
+        "Stun started at " + utils::timeToString(m_speed.tStun) +
+        " for " + utils::durationToString(m_speed.sDuration) +
+        ", " + utils::durationToString(elapsed) + " elapsed, " +
+        utils::durationToString(m_speed.sDuration - elapsed) + " remaining",
+        utils::Level::Verbose
+      );
 
-    m_speed.tStun = t;
-    m_speed.sDuration = m_speed.sDuration - elapsed;
+      m_speed.tStun = t;
+      m_speed.sDuration = m_speed.sDuration - elapsed;
+    }
 
-    elapsed = t - m_poison.tPoison;
+    if (m_poison.pDuration != utils::Duration::zero()) {
+      utils::Duration elapsed = t - m_poison.tPoison;
 
-    log(
-      "Poison started at " + utils::timeToString(m_poison.tPoison) +
-      " for " + utils::durationToString(m_poison.pDuration) +
-      ", " + utils::durationToString(elapsed) + " elapsed, " +
-      utils::durationToString(m_poison.pDuration - elapsed) + " remaining"
-    );
+      log(
+        "Poison started at " + utils::timeToString(m_poison.tPoison) +
+        " for " + utils::durationToString(m_poison.pDuration) +
+        ", " + utils::durationToString(elapsed) + " elapsed, " +
+        utils::durationToString(m_poison.pDuration - elapsed) + " remaining",
+        utils::Level::Verbose
+      );
 
-    m_poison.tPoison = t;
-    m_poison.pDuration = m_poison.pDuration - elapsed;
+      m_poison.tPoison = t;
+      m_poison.pDuration = m_poison.pDuration - elapsed;
+    }
   }
 
   void
@@ -203,19 +212,22 @@ namespace tdef {
       "Moved speed to start from " + utils::timeToString(m_speed.tFreeze) +
       " to " + utils::timeToString(t) +
       ", end in " + utils::durationToString(m_speed.fDuration) +
-      " at " + utils::timeToString(t + m_speed.fDuration)
+      " at " + utils::timeToString(t + m_speed.fDuration),
+      utils::Level::Verbose
     );
     log(
       "Moved stun to start from " + utils::timeToString(m_speed.tStun) +
       " to " + utils::timeToString(t) +
       ", end in " + utils::durationToString(m_speed.sDuration) +
-      " at " + utils::timeToString(t + m_speed.sDuration)
+      " at " + utils::timeToString(t + m_speed.sDuration),
+      utils::Level::Verbose
     );
     log(
       "Moved poison to start from " + utils::timeToString(m_poison.tPoison) +
       " to " + utils::timeToString(t) +
       ", end in " + utils::durationToString(m_poison.pDuration) +
-      " at " + utils::timeToString(t + m_poison.pDuration)
+      " at " + utils::timeToString(t + m_poison.pDuration),
+      utils::Level::Verbose
     );
 
     m_speed.tFreeze = t;
@@ -257,8 +269,8 @@ namespace tdef {
     float hit = d.hit;
 
     if (m_defense.shieldDurability >= 0.0f) {
-      float remaining = hit * m_defense.shieldEfficiency;
-      float absorbed = hit - remaining;
+      float absorbed = hit * m_defense.shieldEfficiency;
+      float remaining = hit - absorbed;
 
       // The durability loss is equivalent to 1% of the
       // difference between the shield health and the

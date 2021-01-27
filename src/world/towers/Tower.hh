@@ -681,6 +681,12 @@ namespace tdef {
         // when the aiming is done. This allows to show
         // to the user the aiming process.
         float aimingCone;
+
+        // Used as a way to keep track of the time at
+        // which the aiming process was paused. Note
+        // that this value is only assigned when at
+        // least one call to `pause` has been made.
+        utils::TimeStamp pauseTime;
       };
 
       /**

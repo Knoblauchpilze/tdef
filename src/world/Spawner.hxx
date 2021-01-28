@@ -4,6 +4,24 @@
 # include "Spawner.hh"
 
 namespace tdef {
+  namespace spawners {
+
+    inline
+    std::string
+    toString(const Level& l) noexcept {
+      switch (l) {
+        case Level::Easy:
+          return "Easy";
+        case Level::Normal:
+          return "Normal";
+        case Level::Hard:
+          return "Hard";
+        default:
+          return "Unknown";
+      }
+    }
+
+  }
 
   inline
   Spawner::SProps
@@ -21,9 +39,6 @@ namespace tdef {
     pp.refill = 0.1f;
 
     pp.mobs = dist;
-
-    pp.minWaveSize = 1;
-    pp.maxWaveSize = 1;
 
     return pp;
   }

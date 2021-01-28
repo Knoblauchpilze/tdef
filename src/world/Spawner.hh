@@ -28,6 +28,54 @@ namespace tdef {
      */
     using Distribution = std::vector<DistItem>;
 
+    /**
+     * @brief - Defines the possible types for a spawner. Each
+     *          type has its own distribution of mob and some
+     *          specific formula to make the health of the mobs
+     *          spawned increase.
+     */
+    enum class Level {
+      Easy,
+      Normal,
+      Hard
+    };
+
+    /**
+     * @brief - Converts the input type value to a string
+     *          and to an "Unknown" value if the enum can
+     *          not be interpreted.
+     * @param l - the type to convert.
+     * @return - the string representation of the enum.
+     */
+    std::string
+    toString(const Level& l) noexcept;
+
+    /**
+     * @brief - Convenience define for a function allowing to
+     *          compute the health of a mob based on some level.
+     */
+    using WaveFunc = std::function<int(StepInfo&, int)>;
+
+    /**
+     * @brief - Convenience define for a function allowing to
+     *          compute the health pool of a mob based on some
+     *          level.
+     */
+    using HealthFunc = std::function<float(StepInfo&, int)>;
+
+    /**
+     * @brief - Convenience structure defining the needed
+     *          information to represent the custom info
+     *          for a spawner.
+     *          This allows to perform customization of
+     *          the behavior of a spawner without needing
+     *          to instantiate a new class.
+     */
+    struct Processes {
+      WaveFunc wave;
+      HealthFunc health;
+    };
+
   }
 
   class Spawner: public Block {
@@ -44,9 +92,6 @@ namespace tdef {
         float refill;
 
         spawners::Distribution mobs;
-
-        int minWaveSize;
-        int maxWaveSize;
       };
 
       static
@@ -58,8 +103,11 @@ namespace tdef {
       /**
        * @brief - Defines a new spawner with the specified props.
        * @param props - the properties to define this spawner.
+       * @param desc - the description of the custom functions to
+       *               use during the behavior of this spawner.
        */
-      Spawner(const SProps& props);
+      Spawner(const SProps& props,
+              const spawners::Processes& desc);
 
       void
       step(StepInfo& info) override;
@@ -97,6 +145,16 @@ namespace tdef {
     private:
 
       /**
+        * @brief - Convenience method allowing to handle the ops
+        *          needed to generate a new wave for this spawner.
+        * @param info - info about the current step of the world.
+        */
+      void
+      generateWave(StepInfo& info);
+
+    private:
+
+      /**
        * @brief - The distribution of mobs attached to this
        *          spawner. Will be polled when a new mob is
        *          to be spawned so that we can randomize
@@ -111,18 +169,6 @@ namespace tdef {
        *          This value is clamped to at least `0`.
        */
       float m_spawnRadius;
-
-      /**
-       * @brief - The minimum number of mobs that can be spawned
-       *          in a single wave of the spawner.
-       */
-      int m_minWaveSize;
-
-      /**
-       * @brief - The maximum number of mobs that can be spawned
-       *          in a single wave of the spawner.
-       */
-      int m_maxWaveSize;
 
       /**
        * @brief - The current stock of resource available in the
@@ -144,6 +190,19 @@ namespace tdef {
        *          amount of stock that is refilled every second.
        */
       float m_refill;
+
+      /**
+       * @brief - Defines an experience level for the spawner.
+       *          This is a measure of the number of waves that
+       *          have already been generated for the spawner.
+       */
+      int m_exp;
+
+      /**
+       * @brief - Defines the custom processes attached to
+       *          this spawner.
+       */
+      spawners::Processes m_processes;
   };
 
   using SpawnerShPtr = std::shared_ptr<Spawner>;

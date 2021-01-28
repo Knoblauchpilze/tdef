@@ -1,51 +1,38 @@
 
 # include "SpawnerFactory.hh"
-# include "Mob.hh"
+# include "SpawnerData.hh"
 
 namespace tdef {
   namespace spawners {
 
+    Processes
+    generateData(const Level& lvl) {
+      switch (lvl) {
+        case Level::Easy:
+          return easy::generateData();
+        case Level::Hard:
+          return hard::generateData();
+        case Level::Normal:
+        default:
+          // Assume default is normal difficulty.
+          return normal::generateData();
+      }
+    }
+
     Spawner::SProps
-    generateProps(const utils::Point2f& p) {
-      spawners::Distribution d;
-
-      d.push_back(
-        spawners::DistItem{
-          0.2f,
-          mobs::Type::Regular
-        }
-      );
-      d.push_back(
-        spawners::DistItem{
-          0.4f,
-          mobs::Type::Fast
-        }
-      );
-      d.push_back(
-        spawners::DistItem{
-          0.2f,
-          mobs::Type::Icy
-        }
-      );
-      d.push_back(
-        spawners::DistItem{
-          0.2f,
-          mobs::Type::Strong
-        }
-      );
-
-      Spawner::SProps pp = Spawner::newProps(p, d);
-
-      pp.spawnRadius = 2.0f;
-
-      pp.threshold = 1.0f;
-      pp.reserve = 0.9f;
-      pp.refill = 0.1f;
-
-      pp.minWaveSize = 1;
-      pp.maxWaveSize = 3;
-
-      return pp;
+    generateProps(const utils::Point2f& p,
+                  const Level& lvl)
+    {
+      switch (lvl) {
+        case Level::Easy:
+          return easy::generateProps(p);
+        case Level::Hard:
+          return hard::generateProps(p);
+        case Level::Normal:
+        default:
+          // Assume default is normal difficulty.
+          return normal::generateProps(p);
+      }
     }
 
   }

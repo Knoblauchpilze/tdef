@@ -4,18 +4,20 @@
 
 namespace tdef {
 
-  Spawner::Spawner(const SProps& props):
+  Spawner::Spawner(const SProps& props,
+                   const spawners::Processes& desc):
     Block(props, "spawner"),
 
     m_distribution(props.mobs),
 
     m_spawnRadius(std::max(props.spawnRadius, 0.0f)),
-    m_minWaveSize(props.minWaveSize),
-    m_maxWaveSize(std::max(props.maxWaveSize, 1)),
 
     m_stock(props.reserve),
     m_threshold(props.threshold),
-    m_refill(props.refill)
+    m_refill(props.refill),
+
+    m_exp(0),
+    m_processes(desc)
   {
     setService("spawner");
 
@@ -39,19 +41,10 @@ namespace tdef {
     }
 
     m_stock -= m_threshold;
+    ++m_exp;
 
-    // Generate the size of the wave.
-    int size = info.rng.rndInt(m_minWaveSize, m_maxWaveSize);
-    for (int id = 0u ; id < size ; ++id) {
-    // Spawn a new entity and prepare it.
-      MobShPtr mob = spawn(info);
-      if (mob == nullptr) {
-        log("Spawner generated null entity, discarding it");
-        continue;
-      }
-
-      info.spawnMob(mob);
-    }
+    // Generate a new wave.
+    generateWave(info);
   }
 
   MobShPtr
@@ -82,7 +75,32 @@ namespace tdef {
     id = std::min(static_cast<unsigned>(m_distribution.size() - 1u), id);
 
     Mob::MProps props = mobs::generateProps(m_distribution[id].mob, utils::Point2f(x, y));
+    props.health = m_processes.health(info, m_exp);
+
+    log(
+      "Spawning " + mobs::toString(props.type) + " at " +
+      props.pos.toString() + " with " +
+      std::to_string(props.health) + " health",
+      utils::Level::Verbose
+    );
+
     return std::make_shared<Mob>(props);
+  }
+
+  void
+  Spawner::generateWave(StepInfo& info) {
+    int size = m_processes.wave(info, m_exp);
+
+    for (int id = 0u ; id < size ; ++id) {
+    // Spawn a new entity and prepare it.
+      MobShPtr mob = spawn(info);
+      if (mob == nullptr) {
+        log("Spawner generated null entity, discarding it");
+        continue;
+      }
+
+      info.spawnMob(mob);
+    }
   }
 
 }

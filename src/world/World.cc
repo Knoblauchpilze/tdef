@@ -222,9 +222,14 @@ namespace tdef {
       key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        log("Generated spawner at " + p.toString(), utils::Level::Verbose);
-        Spawner::SProps pp = spawners::generateProps(p);
-        SpawnerShPtr b = std::make_shared<Spawner>(pp);
+        spawners::Level lvl = spawners::Level::Normal;
+
+        log("Generated " + spawners::toString(lvl) + " spawner at " + p.toString(), utils::Level::Verbose);
+
+        Spawner::SProps pp = spawners::generateProps(p, lvl);
+        spawners::Processes sd = spawners::generateData(lvl);
+
+        SpawnerShPtr b = std::make_shared<Spawner>(pp, sd);
         m_blocks.push_back(b);
         --id;
       }

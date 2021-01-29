@@ -16,6 +16,8 @@
 // TODO: Some mobs seem to have really high speed.
 // TODO: Projectiles seem to keep being alive for some time.
 // TODO: Handle upgrade cost for tower.
+// TODO: Connect game over.
+// TODO: Handle wall breaking behavior.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

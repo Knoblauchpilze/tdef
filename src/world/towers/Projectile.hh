@@ -115,7 +115,7 @@ namespace tdef {
        * @brief - Defines the distance below which the projectile
        *          is considered to have reach its target.
        */
-      static constexpr float sk_arrived = 0.0001f;
+      static constexpr float sk_arrived = 0.01f;
 
       /**
        * @brief - The target for this projectile. We will

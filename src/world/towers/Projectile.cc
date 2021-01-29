@@ -51,8 +51,19 @@ namespace tdef {
       dx /= dst;
       dy /= dst;
 
-      m_pos.x() += dx * m_speed * info.elapsed;
-      m_pos.y() += dy * m_speed * info.elapsed;
+      // At best we can move of `m_speed * info.elapsed` in a
+      // single frame. However, the distance required might
+      // be smaller than that, in which case we don't want to
+      // overshoot our target. Note that the `dx/y` can be
+      // negative so the `s` (for "scaling factor") takes
+      // that into account.
+      // It measures how we should scale the maximum distance
+      // we can travel to not overshoot the target.
+      float covered = m_speed * info.elapsed;
+      float s = std::min(dst / covered, 1.0f);
+
+      m_pos.x() += s * dx * covered;
+      m_pos.y() += s * dy * covered;
 
       return;
     }

@@ -337,9 +337,9 @@ namespace tdef {
   }
 
   void
-  TDefApp::onStep(float /*elapsed*/) {
-    if (m_game != nullptr) {
-      // m_gameOver = !m_game->step(elapsed);
+  TDefApp::onStep(float elapsed) {
+    if (m_game != nullptr && !m_gameOver) {
+      m_gameOver = !m_game->step(elapsed);
     }
   }
 

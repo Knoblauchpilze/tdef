@@ -76,6 +76,14 @@ namespace tdef {
       void
       drawDebug(const RenderDesc& res) override;
 
+      /**
+       * @brief - Used to draw the game over screen.
+       * @param res - the resources to use to perform
+       *              the rendering.
+       */
+      void
+      drawGameOver(const RenderDesc& res);
+
       void
       onStep(float elapsed) override;
 
@@ -128,12 +136,32 @@ namespace tdef {
                     const CoordinateFrame& cf,
                     const Orientation& o = Orientation::Horizontal);
 
+      /**
+       * @brief - Used to perform the creation of the game over menu.
+       * @param dims - the dimensions of the window where the menu is
+       *               to be displayed.
+       */
+      void
+      generateGameOverMenu(const olc::vi2d& dims);
+
     private:
 
       /**
        * @brief - The game managed by this application.
        */
       GameShPtr m_game;
+
+      /**
+       * @brief - Defines whether or not the game has
+       *          ended due to the player being bad.
+       */
+      bool m_gameOver;
+
+      /**
+       * @brief - Defines the menu to display in case
+       *          the game is over.
+       */
+      MenuShPtr m_gameOverMenu;
 
       /**
        * @brief - Defines the list of menus available for

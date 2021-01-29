@@ -253,7 +253,7 @@ namespace tdef {
     return l;
   }
 
-  void
+  bool
   Game::step(float tDelta) {
     // Step the world.
     m_world->step(tDelta);
@@ -270,6 +270,10 @@ namespace tdef {
 
     // And redraw the UI.
     updateUI();
+
+    // The game continues as long as there are some
+    // lives left.
+    return m_lives > 0;
   }
 
   MenuShPtr

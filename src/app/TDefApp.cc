@@ -8,6 +8,8 @@ namespace tdef {
     PGEApp(desc),
 
     m_game(nullptr),
+    m_gameOver(false),
+    m_gameOverMenu(nullptr),
 
     m_menus(),
 
@@ -28,6 +30,8 @@ namespace tdef {
 
     // Generate menus and register them.
     m_menus = m_game->generateMenus(dims);
+
+    generateGameOverMenu(dims);
   }
 
   void
@@ -35,6 +39,12 @@ namespace tdef {
     // Clear rendering target.
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::VERY_DARK_GREY);
+
+    // Do not draw anything if the game is over.
+    if (m_gameOver) {
+      SetPixelMode(olc::Pixel::NORMAL);
+      return;
+    }
 
     // Fetch elements to display.
     Viewport v = res.cf.cellsViewport();
@@ -146,6 +156,13 @@ namespace tdef {
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
 
+    // Check whether the game is over, in which case we
+    // will display the end screen.
+    if (m_gameOver) {
+      SetPixelMode(olc::Pixel::NORMAL);
+      return;
+    }
+
     // Fetch elements to display.
     Viewport v = res.cf.cellsViewport();
     world::ItemType ie = world::ItemType::Block;
@@ -222,6 +239,12 @@ namespace tdef {
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
 
+    if (m_gameOver) {
+      SetPixelMode(olc::Pixel::NORMAL);
+      drawGameOver(res);
+      return;
+    }
+
     // Draw the cursor.
     olc::vi2d mp = GetMousePos();
     olc::vi2d mtp = res.cf.pixelCoordsToTiles(mp);
@@ -250,6 +273,11 @@ namespace tdef {
     // Clear rendering target.
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
+
+    if (m_gameOver) {
+      SetPixelMode(olc::Pixel::NORMAL);
+      return;
+    }
 
     // Draw cursor's position.
     olc::vi2d mp = GetMousePos();
@@ -306,6 +334,50 @@ namespace tdef {
     }
 
     SetPixelMode(olc::Pixel::NORMAL);
+  }
+
+  void
+  TDefApp::onStep(float /*elapsed*/) {
+    if (m_game != nullptr) {
+      // m_gameOver = !m_game->step(elapsed);
+    }
+  }
+
+  void
+  TDefApp::drawGameOver(const RenderDesc& /*res*/) {
+    if (m_gameOverMenu != nullptr) {
+      m_gameOverMenu->render(this);
+    }
+  }
+
+  void
+  TDefApp::generateGameOverMenu(const olc::vi2d& dims) {
+    olc::Pixel bgc(20, 20, 20, alpha::Opaque);
+    const olc::vf2d size(std::min(dims.x, 350), std::min(dims.y, 200));
+    const olc::vi2d pos(dims.x / 2.0f - size.x / 2.0f, dims.y / 2.0f - size.y / 2.0f);
+
+    menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
+    menu::MenuContentDesc fg = menu::newTextContent("");
+
+    m_gameOverMenu = std::make_shared<Menu>(
+      pos,
+      size,
+      "goMenu",
+      bg,
+      fg,
+      menu::Layout::Vertical
+    );
+
+    bgc = olc::Pixel(90, 90, 90);
+    olc::Pixel tc(180, 180, 180);
+
+    bg = menu::newColoredBackground(bgc);
+    fg = menu::newTextContent("Restart", tc, menu::Alignment::Center);
+    m_gameOverMenu->addMenu(std::make_shared<Menu>(pos, size, "restart", bg, fg));
+
+    bg = menu::newColoredBackground(bgc);
+    fg = menu::newTextContent("Quit", tc, menu::Alignment::Center);
+    m_gameOverMenu->addMenu(std::make_shared<Menu>(pos, size, "quit", bg, fg));
   }
 
 }

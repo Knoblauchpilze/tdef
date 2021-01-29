@@ -195,7 +195,12 @@ namespace tdef {
           break;
       }
 
-      pge->DrawStringDecal(p, m_fg.text, m_fg.color);
+      olc::Pixel c = m_fg.color;
+      if (m_state.clickable && (m_state.highlighted || m_state.selected)) {
+        c = m_fg.hColor;
+      }
+
+      pge->DrawStringDecal(p, m_fg.text, c);
 
       return;
     }
@@ -308,7 +313,12 @@ namespace tdef {
     }
 
     // Draw both the text and the image.
-    pge->DrawStringDecal(tp, m_fg.text, olc::MAGENTA);
+    olc::Pixel c = m_fg.color;
+    if (m_state.clickable && (m_state.highlighted || m_state.selected)) {
+      c = m_fg.hColor;
+    }
+
+    pge->DrawStringDecal(tp, m_fg.text, c);
 
     pge->DrawPartialDecal(sp, m_fgSprite, olc::vi2d(), ss, s);
   }

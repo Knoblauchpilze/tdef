@@ -16,6 +16,7 @@ namespace tdef {
 
       m.text = text;
       m.color = color;
+      m.hColor = color;
 
       m.icon = "";
       m.size = olc::vi2d();
@@ -35,6 +36,7 @@ namespace tdef {
 
       m.text = "";
       m.color = olc::MAGENTA;
+      m.hColor = olc::MAGENTA;
 
       m.icon = sprite;
       m.size = size;
@@ -58,6 +60,7 @@ namespace tdef {
 
       m.text = text;
       m.color = olc::MAGENTA;
+      m.hColor = olc::MAGENTA;
 
       m.icon = sprite;
       m.size = size;

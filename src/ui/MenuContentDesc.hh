@@ -32,6 +32,7 @@ namespace tdef {
     struct MenuContentDesc {
       std::string text;
       olc::Pixel color;
+      olc::Pixel hColor;
 
       std::string icon;
       olc::vi2d size;

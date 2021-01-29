@@ -60,14 +60,6 @@ namespace tdef {
 
   inline
   void
-  TDefApp::onStep(float elapsed) {
-    if (m_game != nullptr) {
-      m_game->step(elapsed);
-    }
-  }
-
-  inline
-  void
   TDefApp::onPause(float elapsed) {
     if (m_game != nullptr) {
       m_game->pause(elapsed);
@@ -94,6 +86,11 @@ namespace tdef {
 
     for (unsigned id = 0u ; id < m_menus.size() ; ++id) {
       menu::InputHandle ih = m_menus[id]->processUserInput(c, actions);
+      relevant = (relevant || ih.relevant);
+    }
+
+    if (m_gameOverMenu != nullptr) {
+      menu::InputHandle ih = m_gameOverMenu->processUserInput(c, actions);
       relevant = (relevant || ih.relevant);
     }
 

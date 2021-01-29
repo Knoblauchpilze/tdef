@@ -157,8 +157,11 @@ namespace tdef {
        *          in time to the internal world.
        * @param tDelta - the duration of the last frame in
        *                 seconds.
+       * @param bool - `true` in case the game continues,
+       *               and `false` otherwise (i.e. if the
+       *               game is ended).
        */
-      void
+      bool
       step(float tDelta);
 
       /**

@@ -370,13 +370,18 @@ namespace tdef {
 
     bgc = olc::Pixel(90, 90, 90);
     olc::Pixel tc(180, 180, 180);
+    // Highlight color for the text (which should be darker
+    // as the menu itself is quite bright).
+    olc::Pixel htc(30, 30, 30);
 
     bg = menu::newColoredBackground(bgc);
     fg = menu::newTextContent("Restart", tc, menu::Alignment::Center);
+    fg.hColor = htc;
     m_gameOverMenu->addMenu(std::make_shared<Menu>(pos, size, "restart", bg, fg));
 
     bg = menu::newColoredBackground(bgc);
     fg = menu::newTextContent("Quit", tc, menu::Alignment::Center);
+    fg.hColor = htc;
     m_gameOverMenu->addMenu(std::make_shared<Menu>(pos, size, "quit", bg, fg));
   }
 

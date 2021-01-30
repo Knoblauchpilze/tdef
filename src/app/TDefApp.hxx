@@ -59,19 +59,17 @@ namespace tdef {
   }
 
   inline
-  void
+  bool
   TDefApp::onPause(float elapsed) {
-    if (m_game != nullptr) {
-      m_game->pause(elapsed);
-    }
+    m_game->pause(elapsed);
+    return m_game->terminated();
   }
 
   inline
-  void
+  bool
   TDefApp::onResume(float elapsed) {
-    if (m_game != nullptr) {
-      m_game->resume(elapsed);
-    }
+    m_game->resume(elapsed);
+    return m_game->terminated();
   }
 
   inline

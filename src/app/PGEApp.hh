@@ -199,24 +199,30 @@ namespace tdef {
        *          provide their own logic.
        * @param elapsed - the elapsed time since the last call
        *                  to this method.
+       * @return - `true` in case the program should continue
+       *           running.
        */
-      virtual void
+      virtual bool
       onStep(float elapsed) = 0;
 
       /**
        * @brief - Interface method called at each frame when
        *          the pause has been activated.
        * @param elapsed - the elapsed time since the last call.
+       * @return - `true` in case the program should continue
+       *           running.
        */
-      virtual void
+      virtual bool
       onPause(float elapsed) = 0;
 
       /**
        * @brief - Interface method called at each frame when
        *          the resume method has been called.
        * @param elapsed - the elapsed time since the last call.
+       * @return - `true` in case the program should continue
+       *           running.
        */
-      virtual void
+      virtual bool
       onResume(float elapsed) = 0;
 
       /**

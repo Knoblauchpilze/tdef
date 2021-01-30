@@ -118,6 +118,13 @@ namespace tdef {
       void
       forceDelete();
 
+      /**
+       * @brief - Used to reset the properties of this world
+       *          so that it can be used to start a new game.
+       */
+      void
+      reset();
+
     private:
 
       /**

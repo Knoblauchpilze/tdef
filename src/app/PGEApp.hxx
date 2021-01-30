@@ -12,16 +12,17 @@ namespace tdef {
     InputChanges ic = handleInputs();
 
     // Handle game logic if needed.
+    bool quit = false;
     switch (m_state) {
       case State::Running:
-       onStep(fElapsedTime);
+        quit = onStep(fElapsedTime);
         break;
       case State::Pausing:
-        onPause(fElapsedTime);
+        quit = onPause(fElapsedTime);
         m_state = State::Paused;
         break;
       case State::Resuming:
-        onResume(fElapsedTime);
+        quit = onResume(fElapsedTime);
         m_state = State::Running;
         break;
       case State::Paused:
@@ -90,7 +91,7 @@ namespace tdef {
     // Not the first frame anymore.
     m_first = false;
 
-    return !ic.quit;
+    return !ic.quit && !quit;
   }
 
   inline

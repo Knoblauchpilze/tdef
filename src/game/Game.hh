@@ -94,6 +94,30 @@ namespace tdef {
       lives() const noexcept;
 
       /**
+       * @brief - Used to perform a reset of the data defined
+       *          by this game, typically to allow a new run
+       *          to be generated.
+       */
+      void
+      reset();
+
+      /**
+       * @brief - Requests the game to be terminated. This is
+       *          applied to the next iteration of the game
+       *          loop.
+       */
+      void
+      terminate() noexcept;
+
+      /**
+       * @brief - Returns whether or not the game has been
+       *          terminated. The game is terminated when
+       *          the user wants to exit the app (usually).
+       */
+      bool
+      terminated() const noexcept;
+
+      /**
        * @brief - Forward the call to the internal world so
        *          that one can fetch the list of visible
        *          elements.
@@ -441,6 +465,14 @@ namespace tdef {
        *          `z` order).
        */
       LocatorShPtr m_loc;
+
+      /**
+       * @brief - Used to hold whether or not the game has been shut
+       *          down. It usuallu indicates that no simulation will
+       *          be performed anymore and usually indicates that a
+       *          termination request has been received.
+       */
+      bool m_terminated;
 
       /**
        * @brief - The type of tower to spawn if needed.

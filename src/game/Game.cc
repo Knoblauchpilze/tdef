@@ -53,6 +53,7 @@ namespace tdef {
 
     m_world(nullptr),
     m_loc(nullptr),
+    m_terminated(false),
 
     m_tType(nullptr),
     m_wallBuilding(false),
@@ -251,6 +252,31 @@ namespace tdef {
     }
 
     return l;
+  }
+
+  void
+  Game::reset() {
+    // Reset internal properties.
+    m_tType = nullptr;
+    m_wallBuilding = false;
+
+    m_lives = BASE_LIVES;
+    m_gold = BASE_GOLD;
+
+    m_world->reset();
+
+    // And reset menus.
+    m_tDisplay.main->setVisible(false);
+    m_tDisplay.tower = nullptr;
+
+    m_mDisplay.main->setVisible(false);
+    m_mDisplay.mob = nullptr;
+
+    m_sDisplay.main->setVisible(false);
+    m_sDisplay.spawner = nullptr;
+
+    m_wDisplay.main->setVisible(false);
+    m_wDisplay.wall = nullptr;
   }
 
   bool

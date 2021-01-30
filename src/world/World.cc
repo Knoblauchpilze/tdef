@@ -197,6 +197,17 @@ namespace tdef {
   }
 
   void
+  World::reset() {
+    // Clear all registered elements.
+    m_blocks.clear();
+    m_mobs.clear();
+    m_projectiles.clear();
+
+    // Regenerate the world.
+    generate();
+  }
+
+  void
   World::generate() {
     static constexpr int sk_spawners = 3;
     static constexpr int sk_walls = 2;
@@ -232,6 +243,8 @@ namespace tdef {
         SpawnerShPtr b = std::make_shared<Spawner>(pp, sd);
         m_blocks.push_back(b);
         --id;
+
+        used.insert(key);
       }
     }
 
@@ -244,9 +257,12 @@ namespace tdef {
 
       if (used.count(key) == 0) {
         log("Generated wall at " + p.toString(), utils::Level::Verbose);
+
         WallShPtr b = std::make_shared<Wall>(Wall::newProps(p));
         m_blocks.push_back(b);
         --id;
+
+        used.insert(key);
       }
     }
 
@@ -258,10 +274,18 @@ namespace tdef {
       key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
 
       if (used.count(key) == 0) {
-        log("Generated portal at " + p.toString(), utils::Level::Verbose);
-        PortalShPtr b = std::make_shared<Portal>(Portal::newProps(p));
+        Portal::PProps pp = Portal::newProps(p);
+        log(
+          "Generated portal at " + p.toString() + " with " +
+          std::to_string(pp.lives) + " live(s)",
+          utils::Level::Verbose
+        );
+
+        PortalShPtr b = std::make_shared<Portal>(pp);
         m_blocks.push_back(b);
         --id;
+
+        used.insert(key);
       }
     }
 
@@ -298,6 +322,8 @@ namespace tdef {
         TowerShPtr b = std::make_shared<Tower>(pp, td);
         m_blocks.push_back(b);
         --id;
+
+        used.insert(key);
       }
     }
 
@@ -335,6 +361,8 @@ namespace tdef {
         );
 
         --id;
+
+        used.insert(key);
       }
     }
 

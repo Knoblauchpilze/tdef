@@ -1,6 +1,7 @@
 
 # include "TDefApp.hh"
 # include <maths_utils/ComparisonUtils.hh>
+# include "SimpleAction.hh"
 
 namespace tdef {
 
@@ -336,11 +337,18 @@ namespace tdef {
     SetPixelMode(olc::Pixel::NORMAL);
   }
 
-  void
+  bool
   TDefApp::onStep(float elapsed) {
-    if (m_game != nullptr && !m_gameOver) {
+    if (!m_gameOver) {
       m_gameOver = !m_game->step(elapsed);
+
+      // Display the game over menu if needed.
+      if (m_gameOver) {
+        m_gameOverMenu->setVisible(true);
+      }
     }
+
+    return m_game->terminated();
   }
 
   void
@@ -377,12 +385,53 @@ namespace tdef {
     bg = menu::newColoredBackground(bgc);
     fg = menu::newTextContent("Restart", tc, menu::Alignment::Center);
     fg.hColor = htc;
-    m_gameOverMenu->addMenu(std::make_shared<Menu>(pos, size, "restart", bg, fg));
+    m_gameOverMenu->addMenu(
+      std::make_shared<SimpleMenu>(
+        pos,
+        size,
+        bg,
+        fg,
+        [this](std::vector<ActionShPtr>& actions) {
+          actions.push_back(
+            std::make_shared<SimpleAction>(
+              [this](Game& g) {
+                // Reset visibility of the game over menu and
+                // the game over flag.
+                m_gameOverMenu->setVisible(false);
+                m_gameOver = false;
+
+                // And regenerate a new game.
+                g.reset();
+              }
+            )
+          );
+        }
+      )
+    );
 
     bg = menu::newColoredBackground(bgc);
     fg = menu::newTextContent("Quit", tc, menu::Alignment::Center);
     fg.hColor = htc;
-    m_gameOverMenu->addMenu(std::make_shared<Menu>(pos, size, "quit", bg, fg));
+    m_gameOverMenu->addMenu(
+      std::make_shared<SimpleMenu>(
+        pos,
+        size,
+        bg,
+        fg,
+        [](std::vector<ActionShPtr>& actions) {
+          actions.push_back(
+            std::make_shared<SimpleAction>(
+              [](Game& g) {
+                g.terminate();
+              }
+            )
+          );
+        }
+      )
+    );
+
+    // Disable the menu when we start the app.
+    m_gameOverMenu->setVisible(false);
   }
 
 }

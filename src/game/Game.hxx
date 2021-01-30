@@ -28,6 +28,19 @@ namespace tdef {
   }
 
   inline
+  void
+  Game::terminate() noexcept {
+    log("Terminated");
+    m_terminated = true;
+  }
+
+  inline
+  bool
+  Game::terminated() const noexcept {
+    return m_terminated;
+  }
+
+  inline
   std::vector<world::ItemEntry>
   Game::getVisible(float xMin,
                    float yMin,

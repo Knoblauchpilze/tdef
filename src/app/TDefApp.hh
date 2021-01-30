@@ -84,13 +84,13 @@ namespace tdef {
       void
       drawGameOver(const RenderDesc& res);
 
-      void
+      bool
       onStep(float elapsed) override;
 
-      void
+      bool
       onPause(float elapsed) override;
 
-      void
+      bool
       onResume(float elapsed) override;
 
       void

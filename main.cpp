@@ -15,7 +15,6 @@
 
 // TODO: Some mobs seem to have really high speed.
 // TODO: Handle upgrade cost for tower.
-// TODO: Connect game over.
 // TODO: Handle wall breaking behavior.
 
 int main(int /*argc*/, char** /*argv*/) {

@@ -114,6 +114,11 @@ namespace tdef {
 
   }
 
+  // Forward declaration of the block class to be able
+  // to use it directly.
+  class Block;
+  using BlockShPtr = std::shared_ptr<Block>;
+
   class Mob: public WorldElement {
     public:
 
@@ -592,6 +597,13 @@ namespace tdef {
        *          this mob.
        */
       PoisonData m_poison;
+
+      /**
+       * @brief - The target for this mob. Until it is reached
+       *          or somehow made unavailable we will try to
+                  reach it.
+       */
+      BlockShPtr m_target;
   };
 
   using MobShPtr = std::shared_ptr<Mob>;

@@ -812,14 +812,13 @@ namespace tdef {
           msg += unit;
         }
 
+        float cost = towers::getUpgradeCost(m_tDisplay.tower->getType(), it->first, it->second);
+        msg += " (cost: ";
+        msg += std::to_string(static_cast<int>(std::round(cost)));
+        msg += ")";
+
         m_tDisplay.props[id]->setText(msg);
-        m_tDisplay.props[id]->enable(
-          m_gold >= towers::getUpgradeCost(
-            m_tDisplay.tower->getType(),
-            it->first,
-            it->second
-          )
-        );
+        m_tDisplay.props[id]->enable(m_gold >= cost);
 
         ++id;
       }

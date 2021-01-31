@@ -430,6 +430,12 @@ namespace tdef {
           continue;
         }
 
+        // Make sure that we don't consider nodes farther
+        // away from the source as defined by the user.
+        if (radius > 0.0f && utils::d(m_start, neighbor.p) >= radius) {
+          continue;
+        }
+
         AssociationMap::iterator it = associations.find(neighbor.hash());
 
         if (it == associations.end() || neighbor.c < nodes[it->second].c) {

@@ -38,7 +38,7 @@ namespace tdef {
 
     inline
     void
-    Path::clear(const utils::Point2f& p, bool force) {
+    Path::clear(const utils::Point2f& p) {
       // Assign home and current position.
       home = p;
       cur = p;
@@ -50,8 +50,6 @@ namespace tdef {
       // Reset temporary passage points.
       cPoints.clear();
       addPassagePoint(p);
-
-      forced = force;
     }
 
     inline
@@ -184,8 +182,6 @@ namespace tdef {
 
       pa.seg = -1;
       pa.addPassagePoint(p);
-
-      pa.forced = false;
 
       return pa;
     }

@@ -4,7 +4,6 @@
 # include "Portal.hh"
 # include "Locator.hh"
 
-
 namespace tdef {
 
   Mob::Mob(const MProps& props):
@@ -130,8 +129,14 @@ namespace tdef {
 
     // Generate a path to the portal and go there.
     path::Path np = path::newPath(m_pos);
-    if (!np.generatePathTo(info.frustum, bp, true)) {
-      log("Failed to generate path to " + bp.toString(), utils::Level::Error);
+    if (!np.generatePathTo(info.frustum, bp, true, sk_maxPathFindingDistance)) {
+      // Try to find a wall or tower to destroy.
+      log("Failed to generate path to portal, trying to find wall or tower");
+      if (!destroyDefenses(info.frustum, np)) {
+        log("Failed to generate path to " + bp.toString(), utils::Level::Error);
+        return;
+      }
+
       return;
     }
 
@@ -248,8 +253,14 @@ namespace tdef {
 
     // Generate a path to the portal and go there.
     path::Path np = path::newPath(m_pos);
-    if (!np.generatePathTo(loc, e, true)) {
-      log("Failed to generate path to " + e.toString(), utils::Level::Error);
+    if (!np.generatePathTo(loc, e, true, sk_maxPathFindingDistance)) {
+      // Try to find a wall or tower to destroy.
+      log("Failed to generate path to portal, trying to find wall or tower");
+      if (!destroyDefenses(loc, np)) {
+        log("Failed to generate path to " + e.toString(), utils::Level::Error);
+        return;
+      }
+
       return;
     }
 
@@ -260,7 +271,8 @@ namespace tdef {
 
   void
   Mob::applyDamage(StepInfo& info,
-                   const mobs::Damage& d) {
+                   const mobs::Damage& d)
+  {
     // First, shield the incoming damage: this will
     // reduce the durability of the shield based on
     // a formula describing the impact of the damage.
@@ -482,6 +494,17 @@ namespace tdef {
 
     // Apply the damage per second.
     damage(info, m_poison.damage * info.elapsed);
+  }
+
+  bool
+  Mob::destroyDefenses(LocatorShPtr /*loc*/,
+                       path::Path& path)
+  {
+    // Clear the path.
+    path.clear(m_pos);
+
+    // TODO: Handle this.
+    return false;
   }
 
 }

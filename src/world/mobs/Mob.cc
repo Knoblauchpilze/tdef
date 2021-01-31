@@ -1,6 +1,7 @@
 
 # include "Mob.hh"
 # include <maths_utils/ComparisonUtils.hh>
+# include "Block.hh"
 # include "Portal.hh"
 # include "Locator.hh"
 
@@ -45,7 +46,9 @@ namespace tdef {
       0,
       utils::now(),
       utils::Duration::zero()
-    })
+    }),
+
+    m_target(nullptr)
   {
     setService("mob");
   }
@@ -95,12 +98,32 @@ namespace tdef {
     }
 
     // In case we're already following a path, go
-    // there.
+    // there. We also want to make sure that the
+    // target is still valid (i.e. has not been
+    // deleted) in which case we should try to
+    // find a new one.
     if (isEnRoute()) {
-      m_path.advance(m_speed.speed, info.elapsed, m_rArrival);
-      m_pos = m_path.cur;
+      // Adjust the target and check whether it has
+      // been deleted. If this is the case we want
+      // to try to find a new one asap.
+      if (m_target != nullptr && !m_target->isDeleted()) {
+        m_path.advance(m_speed.speed, info.elapsed, m_rArrival);
+        m_pos = m_path.cur;
 
-      return;
+        return;
+      }
+
+      log(
+        "Current target at " + m_target->getPos().toString() +
+        " does not exist anymore",
+        utils::Level::Verbose
+      );
+
+      // The target is either null (weird) or has
+      // been deleted (probably by another mob).
+      m_behavior = Behavior::None;
+      m_target = nullptr;
+      m_path.clear(m_pos);
     }
 
     // We arrived at the target: check what we need
@@ -117,7 +140,7 @@ namespace tdef {
         return;
       }
 
-      log("Failed to find portal, trying to find defense");
+      log("Failed to find portal, trying to find defense", utils::Level::Verbose);
 
       if (destroyDefenses(info.frustum, np)) {
         std::swap(m_path, np);
@@ -155,9 +178,7 @@ namespace tdef {
       return;
     }
     if (m_behavior == Behavior::WallBreaker) {
-      BlockShPtr b = info.frustum->getClosestBlock(m_pos, world::BlockType::Wall, -1.0f, nullptr);
-
-      WallShPtr w = std::dynamic_pointer_cast<Wall>(b);
+      WallShPtr w = std::dynamic_pointer_cast<Wall>(m_target);
       if (w != nullptr) {
         float d = utils::d(w->getPos(), m_pos);
         if (d > m_rArrival) {
@@ -167,12 +188,27 @@ namespace tdef {
           return;
         }
 
-        // TODO: Attack wall.
-        // log("Should attack wall at " + w->getPos().toString(), utils::Level::Warning);
+        // Perform the attack if possible.
+        if (m_energy < m_attackCost) {
+          return;
+        }
+
+        m_energy -= m_attackCost;
+        if (!w->damage(info, m_attack)) {
+          // Mark the wall for deletion, reset the behavior
+          // so that we get a new chance to evaluate whether
+          // a portal is reachable and reset the target.
+          w->markForDeletion(true);
+          m_behavior = Behavior::None;
+          m_target = nullptr;
+
+          log("Killed wall at " + w->getPos().toString());
+        }
+
         return;
       }
 
-      TowerShPtr t = std::dynamic_pointer_cast<Tower>(b);
+      TowerShPtr t = std::dynamic_pointer_cast<Tower>(m_target);
       if (t != nullptr) {
         float d = utils::d(t->getPos(), m_pos);
         if (d > m_rArrival) {
@@ -182,8 +218,23 @@ namespace tdef {
           return;
         }
 
-        // TODO: Attack tower.
-        // log("Should attack tower at " + t->getPos().toString(), utils::Level::Warning);
+        // Perform the attack if possible.
+        if (m_energy < m_attackCost) {
+          return;
+        }
+
+        m_energy -= m_attackCost;
+        if (!t->damage(info, m_attack)) {
+          // Mark the wall for deletion, reset the behavior
+          // so that we get a new chance to evaluate whether
+          // a portal is reachable and reset the target.
+          t->markForDeletion(true);
+          m_behavior = Behavior::None;
+          m_target = nullptr;
+
+          log("Killed tower " + towers::toString(t->getType()) + " at " + t->getPos().toString());
+        }
+
         return;
       }
 
@@ -192,6 +243,7 @@ namespace tdef {
       log("Target element could not be interpreted", utils::Level::Error);
       m_behavior = Behavior::None;
       m_path.clear(m_pos);
+      m_target = nullptr;
 
       return;
     }
@@ -315,7 +367,7 @@ namespace tdef {
       return;
     }
 
-    log("Failed to find portal, trying to find defense");
+    log("Failed to find portal, trying to find defense", utils::Level::Verbose);
 
     if (destroyDefenses(loc, np)) {
       std::swap(m_path, np);
@@ -564,17 +616,18 @@ namespace tdef {
     PortalShPtr p = std::dynamic_pointer_cast<Portal>(b);
 
     if (p != nullptr) {
-      log("Found portal at " + p->getPos().toString());
       bool valid = path.generatePathTo(loc, p->getPos(), true, sk_maxPathFindingDistance);
       if (valid) {
+        log("Found portal at " + p->getPos().toString(), utils::Level::Verbose);
         m_behavior = Behavior::PortalSeeker;
+        m_target = b;
+
         return true;
       }
     }
 
     // Failed to find a portal or failed to find
     // a path to it.
-    log("Failed to find portal to breach", utils::Level::Error);
     return false;
   }
 
@@ -590,10 +643,12 @@ namespace tdef {
     WallShPtr w = std::dynamic_pointer_cast<Wall>(b);
 
     if (w != nullptr) {
-      log("Found wall at " + w->getPos().toString());
       bool valid = path.generatePathTo(loc, w->getPos(), true, sk_maxPathFindingDistance);
       if (valid) {
+        log("Found wall at " + w->getPos().toString(), utils::Level::Verbose);
         m_behavior = Behavior::WallBreaker;
+        m_target = b;
+
         return true;
       }
     }
@@ -603,17 +658,18 @@ namespace tdef {
     TowerShPtr t = std::dynamic_pointer_cast<Tower>(b);
 
     if (t != nullptr) {
-      log("Found tower at " + t->getPos().toString());
       bool valid = path.generatePathTo(loc, t->getPos(), true, sk_maxPathFindingDistance);
       if (valid) {
+        log("Found tower at " + t->getPos().toString(), utils::Level::Verbose);
         m_behavior = Behavior::WallBreaker;
+        m_target = b;
+
         return true;
       }
     }
 
     // Failed to find a wall or tower or failed
     // to find a path to it.
-    log("Failed to find wall or tower to destroy", utils::Level::Error);
     return false;
   }
 

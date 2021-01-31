@@ -16,6 +16,10 @@ namespace tdef {
     m_energyRefill(props.refill),
 
     m_behavior(Behavior::None),
+
+    m_attackCost(props.attackCost),
+    m_attack(props.attack),
+
     m_rArrival(props.arrival),
     m_path(path::newPath(m_pos)),
 

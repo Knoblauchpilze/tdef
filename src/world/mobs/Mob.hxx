@@ -57,6 +57,9 @@ namespace tdef {
     pp.acceleration = 1.0f;
     pp.arrival = 0.0001f;
 
+    pp.attack = 0.2f;
+    pp.attackCost = 1.0f;
+
     pp.bounty = 1.0f;
     pp.lives = 1.0f;
 

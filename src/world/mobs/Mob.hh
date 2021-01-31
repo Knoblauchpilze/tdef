@@ -136,7 +136,18 @@ namespace tdef {
         // This is defined as unit of speed per second.
         float acceleration;
 
+        // Defines the arrival radius: when the mob is
+        // closer to its target than this distance we
+        // consider that it has arrived.
         float arrival;
+
+        // Defines the damage that this mob hit with on
+        // each attack.
+        float attack;
+
+        // Defines the cost of performing a single attack
+        // for this mob.
+        float attackCost;
 
         // The amount of gold that this mob yields when
         // killed.
@@ -163,8 +174,13 @@ namespace tdef {
         // incoming damage and is in the range `[0; 1]`.
         float shieldEfficiency;
 
+        // Whether or not the mob can be poisoned.
         bool poisonable;
+
+        // Whether or not the mob can be slowed.
         bool slowable;
+
+        // Whether or not the mob can be stunned.
         bool stunnable;
 
         // The `type` defines a representation of the real
@@ -516,6 +532,19 @@ namespace tdef {
        * @brief - The behavior currently adopted by the mob.
        */
       Behavior m_behavior;
+
+      /**
+       * @brief - The energy cost of each attack for this mob.
+       *          This value in combination with the energy is
+       *          defining how fast the mob can attack.
+       */
+      float m_attackCost;
+
+      /**
+       * @brief - Defines the damage value that this mob is
+       *          dealing when attacking.
+       */
+      float m_attack;
 
       /**
        * @brief - Defines the arrival radius for this mob when

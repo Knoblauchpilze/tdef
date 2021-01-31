@@ -15,6 +15,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 1.0f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
@@ -27,6 +30,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 
@@ -53,6 +58,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 200.8f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
@@ -65,6 +73,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 
@@ -91,6 +101,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 1.2f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
@@ -103,6 +116,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 
@@ -129,6 +144,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 1.0f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
@@ -141,6 +159,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 
@@ -167,6 +187,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 0.8f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
@@ -179,6 +202,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 
@@ -205,6 +230,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 1.1f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
@@ -217,6 +245,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 
@@ -243,6 +273,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 0.95f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
@@ -255,6 +288,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 
@@ -281,6 +316,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 1.0f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
@@ -293,6 +331,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 
@@ -319,6 +359,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 0.8f;
       static constexpr float shield = 0.5f;
       static constexpr float shieldEfficiency = 0.8f;
@@ -331,6 +374,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 
@@ -357,6 +402,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 1.0f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
@@ -369,6 +417,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 
@@ -395,6 +445,9 @@ namespace tdef {
       static constexpr float lives = 1.0f;
       static constexpr float exp = 1.0f;
 
+      static constexpr float attack = 0.2f;
+      static constexpr float attackCost = 0.8f;
+
       static constexpr float health = 0.95f;
       static constexpr float shield = 0.0f;
       static constexpr float shieldEfficiency = 0.0f;
@@ -407,6 +460,8 @@ namespace tdef {
 
         pp.speed = speed;
         pp.acceleration = acceleration;
+        pp.attack = attack;
+        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
 

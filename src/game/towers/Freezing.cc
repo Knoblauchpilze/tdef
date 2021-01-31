@@ -103,7 +103,12 @@ namespace tdef {
           case Upgrade::FreezingPower:
           case Upgrade::FreezingSpeed:
           case Upgrade::FreezingDuration:
-            return 49.0f * (level + 1);
+            return std::round(
+              9.72f
+              + 140.0f * level
+              - 51.3f * level * level
+              + 7.62f * level * level * level
+            );
           case Upgrade::Damage:
           case Upgrade::RotationSpeed:
           case Upgrade::AttackSpeed:

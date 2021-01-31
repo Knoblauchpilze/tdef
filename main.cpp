@@ -14,7 +14,6 @@
 # include "TDefApp.hh"
 
 // TODO: Some mobs seem to have really high speed.
-// TODO: Handle upgrade cost for tower.
 // TODO: Handle wall breaking behavior.
 
 int main(int /*argc*/, char** /*argv*/) {
@@ -36,12 +35,12 @@ int main(int /*argc*/, char** /*argv*/) {
     );
 
     tdef::CoordinateFrameShPtr cf = std::make_shared<tdef::TopViewFrame>(
-      tdef::Viewport{olc::vf2d(0.0f, 0.0f), olc::vf2d(10.0f, 10.0f)},
-      tdef::Viewport{olc::vf2d(10.0f, 50.0f), olc::vf2d(640.0f, 480.0f)},
+      tdef::Viewport{olc::vf2d(0.0f, 0.0f), olc::vf2d(20.0f, 15.0f)},
+      tdef::Viewport{olc::vf2d(10.0f, 50.0f), olc::vf2d(800.0f, 600.0f)},
       olc::vi2d(64, 64)
     );
     tdef::AppDesc ad = tdef::newDesc(
-      olc::vi2d(640, 480),
+      olc::vi2d(800, 600),
       cf,
       "tower defense"
     );

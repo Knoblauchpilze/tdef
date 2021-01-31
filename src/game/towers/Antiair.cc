@@ -103,7 +103,18 @@ namespace tdef {
           case Upgrade::Damage:
           case Upgrade::RotationSpeed:
           case Upgrade::AttackSpeed:
-            return 49.0f * (level + 1);
+            // This formula yields a negative value for
+            // the level `0` so we clamp it to get the
+            // desired output.
+            return std::max(
+              std::round(
+                - 4.69f
+                + 89.4f * level
+                - 34.2f * level * level
+                + 4.5f * level * level * level
+              ),
+              20.0f
+            );
           case Upgrade::ProjectileSpeed:
           case Upgrade::FreezingPower:
           case Upgrade::FreezingSpeed:

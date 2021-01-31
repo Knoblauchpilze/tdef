@@ -105,7 +105,12 @@ namespace tdef {
           case Upgrade::Damage:
           case Upgrade::RotationSpeed:
           case Upgrade::ProjectileSpeed:
-            return 49.0f * (level + 1);
+            return std::round(
+              70.9f
+              + 2.52f * level
+              - 6.26f * level * level
+              + 5.58f * level * level * level
+            );
           case Upgrade::AttackSpeed:
           case Upgrade::FreezingPower:
           case Upgrade::FreezingSpeed:

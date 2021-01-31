@@ -144,22 +144,16 @@ namespace tdef {
     m_blocks.push_back(block);
 
     // Update elements.
-    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
-      m_blocks[id]->worldUpdate(m_loc);
-    }
-
-    for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
-      m_mobs[id]->worldUpdate(m_loc);
-    }
-
-    for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
-      m_projectiles[id]->worldUpdate(m_loc);
-    }
+    onWorldUpdate();
   }
 
   void
   World::forceDelete() {
     // First remove blocks.
+    std::size_t bs = m_blocks.size();
+    std::size_t ms = m_mobs.size();
+    std::size_t ps = m_projectiles.size();
+
     m_blocks.erase(
       std::remove_if(
         m_blocks.begin(),
@@ -194,6 +188,15 @@ namespace tdef {
       ),
       m_projectiles.end()
     );
+
+    // Update remaining elements if anything has
+    // been removed.
+    if (bs != m_blocks.size() ||
+        ms != m_mobs.size() ||
+        ps != m_projectiles.size())
+    {
+      onWorldUpdate();
+    }
   }
 
   void
@@ -385,6 +388,21 @@ namespace tdef {
       "Loading from file is not implemented",
       "COME BACK LATER"
     );
+  }
+
+  void
+  World::onWorldUpdate() {
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      m_blocks[id]->worldUpdate(m_loc);
+    }
+
+    for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
+      m_mobs[id]->worldUpdate(m_loc);
+    }
+
+    for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
+      m_projectiles[id]->worldUpdate(m_loc);
+    }
   }
 
 }

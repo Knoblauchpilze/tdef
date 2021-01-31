@@ -14,8 +14,6 @@
 # include "TDefApp.hh"
 
 // TODO: Some mobs seem to have really high speed.
-// TODO: Handle wall breaking behavior.
-// TODO: Call worldUpdate in case a tower is sold.
 // TODO: Seems like when you wait for the mobs to
 // spawn and then block the portal, some can still
 // find a path to it. Start by the bottom, then

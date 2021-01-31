@@ -142,6 +142,14 @@ namespace tdef {
       void
       loadFromFile(const std::string& file);
 
+      /**
+       * @brief - Used to perform an update of all elements
+       *          still existing in the world in response to
+       *          a world change.
+       */
+      void
+      onWorldUpdate();
+
     private:
 
       /**

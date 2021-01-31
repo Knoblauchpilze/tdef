@@ -448,21 +448,20 @@ namespace tdef {
     }
 
     fg = menu::newTextContent("Sell");
-    m_tDisplay.main->addMenu(
-      std::make_shared<SimpleMenu>(
-        pos, size,
-        bg, fg,
-        [](std::vector<ActionShPtr>& actions) {
-          actions.push_back(
-            std::make_shared<SimpleAction>(
-              [](Game& g) {
-                g.sellTower();
-              }
-            )
-          );
-        }
-      )
+    m_tDisplay.sell = std::make_shared<SimpleMenu>(
+      pos, size,
+      bg, fg,
+      [](std::vector<ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<SimpleAction>(
+            [](Game& g) {
+              g.sellTower();
+            }
+          )
+        );
+      }
     );
+    m_tDisplay.main->addMenu(m_tDisplay.sell);
 
     fg = menu::newTextContent("Target mode");
     MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop6", bg, fg);
@@ -829,6 +828,12 @@ namespace tdef {
           utils::Level::Error
         );
       }
+
+      std::string msg = "Sell (";
+      float tc = m_tDisplay.tower->getTotalCost();
+      msg += std::to_string(static_cast<int>(std::round(tc)));
+      msg += " gold)";
+      m_tDisplay.sell->setText(msg);
     }
 
     if (m_mDisplay.mob != nullptr) {

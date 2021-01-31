@@ -375,6 +375,7 @@ namespace tdef {
         // various props of a tower.
         MenuShPtr type;
         std::vector<GameMenuShPtr> props;
+        MenuShPtr sell;
 
         // `tower` defines a pointer to the tower being displayed.
         // It allows to continuously update the values displayed

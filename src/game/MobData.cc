@@ -16,7 +16,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 1.0f;
       static constexpr float shield = 0.0f;
@@ -31,9 +31,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;
@@ -59,7 +68,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 200.8f;
       static constexpr float shield = 0.0f;
@@ -74,9 +83,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;
@@ -102,7 +120,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 1.2f;
       static constexpr float shield = 0.0f;
@@ -117,9 +135,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;
@@ -145,7 +172,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 1.0f;
       static constexpr float shield = 0.0f;
@@ -160,9 +187,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;
@@ -188,7 +224,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 0.8f;
       static constexpr float shield = 0.0f;
@@ -203,9 +239,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;
@@ -231,7 +276,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 1.1f;
       static constexpr float shield = 0.0f;
@@ -246,9 +291,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;
@@ -274,7 +328,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 0.95f;
       static constexpr float shield = 0.0f;
@@ -289,9 +343,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;
@@ -317,7 +380,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 1.0f;
       static constexpr float shield = 0.0f;
@@ -332,9 +395,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;
@@ -360,7 +432,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 0.8f;
       static constexpr float shield = 0.5f;
@@ -375,9 +447,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;
@@ -403,7 +484,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 1.0f;
       static constexpr float shield = 0.0f;
@@ -418,9 +499,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;
@@ -446,7 +536,7 @@ namespace tdef {
       static constexpr float exp = 1.0f;
 
       static constexpr float attack = 0.2f;
-      static constexpr float attackCost = 0.8f;
+      static constexpr float attackSpeed = 0.5f;
 
       static constexpr float health = 0.95f;
       static constexpr float shield = 0.0f;
@@ -461,9 +551,18 @@ namespace tdef {
         pp.speed = speed;
         pp.acceleration = acceleration;
         pp.attack = attack;
-        pp.attackCost = attackCost;
         pp.bounty = bounty;
         pp.exp = exp;
+
+        // Convert attack speed to attack cost and
+        // energy props. The attack speed defines
+        // how many attacks are performed per sec
+        // so we can just use this as the refill
+        // speed as we have a max energy of `1`.
+        pp.maxEnergy = 1.0f;
+        pp.energy = 0.9f;
+        pp.refill = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.shield = shield;
         pp.shieldEfficiency = shieldEfficiency;

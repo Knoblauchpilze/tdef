@@ -328,6 +328,22 @@ namespace tdef {
       void
       updateHealth(StepInfo& info);
 
+      /**
+       * @brief - Used to trigger and apply the behavior which
+       *          consists in finding the closest wall or tower
+       *          and go to it to destroy it.
+       *          This is usually used when the portal can not
+       *          be located.
+       * @param loc - a locator allowing to search elements in
+       *              the world.
+       * @param path - the path to generate. Will be cleared
+       *               before being used.
+       * @return - `true` if a path could be generated.
+       */
+      bool
+      destroyDefenses(LocatorShPtr loc,
+                      path::Path& path);
+
     private:
 
       /**
@@ -429,6 +445,15 @@ namespace tdef {
        *          applied to a mob.
        */
       static constexpr int sk_poisonStacksLimit = 5;
+
+      /**
+       * @brief - The maximum distance from the mob that the
+       *          path finding routines can reach before we
+       *          declare that it is impossible to find.
+       *          This will be used to trigger the wall or
+       *          tower breaking behavior.
+       */
+      static constexpr float sk_maxPathFindingDistance = 25.0f;
 
       /**
        * @brief - The type of the mob. This is mostly used

@@ -329,6 +329,21 @@ namespace tdef {
       updateHealth(StepInfo& info);
 
       /**
+       * @brief - Attemps to locate a portal and generate a path
+       *          to go there. If this works, the path will be
+       *          assigned and the behavior will be set to portal
+       *          seeking.
+       * @param loc - a locator allowing to search elements in
+       *              the world.
+       * @param path - the path to generate. Will be cleared
+       *               before being used.
+       * @return - `true` if a path could be generated.
+       */
+      bool
+      locatePortal(LocatorShPtr loc,
+                   path::Path& path);
+
+      /**
        * @brief - Used to trigger and apply the behavior which
        *          consists in finding the closest wall or tower
        *          and go to it to destroy it.
@@ -435,6 +450,18 @@ namespace tdef {
       };
 
       /**
+       * @brief - Convenience enumeration defining the modes
+       *          available for the mob: this describes the
+       *          possible behaviors that can be adopted by
+       *          the mob.
+       */
+      enum class Behavior {
+        None,
+        PortalSeeker,
+        WallBreaker
+      };
+
+      /**
        * @brief - A factor describing how the durability of
        *          the shield is affected by each hit.
        */
@@ -484,6 +511,11 @@ namespace tdef {
        *          can take more decisions.
        */
       float m_energyRefill;
+
+      /**
+       * @brief - The behavior currently adopted by the mob.
+       */
+      Behavior m_behavior;
 
       /**
        * @brief - Defines the arrival radius for this mob when

@@ -15,6 +15,7 @@ namespace tdef {
     m_maxEnergy(props.maxEnergy),
     m_energyRefill(props.refill),
 
+    m_behavior(Behavior::None),
     m_rArrival(props.arrival),
     m_path(path::newPath(m_pos)),
 
@@ -98,20 +99,45 @@ namespace tdef {
       return;
     }
 
-    // Otherwise check where is the closest portal.
-    BlockShPtr b = info.frustum->getClosestBlock(m_pos, world::BlockType::Portal, -1.0f, nullptr);
-    PortalShPtr p = std::dynamic_pointer_cast<Portal>(b);
-    if (p == nullptr) {
-      // No blocks are visible, nothing to do.
+    // We arrived at the target: check what we need
+    // to do now. It can also happen that we didn't
+    // had a target in the first place in which case
+    // we need to find one.
+    if (m_behavior == Behavior::None) {
+      path::Path np = path::newPath(m_pos);
+
+      // First, attempt to locate a portal: if this
+      // succeeds, use this target.
+      if (locatePortal(info.frustum, np)) {
+        std::swap(m_path, np);
+        return;
+      }
+
+      log("Failed to find portal, trying to find defense");
+
+      if (destroyDefenses(info.frustum, np)) {
+        std::swap(m_path, np);
+        return;
+      }
+
+      // Failed to locate a portal or a tower or
+      // a wall to break. We don't really know
+      // what to to here.
+      log("Failed to find a valid target, mob is now stuck", utils::Level::Error);
       return;
     }
+    if (m_behavior == Behavior::PortalSeeker) {
+      BlockShPtr b = info.frustum->getClosestBlock(m_pos, world::BlockType::Portal, -1.0f, nullptr);
+      PortalShPtr p = std::dynamic_pointer_cast<Portal>(b);
 
-    utils::Point2f bp = b->getPos();
+      if (p == nullptr || utils::d(p->getPos(), m_pos) > m_rArrival) {
+        log("Target portal is either missing or too far", utils::Level::Warning);
+        m_behavior = Behavior::None;
+        m_path.clear(m_pos);
+        return;
+      }
 
-    float d = utils::d(bp, m_pos);
-    if (d < m_rArrival) {
-      // We arrived at the portal, hit it and then
-      // mark the mob for deletion.
+      // Breach the portal and mark the mob for deletion.
       p->breach(m_cost);
       markForDeletion(true);
 
@@ -124,23 +150,47 @@ namespace tdef {
 
       return;
     }
+    if (m_behavior == Behavior::WallBreaker) {
+      BlockShPtr b = info.frustum->getClosestBlock(m_pos, world::BlockType::Wall, -1.0f, nullptr);
 
-    log("Found portal at " + bp.toString() + " (d: " + std::to_string(d) + ")", utils::Level::Verbose);
+      WallShPtr w = std::dynamic_pointer_cast<Wall>(b);
+      if (w != nullptr) {
+        float d = utils::d(w->getPos(), m_pos);
+        if (d > m_rArrival) {
+          log("Target wall is too far (d: " + std::to_string(d) + ")", utils::Level::Warning);
+          m_behavior = Behavior::None;
+          m_path.clear(m_pos);
+          return;
+        }
 
-    // Generate a path to the portal and go there.
-    path::Path np = path::newPath(m_pos);
-    if (!np.generatePathTo(info.frustum, bp, true, sk_maxPathFindingDistance)) {
-      // Try to find a wall or tower to destroy.
-      log("Failed to generate path to portal, trying to find wall or tower");
-      if (!destroyDefenses(info.frustum, np)) {
-        log("Failed to generate path to " + bp.toString(), utils::Level::Error);
+        // TODO: Attack wall.
+        // log("Should attack wall at " + w->getPos().toString(), utils::Level::Warning);
         return;
       }
 
+      TowerShPtr t = std::dynamic_pointer_cast<Tower>(b);
+      if (t != nullptr) {
+        float d = utils::d(t->getPos(), m_pos);
+        if (d > m_rArrival) {
+          log("Target tower is too far (d: " + std::to_string(d) + ")", utils::Level::Warning);
+          m_behavior = Behavior::None;
+          m_path.clear(m_pos);
+          return;
+        }
+
+        // TODO: Attack tower.
+        // log("Should attack tower at " + t->getPos().toString(), utils::Level::Warning);
+        return;
+      }
+
+      // Failed to interpret target either as a wall or
+      // a tower. This is weird.
+      log("Target element could not be interpreted", utils::Level::Error);
+      m_behavior = Behavior::None;
+      m_path.clear(m_pos);
+
       return;
     }
-
-    std::swap(m_path, np);
   }
 
   void
@@ -249,24 +299,26 @@ namespace tdef {
       return;
     }
 
-    utils::Point2f e = m_path.target();
-
-    // Generate a path to the portal and go there.
+    // Even in case the mob is currently trying to
+    // reach a defense, we will assume that the main
+    // objective is to reach a portal. So we will
+    // first try to reach one, and if this fails we
+    // will try to locate a tower or a wall.
     path::Path np = path::newPath(m_pos);
-    if (!np.generatePathTo(loc, e, true, sk_maxPathFindingDistance)) {
-      // Try to find a wall or tower to destroy.
-      log("Failed to generate path to portal, trying to find wall or tower");
-      if (!destroyDefenses(loc, np)) {
-        log("Failed to generate path to " + e.toString(), utils::Level::Error);
-        return;
-      }
 
+    if (locatePortal(loc, np)) {
+      std::swap(m_path, np);
       return;
     }
 
-    log("Generated new path to " + e.toString());
+    log("Failed to find portal, trying to find defense");
 
-    std::swap(m_path, np);
+    if (destroyDefenses(loc, np)) {
+      std::swap(m_path, np);
+      return;
+    }
+
+    log("Failed to find a valid target, mob is now stuck", utils::Level::Error);
   }
 
   void
@@ -497,13 +549,67 @@ namespace tdef {
   }
 
   bool
-  Mob::destroyDefenses(LocatorShPtr /*loc*/,
+  Mob::locatePortal(LocatorShPtr loc,
+                    path::Path& path)
+  {
+    // Clear the path.
+    path.clear(m_pos);
+
+    // Attempt to find a portal to reach.
+    BlockShPtr b = loc->getClosestBlock(m_pos, world::BlockType::Portal, -1.0f, nullptr);
+    PortalShPtr p = std::dynamic_pointer_cast<Portal>(b);
+
+    if (p != nullptr) {
+      log("Found portal at " + p->getPos().toString());
+      bool valid = path.generatePathTo(loc, p->getPos(), true, sk_maxPathFindingDistance);
+      if (valid) {
+        m_behavior = Behavior::PortalSeeker;
+        return true;
+      }
+    }
+
+    // Failed to find a portal or failed to find
+    // a path to it.
+    log("Failed to find portal to breach", utils::Level::Error);
+    return false;
+  }
+
+  bool
+  Mob::destroyDefenses(LocatorShPtr loc,
                        path::Path& path)
   {
     // Clear the path.
     path.clear(m_pos);
 
-    // TODO: Handle this.
+    // Attempt to find a wall to break.
+    BlockShPtr b = loc->getClosestBlock(m_pos, world::BlockType::Wall, -1.0f, nullptr);
+    WallShPtr w = std::dynamic_pointer_cast<Wall>(b);
+
+    if (w != nullptr) {
+      log("Found wall at " + w->getPos().toString());
+      bool valid = path.generatePathTo(loc, w->getPos(), true, sk_maxPathFindingDistance);
+      if (valid) {
+        m_behavior = Behavior::WallBreaker;
+        return true;
+      }
+    }
+
+    // Attempt to find a tower to break.
+    b = loc->getClosestBlock(m_pos, world::BlockType::Tower, -1.0f, nullptr);
+    TowerShPtr t = std::dynamic_pointer_cast<Tower>(b);
+
+    if (t != nullptr) {
+      log("Found tower at " + t->getPos().toString());
+      bool valid = path.generatePathTo(loc, t->getPos(), true, sk_maxPathFindingDistance);
+      if (valid) {
+        m_behavior = Behavior::WallBreaker;
+        return true;
+      }
+    }
+
+    // Failed to find a wall or tower or failed
+    // to find a path to it.
+    log("Failed to find wall or tower to destroy", utils::Level::Error);
     return false;
   }
 

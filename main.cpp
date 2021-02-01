@@ -14,10 +14,6 @@
 # include "TDefApp.hh"
 
 // TODO: Some mobs seem to have really high speed.
-// TODO: Seems like when you wait for the mobs to
-// spawn and then block the portal, some can still
-// find a path to it. Start by the bottom, then
-// the top and finally the right cell.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

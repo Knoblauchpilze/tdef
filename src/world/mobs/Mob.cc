@@ -22,7 +22,7 @@ namespace tdef {
     m_attack(props.attack),
 
     m_rArrival(props.arrival),
-    m_path(path::newPath(m_pos)),
+    m_path(m_pos),
 
     m_bounty(props.bounty),
     m_cost(props.lives),
@@ -108,7 +108,7 @@ namespace tdef {
       // to try to find a new one asap.
       if (m_target != nullptr && !m_target->isDeleted()) {
         m_path.advance(m_speed.speed, info.elapsed, m_rArrival);
-        m_pos = m_path.cur;
+        m_pos = m_path.cur();
 
         return;
       }
@@ -131,7 +131,7 @@ namespace tdef {
     // had a target in the first place in which case
     // we need to find one.
     if (m_behavior == Behavior::None) {
-      path::Path np = path::newPath(m_pos);
+      Path np(m_pos);
 
       // First, attempt to locate a portal: if this
       // succeeds, use this target.
@@ -360,7 +360,7 @@ namespace tdef {
     // objective is to reach a portal. So we will
     // first try to reach one, and if this fails we
     // will try to locate a tower or a wall.
-    path::Path np = path::newPath(m_pos);
+    Path np(m_pos);
 
     if (locatePortal(loc, np)) {
       std::swap(m_path, np);
@@ -606,7 +606,7 @@ namespace tdef {
 
   bool
   Mob::locatePortal(LocatorShPtr loc,
-                    path::Path& path)
+                    Path& path)
   {
     // Clear the path.
     path.clear(m_pos);
@@ -633,7 +633,7 @@ namespace tdef {
 
   bool
   Mob::destroyDefenses(LocatorShPtr loc,
-                       path::Path& path)
+                       Path& path)
   {
     // Clear the path.
     path.clear(m_pos);

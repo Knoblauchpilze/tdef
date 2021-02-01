@@ -73,7 +73,7 @@ namespace tdef {
       float radius;
       float health;
 
-      path::Path path;
+      Path path;
 
       // The `id` defines a custom value which is interpreted
       // from the `type` of the mob.

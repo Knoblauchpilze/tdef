@@ -4,6 +4,7 @@
 # include <vector>
 # include <memory>
 # include <maths_utils/Point2.hh>
+# include <core_utils/CoreObject.hh>
 
 namespace tdef {
   // Forward declaration of the `Locator` class.
@@ -40,18 +41,48 @@ namespace tdef {
     };
 
     /**
-     * @brief - Define a complete path, composed of one or
-     *          more segments.
+     * @brief - Create a new path segment starting at the
+     *          specified location and with the direction
+     *          provided in input.
+     *          The final position of the segment is given
+     *          by measuring `d` units along the direction.
+     * @param p - the starting position of the path segment.
+     * @param xD - the abscissa for the direction.
+     * @param yD - the ordinate for the direction.
+     * @param d - the length of this path segment.
+     * @return - the created path segment.
      */
-    struct Path {
-      utils::Point2f home;
+    Segment
+    newSegment(const utils::Point2f& p, float xD, float yD, float d) noexcept;
 
-      utils::Point2f cur;
-      int seg;
+    /**
+     * @brief - Create a new segment from a starting location
+     *          and an end position.
+       * @param s - the starting point of the path segment.
+       * @param t - the target of the path segment.
+     * @return - the created path segment.
+     */
+    Segment
+    newSegment(const utils::Point2f& s, const utils::Point2f& t) noexcept;
 
-      std::vector<Segment> segments;
+  }
 
-      std::vector<utils::Point2f> cPoints;
+  class Path: utils::CoreObject {
+    public:
+
+      /**
+       * @brief - Creates a new default path with no position
+       *          and no segments. The home position will be
+       *          set to the origin.
+       */
+      Path() noexcept;
+
+      /**
+       * @brief - Create a new path with the input position
+       *          as default.
+       * @param p - the input position of the path.
+       */
+      Path(const utils::Point2f& p) noexcept;
 
       /**
        * @brief - Used to determine whether this path is
@@ -129,6 +160,14 @@ namespace tdef {
       enRoute(float threshold) const noexcept;
 
       /**
+       * @brief - The current position on the path given all
+       *          the advancement already made.
+       * @return - the current position on the path.
+       */
+      utils::Point2f
+      cur() const noexcept;
+
+      /**
        * @brief - Used to retrieve the closest target on the
        *          path: this refers to the endpoint of the
        *          segment currently followed by the entity.
@@ -144,6 +183,15 @@ namespace tdef {
        */
       utils::Point2f
       target() const noexcept;
+
+      /**
+       * @brief - Used to fetch the passage points checked on
+       *          the construction of this path.
+       * @return - the passage points controlled to validate
+       *           the path.
+       */
+      const std::vector<utils::Point2f>&
+      getPassagePoints() const noexcept;
 
       /**
        * @brief - Used to advance on this path assuming the
@@ -187,47 +235,51 @@ namespace tdef {
        */
       bool
       generatePathTo(LocatorShPtr frustum,
-                     const utils::Point2f& p,
-                     bool ignoreTargetObstruction,
-                     float maxDistanceFromStart = -1.0f,
-                     bool allowLog = false);
-    };
+                      const utils::Point2f& p,
+                      bool ignoreTargetObstruction,
+                      float maxDistanceFromStart = -1.0f,
+                      bool allowLog = false);
 
-    /**
-     * @brief - Create a new path segment starting at the
-     *          specified location and with the direction
-     *          provided in input.
-     *          The final position of the segment is given
-     *          by measuring `d` units along the direction.
-     * @param p - the starting position of the path segment.
-     * @param xD - the abscissa for the direction.
-     * @param yD - the ordinate for the direction.
-     * @param d - the length of this path segment.
-     * @return - the created path segment.
-     */
-    Segment
-    newSegment(const utils::Point2f& p, float xD, float yD, float d) noexcept;
+    private:
 
-    /**
-     * @brief - Create a new segment from a starting location
-     *          and an end position.
-       * @param s - the starting point of the path segment.
-       * @param t - the target of the path segment.
-     * @return - the created path segment.
-     */
-    Segment
-    newSegment(const utils::Point2f& s, const utils::Point2f& t) noexcept;
+      /**
+       * @brief - The home position of the path, used in case the
+       *          path should be cleared or to detect when the
+       *          traversal on the path has not started yet.
+       */
+      utils::Point2f m_home;
 
-    /**
-     * @brief - Create a new path with the input position
-     *          as default.
-     * @param p - the input position of the path.
-     * @return - the created path.
-     */
-    Path
-    newPath(const utils::Point2f& p) noexcept;
+      /**
+       * @brief - The current position on the path. Default is to
+       *          be the home position, unless the journey along
+       *          the path has already started.
+       */
+      utils::Point2f m_cur;
 
-  }
+      /**
+       * @brief - The current path segment onto which the `m_cur`
+       *          value is defined.
+       *          Set to `-1` in case no segments are defined or
+       *          to a larger values that `m_segments` in case
+       *          the entirety of the path has been traversed.
+       */
+      int m_seg;
+
+      /**
+       * @brief - The list of path segments available for this.
+       *          path. If none are defined the path will not
+       *          be considered valid.
+       */
+      std::vector<path::Segment> m_segments;
+
+      /**
+       * @brief - The passage points that were controlled when
+       *          the path was generated to make sure it was
+       *          valid (i.e. not obstructing with any block).
+       */
+      std::vector<utils::Point2f> m_cPoints;
+  };
+
 }
 
 # include "Path.hxx"

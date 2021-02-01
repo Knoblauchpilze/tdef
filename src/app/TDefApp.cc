@@ -322,8 +322,9 @@ namespace tdef {
       // Draw the path of this entity if any.
       if (md.path.valid()) {
         olc::vf2d old;
-        for (unsigned id = 0u ; id < md.path.cPoints.size() ; ++id) {
-          olc::vf2d p = res.cf.tileCoordsToPixels(md.path.cPoints[id].x(), md.path.cPoints[id].y());
+        const std::vector<utils::Point2f>& cPoints = md.path.getPassagePoints();
+        for (unsigned id = 0u ; id < cPoints.size() ; ++id) {
+          olc::vf2d p = res.cf.tileCoordsToPixels(cPoints[id].x(), cPoints[id].y());
           FillCircle(p, 3, olc::CYAN);
 
           if (id > 0u) {

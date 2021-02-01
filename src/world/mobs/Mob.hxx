@@ -81,7 +81,7 @@ namespace tdef {
   }
 
   inline
-  const path::Path&
+  const Path&
   Mob::getPath() const noexcept {
     return m_path;
   }

@@ -31,113 +31,6 @@ namespace tdef {
     }
 
     inline
-    bool
-    Path::valid() const noexcept {
-      return !segments.empty();
-    }
-
-    inline
-    void
-    Path::clear(const utils::Point2f& p) {
-      // Assign home and current position.
-      home = p;
-      cur = p;
-
-      // Reset segments.
-      seg = -1;
-      segments.clear();
-
-      // Reset temporary passage points.
-      cPoints.clear();
-      addPassagePoint(p);
-    }
-
-    inline
-    void
-    Path::addPassagePoint(const utils::Point2f& p) {
-      cPoints.push_back(p);
-    }
-
-    inline
-    void
-    Path::add(const utils::Point2f& p, float xD, float yD, float d) {
-      Segment s = newSegment(p, xD, yD, d);
-      segments.push_back(s);
-      addPassagePoint(s.end);
-
-      // Make the entity on the first segment.
-      if (seg < 0) {
-        seg = 0;
-      }
-    }
-
-    inline
-    void
-    Path::add(const utils::Point2f& s, const utils::Point2f& t) {
-      Segment se = newSegment(s, t);
-      segments.push_back(se);
-      addPassagePoint(se.end);
-
-      // Make the entity on the first segment.
-      if (seg < 0) {
-        seg = 0;
-      }
-    }
-
-    inline
-    void
-    Path::add(const utils::Point2f& p) {
-      if (seg < 0) {
-        // We want to make sure that we don't
-        // register the home position once
-        // again.
-        if (home.x() != p.x() || home.y() != p.y()) {
-          add(home, p);
-        }
-      }
-      else {
-        const Segment s = segments.back();
-        add(s.end, p);
-      }
-    }
-
-    inline
-    bool
-    Path::enRoute(float threshold) const noexcept {
-      // In case the identifier does not describe a
-      // valid path segment, assume we did arrive.
-      // Similarly if no segments are registered we
-      // consider that we already arrived.
-      int ss = static_cast<int>(segments.size());
-      if (seg < 0 || seg >= ss) {
-        return false;
-      }
-
-      return (seg < ss - 1) || utils::d(segments[seg].end, cur) > threshold;
-    }
-
-    inline
-    utils::Point2f
-    Path::currentTarget() const noexcept {
-      int ss = static_cast<int>(segments.size());
-      if (seg < 0 || seg >= ss) {
-        return utils::Point2f();
-      }
-
-      return segments[seg].end;
-    }
-
-    inline
-    utils::Point2f
-    Path::target() const noexcept {
-      if (segments.empty()) {
-        return utils::Point2f();
-      }
-
-      return segments.back().end;
-    }
-
-    inline
     Segment
     newSegment(const utils::Point2f& p, float xD, float yD, float d) noexcept {
       Segment s;
@@ -172,21 +65,127 @@ namespace tdef {
       return se;
     }
 
-    inline
-    Path
-    newPath(const utils::Point2f& p) noexcept {
-      Path pa;
+  }
 
-      pa.home = p;
-      pa.cur = p;
+  inline
+  bool
+  Path::valid() const noexcept {
+    return !m_segments.empty();
+  }
 
-      pa.seg = -1;
-      pa.addPassagePoint(p);
+  inline
+  void
+  Path::clear(const utils::Point2f& p) {
+    // Assign home and current position.
+    m_home = p;
+    m_cur = p;
 
-      return pa;
+    // Reset segments.
+    m_seg = -1;
+    m_segments.clear();
+
+    // Reset temporary passage points.
+    m_cPoints.clear();
+    addPassagePoint(p);
+  }
+
+  inline
+  void
+  Path::addPassagePoint(const utils::Point2f& p) {
+    m_cPoints.push_back(p);
+  }
+
+  inline
+  void
+  Path::add(const utils::Point2f& p, float xD, float yD, float d) {
+    path::Segment s = path::newSegment(p, xD, yD, d);
+    m_segments.push_back(s);
+    addPassagePoint(s.end);
+
+    // Make the entity on the first segment.
+    if (m_seg < 0) {
+      m_seg = 0;
+    }
+  }
+
+  inline
+  void
+  Path::add(const utils::Point2f& s, const utils::Point2f& t) {
+    path::Segment se = path::newSegment(s, t);
+    m_segments.push_back(se);
+    addPassagePoint(se.end);
+
+    // Make the entity on the first segment.
+    if (m_seg < 0) {
+      m_seg = 0;
+    }
+  }
+
+  inline
+  void
+  Path::add(const utils::Point2f& p) {
+    if (m_seg < 0) {
+      // We want to make sure that we don't
+      // register the home position once
+      // again.
+      if (m_home.x() != p.x() || m_home.y() != p.y()) {
+        add(m_home, p);
+      }
+    }
+    else {
+      const path::Segment s = m_segments.back();
+      add(s.end, p);
+    }
+  }
+
+  inline
+  bool
+  Path::enRoute(float threshold) const noexcept {
+    // In case the identifier does not describe a
+    // valid path segment, assume we did arrive.
+    // Similarly if no segments are registered we
+    // consider that we already arrived.
+    int ss = static_cast<int>(m_segments.size());
+    if (m_seg < 0 || m_seg >= ss) {
+      return false;
     }
 
+    return (m_seg < ss - 1) || utils::d(m_segments[m_seg].end, m_cur) > threshold;
   }
+
+  inline
+  utils::Point2f
+  Path::cur() const noexcept {
+    return m_cur;
+  }
+
+  inline
+  utils::Point2f
+  Path::currentTarget() const noexcept {
+    int ss = static_cast<int>(m_segments.size());
+    if (m_seg < 0 || m_seg >= ss) {
+      return utils::Point2f();
+    }
+
+    return m_segments[m_seg].end;
+  }
+
+  inline
+  utils::Point2f
+  Path::target() const noexcept {
+    if (m_segments.empty()) {
+      return utils::Point2f();
+    }
+
+    return m_segments.back().end;
+  }
+
+  inline
+  const std::vector<utils::Point2f>&
+  Path::getPassagePoints() const noexcept {
+    return m_cPoints;
+  }
+
 }
 
 #endif    /* PATH_HXX */

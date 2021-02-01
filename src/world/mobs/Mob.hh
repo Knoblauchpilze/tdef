@@ -218,7 +218,7 @@ namespace tdef {
        * @brief - Returns the current path followed by the entity.
        * @return - the current path followed by the entity.
        */
-      const path::Path&
+      const Path&
       getPath() const noexcept;
 
       float
@@ -362,7 +362,7 @@ namespace tdef {
        */
       bool
       locatePortal(LocatorShPtr loc,
-                   path::Path& path);
+                   Path& path);
 
       /**
        * @brief - Used to trigger and apply the behavior which
@@ -378,7 +378,7 @@ namespace tdef {
        */
       bool
       destroyDefenses(LocatorShPtr loc,
-                      path::Path& path);
+                      Path& path);
 
     private:
 
@@ -560,7 +560,7 @@ namespace tdef {
       /**
        * @brief - The current path followed by this mob.
        */
-      path::Path m_path;
+      Path m_path;
 
       /**
        * @brief - The bounty provided by this mob if killed.

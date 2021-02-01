@@ -131,7 +131,10 @@ namespace tdef {
     bool obs = frustum->obstructed(s, xDir, yDir, d, iPoints, &obsP);
     float dx = std::abs(obsP.x() - p.x());
     float dy = std::abs(obsP.y() - p.y());
-    bool obsWithinTarget = obs && (dx < 1.0f && dy < 1.0f);
+    // As the target is assumed to have a radius
+    // of `1`, we need to check whether the obs
+    // is within half a radius from it.
+    bool obsWithinTarget = obs && (dx < 0.5f && dy < 0.5f);
 
     if (!obs || (obsWithinTarget && ignoreTargetObstruction)) {
       // Either there is no obstruction or there is one

@@ -41,6 +41,12 @@ namespace tdef {
       void
       breach(float lives);
 
+      std::ostream&
+      operator<<(std::ostream& out) const override;
+
+      std::istream&
+      operator>>(std::istream& in) override;
+
     private:
 
       /**
@@ -54,6 +60,12 @@ namespace tdef {
 
   using PortalShPtr = std::shared_ptr<Portal>;
 }
+
+std::ostream&
+operator<<(std::ostream& out, const tdef::Portal& p) noexcept;
+
+std::istream&
+operator>>(std::istream& in, tdef::Portal& p) noexcept;
 
 # include "Portal.hxx"
 

@@ -237,6 +237,60 @@ namespace tdef {
   }
 
   inline
+  std::ostream&
+  Tower::operator<<(std::ostream& out) const {
+    Block::operator<<(out);
+
+    // TODO: Handle this.
+    // m_type;
+    // std::vector<UpgradeData> m_upgrades;
+    // ExperienceData m_exp;
+    out << m_energy;
+    out << m_maxEnergy;
+    out << m_energyRefill;
+    out << m_attackCost;
+    // TODO: Handle this.
+    // towers::Upgradable m_minRange;
+    // towers::Upgradable m_maxRange;
+    // towers::Upgradable m_aoeRadius;
+    // ShootingData m_shooting;
+    // DamageData m_attack;
+    // towers::Processes m_processes;
+    // MobShPtr m_target
+
+    log("Saved tower at " + m_pos.toString(), utils::Level::Verbose);
+
+    return out;
+  }
+
+  inline
+  std::istream&
+  Tower::operator>>(std::istream& in) {
+    Block::operator>>(in);
+
+    // TODO: Handle this.
+    // m_type;
+    // std::vector<UpgradeData> m_upgrades;
+    // ExperienceData m_exp;
+    in >> m_energy;
+    in >> m_maxEnergy;
+    in >> m_energyRefill;
+    in >> m_attackCost;
+    // TODO: Handle this.
+    // towers::Upgradable m_minRange;
+    // towers::Upgradable m_maxRange;
+    // towers::Upgradable m_aoeRadius;
+    // ShootingData m_shooting;
+    // DamageData m_attack;
+    // towers::Processes m_processes;
+    // MobShPtr m_target
+
+    log("Restored tower at " + m_pos.toString(), utils::Level::Verbose);
+
+    return in;
+  }
+
+  inline
   Tower::DamageData
   Tower::fromProps(const TProps& props) noexcept {
     DamageData dd;
@@ -300,6 +354,20 @@ namespace tdef {
     return speed <= 0.0f;
   }
 
+}
+
+inline
+std::ostream&
+operator<<(std::ostream& out, const tdef::Tower& t) noexcept {
+  t << out;
+  return out;
+}
+
+inline
+std::istream&
+operator>>(std::istream& in, tdef::Tower& t) noexcept {
+  t >> in;
+  return in;
 }
 
 #endif    /* TOWER_HXX */

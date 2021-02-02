@@ -110,6 +110,69 @@ namespace tdef {
     return m_path.enRoute(m_rArrival);
   }
 
+
+  inline
+  std::ostream&
+  Mob::operator<<(std::ostream& out) const {
+    WorldElement::operator<<(out);
+
+    // TODO: Handle this.
+    // mobs::Type m_type;
+    out << m_energy;
+    out << m_maxEnergy;
+    out << m_energyRefill;
+    // TODO: Handle this.
+    // Behavior m_behavior;
+    out << m_attackCost;
+    out << m_attack;
+    out << m_rArrival;
+    // TODO: Handle this.
+    // Path m_path;
+    out << m_bounty;
+    out << m_cost;
+    out << m_exp;
+    // TODO: Handle this.
+    // mobs::DefenseData m_defense;
+    // SpeedData m_speed;
+    // PoisonData m_poison;
+    // BlockShPtr m_target;
+
+    log("Saved mob at " + m_pos.toString(), utils::Level::Verbose);
+
+    return out;
+  }
+
+  inline
+  std::istream&
+  Mob::operator>>(std::istream& in) {
+    WorldElement::operator>>(in);
+
+    // TODO: Handle this.
+    // mobs::Type m_type;
+    in >> m_energy;
+    in >> m_maxEnergy;
+    in >> m_energyRefill;
+    // TODO: Handle this.
+    // Behavior m_behavior;
+    in >> m_attackCost;
+    in >> m_attack;
+    in >> m_rArrival;
+    // TODO: Handle this.
+    // Path m_path;
+    in >> m_bounty;
+    in >> m_cost;
+    in >> m_exp;
+    // TODO: Handle this.
+    // mobs::DefenseData m_defense;
+    // SpeedData m_speed;
+    // PoisonData m_poison;
+    // BlockShPtr m_target;
+
+    log("Restored mob at " + m_pos.toString(), utils::Level::Verbose);
+
+    return in;
+  }
+
   inline
   void
   Mob::init(StepInfo& /*info*/) {}
@@ -134,6 +197,20 @@ namespace tdef {
     return dd;
   }
 
+}
+
+inline
+std::ostream&
+operator<<(std::ostream& out, const tdef::Mob& m) noexcept {
+  m << out;
+  return out;
+}
+
+inline
+std::istream&
+operator>>(std::istream& in, tdef::Mob& m) noexcept {
+  m >> in;
+  return in;
 }
 
 #endif    /* MOB_HXX */

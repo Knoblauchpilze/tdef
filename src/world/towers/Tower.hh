@@ -479,6 +479,12 @@ namespace tdef {
       upgrade(const towers::Upgrade& upgrade,
               int level);
 
+      std::ostream&
+      operator<<(std::ostream& out) const override;
+
+      std::istream&
+      operator>>(std::istream& in) override;
+
       void
       step(StepInfo& info) override;
 
@@ -779,6 +785,12 @@ namespace tdef {
 
   using TowerShPtr = std::shared_ptr<Tower>;
 }
+
+std::ostream&
+operator<<(std::ostream& out, const tdef::Tower& t) noexcept;
+
+std::istream&
+operator>>(std::istream& in, tdef::Tower& t) noexcept;
 
 # include "Tower.hxx"
 

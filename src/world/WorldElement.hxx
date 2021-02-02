@@ -93,6 +93,48 @@ namespace tdef {
   }
 
   inline
+  std::ostream&
+  WorldElement::operator<<(std::ostream& out) const {
+    // Save props in order.
+    // TODO: Handle owner.
+    // out << m_owner;
+
+    out << m_pos.x();
+    out << m_pos.y();
+    out << m_radius;
+
+    out << m_totalHealth;
+    out << m_health;
+
+    out << m_deleted;
+
+    log("Saved world element at " + m_pos.toString(), utils::Level::Verbose);
+
+    return out;
+  }
+
+  inline
+  std::istream&
+  WorldElement::operator>>(std::istream& in) {
+    // Load props in order.
+    // TODO: Handle owner.
+    // in >> m_owner;
+
+    in >> m_pos.x();
+    in >> m_pos.y();
+    in >> m_radius;
+
+    in >> m_totalHealth;
+    in >> m_health;
+
+    in >> m_deleted;
+
+    log("Restored world element at " + m_pos.toString(), utils::Level::Verbose);
+
+    return in;
+  }
+
+  inline
   void
   WorldElement::assignProps(Props& pp,
                             const utils::Point2f& p,
@@ -130,6 +172,20 @@ namespace tdef {
     m_owner = uuid;
   }
 
+}
+
+inline
+std::ostream&
+operator<<(std::ostream& out, const tdef::WorldElement& we) noexcept {
+  we << out;
+  return out;
+}
+
+inline
+std::istream&
+operator>>(std::istream& in, tdef::WorldElement& we) noexcept {
+  we >> in;
+  return in;
 }
 
 #endif    /* WORLD_ELEMENT_HXX */

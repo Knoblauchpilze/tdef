@@ -30,6 +30,30 @@ namespace tdef {
   }
 
   inline
+  std::ostream&
+  Block::operator<<(std::ostream& out) const {
+    WorldElement::operator<<(out);
+    out << m_orientation;
+    out << m_rotationSpeed;
+
+    log("Saved block at " + m_pos.toString(), utils::Level::Verbose);
+
+    return out;
+  }
+
+  inline
+  std::istream&
+  Block::operator>>(std::istream& in) {
+    WorldElement::operator>>(in);
+    in >> m_orientation;
+    in >> m_rotationSpeed;
+
+    log("Restored block at " + m_pos.toString(), utils::Level::Verbose);
+
+    return in;
+  }
+
+  inline
   void
   Block::init(StepInfo& /*info*/) {
     // Nothing to do.
@@ -65,6 +89,20 @@ namespace tdef {
     // Nothing to do.
   }
 
+}
+
+inline
+std::ostream&
+operator<<(std::ostream& out, const tdef::Block& b) noexcept {
+  b << out;
+  return out;
+}
+
+inline
+std::istream&
+operator>>(std::istream& in, tdef::Block& b) noexcept {
+  b >> in;
+  return in;
 }
 
 #endif    /* BLOCK_HXX */

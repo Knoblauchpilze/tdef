@@ -109,6 +109,12 @@ namespace tdef {
       Spawner(const SProps& props,
               const spawners::Processes& desc);
 
+      std::ostream&
+      operator<<(std::ostream& out) const override;
+
+      std::istream&
+      operator>>(std::istream& in) override;
+
       void
       step(StepInfo& info) override;
 
@@ -207,6 +213,12 @@ namespace tdef {
 
   using SpawnerShPtr = std::shared_ptr<Spawner>;
 }
+
+std::ostream&
+operator<<(std::ostream& out, const tdef::Spawner& s) noexcept;
+
+std::istream&
+operator>>(std::istream& in, tdef::Spawner& s) noexcept;
 
 # include "Spawner.hxx"
 

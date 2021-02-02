@@ -91,6 +91,12 @@ namespace tdef {
                  Tower* owner,
                  MobShPtr mob);
 
+      std::ostream&
+      operator<<(std::ostream& out) const override;
+
+      std::istream&
+      operator>>(std::istream& in) override;
+
       void
       init(StepInfo& info) override;
 
@@ -216,6 +222,12 @@ namespace tdef {
 
   using ProjectileShPtr = std::shared_ptr<Projectile>;
 }
+
+std::ostream&
+operator<<(std::ostream& out, const tdef::Projectile& p) noexcept;
+
+std::istream&
+operator>>(std::istream& in, tdef::Projectile& p) noexcept;
 
 # include "Projectile.hxx"
 

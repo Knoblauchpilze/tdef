@@ -44,6 +44,46 @@ namespace tdef {
   }
 
   inline
+  std::ostream&
+  Spawner::operator<<(std::ostream& out) const {
+    Block::operator<<(out);
+
+    // TODO: Handle distribution.
+    // m_distribution;
+    out << m_spawnRadius;
+    out << m_stock;
+    out << m_threshold;
+    out << m_refill;
+    out << m_exp;
+    // TODO: Handle processes.
+    // spawners::Processes m_processes
+
+    log("Saved spawner at " + m_pos.toString(), utils::Level::Verbose);
+
+    return out;
+  }
+
+  inline
+  std::istream&
+  Spawner::operator>>(std::istream& in) {
+    Block::operator>>(in);
+
+    // TODO: Handle distribution.
+    // m_distribution;
+    in >> m_spawnRadius;
+    in >> m_stock;
+    in >> m_threshold;
+    in >> m_refill;
+    in >> m_exp;
+    // TODO: Handle processes.
+    // spawners::Processes m_processes
+
+    log("Restored spawner at " + m_pos.toString(), utils::Level::Verbose);
+
+    return in;
+  }
+
+  inline
   float
   Spawner::refill(float delta, bool force) {
     // In case the `delta` is positive the operation
@@ -72,6 +112,20 @@ namespace tdef {
     return var;
   }
 
+}
+
+inline
+std::ostream&
+operator<<(std::ostream& out, const tdef::Spawner& s) noexcept {
+  s << out;
+  return out;
+}
+
+inline
+std::istream&
+operator>>(std::istream& in, tdef::Spawner& s) noexcept {
+  s >> in;
+  return in;
 }
 
 #endif    /* SPAWNER_HXX */

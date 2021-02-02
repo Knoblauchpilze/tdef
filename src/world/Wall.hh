@@ -31,6 +31,12 @@ namespace tdef {
       float
       getHeight() const noexcept;
 
+      std::ostream&
+      operator<<(std::ostream& out) const override;
+
+      std::istream&
+      operator>>(std::istream& in) override;
+
     private:
 
       /**
@@ -42,6 +48,12 @@ namespace tdef {
 
   using WallShPtr = std::shared_ptr<Wall>;
 }
+
+std::ostream&
+operator<<(std::ostream& out, const tdef::Wall& w) noexcept;
+
+std::istream&
+operator>>(std::istream& in, tdef::Wall& w) noexcept;
 
 # include "Wall.hxx"
 

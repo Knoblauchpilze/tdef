@@ -14,6 +14,9 @@
 # include "TDefApp.hh"
 
 // TODO: Some mobs seem to have really high speed.
+// TODO: Custom behaviors for towers.
+// TODO: Save and load game from file.
+// TODO: Welcome menu.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

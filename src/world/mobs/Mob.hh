@@ -255,6 +255,12 @@ namespace tdef {
       hit(StepInfo& info,
           const mobs::Damage& d);
 
+      std::ostream&
+      operator<<(std::ostream& out) const override;
+
+      std::istream&
+      operator>>(std::istream& in) override;
+
       void
       init(StepInfo& info) override;
 
@@ -608,6 +614,12 @@ namespace tdef {
 
   using MobShPtr = std::shared_ptr<Mob>;
 }
+
+std::ostream&
+operator<<(std::ostream& out, const tdef::Mob& m) noexcept;
+
+std::istream&
+operator>>(std::istream& in, tdef::Mob& m) noexcept;
 
 # include "Mob.hxx"
 

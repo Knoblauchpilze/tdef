@@ -46,12 +46,10 @@ namespace tdef {
       /**
        * @brief - Build a new world from the file specified in input.
        *          The file should describe a valid level.
-       * @param seed - the seed to use for this world.
        * @param file - the name of the file from which the world's
        *               data should be loaded.
        */
-      World(int seed,
-            const std::string& file);
+      World(const std::string& file);
 
       /**
        * @brief - Desctruction of the object.
@@ -125,6 +123,17 @@ namespace tdef {
       void
       reset();
 
+      /**
+       * @brief - Used to save the content of the world to
+       *          the file provided in input. This can be
+       *          particulary useful to restore the game
+       *          at a later point in time.
+       * @param file - the name of the file to which this
+       *               world should be serialized.
+       */
+      void
+      save(const std::string& file) const;
+
     private:
 
       /**
@@ -132,6 +141,17 @@ namespace tdef {
        */
       void
       generate();
+
+      /**
+       * @brief - Called after a world has been generated,
+       *          either from a file or through automatic
+       *          procedures to initialize the needed info
+       *          about it.
+       *          For now it mainly consists in creating
+       *          the locator object.
+       */
+      void
+      initialize();
 
       /**
        * @brief - Attempt to load a world from the file as

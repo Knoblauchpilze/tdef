@@ -2,6 +2,8 @@
 # define   WORLD_ELEMENT_HH
 
 # include <memory>
+# include <istream>
+# include <ostream>
 # include <core_utils/TimeUtils.hh>
 # include <core_utils/CoreObject.hh>
 # include <core_utils/Uuid.hh>
@@ -119,6 +121,30 @@ namespace tdef {
        */
       void
       markForDeletion(bool toDelete);
+
+      /**
+       * @brief - Base interface to allow the serialization of
+       *          a world element to a stream. The goal is to
+       *          lay out properties in a known manner so that
+       *          it can be deserialized later.
+       * @param out - the stream to serialize into.
+       * @return - the modified stream.
+       */
+      virtual std::ostream&
+      operator<<(std::ostream& out) const;
+
+      /**
+       * @brief - Base interface to allow the deserialization
+       *          of the content of the stream into a valid
+       *          world element description. We assume that
+       *          the stream is pointing directly at the start
+       *          of the object's properties.
+       * @param in - the input stream from which data should be
+       *             read.
+       * @return - the modified stream.
+       */
+      virtual std::istream&
+      operator>>(std::istream& in);
 
       /**
        * @brief - Interface method caled before the first
@@ -277,5 +303,25 @@ namespace tdef {
 }
 
 # include "WorldElement.hxx"
+
+/**
+ * @brief - Serialization function allowing to insert the representation
+ *          of the world element object to the stream.
+ * @param out - the stream into which the world element will be appended.
+ * @param rng - the world element to serialize.
+ * @return - the modified stream.
+ */
+std::ostream&
+operator<<(std::ostream& out, const tdef::WorldElement& we) noexcept;
+
+/**
+ * @brief - Deserialization function allowing to extract the representation
+ *          of a world element object from the input stream.
+ * @param int - the stream from which the world element will be generated.
+ * @param we - the world element to extract from the stream.
+ * @return - the modified stream.
+ */
+std::istream&
+operator>>(std::istream& in, tdef::WorldElement& we) noexcept;
 
 #endif    /* WORLD_ELEMENT_HH */

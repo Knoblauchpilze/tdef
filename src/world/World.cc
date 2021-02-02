@@ -29,13 +29,13 @@ namespace tdef {
     setService("world");
 
     generate();
+    initialize();
   }
 
-  World::World(int seed,
-               const std::string& file):
+  World::World(const std::string& file):
     utils::CoreObject("world"),
 
-    m_rng(seed),
+    m_rng(),
 
     m_blocks(),
     m_mobs(),
@@ -49,6 +49,7 @@ namespace tdef {
     setService("world");
 
     loadFromFile(file);
+    initialize();
   }
 
   void
@@ -211,6 +212,97 @@ namespace tdef {
   }
 
   void
+  World::save(const std::string& file) const {
+    // Open the file.
+    std::ofstream out(file.c_str());
+
+    if (!out.good()) {
+      error(
+        "Failed to save world to \"" + file + "\"",
+        "Failed to open file"
+      );
+    }
+
+    // Indicate that a valid rng was saved for this
+    // world and save the corresponding resource.
+    out << true;
+    out << m_rng;
+
+    int count = 0;
+
+    // Save towers.
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      if (std::dynamic_pointer_cast<Tower>(m_blocks[id]) != nullptr) {
+        ++count;
+      }
+    }
+    out << count;
+
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      if (std::dynamic_pointer_cast<Tower>(m_blocks[id]) != nullptr) {
+        out << *m_blocks[id];
+      }
+    }
+
+    // Save portals.
+    count = 0;
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      if (std::dynamic_pointer_cast<Portal>(m_blocks[id]) != nullptr) {
+        ++count;
+      }
+    }
+    out << count;
+
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      if (std::dynamic_pointer_cast<Portal>(m_blocks[id]) != nullptr) {
+        out << *m_blocks[id];
+      }
+    }
+
+    // Save spawners.
+    count = 0;
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      if (std::dynamic_pointer_cast<Spawner>(m_blocks[id]) != nullptr) {
+        ++count;
+      }
+    }
+    out << count;
+
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      if (std::dynamic_pointer_cast<Spawner>(m_blocks[id]) != nullptr) {
+        out << *m_blocks[id];
+      }
+    }
+
+    // Save walls.
+    count = 0;
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      if (std::dynamic_pointer_cast<Wall>(m_blocks[id]) != nullptr) {
+        ++count;
+      }
+    }
+    out << count;
+
+    for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
+      if (std::dynamic_pointer_cast<Wall>(m_blocks[id]) != nullptr) {
+        out << *m_blocks[id];
+      }
+    }
+
+    // Save mobs.
+    out << m_mobs.size();
+    for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
+      out << *m_mobs[id];
+    }
+
+    // Save projectiles.
+    out << m_projectiles.size();
+    for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
+      out << *m_projectiles[id];
+    }
+  }
+
+  void
   World::generate() {
     static constexpr int sk_spawners = 3;
     static constexpr int sk_walls = 2;
@@ -368,7 +460,10 @@ namespace tdef {
         used.insert(key);
       }
     }
+  }
 
+  void
+  World::initialize() {
     m_loc = std::make_shared<Locator>(m_blocks, m_mobs, m_projectiles);
   }
 
@@ -379,15 +474,58 @@ namespace tdef {
 
     if (!in.good()) {
       error(
-        std::string("Unable to load level from file \"") + file + "\"",
-        std::string("No such file")
+        "Failed to load world from \"" + file + "\"",
+        "Failed to open file"
       );
     }
 
-    error(
-      "Loading from file is not implemented",
-      "COME BACK LATER"
-    );
+    // First thing is to determine whether a valid
+    // rng has been saved.
+    log("Loading rng engine");
+
+    bool rngDefined;
+    in >> rngDefined;
+    if (rngDefined) {
+      in >> m_rng;
+    }
+
+    int count = 0;
+
+    // Load towers if any.
+    in >> count;
+    for (int id = 0 ; id < count ; ++id) {
+      // TODO: Handle this.
+    }
+
+    // Load portals.
+    in >> count;
+    for (int id = 0 ; id < count ; ++id) {
+      // TODO: Handle this.
+    }
+
+    // Load spawners.
+    in >> count;
+    for (int id = 0 ; id < count ; ++id) {
+      // TODO: Handle this.
+    }
+
+    // Load walls.
+    in >> count;
+    for (int id = 0 ; id < count ; ++id) {
+      // TODO: Handle this.
+    }
+
+    // Load mobs if any.
+    in >> count;
+    for (int id = 0 ; id < count ; ++id) {
+      // TODO: Handle this.
+    }
+
+    // Load projectiles.
+    in >> count;
+    for (int id = 0 ; id < count ; ++id) {
+      // TODO: Handle this.
+    }
   }
 
   void

@@ -17,6 +17,12 @@ namespace tdef {
       float
       getRotationSpeed() const noexcept;
 
+      std::ostream&
+      operator<<(std::ostream& out) const override;
+
+      std::istream&
+      operator>>(std::istream& in) override;
+
       void
       init(StepInfo& info) override;
 
@@ -81,6 +87,12 @@ namespace tdef {
 
   using BlockShPtr = std::shared_ptr<Block>;
 }
+
+std::ostream&
+operator<<(std::ostream& out, const tdef::Block& b) noexcept;
+
+std::istream&
+operator>>(std::istream& in, tdef::Block& b) noexcept;
 
 # include "Block.hxx"
 

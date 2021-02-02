@@ -24,6 +24,42 @@ namespace tdef {
     return m_height;
   }
 
+  inline
+  std::ostream&
+  Wall::operator<<(std::ostream& out) const {
+    Block::operator<<(out);
+    out << m_height;
+
+    log("Saved wall at " + m_pos.toString(), utils::Level::Verbose);
+
+    return out;
+  }
+
+  inline
+  std::istream&
+  Wall::operator>>(std::istream& in) {
+    Block::operator>>(in);
+    in >> m_height;
+
+    log("Restored wall at " + m_pos.toString(), utils::Level::Verbose);
+
+    return in;
+  }
+
+}
+
+inline
+std::ostream&
+operator<<(std::ostream& out, const tdef::Wall& w) noexcept {
+  w << out;
+  return out;
+}
+
+inline
+std::istream&
+operator>>(std::istream& in, tdef::Wall& w) noexcept {
+  w >> in;
+  return in;
 }
 
 #endif    /* Wall_HXX */

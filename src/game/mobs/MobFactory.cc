@@ -1,6 +1,16 @@
 
 # include "MobFactory.hh"
-# include "MobData.hh"
+# include "Armored.hh"
+# include "Fast.hh"
+# include "Fighter.hh"
+# include "Healer.hh"
+# include "Heli.hh"
+# include "Icy.hh"
+# include "Jet.hh"
+# include "Light.hh"
+# include "Regular.hh"
+# include "Strong.hh"
+# include "Toxic.hh"
 
 namespace tdef {
   namespace mobs {

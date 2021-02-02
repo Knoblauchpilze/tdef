@@ -1,0 +1,19 @@
+
+target_sources (tdef_lib PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/Armored.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Fast.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Fighter.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Healer.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Heli.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Icy.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Jet.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Light.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Regular.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Strong.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/Toxic.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/MobFactory.cc
+  )
+
+target_include_directories (tdef_lib PUBLIC
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+  )

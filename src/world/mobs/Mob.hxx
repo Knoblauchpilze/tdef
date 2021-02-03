@@ -116,13 +116,11 @@ namespace tdef {
   Mob::operator<<(std::ostream& out) const {
     WorldElement::operator<<(out);
 
-    // TODO: Handle this.
-    // mobs::Type m_type;
+    out << static_cast<int>(m_type);
     out << m_energy;
     out << m_maxEnergy;
     out << m_energyRefill;
-    // TODO: Handle this.
-    // Behavior m_behavior;
+    out << static_cast<int>(m_behavior);
     out << m_attackCost;
     out << m_attack;
     out << m_rArrival;
@@ -131,10 +129,34 @@ namespace tdef {
     out << m_bounty;
     out << m_cost;
     out << m_exp;
+
+    // Defense data.
+    out << m_defense.shield;
+    out << m_defense.shieldEfficiency;
+    out << m_defense.shieldDurability;
+    out << m_defense.poisonable;
+    out << m_defense.slowable;
+    out << m_defense.stunnable;
+
+    // Speed data.
+    out << m_speed.bSpeed;
+    out << m_speed.speed;
     // TODO: Handle this.
-    // mobs::DefenseData m_defense;
-    // SpeedData m_speed;
-    // PoisonData m_poison;
+    // out << utils::toMilliseconds(m_speed.tFreeze);
+    out << utils::toMilliseconds(m_speed.fDuration);
+    out << m_speed.fSpeed;
+    out << m_speed.sDecrease;
+    out << m_speed.sIncrease;
+    // out << utils::toMilliseconds(m_speed.tStun);
+    out << utils::toMilliseconds(m_speed.sDuration);
+
+    // Poison data.
+    out << m_poison.damage;
+    out << m_poison.stack;
+    // utils::TimeStamp tPoison;
+    out << utils::toMilliseconds(m_poison.pDuration);
+
+    // TODO: Handle this.
     // BlockShPtr m_target;
 
     log("Saved mob at " + m_pos.toString(), utils::Level::Verbose);
@@ -147,13 +169,14 @@ namespace tdef {
   Mob::operator>>(std::istream& in) {
     WorldElement::operator>>(in);
 
-    // TODO: Handle this.
-    // mobs::Type m_type;
+    int i;
+    in >> i;
+    m_type = static_cast<mobs::Type>(i);
     in >> m_energy;
     in >> m_maxEnergy;
     in >> m_energyRefill;
-    // TODO: Handle this.
-    // Behavior m_behavior;
+    in >> i;
+    m_behavior = static_cast<Behavior>(i);
     in >> m_attackCost;
     in >> m_attack;
     in >> m_rArrival;
@@ -162,10 +185,38 @@ namespace tdef {
     in >> m_bounty;
     in >> m_cost;
     in >> m_exp;
+
+    // Defense data.
+    in >> m_defense.shield;
+    in >> m_defense.shieldEfficiency;
+    in >> m_defense.shieldDurability;
+    in >> m_defense.poisonable;
+    in >> m_defense.slowable;
+    in >> m_defense.stunnable;
+
+    // Speed data.
+    in >> m_speed.bSpeed;
+    in >> m_speed.speed;
     // TODO: Handle this.
-    // mobs::DefenseData m_defense;
-    // SpeedData m_speed;
-    // PoisonData m_poison;
+    float d;
+    // m_speed.tFreeze = utils::toMilliseconds(d);
+    in >> d;
+    m_speed.fDuration = utils::toMilliseconds(d);
+    in >> m_speed.fSpeed;
+    in >> m_speed.sDecrease;
+    in >> m_speed.sIncrease;
+    // m_speed.tStun = utils::toMilliseconds(d);
+    in >> d;
+    m_speed.sDuration = utils::toMilliseconds(d);
+
+    // Poison data.
+    in >> m_poison.damage;
+    in >> m_poison.stack;
+    // utils::TimeStamp tPoison;
+    in >> d;
+    m_poison.pDuration = utils::toMilliseconds(d);
+
+    // TODO: Handle this.
     // BlockShPtr m_target;
 
     log("Restored mob at " + m_pos.toString(), utils::Level::Verbose);

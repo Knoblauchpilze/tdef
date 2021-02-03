@@ -54,8 +54,7 @@ namespace {
 
 namespace tdef {
 
-  Tower::Tower(const TProps& props,
-               const towers::Processes& desc):
+  Tower::Tower(const TProps& props):
     Block(props, towers::toString(props.type)),
 
     m_type(props.type),
@@ -85,7 +84,7 @@ namespace tdef {
     ),
 
     m_attack(fromProps(props)),
-    m_processes(desc),
+    m_processes(towers::generateData(m_type)),
 
     m_target(nullptr)
   {
@@ -168,6 +167,52 @@ namespace tdef {
     // Handle the upgrade: this basically consists in
     // increasing the level of the property by `1`.
     m_upgrades[id].level = level;
+  }
+
+  std::istream&
+  Tower::operator>>(std::istream& in) {
+    Block::operator>>(in);
+
+    int i;
+    in >> i;
+    m_type = static_cast<towers::Type>(i);
+
+    // Upgrades.
+    unsigned count;
+    in >> count;
+    for (unsigned id = 0u ; id < count ; ++id) {
+      int tt;
+      in >> tt;
+      float level;
+      in >> level;
+
+      UpgradeData it;
+      it.type = static_cast<towers::Upgrade>(tt);
+      it.level = level;
+
+      m_upgrades.push_back(it);
+    }
+
+    // Experience data.
+    in >> m_exp.exp;
+    in >> m_exp.level;
+
+    in >> m_energy;
+    in >> m_maxEnergy;
+    in >> m_energyRefill;
+    in >> m_attackCost;
+    // TODO: Handle this.
+    // towers::Upgradable m_minRange;
+    // towers::Upgradable m_maxRange;
+    // towers::Upgradable m_aoeRadius;
+    // ShootingData m_shooting;
+    // DamageData m_attack;
+    m_processes = towers::generateData(m_type);
+    // MobShPtr m_target
+
+    log("Restored tower at " + m_pos.toString(), utils::Level::Verbose);
+
+    return in;
   }
 
   void

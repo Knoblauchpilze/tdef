@@ -51,10 +51,9 @@ namespace tdef {
     out << m_stunProb;
     out << m_critProb;
     out << m_critMultiplier;
-    // TODO: Handle durations.
-    // utils::Duration m_freezeDuration;
-    // utils::Duration m_stunDuration;
-    // utils::Duration m_poisonDuration
+    out << utils::toMilliseconds(m_freezeDuration);
+    out << utils::toMilliseconds(m_stunDuration);
+    out << utils::toMilliseconds(m_poisonDuration);
 
     log("Saved projectile at " + m_pos.toString(), utils::Level::Verbose);
 
@@ -78,10 +77,13 @@ namespace tdef {
     in >> m_stunProb;
     in >> m_critProb;
     in >> m_critMultiplier;
-    // TODO: Handle durations.
-    // utils::Duration m_freezeDuration;
-    // utils::Duration m_stunDuration;
-    // utils::Duration m_poisonDuration
+    float d;
+    in >> d;
+    m_freezeDuration = utils::toMilliseconds(d);
+    in >> d;
+    m_stunDuration = utils::toMilliseconds(d);
+    in >> d;
+    m_poisonDuration = utils::toMilliseconds(d);
 
     log("Restored projectile at " + m_pos.toString(), utils::Level::Verbose);
 

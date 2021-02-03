@@ -40,6 +40,8 @@ namespace tdef {
 
     pp.mobs = dist;
 
+    pp.difficulty = spawners::Level::Normal;
+
     return pp;
   }
 
@@ -48,39 +50,23 @@ namespace tdef {
   Spawner::operator<<(std::ostream& out) const {
     Block::operator<<(out);
 
-    // TODO: Handle distribution.
-    // m_distribution;
+    // Distribution.
+    out << m_distribution.size();
+    for (unsigned id = 0u ; id < m_distribution.size() ; ++id) {
+      out << m_distribution[id].prob;
+      out << static_cast<int>(m_distribution[id].mob);
+    }
+
     out << m_spawnRadius;
     out << m_stock;
     out << m_threshold;
     out << m_refill;
     out << m_exp;
-    // TODO: Handle processes.
-    // spawners::Processes m_processes
+    out << static_cast<int>(m_difficulty);
 
     log("Saved spawner at " + m_pos.toString(), utils::Level::Verbose);
 
     return out;
-  }
-
-  inline
-  std::istream&
-  Spawner::operator>>(std::istream& in) {
-    Block::operator>>(in);
-
-    // TODO: Handle distribution.
-    // m_distribution;
-    in >> m_spawnRadius;
-    in >> m_stock;
-    in >> m_threshold;
-    in >> m_refill;
-    in >> m_exp;
-    // TODO: Handle processes.
-    // spawners::Processes m_processes
-
-    log("Restored spawner at " + m_pos.toString(), utils::Level::Verbose);
-
-    return in;
   }
 
   inline

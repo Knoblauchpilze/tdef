@@ -323,11 +323,8 @@ namespace tdef {
       /**
        * @brief - Defines a new tower with the specified props.
        * @param props - the properties defining this tower.
-       * @param desc - the description of the custom functions to
-       *               use during the behavior of this tower.
        */
-      Tower(const TProps& props,
-            const towers::Processes& desc);
+      Tower(const TProps& props);
 
       /**
        * @brief - Fetch the type for this tower.

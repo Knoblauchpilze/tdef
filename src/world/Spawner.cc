@@ -1,11 +1,11 @@
 
 # include "Spawner.hh"
 # include "MobFactory.hh"
+# include "SpawnerFactory.hh"
 
 namespace tdef {
 
-  Spawner::Spawner(const SProps& props,
-                   const spawners::Processes& desc):
+  Spawner::Spawner(const SProps& props):
     Block(props, "spawner"),
 
     m_distribution(props.mobs),
@@ -17,7 +17,8 @@ namespace tdef {
     m_refill(props.refill),
 
     m_exp(0),
-    m_processes(desc)
+    m_difficulty(props.difficulty),
+    m_processes(spawners::generateData(m_difficulty))
   {
     setService("spawner");
 
@@ -27,6 +28,42 @@ namespace tdef {
         "No element in distribution"
       );
     }
+  }
+
+  std::istream&
+  Spawner::operator>>(std::istream& in) {
+    Block::operator>>(in);
+
+    // Distribution.
+    unsigned count;
+    in >> count;
+    for (unsigned id = 0u ; id < count ; ++id) {
+      float prob;
+      in >> prob;
+      int mt;
+      in >> mt;
+
+      spawners::DistItem it;
+      it.prob = prob;
+      it.mob = static_cast<mobs::Type>(mt);
+
+      m_distribution.push_back(it);
+    }
+
+    in >> m_spawnRadius;
+    in >> m_stock;
+    in >> m_threshold;
+    in >> m_refill;
+    in >> m_exp;
+    int dif;
+    in >> dif;
+    m_difficulty = static_cast<spawners::Level>(dif);
+    // Generate processes based on the level.
+    m_processes = spawners::generateData(m_difficulty);
+
+    log("Restored spawner at " + m_pos.toString(), utils::Level::Verbose);
+
+    return in;
   }
 
   void

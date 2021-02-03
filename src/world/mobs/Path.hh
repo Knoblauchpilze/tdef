@@ -240,6 +240,26 @@ namespace tdef {
                       float maxDistanceFromStart = -1.0f,
                       bool allowLog = false);
 
+
+      /**
+       * @brief - Performs the serialization of this path to the
+       *          provided stream. The path can then be restored
+       *          using the companion operator
+       * @param out - the stream where the path will be serialized.
+       * @return - a reference to the modified stream.
+       */
+      std::ostream&
+      operator<<(std::ostream& out) const;
+
+      /**
+       * @brief - Attempts to extract a valid path from the input
+       *          stream provided in input.
+       * @param in - the stream to extract the path from.
+       * @return - the stream from which the path has been extracted.
+       */
+      std::istream&
+      operator>>(std::istream& in);
+
     private:
 
       /**
@@ -281,6 +301,12 @@ namespace tdef {
   };
 
 }
+
+std::ostream&
+operator<<(std::ostream& out, const tdef::Path& p) noexcept;
+
+std::istream&
+operator>>(std::istream& in, tdef::Path& p) noexcept;
 
 # include "Path.hxx"
 

@@ -96,8 +96,7 @@ namespace tdef {
   std::ostream&
   WorldElement::operator<<(std::ostream& out) const {
     // Save props in order.
-    // TODO: Handle owner.
-    // out << m_owner;
+    out << m_owner;
 
     out << m_pos.x();
     out << m_pos.y();
@@ -117,8 +116,7 @@ namespace tdef {
   std::istream&
   WorldElement::operator>>(std::istream& in) {
     // Load props in order.
-    // TODO: Handle owner.
-    // in >> m_owner;
+    in >> m_owner;
 
     in >> m_pos.x();
     in >> m_pos.y();

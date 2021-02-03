@@ -124,8 +124,7 @@ namespace tdef {
     out << m_attackCost;
     out << m_attack;
     out << m_rArrival;
-    // TODO: Handle this.
-    // Path m_path;
+    out << m_path;
     out << m_bounty;
     out << m_cost;
     out << m_exp;
@@ -141,7 +140,7 @@ namespace tdef {
     // Speed data.
     out << m_speed.bSpeed;
     out << m_speed.speed;
-    // TODO: Handle this.
+    // TODO: Save the time of freeze, stun and poison.
     // out << utils::toMilliseconds(m_speed.tFreeze);
     out << utils::toMilliseconds(m_speed.fDuration);
     out << m_speed.fSpeed;
@@ -156,7 +155,7 @@ namespace tdef {
     // utils::TimeStamp tPoison;
     out << utils::toMilliseconds(m_poison.pDuration);
 
-    // TODO: Handle this.
+    // TODO: Save mob' target.
     // BlockShPtr m_target;
 
     log("Saved mob at " + m_pos.toString(), utils::Level::Verbose);
@@ -180,8 +179,7 @@ namespace tdef {
     in >> m_attackCost;
     in >> m_attack;
     in >> m_rArrival;
-    // TODO: Handle this.
-    // Path m_path;
+    in >> m_path;
     in >> m_bounty;
     in >> m_cost;
     in >> m_exp;
@@ -197,7 +195,7 @@ namespace tdef {
     // Speed data.
     in >> m_speed.bSpeed;
     in >> m_speed.speed;
-    // TODO: Handle this.
+    // TODO: Restore freeze, stun and poison time.
     float d;
     // m_speed.tFreeze = utils::toMilliseconds(d);
     in >> d;
@@ -216,7 +214,7 @@ namespace tdef {
     in >> d;
     m_poison.pDuration = utils::toMilliseconds(d);
 
-    // TODO: Handle this.
+    // TODO: Restore mob's target.
     // BlockShPtr m_target;
 
     log("Restored mob at " + m_pos.toString(), utils::Level::Verbose);

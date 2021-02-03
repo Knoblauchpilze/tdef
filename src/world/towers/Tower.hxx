@@ -258,12 +258,14 @@ namespace tdef {
     out << m_maxEnergy;
     out << m_energyRefill;
     out << m_attackCost;
-    // TODO: Handle this.
-    // towers::Upgradable m_minRange;
-    // towers::Upgradable m_maxRange;
-    // towers::Upgradable m_aoeRadius;
-    // ShootingData m_shooting;
-    // DamageData m_attack;
+
+    // Only save part of the properties related to the
+    // shooting and damage: the rest can be deduced of
+    // the type of the tower.
+    out << m_shooting.aiming;
+    out << m_shooting.aimingCone;
+
+    // TODO: Handle saving of tower's target.
     // MobShPtr m_target
 
     log("Saved tower at " + m_pos.toString(), utils::Level::Verbose);

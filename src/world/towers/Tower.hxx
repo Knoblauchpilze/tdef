@@ -241,10 +241,19 @@ namespace tdef {
   Tower::operator<<(std::ostream& out) const {
     Block::operator<<(out);
 
-    // TODO: Handle this.
-    // m_type;
-    // std::vector<UpgradeData> m_upgrades;
-    // ExperienceData m_exp;
+    out << static_cast<int>(m_type);
+
+    // Upgrades.
+    out << m_upgrades.size();
+    for (unsigned id = 0u ; id < m_upgrades.size() ; ++id) {
+      out << static_cast<int>(m_upgrades[id].type);
+      out << m_upgrades[id].level;
+    }
+
+    // Experience data.
+    out << m_exp.exp;
+    out << m_exp.level;
+
     out << m_energy;
     out << m_maxEnergy;
     out << m_energyRefill;
@@ -255,39 +264,11 @@ namespace tdef {
     // towers::Upgradable m_aoeRadius;
     // ShootingData m_shooting;
     // DamageData m_attack;
-    // towers::Processes m_processes;
     // MobShPtr m_target
 
     log("Saved tower at " + m_pos.toString(), utils::Level::Verbose);
 
     return out;
-  }
-
-  inline
-  std::istream&
-  Tower::operator>>(std::istream& in) {
-    Block::operator>>(in);
-
-    // TODO: Handle this.
-    // m_type;
-    // std::vector<UpgradeData> m_upgrades;
-    // ExperienceData m_exp;
-    in >> m_energy;
-    in >> m_maxEnergy;
-    in >> m_energyRefill;
-    in >> m_attackCost;
-    // TODO: Handle this.
-    // towers::Upgradable m_minRange;
-    // towers::Upgradable m_maxRange;
-    // towers::Upgradable m_aoeRadius;
-    // ShootingData m_shooting;
-    // DamageData m_attack;
-    // towers::Processes m_processes;
-    // MobShPtr m_target
-
-    log("Restored tower at " + m_pos.toString(), utils::Level::Verbose);
-
-    return in;
   }
 
   inline

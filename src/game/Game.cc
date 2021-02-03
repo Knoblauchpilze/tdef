@@ -74,9 +74,9 @@ namespace tdef {
   {
     setService("game");
 
-    // # define WORLD_FROM_FILE
+    # define WORLD_FROM_FILE
 # ifdef WORLD_FROM_FILE
-    m_world = std::make_shared<World>(100, std::string("data/worlds/level_1.lvl"));
+    m_world = std::make_shared<World>("data/worlds/level_1.lvl");
 # else
     m_world = std::make_shared<World>(100);
 # endif
@@ -598,14 +598,13 @@ namespace tdef {
     m_gold -= c;
 
     Tower::TProps pp = towers::generateProps(*m_tType, p);
-    towers::Processes td = towers::generateData(*m_tType);
 
     log(
       "Generated tower " + towers::toString(*m_tType) + " at " + p.toString(),
       utils::Level::Info
     );
 
-    TowerShPtr t = std::make_shared<Tower>(pp, td);
+    TowerShPtr t = std::make_shared<Tower>(pp);
     m_world->spawn(t);
   }
 

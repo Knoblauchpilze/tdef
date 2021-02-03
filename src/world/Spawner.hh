@@ -92,6 +92,10 @@ namespace tdef {
         float refill;
 
         spawners::Distribution mobs;
+
+        // The difficulty of the spawner. Allows to generate
+        // the correct processes from this difficulty.
+        spawners::Level difficulty;
       };
 
       static
@@ -103,11 +107,8 @@ namespace tdef {
       /**
        * @brief - Defines a new spawner with the specified props.
        * @param props - the properties to define this spawner.
-       * @param desc - the description of the custom functions to
-       *               use during the behavior of this spawner.
        */
-      Spawner(const SProps& props,
-              const spawners::Processes& desc);
+      Spawner(const SProps& props);
 
       std::ostream&
       operator<<(std::ostream& out) const override;
@@ -203,6 +204,11 @@ namespace tdef {
        *          have already been generated for the spawner.
        */
       int m_exp;
+
+      /**
+       * @brief - The difficulty of this spawner.
+       */
+      spawners::Level m_difficulty;
 
       /**
        * @brief - Defines the custom processes attached to

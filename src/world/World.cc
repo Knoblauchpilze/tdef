@@ -333,9 +333,9 @@ namespace tdef {
         log("Generated " + spawners::toString(lvl) + " spawner at " + p.toString(), utils::Level::Verbose);
 
         Spawner::SProps pp = spawners::generateProps(p, lvl);
-        spawners::Processes sd = spawners::generateData(lvl);
+        pp.difficulty = lvl;
 
-        SpawnerShPtr b = std::make_shared<Spawner>(pp, sd);
+        SpawnerShPtr b = std::make_shared<Spawner>(pp);
         m_blocks.push_back(b);
         --id;
 
@@ -393,28 +393,23 @@ namespace tdef {
 
       if (used.count(key) == 0) {
         Tower::TProps pp;
-        towers::Processes td;
 
         if (id % 4 == 0) {
           pp = towers::generateProps(towers::Type::Multishot, p);
-          td = towers::generateData(towers::Type::Multishot);
         }
         else if (id % 4 == 1) {
           pp = towers::generateProps(towers::Type::Sniper, p);
-          td = towers::generateData(towers::Type::Sniper);
         }
         else if (id % 4 == 2) {
           pp = towers::generateProps(towers::Type::Freezing, p);
-          td = towers::generateData(towers::Type::Freezing);
         }
         else {
           pp = towers::generateProps(towers::Type::Venom, p);
-          td = towers::generateData(towers::Type::Venom);
         }
 
         log("Generated tower " + towers::toString(pp.type) + " at " + p.toString(), utils::Level::Verbose);
 
-        TowerShPtr b = std::make_shared<Tower>(pp, td);
+        TowerShPtr b = std::make_shared<Tower>(pp);
         m_blocks.push_back(b);
         --id;
 
@@ -494,37 +489,59 @@ namespace tdef {
     // Load towers if any.
     in >> count;
     for (int id = 0 ; id < count ; ++id) {
-      // TODO: Handle this.
+      TowerShPtr e = std::make_shared<Tower>(Tower::newProps(utils::Point2f()));
+      in >> *e;
+
+      m_blocks.push_back(e);
     }
 
     // Load portals.
     in >> count;
     for (int id = 0 ; id < count ; ++id) {
-      // TODO: Handle this.
+      PortalShPtr e = std::make_shared<Portal>(Portal::newProps(utils::Point2f()));
+      in >> *e;
+
+      m_blocks.push_back(e);
     }
 
     // Load spawners.
     in >> count;
     for (int id = 0 ; id < count ; ++id) {
-      // TODO: Handle this.
+      SpawnerShPtr e = std::make_shared<Spawner>(Spawner::newProps(utils::Point2f()));
+      in >> *e;
+
+      m_blocks.push_back(e);
     }
 
     // Load walls.
     in >> count;
     for (int id = 0 ; id < count ; ++id) {
-      // TODO: Handle this.
+      WallShPtr e = std::make_shared<Wall>(Wall::newProps(utils::Point2f()));
+      in >> *e;
+
+      m_blocks.push_back(e);
     }
 
     // Load mobs if any.
     in >> count;
     for (int id = 0 ; id < count ; ++id) {
-      // TODO: Handle this.
+      MobShPtr e = std::make_shared<Mob>(Mob::newProps(utils::Point2f()));
+      in >> *e;
+
+      m_mobs.push_back(e);
     }
 
     // Load projectiles.
     in >> count;
     for (int id = 0 ; id < count ; ++id) {
-      // TODO: Handle this.
+      ProjectileShPtr e = std::make_shared<Projectile>(
+        Projectile::newProps(utils::Point2f()),
+        nullptr,
+        nullptr
+      );
+      in >> *e;
+
+      m_projectiles.push_back(e);
     }
   }
 

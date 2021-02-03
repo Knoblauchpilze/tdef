@@ -181,4 +181,78 @@ namespace tdef {
     return true;
   }
 
+  std::ostream&
+  Path::operator<<(std::ostream& out) const {
+    // Save properties in order. The vectors will be
+    // saved with first the size and then its content.
+    out << m_home.x();
+    out << m_home.y();
+
+    out << m_cur.x();
+    out << m_cur.y();
+
+    out << m_seg;
+
+    out << m_segments.size();
+    for (unsigned id = 0u ; id < m_segments.size() ; ++id) {
+      out << m_segments[id].start.x();
+      out << m_segments[id].start.y();
+
+      out << m_segments[id].end.x();
+      out << m_segments[id].end.y();
+
+      out << m_segments[id].xD;
+      out << m_segments[id].yD;
+    }
+
+    out << m_cPoints.size();
+    for (unsigned id = 0u ; id < m_cPoints.size() ; ++id) {
+      out << m_cPoints[id].x();
+      out << m_cPoints[id].y();
+    }
+
+    return out;
+  }
+
+  std::istream&
+  Path::operator>>(std::istream& in) {
+    // Restore properties in the same order they are
+    // saved by the companion operator.
+    in >> m_home.x();
+    in >> m_home.y();
+
+    in >> m_cur.x();
+    in >> m_cur.y();
+
+    in >> m_seg;
+
+    unsigned count;
+    in >> count;
+    for (unsigned id = 0u ; id < count ; ++id) {
+      path::Segment seg;
+
+      in >> seg.start.x();
+      in >> seg.start.y();
+
+      in >> seg.end.x();
+      in >> seg.end.y();
+
+      in >> seg.xD;
+      in >> seg.yD;
+
+      m_segments.push_back(seg);
+    }
+
+    in >> count;
+    for (unsigned id = 0u ; id < count ; ++id) {
+      float x, y;
+      in >> x;
+      in >> y;
+
+      m_cPoints.push_back(utils::Point2f(x, y));
+    }
+
+    return in;
+  }
+
 }

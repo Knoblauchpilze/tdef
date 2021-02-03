@@ -188,4 +188,18 @@ namespace tdef {
 
 }
 
+inline
+std::ostream&
+operator<<(std::ostream& out, const tdef::Path& p) noexcept {
+  p << out;
+  return out;
+}
+
+inline
+std::istream&
+operator>>(std::istream& in, tdef::Path& p) noexcept {
+  p >> in;
+  return in;
+}
+
 #endif    /* PATH_HXX */

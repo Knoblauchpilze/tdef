@@ -201,12 +201,24 @@ namespace tdef {
     in >> m_maxEnergy;
     in >> m_energyRefill;
     in >> m_attackCost;
-    // TODO: Handle this.
-    // towers::Upgradable m_minRange;
-    // towers::Upgradable m_maxRange;
-    // towers::Upgradable m_aoeRadius;
-    // ShootingData m_shooting;
-    // DamageData m_attack;
+
+    // Restore properties from the type of the tower.
+    TProps pp = towers::generateProps(m_type, m_pos);
+    m_minRange = pp.minRange;
+    m_maxRange = pp.maxRange;
+    m_aoeRadius = pp.aoeRadius;
+
+    m_shooting.shootAngle = pp.shootAngle;
+    m_shooting.projectileSpeed = pp.projectileSpeed;
+    m_shooting.aimSpeed = pp.aimSpeed;
+    in >> m_shooting.aiming;
+    // TODO: Restore the aim start and pause time and target.
+    // m_shooting.aimStart
+    in >> m_shooting.aimingCone;
+    // m_shooting.pauseTime
+
+    m_attack = fromProps(pp);
+
     m_processes = towers::generateData(m_type);
     // MobShPtr m_target
 

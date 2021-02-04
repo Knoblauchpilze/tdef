@@ -263,7 +263,9 @@ namespace tdef {
     // shooting and damage: the rest can be deduced of
     // the type of the tower.
     out << m_shooting.aiming;
+    out << m_shooting.aimStart;
     out << m_shooting.aimingCone;
+    out << m_shooting.pauseTime;
 
     // TODO: Handle saving of tower's target.
     // MobShPtr m_target

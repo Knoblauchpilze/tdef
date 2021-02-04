@@ -212,14 +212,14 @@ namespace tdef {
     m_shooting.projectileSpeed = pp.projectileSpeed;
     m_shooting.aimSpeed = pp.aimSpeed;
     in >> m_shooting.aiming;
-    // TODO: Restore the aim start and pause time and target.
-    // m_shooting.aimStart
+    in >> m_shooting.aimStart;
     in >> m_shooting.aimingCone;
-    // m_shooting.pauseTime
+    in >> m_shooting.pauseTime;
 
     m_attack = fromProps(pp);
 
     m_processes = towers::generateData(m_type);
+    // TODO: Restore tower's target.
     // MobShPtr m_target
 
     log("Restored tower at " + m_pos.toString(), utils::Level::Verbose);

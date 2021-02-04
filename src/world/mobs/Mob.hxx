@@ -140,19 +140,26 @@ namespace tdef {
     // Speed data.
     out << m_speed.bSpeed;
     out << m_speed.speed;
-    // TODO: Save the time of freeze, stun and poison.
-    // out << utils::toMilliseconds(m_speed.tFreeze);
+    // In order to save the speed time and duration,
+    // we only save the duration. Indeed as we only
+    // allow a Mob to be saved when the game is in
+    // pause, we will have a duration corresponding
+    // to the remaining freeze time already. It is
+    // then valid to consider that when restoring
+    // this data, we will put the current timestamp
+    // in the freeze time and use the remaining
+    // duration for the freeze time.
+    // We apply a similar reasoning for the stun
+    // and poison duration.
     out << utils::toMilliseconds(m_speed.fDuration);
     out << m_speed.fSpeed;
     out << m_speed.sDecrease;
     out << m_speed.sIncrease;
-    // out << utils::toMilliseconds(m_speed.tStun);
     out << utils::toMilliseconds(m_speed.sDuration);
 
     // Poison data.
     out << m_poison.damage;
     out << m_poison.stack;
-    // utils::TimeStamp tPoison;
     out << utils::toMilliseconds(m_poison.pDuration);
 
     // TODO: Save mob' target.
@@ -195,22 +202,24 @@ namespace tdef {
     // Speed data.
     in >> m_speed.bSpeed;
     in >> m_speed.speed;
-    // TODO: Restore freeze, stun and poison time.
     float d;
-    // m_speed.tFreeze = utils::toMilliseconds(d);
+    // Initialize freeze, stun and poison time to
+    // the current moment. It should be overriden
+    // when we actually resume the game.
+    m_speed.tFreeze = utils::now();
     in >> d;
     m_speed.fDuration = utils::toMilliseconds(d);
     in >> m_speed.fSpeed;
     in >> m_speed.sDecrease;
     in >> m_speed.sIncrease;
-    // m_speed.tStun = utils::toMilliseconds(d);
+    m_speed.tStun = utils::now();
     in >> d;
     m_speed.sDuration = utils::toMilliseconds(d);
 
     // Poison data.
     in >> m_poison.damage;
     in >> m_poison.stack;
-    // utils::TimeStamp tPoison;
+    m_poison.tPoison = utils::now();
     in >> d;
     m_poison.pDuration = utils::toMilliseconds(d);
 

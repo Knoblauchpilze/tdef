@@ -142,6 +142,33 @@ namespace tdef {
   GameState::generateHomeScreen(const olc::vi2d& dims) {
     // Generate base menu.
     m_homeScreen = generateDefaultScreen(dims, sk_screenBGColor);
+
+    // Create each option.
+    SimpleMenuShPtr m = generateScreenOption("New game", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m->setSimpleAction(
+      [this](Game& /*g*/) {
+        setScreen(game::Screen::Game);
+      }
+    );
+    m_homeScreen->addMenu(m);
+
+    m = generateScreenOption("Load game", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m->setSimpleAction(
+      [this](Game& /*g*/) {
+        setScreen(game::Screen::LoadGame);
+      }
+    );
+    m_homeScreen->addMenu(m);
+
+    m = generateScreenOption("Quit", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m->setSimpleAction(
+      [this](Game& g) {
+        // Assign the correct screen and terminate the game.
+        setScreen(game::Screen::Exit);
+        g.terminate();
+      }
+    );
+    m_homeScreen->addMenu(m);
   }
 
   void
@@ -154,6 +181,42 @@ namespace tdef {
   GameState::generatePauseScreen(const olc::vi2d& dims) {
     // Generate base menu.
     m_pauseScreen = generateDefaultScreen(dims, sk_screenBGColor);
+
+    // Create each option.
+    SimpleMenuShPtr m = generateScreenOption("Resume", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m->setSimpleAction(
+      [this](Game& /*g*/) {
+        setScreen(game::Screen::Game);
+      }
+    );
+    m_pauseScreen->addMenu(m);
+
+    m = generateScreenOption("Save game", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m->setSimpleAction(
+      [this](Game& /*g*/) {
+        setScreen(game::Screen::Game);
+      }
+    );
+    m_pauseScreen->addMenu(m);
+
+    m = generateScreenOption("Back to main screen", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m->setSimpleAction(
+      [this](Game& /*g*/) {
+        // Assign the correct screen and terminate the game.
+        setScreen(game::Screen::Home);
+      }
+    );
+    m_pauseScreen->addMenu(m);
+
+    m = generateScreenOption("Exit", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m->setSimpleAction(
+      [this](Game& g) {
+        // Assign the correct screen and terminate the game.
+        setScreen(game::Screen::Exit);
+        g.terminate();
+      }
+    );
+    m_pauseScreen->addMenu(m);
   }
 
   void

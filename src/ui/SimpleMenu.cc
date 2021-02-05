@@ -20,6 +20,13 @@ namespace tdef {
   }
 
   void
+  SimpleMenu::setSimpleAction(action::Process process) {
+    m_callback = [process](std::vector<ActionShPtr>& actions) {
+      actions.push_back(std::make_shared<SimpleAction>(process));
+    };
+  }
+
+  void
   SimpleMenu::onClick(std::vector<ActionShPtr>& actions) const {
     // Trigger the callback.
     m_callback(actions);

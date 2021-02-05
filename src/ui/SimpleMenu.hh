@@ -3,6 +3,7 @@
 
 # include <memory>
 # include "Menu.hh"
+# include "SimpleAction.hh"
 
 namespace tdef {
   namespace menu {
@@ -50,6 +51,17 @@ namespace tdef {
        */
       void
       setAction(menu::RegisterAction action);
+      
+      /**
+       * @brief - Used to define a new simple action where the
+       *          process would be to push the input callback
+       *          to the provided vector of actions.
+       * @param process - the callback to be pushed to the list
+       *                  of action whenever the callback linked
+       *                  to this menu is triggered.
+       */
+      void
+      setSimpleAction(action::Process process);
 
     protected:
 
@@ -66,6 +78,7 @@ namespace tdef {
       menu::RegisterAction m_callback;
   };
 
+  using SimpleMenuShPtr = std::shared_ptr<SimpleMenu>;
 }
 
 #endif    /* SIMPLE_MENU_HH */

@@ -96,9 +96,29 @@ namespace tdef {
     private:
 
       /**
-       * @brief - Used to perform the creation of the game over screen.
-       * @param dims - the dimensions of the window where the screen is
-       *               to be displayed.
+       * @brief - Create a valid home screen menu.
+       * @param dims - the dimensions of the parent window.
+       */
+      void
+      generateHomeScreen(const olc::vi2d& dims);
+
+      /**
+       * @brief - Create a valid load game screen menu.
+       * @param dims - the dimensions of the parent window.
+       */
+      void
+      generateLoadGameScreen(const olc::vi2d& dims);
+
+      /**
+       * @brief - Create a valid pause screen menu.
+       * @param dims - the dimensions of the parent window.
+       */
+      void
+      generatePauseScreen(const olc::vi2d& dims);
+
+      /**
+       * @brief - Create a valid game over screen menu.
+       * @param dims - the dimensions of the parent window.
        */
       void
       generateGameOverScreen(const olc::vi2d& dims);
@@ -143,10 +163,28 @@ namespace tdef {
       std::string m_worldFile;
 
       /**
+       * @brief - Defines the screen to display when the game is
+       *          on the home screen.
+       */
+      MenuShPtr m_homeScreen;
+
+      /**
+       * @brief - Defines the screen to display when the game is
+       *          on the loading game screen.
+       */
+      MenuShPtr m_loadGameScreen;
+
+      /**
+       * @brief - Defines the screen to display when the game is
+       *          in pause.
+       */
+      MenuShPtr m_pauseScreen;
+
+      /**
        * @brief - Defines the menu to display in case
        *          the game is over.
        */
-      MenuShPtr m_gameOverMenu;
+      MenuShPtr m_gameOverScreen;
   };
 
   using GameStateShPtr = std::shared_ptr<GameState>;

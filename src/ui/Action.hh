@@ -20,12 +20,14 @@ namespace tdef {
 
       /**
        * @brief - Interface method allowing to perform an
-       *          action on the input game. It aims at
-       *          providing a common interface allowing
-       *          menus to trigger some real changes in the
-       *          game.
+       *          action. Nothing is known of the actual
+       *          process performed by the action and we
+       *          don't need to.
+       *          The goal is to provide a base interface
+       *          allowing menus to trigger some changes
+       *          in the game.
        *          Inheriting classes should redefine this
-       *          method based on their effect on the game.
+       *          method based on their effect.
        * @param g - the game onto which the action should
        *            be applied.
        */

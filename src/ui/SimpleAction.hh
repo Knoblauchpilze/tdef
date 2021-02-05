@@ -13,7 +13,7 @@ namespace tdef {
      *          specialize the menu class easily when not
      *          much is needed.
      */
-    using Process = std::function<void(Game&)>;
+    using Process = std::function<void(Game& g)>;
 
   }
 
@@ -33,6 +33,15 @@ namespace tdef {
 
       void
       apply(Game& g) const override;
+
+      /**
+       * @brief - Assign a new process to be triggered in
+       *          case this action is applied.
+       * @param cb - the new process to trigger when this
+       *             action is applied.
+       */
+      void
+      setProcess(const action::Process& cb);
 
     private:
 

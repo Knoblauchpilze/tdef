@@ -353,7 +353,7 @@ namespace tdef {
 
   bool
   TDefApp::onStep(float elapsed) {
-    if (m_state->getScreen() != game::Screen::GameOver) {
+    if (m_state->getScreen() == game::Screen::Game) {
       bool gameOver = !m_game->step(elapsed);
 
       // Display the game over menu if needed.

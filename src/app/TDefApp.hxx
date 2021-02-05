@@ -87,8 +87,8 @@ namespace tdef {
       relevant = (relevant || ih.relevant);
     }
 
-    if (m_gameOverMenu != nullptr) {
-      menu::InputHandle ih = m_gameOverMenu->processUserInput(c, actions);
+    if (m_state != nullptr) {
+      menu::InputHandle ih = m_state->processUserInput(c, actions);
       relevant = (relevant || ih.relevant);
     }
 

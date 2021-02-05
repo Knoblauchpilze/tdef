@@ -9,8 +9,7 @@ namespace tdef {
     PGEApp(desc),
 
     m_game(nullptr),
-    m_gameOver(false),
-    m_gameOverMenu(nullptr),
+    m_state(nullptr),
 
     m_menus(),
 
@@ -31,8 +30,7 @@ namespace tdef {
 
     // Generate menus and register them.
     m_menus = m_game->generateMenus(dims);
-
-    generateGameOverMenu(dims);
+    m_state = std::make_shared<GameState>(dims);
   }
 
   void
@@ -41,8 +39,8 @@ namespace tdef {
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::VERY_DARK_GREY);
 
-    // Do not draw anything if the game is over.
-    if (m_gameOver) {
+    // In case we're not in the game screen, do nothing.
+    if (m_state->getScreen() != game::Screen::Game) {
       SetPixelMode(olc::Pixel::NORMAL);
       return;
     }
@@ -157,9 +155,8 @@ namespace tdef {
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
 
-    // Check whether the game is over, in which case we
-    // will display the end screen.
-    if (m_gameOver) {
+    // In case we're not in the game screen, do nothing.
+    if (m_state->getScreen() != game::Screen::Game) {
       SetPixelMode(olc::Pixel::NORMAL);
       return;
     }
@@ -240,9 +237,25 @@ namespace tdef {
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
 
-    if (m_gameOver) {
+    // Draw the correct screen based on the current
+    // state of the game.
+    const game::Screen& s = m_state->getScreen();
+    switch (s) {
+      case game::Screen::Home:
+      case game::Screen::LoadGame:
+      case game::Screen::Pause:
+      case game::Screen::GameOver:
+      case game::Screen::Exit:
+        m_state->render(this);
+        break;
+      case game::Screen::Game:
+      default:
+        // Continue to the rest of the function to
+        // draw the game's data.
+        break;
+    }
+    if (s != game::Screen::Game) {
       SetPixelMode(olc::Pixel::NORMAL);
-      drawGameOver(res);
       return;
     }
 
@@ -275,7 +288,7 @@ namespace tdef {
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
 
-    if (m_gameOver) {
+    if (m_state->getScreen() != game::Screen::Game) {
       SetPixelMode(olc::Pixel::NORMAL);
       return;
     }
@@ -340,99 +353,16 @@ namespace tdef {
 
   bool
   TDefApp::onStep(float elapsed) {
-    if (!m_gameOver) {
-      m_gameOver = !m_game->step(elapsed);
+    if (m_state->getScreen() != game::Screen::GameOver) {
+      bool gameOver = !m_game->step(elapsed);
 
       // Display the game over menu if needed.
-      if (m_gameOver) {
-        m_gameOverMenu->setVisible(true);
+      if (gameOver) {
+        m_state->setScreen(game::Screen::GameOver);
       }
     }
 
     return m_game->terminated();
-  }
-
-  void
-  TDefApp::drawGameOver(const RenderDesc& /*res*/) {
-    if (m_gameOverMenu != nullptr) {
-      m_gameOverMenu->render(this);
-    }
-  }
-
-  void
-  TDefApp::generateGameOverMenu(const olc::vi2d& dims) {
-    olc::Pixel bgc(20, 20, 20, alpha::Opaque);
-    const olc::vf2d size(std::min(dims.x, 350), std::min(dims.y, 200));
-    const olc::vi2d pos(dims.x / 2.0f - size.x / 2.0f, dims.y / 2.0f - size.y / 2.0f);
-
-    menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
-    menu::MenuContentDesc fg = menu::newTextContent("");
-
-    m_gameOverMenu = std::make_shared<Menu>(
-      pos,
-      size,
-      "goMenu",
-      bg,
-      fg,
-      menu::Layout::Vertical
-    );
-
-    bgc = olc::Pixel(90, 90, 90);
-    olc::Pixel tc(180, 180, 180);
-    // Highlight color for the text (which should be darker
-    // as the menu itself is quite bright).
-    olc::Pixel htc(30, 30, 30);
-
-    bg = menu::newColoredBackground(bgc);
-    fg = menu::newTextContent("Restart", tc, menu::Alignment::Center);
-    fg.hColor = htc;
-    m_gameOverMenu->addMenu(
-      std::make_shared<SimpleMenu>(
-        pos,
-        size,
-        bg,
-        fg,
-        [this](std::vector<ActionShPtr>& actions) {
-          actions.push_back(
-            std::make_shared<SimpleAction>(
-              [this](Game& g) {
-                // Reset visibility of the game over menu and
-                // the game over flag.
-                m_gameOverMenu->setVisible(false);
-                m_gameOver = false;
-
-                // And regenerate a new game.
-                g.reset();
-              }
-            )
-          );
-        }
-      )
-    );
-
-    bg = menu::newColoredBackground(bgc);
-    fg = menu::newTextContent("Quit", tc, menu::Alignment::Center);
-    fg.hColor = htc;
-    m_gameOverMenu->addMenu(
-      std::make_shared<SimpleMenu>(
-        pos,
-        size,
-        bg,
-        fg,
-        [](std::vector<ActionShPtr>& actions) {
-          actions.push_back(
-            std::make_shared<SimpleAction>(
-              [](Game& g) {
-                g.terminate();
-              }
-            )
-          );
-        }
-      )
-    );
-
-    // Disable the menu when we start the app.
-    m_gameOverMenu->setVisible(false);
   }
 
 }

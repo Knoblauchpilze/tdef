@@ -15,4 +15,9 @@ namespace tdef {
     m_callback(g);
   }
 
+  void
+  SimpleAction::setProcess(const action::Process& cb) {
+    m_callback = cb;
+  }
+
 }

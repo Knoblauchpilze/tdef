@@ -15,7 +15,7 @@ namespace tdef {
     m_debugOn(true),
     m_uiOn(true),
 
-    m_state(State::Running),
+    m_state(State::Paused),
     m_controls(controls::newState()),
     m_first(true),
 

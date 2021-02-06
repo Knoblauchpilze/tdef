@@ -363,6 +363,7 @@ namespace tdef {
 
       // Display the game over menu if needed.
       if (gameOver) {
+        m_game->enable(false);
         m_state->setScreen(game::Screen::GameOver);
       }
     }

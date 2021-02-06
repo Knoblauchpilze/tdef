@@ -30,7 +30,12 @@ namespace tdef {
 
     // Generate menus and register them.
     m_menus = m_game->generateMenus(dims);
-    m_state = std::make_shared<GameState>(dims);
+    m_state = std::make_shared<GameState>(dims, game::Screen::Home);
+
+    // As we're on the home screen at the beginning, disable
+    // menus so we can't do anything weird while selecting a
+    // game.
+    m_game->enable(false);
   }
 
   void

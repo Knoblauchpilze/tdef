@@ -16,28 +16,29 @@ namespace tdef {
   inline
   void
   Game::setTowerType(const towers::Type& type) {
-    m_tType = std::make_shared<towers::Type>(type);
-    m_wallBuilding = false;
+    log("Set tower type to " + towers::toString(type), utils::Level::Info);
+    m_state.tType = std::make_shared<towers::Type>(type);
+    m_state.wallBuilding = false;
   }
 
   inline
   void
   Game::allowWallBuilding() {
-    m_tType.reset();
-    m_wallBuilding = true;
+    m_state.tType.reset();
+    m_state.wallBuilding = true;
   }
 
   inline
   void
   Game::terminate() noexcept {
-    log("Terminated");
-    m_terminated = true;
+    log("Game has been terminated", utils::Level::Info);
+    m_state.terminated = true;
   }
 
   inline
   bool
   Game::terminated() const noexcept {
-    return m_terminated;
+    return m_state.terminated;
   }
 
   inline
@@ -86,7 +87,7 @@ namespace tdef {
   inline
   void
   Game::updateGold(float earned) {
-    m_gold += earned;
+    m_state.gold += earned;
   }
 
 }

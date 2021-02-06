@@ -25,6 +25,15 @@ namespace tdef {
       ~Game();
 
       /**
+       * @brief - Used to enable or disable the menus that
+       *          compose the game. This allows to easily
+       *          hide any game related component.
+       * @param enable - `true` if the menus are enabled.
+       */
+      void
+      enable(bool enable);
+
+      /**
        * @brief - Used to perform the creation of the menus
        *          allowing to control the world wrapped by
        *          this game.
@@ -447,6 +456,60 @@ namespace tdef {
       };
 
       /**
+       * @brief - Convenience enumeration allowing to save the
+       *          current information being displayed in the
+       *          lateral info panel.
+       */
+      enum class InfoPanelStatus {
+        Tower,
+        Mob,
+        Spawner,
+        Wall,
+        None
+      };
+
+      /**
+       * @brief - Convenience information defining the state of the
+       *          game. It includes information about whether the
+       *          menus should be displayed and if the user actions
+       *          should be interpreted or not.
+       */
+      struct State {
+        // Whether or not the UI is disabled.
+        bool disabled;
+
+        // Used to hold whether or not the game has been shut
+        // down. It usuallu indicates that no simulation will
+        // be performed anymore and usually indicates that a
+        // termination request has been received.
+        bool terminated;
+
+        // Defines the current information displayed in the
+        // lateral information panel. This is updated based
+        // on which element of the game is selected and is
+        // used in case the menu is disabled to restore the
+        // correct info displayed.
+        // Default value is set to none as no information is
+        // displayed at the beginning of the game.
+        InfoPanelStatus infoState;
+
+        // Used to define that building a wall is
+        // allowed. This will usually be used to
+        // override any information about a tower
+        // to build.
+        bool wallBuilding;
+
+        // The type of tower to spawn if needed.
+        std::shared_ptr<towers::Type> tType;
+
+        // The available lives for this game.
+        float lives;
+
+        // The available gold for this game.
+        float gold;
+      };
+
+      /**
        * @brief - Convenience define to refer to a map of menus
        *          adressed based on the type of tower it defines.
        */
@@ -468,41 +531,22 @@ namespace tdef {
       LocatorShPtr m_loc;
 
       /**
-       * @brief - Used to hold whether or not the game has been shut
-       *          down. It usuallu indicates that no simulation will
-       *          be performed anymore and usually indicates that a
-       *          termination request has been received.
+       * @brief - The definition of the game state.
        */
-      bool m_terminated;
+      State m_state;
 
       /**
-       * @brief - The type of tower to spawn if needed.
+       * @brief - The status menu regrouping both the number of
+       *          lives remaining, the amount of gold available
+       *          and other information about the game.
        */
-      std::shared_ptr<towers::Type> m_tType;
-
-      /**
-       * @brief - Used to define that building a wall is
-       *          allowed. This will usually be used to
-       *          override any information about a tower
-       *          to build.
-       */
-      bool m_wallBuilding;
-
-      /**
-       * @brief - The available lives for this game.
-       */
-      float m_lives;
+      MenuShPtr m_statusMenu;
 
       /**
        * @brief - The menu indicating the number of remaining lives
        *          in the game.
        */
       MenuShPtr m_mLives;
-
-      /**
-       * @brief - The available gold for this game.
-       */
-      float m_gold;
 
       /**
        * @brief - The menu indicating the amount of gold available
@@ -543,6 +587,12 @@ namespace tdef {
        *          generation method has been called.
        */
       WallDisplay m_wDisplay;
+
+      /**
+       * @brief - The main menu holding all the information about
+       *          towers and other buildings construction.
+       */
+      MenuShPtr m_buildings;
 
       /**
        * @brief - Defines the list of menus allowing to build a

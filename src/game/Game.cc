@@ -53,15 +53,21 @@ namespace tdef {
 
     m_world(nullptr),
     m_loc(nullptr),
-    m_terminated(false),
+    m_state(
+      State{
+        false,                 // disabled
+        false,                 // terminated
+        InfoPanelStatus::None, // infoState
+        false,                 // wallBuilding
+        nullptr,               // tType
+        BASE_LIVES,            // lives
+        BASE_GOLD              // gold
+      }
+    ),
 
-    m_tType(nullptr),
-    m_wallBuilding(false),
-
-    m_lives(BASE_LIVES),
+    m_statusMenu(nullptr),
     m_mLives(nullptr),
 
-    m_gold(BASE_GOLD),
     m_mGold(nullptr),
     m_goldEarnedSlot(-1),
 
@@ -70,6 +76,7 @@ namespace tdef {
     m_sDisplay(),
     m_wDisplay(),
 
+    m_buildings(nullptr),
     m_tMenus()
   {
     setService("game");
@@ -86,6 +93,36 @@ namespace tdef {
     // Register this item as a listener of the gold
     // earned signal.
     m_goldEarnedSlot = m_world->onGoldEarned.connect_member<Game>(this, &Game::updateGold);
+  }
+
+  void
+  Game::enable(bool enable) {
+    if (m_statusMenu != nullptr) {
+      m_statusMenu->setVisible(enable);
+    }
+
+    m_state.disabled = !enable;
+
+    // Only reenable menus (i.e. `enable = true`) in
+    // case the information status indicates that it
+    // was indeed displayed.
+    bool st = (enable && !m_state.disabled);
+    if (m_tDisplay.main != nullptr) {
+      m_tDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Tower);
+    }
+    if (m_mDisplay.main != nullptr) {
+      m_mDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Mob);
+    }
+    if (m_sDisplay.main != nullptr) {
+      m_sDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Spawner);
+    }
+    if (m_wDisplay.main != nullptr) {
+      m_wDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Wall);
+    }
+
+    if (m_buildings != nullptr) {
+      m_buildings->setVisible(st);
+    }
   }
 
   std::vector<MenuShPtr>
@@ -105,6 +142,12 @@ namespace tdef {
 
   void
   Game::performAction(float x, float y) {
+    // Only handle actions when the game is not disabled.
+    if (m_state.disabled) {
+      log("Ignoring action while menu is disabled");
+      return;
+    }
+
     // Assume the point is at the center of the
     // cell corresponding to the input position.
     utils::Point2f p(std::floor(x) + 0.5f, std::floor(y) + 0.5f);
@@ -158,17 +201,17 @@ namespace tdef {
     // position of the action, we can attempt
     // to build a tower or a wall, assuming
     // there is one defined.
-    if (m_tType == nullptr && !m_wallBuilding) {
+    if (m_state.tType == nullptr && !m_state.wallBuilding) {
       return;
     }
 
     // Spawn a tower or a wall.
-    if (m_tType != nullptr) {
+    if (m_state.tType != nullptr) {
       spawnTower(p);
       return;
     }
 
-    if (m_wallBuilding) {
+    if (m_state.wallBuilding) {
       spawnWall(p);
       return;
     }
@@ -190,10 +233,10 @@ namespace tdef {
     towers::Type t = m_tDisplay.tower->getType();
     int level = m_tDisplay.tower->getUpgradeLevel(upgrade);
     float cost = towers::getUpgradeCost(t, upgrade, level);
-    if (m_gold < cost) {
+    if (m_state.gold < cost) {
       log(
         "Upgrading " + towers::toString(upgrade) + " costs " + std::to_string(cost) +
-        " but only " + std::to_string(m_gold) + "available, aborting",
+        " but only " + std::to_string(m_state.gold) + "available, aborting",
         utils::Level::Error
       );
 
@@ -201,8 +244,8 @@ namespace tdef {
     }
 
     m_tDisplay.tower->upgrade(upgrade, level + 1);
-    m_gold -= cost;
-    log("Gold is now " + std::to_string(m_gold) + " due to cost " + std::to_string(cost));
+    m_state.gold -= cost;
+    log("Gold is now " + std::to_string(m_state.gold) + " due to cost " + std::to_string(cost));
 
     updateUI();
   }
@@ -220,12 +263,12 @@ namespace tdef {
     }
 
     float cost = m_tDisplay.tower->getTotalCost();
-    m_gold += cost;
+    m_state.gold += cost;
 
     log(
       "Selling tower " + towers::toString(m_tDisplay.tower->getType()) +
       " for " + std::to_string(cost) +
-      ", " + std::to_string(m_gold) + " now available"
+      ", " + std::to_string(m_state.gold) + " now available"
     );
 
     m_tDisplay.tower->markForDeletion(true);
@@ -234,6 +277,12 @@ namespace tdef {
     // Hide the upgrade menu.
     m_tDisplay.main->setVisible(false);
     m_tDisplay.tower = nullptr;
+
+    // Should be the case as we don't allow selling a tower
+    // outside of the corresponding menu.
+    if (m_state.infoState == InfoPanelStatus::Tower) {
+      m_state.infoState = InfoPanelStatus::None;
+    }
 
     updateUI();
   }
@@ -256,16 +305,24 @@ namespace tdef {
 
   void
   Game::reset() {
-    // Reset internal properties.
-    m_tType = nullptr;
-    m_wallBuilding = false;
-
-    m_lives = BASE_LIVES;
-    m_gold = BASE_GOLD;
+    // Reset game state.
+    m_state.disabled = false;
+    // Note that the `terminated` is only set to `true` if the
+    // user wants to exit the game so the next line is probably
+    // redundant.
+    m_state.terminated = false;
+    m_state.infoState = InfoPanelStatus::None;
+    m_state.wallBuilding = false;
+    m_state.tType = nullptr;
+    m_state.lives = BASE_LIVES;
+    m_state.gold = BASE_GOLD;
 
     m_world->reset();
 
     // And reset menus.
+    m_statusMenu->setVisible(true);
+    m_buildings->setVisible(true);
+
     m_tDisplay.main->setVisible(false);
     m_tDisplay.tower = nullptr;
 
@@ -285,7 +342,7 @@ namespace tdef {
     m_world->step(tDelta);
 
     // Update lives.
-    m_lives = lives();
+    m_state.lives = lives();
 
     // Disable the mob display in case it is either
     // dead or not in this world anymore.
@@ -299,7 +356,7 @@ namespace tdef {
 
     // The game continues as long as there are some
     // lives left.
-    return m_lives > 0;
+    return m_state.lives > 0;
   }
 
   MenuShPtr
@@ -312,28 +369,28 @@ namespace tdef {
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    MenuShPtr m = std::make_shared<Menu>(pos, size, "sMenu", bg, fg);
+    m_statusMenu = std::make_shared<Menu>(pos, size, "sMenu", bg, fg);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
     // Gold amount.
-    fg = menu::newTextContent("Gold: " + std::to_string(m_gold));
+    fg = menu::newTextContent("Gold: " + std::to_string(m_state.gold));
     m_mGold = std::make_shared<Menu>(pos, size, "gold", bg, fg, menu::Layout::Horizontal, false);
-    m->addMenu(m_mGold);
+    m_statusMenu->addMenu(m_mGold);
 
     // Lives status.
-    fg = menu::newTextContent("Lives: " + std::to_string(m_lives));
+    fg = menu::newTextContent("Lives: " + std::to_string(m_state.lives));
     m_mLives = std::make_shared<Menu>(pos, size, "lives", bg, fg, menu::Layout::Horizontal, false);
-    m->addMenu(m_mLives);
+    m_statusMenu->addMenu(m_mLives);
 
     // Wave count.
     fg = menu::newTextContent("Wave: 1");
     MenuShPtr sm = std::make_shared<Menu>(pos, size, "wave", bg, fg, menu::Layout::Horizontal, false);
-    m->addMenu(sm);
+    m_statusMenu->addMenu(sm);
 
-    return m;
+    return m_statusMenu;
   }
 
   MenuShPtr
@@ -346,7 +403,7 @@ namespace tdef {
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    MenuShPtr m = std::make_shared<Menu>(pos, size, "tMenu", bg, fg, menu::Layout::Vertical);
+    m_buildings = std::make_shared<Menu>(pos, size, "tMenu", bg, fg, menu::Layout::Vertical);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
@@ -354,53 +411,53 @@ namespace tdef {
 
     GameMenuShPtr tm = generateTowerMenu(towers::Type::Basic);
     m_tMenus[towers::Type::Basic] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Sniper);
     m_tMenus[towers::Type::Sniper] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Cannon);
     m_tMenus[towers::Type::Cannon] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Freezing);
     m_tMenus[towers::Type::Freezing] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Venom);
     m_tMenus[towers::Type::Venom] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Splash);
     m_tMenus[towers::Type::Splash] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Blast);
     m_tMenus[towers::Type::Blast] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Multishot);
     m_tMenus[towers::Type::Multishot] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Minigun);
     m_tMenus[towers::Type::Minigun] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Antiair);
     m_tMenus[towers::Type::Antiair] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Tesla);
     m_tMenus[towers::Type::Tesla] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
     tm = generateTowerMenu(towers::Type::Missile);
     m_tMenus[towers::Type::Missile] = tm;
-    m->addMenu(tm);
+    m_buildings->addMenu(tm);
 
-    m->addMenu(
+    m_buildings->addMenu(
       std::make_shared<GameMenu>(
         "Wall",
         [](std::vector<ActionShPtr>& actions) {
@@ -417,7 +474,7 @@ namespace tdef {
       )
     );
 
-    return m;
+    return m_buildings;
   }
 
   MenuShPtr
@@ -583,24 +640,24 @@ namespace tdef {
   Game::spawnTower(const utils::Point2f& p) {
     // Generate the tower. Also make sure that the
     // player owns enough gold to do so.
-    float c = towers::getCost(*m_tType);
-    if (m_gold < c) {
+    float c = towers::getCost(*m_state.tType);
+    if (m_state.gold < c) {
       log(
-        "Can't afford tower " + towers::toString(*m_tType) + " costing " +
+        "Can't afford tower " + towers::toString(*m_state.tType) + " costing " +
         std::to_string(c) + " with only " +
-        std::to_string(m_gold) + " gold available",
+        std::to_string(m_state.gold) + " gold available",
         utils::Level::Error
       );
 
       return;
     }
 
-    m_gold -= c;
+    m_state.gold -= c;
 
-    Tower::TProps pp = towers::generateProps(*m_tType, p);
+    Tower::TProps pp = towers::generateProps(*m_state.tType, p);
 
     log(
-      "Generated tower " + towers::toString(*m_tType) + " at " + p.toString(),
+      "Generated tower " + towers::toString(*m_state.tType) + " at " + p.toString(),
       utils::Level::Info
     );
 
@@ -630,6 +687,8 @@ namespace tdef {
     m_wDisplay.main->setVisible(false);
     m_wDisplay.wall = nullptr;
 
+    m_state.infoState = InfoPanelStatus::Mob;
+
     // Register the mob as the one being followed.
     m_mDisplay.mob = m;
   }
@@ -645,6 +704,8 @@ namespace tdef {
     m_sDisplay.spawner = nullptr;
     m_wDisplay.main->setVisible(false);
     m_wDisplay.wall = nullptr;
+
+    m_state.infoState = InfoPanelStatus::Tower;
 
     // Register the tower as the one being followed.
     m_tDisplay.tower = t;
@@ -687,6 +748,8 @@ namespace tdef {
     m_wDisplay.main->setVisible(false);
     m_wDisplay.wall = nullptr;
 
+    m_state.infoState = InfoPanelStatus::Spawner;
+
     // Register the spawner as the one being followed.
     m_sDisplay.spawner = s;
   }
@@ -703,6 +766,8 @@ namespace tdef {
     m_sDisplay.spawner = nullptr;
     m_wDisplay.main->setVisible(true);
 
+    m_state.infoState = InfoPanelStatus::Wall;
+
     // Register the wall as the one being followed.
     m_wDisplay.wall = w;
   }
@@ -710,10 +775,10 @@ namespace tdef {
   void
   Game::updateUI() {
     // Update status menu.
-    int v = static_cast<int>(m_lives);
+    int v = static_cast<int>(m_state.lives);
     m_mLives->setText("Lives: " + std::to_string(v));
 
-    v = static_cast<int>(m_gold);
+    v = static_cast<int>(m_state.gold);
     m_mGold->setText("Gold: " + std::to_string(v));
 
     // Update display values for visible menus.
@@ -816,7 +881,7 @@ namespace tdef {
         msg += ")";
 
         m_tDisplay.props[id]->setText(msg);
-        m_tDisplay.props[id]->enable(m_gold >= cost);
+        m_tDisplay.props[id]->enable(m_state.gold >= cost);
 
         ++id;
       }
@@ -864,29 +929,29 @@ namespace tdef {
     // already registered in the map. If this
     // is not the case UB will arise.
     towers::Type t = towers::Type::Basic;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Sniper;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Cannon;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Freezing;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Venom;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Splash;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Blast;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Multishot;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Minigun;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Antiair;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Tesla;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Missile;
-    m_tMenus[t]->enable(m_gold >= towers::getCost(t));
+    m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
   }
 
 }

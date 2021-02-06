@@ -62,6 +62,7 @@ namespace tdef {
   bool
   TDefApp::onPause(float elapsed) {
     m_game->pause(elapsed);
+    m_game->enable(false);
     return m_game->terminated();
   }
 
@@ -69,6 +70,7 @@ namespace tdef {
   bool
   TDefApp::onResume(float elapsed) {
     m_game->resume(elapsed);
+    m_game->enable(true);
     return m_game->terminated();
   }
 

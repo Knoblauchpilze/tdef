@@ -175,6 +175,44 @@ namespace tdef {
   GameState::generateLoadGameScreen(const olc::vi2d& dims) {
     // Generate base menu.
     m_loadGameScreen = generateDefaultScreen(dims, sk_screenBGColor);
+
+    menu::BackgroundDesc bg = menu::newColoredBackground(sk_menuBGColor);
+    menu::MenuContentDesc fg = menu::newTextContent("Saved games:", olc::MAGENTA, menu::Alignment::Center);
+    MenuShPtr tm = std::make_shared<Menu>(
+      olc::vi2d(),
+      olc::vf2d(),
+      "load_game_title",
+      bg,
+      fg,
+      menu::Layout::Horizontal,
+      false
+    );
+    m_loadGameScreen->addMenu(tm);
+
+    SimpleMenuShPtr m = generateScreenOption("Previous page", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m->setSimpleAction(
+      [this](Game& /*g*/) {
+        setScreen(game::Screen::Game);
+      }
+    );
+    m_loadGameScreen->addMenu(m);
+
+    m = generateScreenOption("Next page", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m->setSimpleAction(
+      [this](Game& /*g*/) {
+        setScreen(game::Screen::Game);
+      }
+    );
+    m_loadGameScreen->addMenu(m);
+
+    m = generateScreenOption("Back to main screen", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m->setSimpleAction(
+      [this](Game& /*g*/) {
+        // Assign the correct screen and terminate the game.
+        setScreen(game::Screen::Home);
+      }
+    );
+    m_loadGameScreen->addMenu(m);
   }
 
   void

@@ -17,6 +17,7 @@
 // TODO: Custom behaviors for towers.
 // TODO: Save and load game from file.
 // TODO: Welcome menu.
+// TODO: Handle targetting mode.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

@@ -26,6 +26,26 @@ namespace tdef {
                Menu* parent = nullptr,
                bool enabled = true);
 
+      /**
+       * @brief - Create a new game menu which builds upon the
+       *          simple menu in order to add the possibility
+       *          to enable/disable it but still allows to
+       *          specify the background and foreground color.
+       * @param bg - the background description for this menu.
+       * @param fg - the content description for this menu.
+       * @param cb - the callback to trigger when the menu is
+       *             clicked upon.
+       * @param parent - the parent menu for this element. Specify
+       *                 `null` in case the menu is the root of the
+       *                 subsystem.
+       * @param enabled - `true` if this menu is enabled at first.
+       */
+      GameMenu(const menu::BackgroundDesc& bg,
+               const menu::MenuContentDesc& fg,
+               const menu::RegisterAction& cb,
+               Menu* parent = nullptr,
+               bool enabled = true);
+
       ~GameMenu() = default;
 
       /**
@@ -76,6 +96,26 @@ namespace tdef {
        *          is enabled and `false` otherwise.
        */
       bool m_enabled;
+
+      /**
+       * @brief - The color of the background if this menu is active.
+       */
+      olc::Pixel m_activeBGColor;
+
+      /**
+       * @brief - The color of the background if this menu is disabled.
+       */
+      olc::Pixel m_disabledBGColor;
+
+      /**
+       * @brief - The color of the text if this menu is active.
+       */
+      olc::Pixel m_activeTextColor;
+
+      /**
+       * @brief - The color of the text is this menu is disabled.
+       */
+      olc::Pixel m_disabledTextColor;
   };
 
   using GameMenuShPtr = std::shared_ptr<GameMenu>;

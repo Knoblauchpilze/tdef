@@ -21,7 +21,34 @@ namespace tdef {
       parent
     ),
 
-    m_enabled(enabled)
+    m_enabled(enabled),
+
+    m_activeBGColor(sk_activeBGColor),
+    m_disabledBGColor(sk_disabledBGColor),
+    m_activeTextColor(sk_activeTextColor),
+    m_disabledTextColor(sk_disabledTextColor)
+  {}
+
+  GameMenu::GameMenu(const menu::BackgroundDesc& bg,
+                     const menu::MenuContentDesc& fg,
+                     const menu::RegisterAction& cb,
+                     Menu* parent,
+                     bool enabled):
+    SimpleMenu(
+      olc::vi2d(),
+      olc::vf2d(),
+      bg,
+      fg,
+      cb,
+      parent
+    ),
+
+    m_enabled(enabled),
+
+    m_activeBGColor(bg.color),
+    m_disabledBGColor(sk_disabledBGColor),
+    m_activeTextColor(fg.color),
+    m_disabledTextColor(sk_disabledTextColor)
   {}
 
   void
@@ -32,12 +59,12 @@ namespace tdef {
     }
 
     menu::BackgroundDesc bg;
-    bg = menu::newColoredBackground(enabled ? sk_activeBGColor : sk_disabledBGColor);
+    bg = menu::newColoredBackground(enabled ? m_activeBGColor : m_disabledBGColor);
 
     menu::MenuContentDesc fg;
     fg = menu::newTextContent(
       getText(),
-      enabled ? sk_activeTextColor : sk_disabledTextColor
+      enabled ? m_activeTextColor : m_disabledTextColor
     );
 
     setBackground(bg);

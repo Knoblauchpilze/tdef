@@ -84,6 +84,9 @@ namespace tdef {
       onPause(float elapsed) override;
 
       bool
+      onPaused(float elapsed) override;
+
+      bool
       onResume(float elapsed) override;
 
       void

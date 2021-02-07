@@ -68,6 +68,12 @@ namespace tdef {
 
   inline
   bool
+  TDefApp::onPaused(float /*elapsed*/) {
+    return m_game->terminated();
+  }
+
+  inline
+  bool
   TDefApp::onResume(float elapsed) {
     m_game->resume(elapsed);
     m_game->enable(true);

@@ -1,6 +1,7 @@
 
 # include "GameState.hh"
 # include <filesystem>
+# include <algorithm>
 # include "SimpleMenu.hh"
 # include "SimpleAction.hh"
 # include "Game.hh"
@@ -85,7 +86,14 @@ namespace tdef {
 
     m_homeScreen(nullptr),
     m_loadGameScreen(nullptr),
-    m_savedGames(),
+    m_savedGames(SavedGamesData{
+      std::vector<std::string>(),   // saves
+      0u,                           // index
+      sk_savedGamesPerPage,         // gamesPerPage
+      std::vector<GameMenuShPtr>(), // games
+      nullptr,                      // previous
+      nullptr                       // next
+    }),
     m_pauseScreen(nullptr),
     m_gameOverScreen(nullptr)
   {
@@ -169,7 +177,12 @@ namespace tdef {
     m = generateScreenOption("Load game", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
     m->setSimpleAction(
       [this](Game& /*g*/) {
+        // Refresh saved games list and display from the
+        // first entry.
         refreshSavedGames();
+        m_savedGames.index = 0;
+        updateSavedGamesDisplay();
+
         setScreen(game::Screen::LoadGame);
       }
     );
@@ -207,40 +220,58 @@ namespace tdef {
     );
     m_loadGameScreen->addMenu(tm);
 
-    GameMenuShPtr m = generateScreenOption("Previous page", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
-    m->setSimpleAction(
+    m_savedGames.previous = generateScreenOption("Previous page", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m_savedGames.previous->setSimpleAction(
       [this](Game& /*g*/) {
-        setScreen(game::Screen::Game);
+        // Move to the previous page if possible.
+        if (m_savedGames.index > 0) {
+          m_savedGames.index -= std::min(m_savedGames.index, m_savedGames.gamesPerPage);
+          updateSavedGamesDisplay();
+        }
       }
     );
-    m->enable(false);
-    m_loadGameScreen->addMenu(m);
+    m_savedGames.previous->enable(false);
+    m_loadGameScreen->addMenu(m_savedGames.previous);
 
     // Create menus for each line of the saved game screen.
-    for (int id = 0 ; id < sk_savedGamesPerPage ; ++id) {
-      m = generateScreenOption("", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    for (unsigned id = 0u ; id < sk_savedGamesPerPage ; ++id) {
+      GameMenuShPtr m = generateScreenOption("", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
 
       m->setSimpleAction(
-        [this, m](Game& /*g*/) {
-          setWorldFile(m->getText());
+        [this, m](Game& g) {
+          // Concatenate the save directory path to the name
+          // of the game so that we can readily path it to
+          // other processes.
+          std::string fullPath = sk_savedGamesDir + std::string("/") + m->getText();
+
+          setWorldFile(fullPath);
+          g.reset(getWorldFile());
+
+          // Move to the game screen.
+          setScreen(game::Screen::Game);
         }
       );
       m->enable(false);
 
       m_loadGameScreen->addMenu(m);
-      m_savedGames.push_back(m);
+      m_savedGames.games.push_back(m);
     }
 
-    m = generateScreenOption("Next page", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
-    m->setSimpleAction(
+    m_savedGames.next = generateScreenOption("Next page", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    m_savedGames.next->setSimpleAction(
       [this](Game& /*g*/) {
-        setScreen(game::Screen::Game);
+        // Move to the next page if possible.
+        if (m_savedGames.index + m_savedGames.gamesPerPage < m_savedGames.saves.size()) {
+          m_savedGames.index += m_savedGames.gamesPerPage;
+          updateSavedGamesDisplay();
+        }
+
       }
     );
-    m->enable(false);
-    m_loadGameScreen->addMenu(m);
+    m_savedGames.next->enable(false);
+    m_loadGameScreen->addMenu(m_savedGames.next);
 
-    m = generateScreenOption("Back to main screen", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    GameMenuShPtr m = generateScreenOption("Back to main screen", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
     m->setSimpleAction(
       [this](Game& /*g*/) {
         // Assign the correct screen and terminate the game.
@@ -309,9 +340,11 @@ namespace tdef {
     m = generateScreenOption("Restart", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
     m->setSimpleAction(
       [this](Game& g) {
-        // Assign the correct screen and reset the game.
+        // Assign the correct screen and reset the game with
+        // the previously loaded one. If no game has been
+        // loaded so far a new one will be generated.
         setScreen(game::Screen::Game);
-        g.reset();
+        g.reset(getWorldFile());
       }
     );
     m_gameOverScreen->addMenu(m);
@@ -329,13 +362,73 @@ namespace tdef {
 
   void
   GameState::refreshSavedGames() {
-    DirIt end;
-    DirIt it(sk_savedGamesDir);
+    // Refresh the list of games that can be loaded by
+    // re-reading the content of the save directory.
+    // Note that we do not update the displayed values
+    // within this method.
+    std::string dir = sk_savedGamesDir;
 
+    DirIt end;
+    DirIt it(dir);
+
+    m_savedGames.saves.clear();
+
+    log("Scanning directory \"" + dir + "\" for saved games", utils::Level::Debug);
     for (; it != end ; ++it) {
       std::filesystem::directory_entry sg = *it;
-      log("Found entry \"" + std::string(sg.path()) + "\"");
+
+      // Only keep the base path in the display: the
+      // path to the save directory would just clutter
+      // the output.
+      std::string path = sg.path();
+      std::string name = path.substr(dir.size() + 1);
+
+      if (name.empty()) {
+        log("Failed to interpret saved game \"" + path + "\"", utils::Level::Error);
+        continue;
+      }
+
+      m_savedGames.saves.push_back(name);
     }
+
+    // Sort the games in alphabetical order to ease
+    // finding a particular game.
+    std::sort(m_savedGames.saves.begin(), m_savedGames.saves.end());
+
+    for (unsigned id = 0u ; id < m_savedGames.saves.size() ; ++id) {
+      log("Found saved game \"" + m_savedGames.saves[id] + "\"", utils::Level::Debug);
+    }
+  }
+
+  void
+  GameState::updateSavedGamesDisplay() {
+    // Update the text of the display menus with
+    // the name of the games starting from the one
+    // pointed at by the virtual cursor.
+    unsigned max = std::min(
+      static_cast<unsigned>(m_savedGames.saves.size()) - m_savedGames.index,
+      m_savedGames.gamesPerPage
+    );
+
+    unsigned id = 0u;
+    for (; id < max ; ++id) {
+      m_savedGames.games[id]->setText(m_savedGames.saves[m_savedGames.index + id]);
+      m_savedGames.games[id]->enable(true);
+    }
+
+    // Fill the rest of the cells with blank spaces.
+    if (id < m_savedGames.gamesPerPage) {
+      for (; id < m_savedGames.gamesPerPage ; ++id) {
+        m_savedGames.games[id]->setText("");
+        m_savedGames.games[id]->enable(false);
+      }
+    }
+
+    // Update the next/previous page buttons.
+    m_savedGames.previous->enable(m_savedGames.index > 0);
+    m_savedGames.next->enable(
+      m_savedGames.index + m_savedGames.gamesPerPage < m_savedGames.saves.size()
+    );
   }
 
 }

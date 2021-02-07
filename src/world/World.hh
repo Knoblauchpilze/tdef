@@ -119,9 +119,13 @@ namespace tdef {
       /**
        * @brief - Used to reset the properties of this world
        *          so that it can be used to start a new game.
+       * @param file - the name of the file from which the
+       *               world's data should be loaded. In case
+       *               the path is empty a new world will be
+       *               generated.
        */
       void
-      reset();
+      reset(const std::string& file = std::string());
 
       /**
        * @brief - Used to save the content of the world to

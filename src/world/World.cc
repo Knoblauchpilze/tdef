@@ -201,14 +201,19 @@ namespace tdef {
   }
 
   void
-  World::reset() {
+  World::reset(const std::string& file) {
     // Clear all registered elements.
     m_blocks.clear();
     m_mobs.clear();
     m_projectiles.clear();
 
     // Regenerate the world.
-    generate();
+    if (file.empty()) {
+      generate();
+    }
+    else {
+      loadFromFile(file);
+    }
   }
 
   void

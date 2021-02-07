@@ -106,9 +106,13 @@ namespace tdef {
        * @brief - Used to perform a reset of the data defined
        *          by this game, typically to allow a new run
        *          to be generated.
+       * @param file - the name of the saved game to load for
+       *               the reset operation. In case the file
+       *               is empty, a new randomy generated game
+       *               will be created.
        */
       void
-      reset();
+      reset(const std::string& file = std::string());
 
       /**
        * @brief - Requests the game to be terminated. This is

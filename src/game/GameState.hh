@@ -134,6 +134,15 @@ namespace tdef {
       void
       generateGameOverScreen(const olc::vi2d& dims);
 
+      /**
+       * @brief - Used to update the list of saved games. It
+       *          is typically used in case the load game menu
+       *          is being displayed to ensure that we have
+       *          up to date information in it.
+       */
+      void
+      refreshSavedGames();
+
     private:
 
       /**
@@ -165,6 +174,12 @@ namespace tdef {
        *          game menu.
        */
       static constexpr const int sk_savedGamesPerPage = 10;
+
+      /**
+       * @brief - Defines the path to the directory where the
+       *          saved games are registered.
+       */
+      static constexpr const char* sk_savedGamesDir = "data/worlds";
 
       /**
        * @brief - Defines the current screen selected in this

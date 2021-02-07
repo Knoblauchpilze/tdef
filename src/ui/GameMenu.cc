@@ -46,9 +46,9 @@ namespace tdef {
     m_enabled(enabled),
 
     m_activeBGColor(bg.color),
-    m_disabledBGColor(sk_disabledBGColor),
+    m_disabledBGColor(bg.color),
     m_activeTextColor(fg.color),
-    m_disabledTextColor(sk_disabledTextColor)
+    m_disabledTextColor(fg.color)
   {}
 
   void
@@ -58,17 +58,17 @@ namespace tdef {
       return;
     }
 
-    menu::BackgroundDesc bg;
-    bg = menu::newColoredBackground(enabled ? m_activeBGColor : m_disabledBGColor);
+    // Copy the data of the current background and
+    // content description while updating the colors
+    // to match the disabled/enabled state.
+    menu::BackgroundDesc nbg = bg();
+    updateFromColor(nbg, enabled ? m_activeBGColor : m_disabledBGColor);
 
-    menu::MenuContentDesc fg;
-    fg = menu::newTextContent(
-      getText(),
-      enabled ? m_activeTextColor : m_disabledTextColor
-    );
+    menu::MenuContentDesc nfg = fg();
+    nfg.color = enabled ? m_activeTextColor : m_disabledTextColor;
 
-    setBackground(bg);
-    setContent(fg);
+    setBackground(nbg);
+    setContent(nfg);
 
     m_enabled = enabled;
   }

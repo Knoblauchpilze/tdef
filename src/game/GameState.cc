@@ -168,7 +168,11 @@ namespace tdef {
     // Create each option.
     SimpleMenuShPtr m = generateScreenOption("New game", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
     m->setSimpleAction(
-      [this](Game& /*g*/) {
+      [this](Game& g) {
+        // Generate a new game.
+        setWorldFile("");
+        g.reset(getWorldFile());
+
         setScreen(game::Screen::Game);
       }
     );

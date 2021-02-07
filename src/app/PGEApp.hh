@@ -217,6 +217,18 @@ namespace tdef {
 
       /**
        * @brief - Interface method called at each frame when
+       *          the game is paused. This is usually the case
+       *          right after the `onPause` method has been
+       *          called (only once).
+       * @param elapsed - the elapsed time since the last call.
+       * @return - `true` in case the program shoudl continue
+       *           running.
+       */
+      virtual bool
+      onPaused(float elapsed) = 0;
+
+      /**
+       * @brief - Interface method called at each frame when
        *          the resume method has been called.
        * @param elapsed - the elapsed time since the last call.
        * @return - `true` in case the program should continue

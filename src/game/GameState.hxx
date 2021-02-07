@@ -17,6 +17,13 @@ namespace tdef {
     return m_worldFile;
   }
 
+  inline
+  void
+  GameState::setWorldFile(const std::string& file) {
+    log("Setting world file to \"" + file + "\"");
+    m_worldFile = file;
+  }
+
 }
 
 #endif    /* GAME_STATE_HXX */

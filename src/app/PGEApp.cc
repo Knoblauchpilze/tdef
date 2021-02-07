@@ -67,6 +67,96 @@ namespace tdef {
     return true;
   }
 
+  bool
+  PGEApp::OnUserUpdate(float fElapsedTime) {
+    // Handle inputs.
+    InputChanges ic = handleInputs();
+
+    // Handle game logic if needed.
+    bool quit = false;
+    switch (m_state) {
+      case State::Running:
+        quit = onStep(fElapsedTime);
+        break;
+      case State::Pausing:
+        quit = onPause(fElapsedTime);
+        m_state = State::Paused;
+        break;
+      case State::Resuming:
+        quit = onResume(fElapsedTime);
+        m_state = State::Running;
+        break;
+      case State::Paused:
+        quit = onPaused(fElapsedTime);
+        break;
+      default:
+        break;
+    }
+
+    // Handle user inputs.
+    onInputs(m_controls, *m_frame);
+
+    // Handle rendering: for each function
+    // we will assign the draw target first
+    // so that the function does not have
+    // to handle it. We want to save the
+    // current draw target to restore it
+    // once the process is done.
+    olc::Sprite* base = GetDrawTarget();
+
+    RenderDesc res{
+      *m_frame, // Coordinate frame
+    };
+
+    // Note that we usually need to clear
+    // the layer at least once to `activate`
+    // them: otherwise the window usually
+    // stays black.
+    SetDrawTarget(m_mDecalLayer);
+    drawDecal(res);
+
+    SetDrawTarget(m_mLayer);
+    draw(res);
+
+    if (hasUI()) {
+      SetDrawTarget(m_uiLayer);
+      drawUI(res);
+    }
+    if (!hasUI() && isFirstFrame()) {
+      SetDrawTarget(m_uiLayer);
+      clearLayer();
+    }
+
+    // Draw the debug layer. As it is saved
+    // in the layer `0` we need to clear it
+    // when it is not displayed as it will
+    // be rendered on top of any other layer
+    // and thus we would still display the
+    // last frame when it is inactive.
+    // Note that we also clear it in case
+    // the debug is set to `false` from the
+    // beginning of the rendering: if we
+    // don't do this nothing will be visible
+    // as the `0`-th layer would never be
+    // updated.
+    if (hasDebug()) {
+      SetDrawTarget(m_dLayer);
+      drawDebug(res);
+    }
+    if (!hasDebug() && (ic.debugLayerToggled || isFirstFrame())) {
+      SetDrawTarget(m_dLayer);
+      clearLayer();
+    }
+
+    // Restore the target.
+    SetDrawTarget(base);
+
+    // Not the first frame anymore.
+    m_first = false;
+
+    return !ic.quit && !quit;
+  }
+
   PGEApp::InputChanges
   PGEApp::handleInputs() {
     InputChanges ic{false, false};

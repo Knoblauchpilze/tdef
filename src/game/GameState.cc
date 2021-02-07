@@ -1,10 +1,15 @@
 
 # include "GameState.hh"
+# include <filesystem>
 # include "SimpleMenu.hh"
 # include "SimpleAction.hh"
 # include "Game.hh"
 
 namespace {
+
+  // Convenience using to shorten the usage of the filesystem
+  // data types when loading the saved games list.
+  using DirIt = std::filesystem::directory_iterator;
 
   tdef::MenuShPtr
   generateDefaultScreen(const olc::vi2d& dims,
@@ -164,6 +169,7 @@ namespace tdef {
     m = generateScreenOption("Load game", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
     m->setSimpleAction(
       [this](Game& /*g*/) {
+        refreshSavedGames();
         setScreen(game::Screen::LoadGame);
       }
     );
@@ -319,6 +325,17 @@ namespace tdef {
       }
     );
     m_gameOverScreen->addMenu(m);
+  }
+
+  void
+  GameState::refreshSavedGames() {
+    DirIt end;
+    DirIt it(sk_savedGamesDir);
+
+    for (; it != end ; ++it) {
+      std::filesystem::directory_entry sg = *it;
+      log("Found entry \"" + std::string(sg.path()) + "\"");
+    }
   }
 
 }

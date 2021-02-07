@@ -18,6 +18,11 @@
 // TODO: Save and load game from file.
 // TODO: Welcome menu.
 // TODO: Handle targetting mode.
+// TODO: The `Pause`, `Step` and `Resume` mode of
+// the PGEApp are not really suited because the
+// TDefApp can't influence on that which means
+// that as soon as the simulation is started once
+// a new load of another game will also be started.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

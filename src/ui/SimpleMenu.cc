@@ -9,7 +9,7 @@ namespace tdef {
                         const menu::MenuContentDesc& fg,
                         const menu::RegisterAction& cb,
                         Menu* parent):
-    Menu(pos, size, "simple_menu", bg, fg, menu::Layout::Horizontal, true, parent),
+    Menu(pos, size, "simple_menu", bg, fg, menu::Layout::Horizontal, true, true, parent),
 
     m_callback(cb)
   {}

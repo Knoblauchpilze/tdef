@@ -60,6 +60,8 @@ namespace tdef {
        *                 children are represented in the menu.
        * @param clickable - indicates whether this menu can be
        *                    clicked.
+       * @param selectable - indicates whether this menu can be
+       *                     selected.
        * @param parent - the parent menu for this element. Specify
        *                 `null` in case the menu is the root of the
        *                 subsystem.
@@ -71,6 +73,7 @@ namespace tdef {
            const menu::MenuContentDesc& fg,
            const menu::Layout& layout = menu::Layout::Horizontal,
            bool clickable = true,
+           bool selectable = true,
            Menu* parent = nullptr);
 
       /**
@@ -87,6 +90,29 @@ namespace tdef {
        */
       void
       setVisible(bool visible) noexcept;
+
+      /**
+       * @brief - Defines whether or not this menu support
+       *          click on it. If set to `false` the menu
+       *          will not react whenever the user clicks
+       *          on it.
+       * @param click - `true` in case clicks are supported.
+       */
+      void
+      setClickable(bool click) noexcept;
+
+      /**
+       * @brief - Defines whether or not this menu support
+       *          selection. If set to `false` the menu will
+       *          not react whenever the user attemps to
+       *          select it by clicking. This will notably
+       *          prevent to change the visual representation
+       *          to use the highlighted colors.
+       * @param select - `true` in case selecion is supported.
+       */
+      void
+      setSelectable(bool select) noexcept;
+
 
       /**
        * @brief- Interface method allowing to render a menu in
@@ -207,6 +233,22 @@ namespace tdef {
       olc::vi2d
       absolutePosition() const noexcept;
 
+      /**
+       * @brief - Allow inheriting classes to access the background
+       *          description for this menu as a copy.
+       * @return - a copy of the background description.
+       */
+      menu::BackgroundDesc
+      bg() const noexcept;
+
+      /**
+       * @brief - Allow inheriting classes to access the foreground
+       *          description for this menu as a copy.
+       * @return - a copy of the foreground description.
+       */
+      menu::MenuContentDesc
+      fg() const noexcept;
+
     private:
 
       /**
@@ -245,9 +287,22 @@ namespace tdef {
        *          for this menu, such as visibility and highlight.
        */
       struct State {
+        // Whether this menu is currently visible.
         bool visible;
+
+        // Whether this menu is clickable: this triggeres whether a
+        // hovering over action is associated with a change in color.
         bool clickable;
+
+        // Whether this menu is selectable. It is used to define
+        // whether the selected color should be applied in case
+        // of a click within the menu.
+        bool selectable;
+
+        // Whether or not this menu is currently highlighted.
         bool highlighted;
+
+        // Whether or not this menu is currently selected.
         bool selected;
       };
 

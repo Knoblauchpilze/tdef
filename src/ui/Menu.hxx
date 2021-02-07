@@ -18,6 +18,18 @@ namespace tdef {
   }
 
   inline
+  void
+  Menu::setClickable(bool click) noexcept {
+    m_state.clickable = click;
+  }
+
+  inline
+  void
+  Menu::setSelectable(bool select) noexcept {
+    m_state.selectable = select;
+  }
+
+  inline
   olc::vf2d
   Menu::getSize() const noexcept {
     return m_size;
@@ -88,6 +100,18 @@ namespace tdef {
     p += m_pos;
 
     return p;
+  }
+
+  inline
+  menu::BackgroundDesc
+  Menu::bg() const noexcept {
+    return m_bg;
+  }
+
+  inline
+  menu::MenuContentDesc
+  Menu::fg() const noexcept {
+    return m_fg;
   }
 
   inline

@@ -10,10 +10,17 @@ namespace tdef {
              const menu::MenuContentDesc& fg,
              const menu::Layout& layout,
              bool clickable,
+             bool selectable,
              Menu* parent):
     utils::CoreObject(name),
 
-    m_state(State{true, clickable, false, false}),
+    m_state(State{
+      true,       // visible
+      clickable,  // clickable
+      selectable, // selectable
+      false,      // highlighted
+      false       // selected
+    }),
 
     m_pos(pos),
     m_size(size),
@@ -42,7 +49,7 @@ namespace tdef {
     // Render the uniform background for this menu.
     olc::vi2d pos = absolutePosition();
     olc::Pixel c = m_bg.color;
-    if (m_state.clickable && (m_state.highlighted || m_state.selected)) {
+    if ((m_state.clickable && m_state.highlighted) || (m_state.selectable && m_state.selected)) {
       c = m_bg.hColor;
     }
     pge->FillRectDecal(pos, m_size, c);
@@ -112,11 +119,15 @@ namespace tdef {
     // In case the user clicks on the menu, we need
     // to trigger the corresponding handler.
     if (click) {
+      // Only trigger the `onClick` in case the user
+      // indicated to do so when building the menu.
       if (process) {
         onClick(actions);
-        m_state.selected = true;
       }
 
+      // But always register the internal state as
+      // selected.
+      m_state.selected = true;
       res.selected = true;
     }
 
@@ -196,7 +207,7 @@ namespace tdef {
       }
 
       olc::Pixel c = m_fg.color;
-      if (m_state.clickable && (m_state.highlighted || m_state.selected)) {
+      if ((m_state.clickable && m_state.highlighted) || (m_state.selectable && m_state.selected)) {
         c = m_fg.hColor;
       }
 
@@ -314,7 +325,7 @@ namespace tdef {
 
     // Draw both the text and the image.
     olc::Pixel c = m_fg.color;
-    if (m_state.clickable && (m_state.highlighted || m_state.selected)) {
+    if ((m_state.clickable && m_state.highlighted) || (m_state.selectable && m_state.selected)) {
       c = m_fg.hColor;
     }
 

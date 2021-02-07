@@ -8,9 +8,10 @@ namespace {
 
   tdef::MenuShPtr
   generateDefaultScreen(const olc::vi2d& dims,
-                        const olc::Pixel& color)
+                        const olc::Pixel& color,
+                        const olc::vi2d& menuSize = olc::vi2d(350, 200))
   {
-    const olc::vf2d size(std::min(dims.x, 350), std::min(dims.y, 200));
+    const olc::vf2d size(std::min(dims.x, menuSize.x), std::min(dims.y, menuSize.y));
     const olc::vi2d pos(dims.x / 2.0f - size.x / 2.0f, dims.y / 2.0f - size.y / 2.0f);
 
     tdef::menu::BackgroundDesc bg = tdef::menu::newColoredBackground(color);
@@ -22,11 +23,15 @@ namespace {
       "goMenu",
       bg,
       fg,
-      tdef::menu::Layout::Vertical
+      tdef::menu::Layout::Vertical,
+      // The menus can be highlighted but don't have a
+      // selected behavior.
+      true,
+      false
     );
   }
 
-  tdef::SimpleMenuShPtr
+  tdef::GameMenuShPtr
   generateScreenOption(const std::string& text,
                        const olc::Pixel& bgColor,
                        const olc::Pixel& textColor,
@@ -40,15 +45,18 @@ namespace {
     );
     fg.hColor = textHighlighColor;
 
-    return std::make_shared<tdef::SimpleMenu>(
-      olc::vi2d(),
-      olc::vf2d(),
+    tdef::GameMenuShPtr m = std::make_shared<tdef::GameMenu>(
       bg,
       fg,
       [](std::vector<tdef::ActionShPtr>& /*actions*/) {
         // Dummy action.
       }
     );
+
+    // Screen options are not selectable.
+    m->setSelectable(false);
+
+    return m;
   }
 
 }
@@ -72,6 +80,7 @@ namespace tdef {
 
     m_homeScreen(nullptr),
     m_loadGameScreen(nullptr),
+    m_savedGames(),
     m_pauseScreen(nullptr),
     m_gameOverScreen(nullptr)
   {
@@ -173,8 +182,10 @@ namespace tdef {
 
   void
   GameState::generateLoadGameScreen(const olc::vi2d& dims) {
-    // Generate base menu.
-    m_loadGameScreen = generateDefaultScreen(dims, sk_screenBGColor);
+    // Generate base menu: note that as we will be displaying
+    // quite a lot of information we want this menu to be a
+    // bit larger than the other ones.
+    m_loadGameScreen = generateDefaultScreen(dims, sk_screenBGColor, olc::vi2d(350, 400));
 
     menu::BackgroundDesc bg = menu::newColoredBackground(sk_menuBGColor);
     menu::MenuContentDesc fg = menu::newTextContent("Saved games:", olc::MAGENTA, menu::Alignment::Center);
@@ -185,17 +196,34 @@ namespace tdef {
       bg,
       fg,
       menu::Layout::Horizontal,
+      false,
       false
     );
     m_loadGameScreen->addMenu(tm);
 
-    SimpleMenuShPtr m = generateScreenOption("Previous page", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+    GameMenuShPtr m = generateScreenOption("Previous page", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
     m->setSimpleAction(
       [this](Game& /*g*/) {
         setScreen(game::Screen::Game);
       }
     );
+    m->enable(false);
     m_loadGameScreen->addMenu(m);
+
+    // Create menus for each line of the saved game screen.
+    for (int id = 0 ; id < sk_savedGamesPerPage ; ++id) {
+      m = generateScreenOption("", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
+
+      m->setSimpleAction(
+        [this, m](Game& /*g*/) {
+          setWorldFile(m->getText());
+        }
+      );
+      m->enable(false);
+
+      m_loadGameScreen->addMenu(m);
+      m_savedGames.push_back(m);
+    }
 
     m = generateScreenOption("Next page", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
     m->setSimpleAction(
@@ -203,6 +231,7 @@ namespace tdef {
         setScreen(game::Screen::Game);
       }
     );
+    m->enable(false);
     m_loadGameScreen->addMenu(m);
 
     m = generateScreenOption("Back to main screen", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);

@@ -5,6 +5,7 @@
 # include <core_utils/CoreObject.hh>
 # include "olcEngine.hh"
 # include "Menu.hh"
+# include "GameMenu.hh"
 
 namespace tdef {
   namespace game {
@@ -66,6 +67,16 @@ namespace tdef {
        */
       void
       setScreen(const game::Screen& screen);
+
+      /**
+       * @brief - Defines a new value for the selected world
+       *          to load. This will overrides the file path
+       *          to reach the saved world's data.
+       * @param file - the path to the file describing the
+       *               world's to load data.
+       */
+      void
+      setWorldFile(const std::string& file);
 
       /**
        * @brief - Used to render the screen corresponding to
@@ -149,6 +160,13 @@ namespace tdef {
       static const olc::Pixel sk_menuTextColorHighlight;
 
       /**
+       * @brief - Defines the number of saved games that can
+       *          be displayed on a single page of the load
+       *          game menu.
+       */
+      static constexpr const int sk_savedGamesPerPage = 10;
+
+      /**
        * @brief - Defines the current screen selected in this
        *          game. Updated whenever the user takes action
        *          to change it.
@@ -173,6 +191,15 @@ namespace tdef {
        *          on the loading game screen.
        */
       MenuShPtr m_loadGameScreen;
+
+      /**
+       * @brief - A list of the available saved games in the page.
+       *          This allows to update their text to reflect the
+       *          games displayed in the current page.
+       *          Each cell in the vector corresponds to the item
+       *          in the `n-th` position in the page.
+       */
+      std::vector<GameMenuShPtr> m_savedGames;
 
       /**
        * @brief - Defines the screen to display when the game is

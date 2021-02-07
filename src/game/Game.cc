@@ -369,7 +369,7 @@ namespace tdef {
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    m_statusMenu = std::make_shared<Menu>(pos, size, "sMenu", bg, fg);
+    m_statusMenu = std::make_shared<Menu>(pos, size, "sMenu", bg, fg, menu::Layout::Horizontal, false, false);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
@@ -377,17 +377,17 @@ namespace tdef {
 
     // Gold amount.
     fg = menu::newTextContent("Gold: " + std::to_string(m_state.gold));
-    m_mGold = std::make_shared<Menu>(pos, size, "gold", bg, fg, menu::Layout::Horizontal, false);
+    m_mGold = std::make_shared<Menu>(pos, size, "gold", bg, fg, menu::Layout::Horizontal, false, false);
     m_statusMenu->addMenu(m_mGold);
 
     // Lives status.
     fg = menu::newTextContent("Lives: " + std::to_string(m_state.lives));
-    m_mLives = std::make_shared<Menu>(pos, size, "lives", bg, fg, menu::Layout::Horizontal, false);
+    m_mLives = std::make_shared<Menu>(pos, size, "lives", bg, fg, menu::Layout::Horizontal, false, false);
     m_statusMenu->addMenu(m_mLives);
 
     // Wave count.
     fg = menu::newTextContent("Wave: 1");
-    MenuShPtr sm = std::make_shared<Menu>(pos, size, "wave", bg, fg, menu::Layout::Horizontal, false);
+    MenuShPtr sm = std::make_shared<Menu>(pos, size, "wave", bg, fg, menu::Layout::Horizontal, false, false);
     m_statusMenu->addMenu(sm);
 
     return m_statusMenu;
@@ -403,7 +403,7 @@ namespace tdef {
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    m_buildings = std::make_shared<Menu>(pos, size, "tMenu", bg, fg, menu::Layout::Vertical);
+    m_buildings = std::make_shared<Menu>(pos, size, "tMenu", bg, fg, menu::Layout::Vertical, false, false);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
@@ -487,14 +487,14 @@ namespace tdef {
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    m_tDisplay.main = std::make_shared<Menu>(pos, size, "uMenu", bg, fg, menu::Layout::Vertical);
+    m_tDisplay.main = std::make_shared<Menu>(pos, size, "uMenu", bg, fg, menu::Layout::Vertical, false, false);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
     fg = menu::newTextContent("Type: Regular");
-    m_tDisplay.type = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
+    m_tDisplay.type = std::make_shared<Menu>(pos, size, "prop1", bg, fg, menu::Layout::Horizontal, false, false);
     m_tDisplay.main->addMenu(m_tDisplay.type);
 
     for (unsigned id = 0u ; id < UPGRADE_COUNT ; ++id) {
@@ -521,7 +521,7 @@ namespace tdef {
     m_tDisplay.main->addMenu(m_tDisplay.sell);
 
     fg = menu::newTextContent("Target mode");
-    MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop6", bg, fg);
+    MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop2", bg, fg);
     m_tDisplay.main->addMenu(sm);
 
     // This menu is hidden until the user clicks on
@@ -544,26 +544,26 @@ namespace tdef {
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    m_mDisplay.main = std::make_shared<Menu>(pos, size, "mMenu", bg, fg, menu::Layout::Vertical);
+    m_mDisplay.main = std::make_shared<Menu>(pos, size, "mMenu", bg, fg, menu::Layout::Vertical, false, false);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
     fg = menu::newTextContent("Type: Regular");
-    m_mDisplay.type = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
+    m_mDisplay.type = std::make_shared<Menu>(pos, size, "prop1", bg, fg, menu::Layout::Horizontal, false, false);
     m_mDisplay.main->addMenu(m_mDisplay.type);
 
     fg = menu::newTextContent("Health: 10");
-    m_mDisplay.health = std::make_shared<Menu>(pos, size, "prop2", bg, fg);
+    m_mDisplay.health = std::make_shared<Menu>(pos, size, "prop2", bg, fg, menu::Layout::Horizontal, false, false);
     m_mDisplay.main->addMenu(m_mDisplay.health);
 
     fg = menu::newTextContent("Speed: 10");
-    m_mDisplay.speed = std::make_shared<Menu>(pos, size, "prop3", bg, fg);
+    m_mDisplay.speed = std::make_shared<Menu>(pos, size, "prop3", bg, fg, menu::Layout::Horizontal, false, false);
     m_mDisplay.main->addMenu(m_mDisplay.speed);
 
     fg = menu::newTextContent("Bounty: 10");
-    m_mDisplay.bounty = std::make_shared<Menu>(pos, size, "prop4", bg, fg);
+    m_mDisplay.bounty = std::make_shared<Menu>(pos, size, "prop4", bg, fg, menu::Layout::Horizontal, false, false);
     m_mDisplay.main->addMenu(m_mDisplay.bounty);
 
     // This menu is hidden until the user clicks on
@@ -586,14 +586,14 @@ namespace tdef {
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    m_sDisplay.main = std::make_shared<Menu>(pos, size, "sMenu", bg, fg, menu::Layout::Vertical);
+    m_sDisplay.main = std::make_shared<Menu>(pos, size, "sMenu", bg, fg, menu::Layout::Vertical, false, false);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
     fg = menu::newTextContent("Health: 10");
-    m_sDisplay.health = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
+    m_sDisplay.health = std::make_shared<Menu>(pos, size, "prop1", bg, fg, menu::Layout::Horizontal, false, false);
     m_sDisplay.main->addMenu(m_sDisplay.health);
 
     // This menu is hidden until the user clicks on
@@ -616,14 +616,14 @@ namespace tdef {
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    m_wDisplay.main = std::make_shared<Menu>(pos, size, "wMenu", bg, fg, menu::Layout::Vertical);
+    m_wDisplay.main = std::make_shared<Menu>(pos, size, "wMenu", bg, fg, menu::Layout::Vertical, false, false);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
     fg = menu::newTextContent("Health: 10");
-    m_wDisplay.health = std::make_shared<Menu>(pos, size, "prop1", bg, fg);
+    m_wDisplay.health = std::make_shared<Menu>(pos, size, "prop1", bg, fg, menu::Layout::Horizontal, false, false);
     m_wDisplay.main->addMenu(m_wDisplay.health);
 
     // This menu is hidden until the user clicks on

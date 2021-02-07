@@ -143,6 +143,20 @@ namespace tdef {
       void
       refreshSavedGames();
 
+      /**
+       * @brief - Used to update the display menus representing
+       *          the list of saved games available for loading.
+       *          This assumes the list of games is up to date
+       *          and will use the current index to display all
+       *          subsequent games in the limit of the allowed
+       *          number per page.
+       *          It will also handle the de/activation of the
+       *          navigation buttons if needed.
+       */
+      void
+      updateSavedGamesDisplay();
+
+
     private:
 
       /**
@@ -173,13 +187,41 @@ namespace tdef {
        *          be displayed on a single page of the load
        *          game menu.
        */
-      static constexpr const int sk_savedGamesPerPage = 10;
+      static constexpr const unsigned sk_savedGamesPerPage = 10u;
 
       /**
        * @brief - Defines the path to the directory where the
        *          saved games are registered.
        */
       static constexpr const char* sk_savedGamesDir = "data/worlds";
+
+      /**
+       * @brief - Convenience structure regrouping the available
+       *          saved games as fetched from the saves directory.
+       */
+      struct SavedGamesData {
+        // The list of saved games as listed in the directory where
+        // games are dumped.
+        std::vector<std::string> saves;
+
+        // The index of the first element displayed in the load game
+        // screen. Starts at `0` and can range until all the games
+        // are displayed (assuming we're displaying a certain number
+        // per page).
+        unsigned index;
+
+        // The number of saved games displayed per page.
+        unsigned gamesPerPage;
+
+        // The menus allowing to display the saved games names.
+        std::vector<GameMenuShPtr> games;
+
+        // The menu representing the previous page option.
+        GameMenuShPtr previous;
+
+        // The menu representing the next page option.
+        GameMenuShPtr next;
+      };
 
       /**
        * @brief - Defines the current screen selected in this
@@ -208,13 +250,10 @@ namespace tdef {
       MenuShPtr m_loadGameScreen;
 
       /**
-       * @brief - A list of the available saved games in the page.
-       *          This allows to update their text to reflect the
-       *          games displayed in the current page.
-       *          Each cell in the vector corresponds to the item
-       *          in the `n-th` position in the page.
+       * @brief - The data needed to represent the list of games
+       *          available for loading.
        */
-      std::vector<GameMenuShPtr> m_savedGames;
+      SavedGamesData m_savedGames;
 
       /**
        * @brief - Defines the screen to display when the game is

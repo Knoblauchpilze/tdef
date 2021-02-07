@@ -304,7 +304,7 @@ namespace tdef {
   }
 
   void
-  Game::reset() {
+  Game::reset(const std::string& file) {
     // Reset game state.
     m_state.disabled = false;
     // Note that the `terminated` is only set to `true` if the
@@ -317,7 +317,7 @@ namespace tdef {
     m_state.lives = BASE_LIVES;
     m_state.gold = BASE_GOLD;
 
-    m_world->reset();
+    m_world->reset(file);
 
     // And reset menus.
     m_statusMenu->setVisible(true);

@@ -20,6 +20,21 @@ namespace tdef {
       return bd;
     }
 
+    inline
+    void
+    updateFromColor(BackgroundDesc& bg,
+                    const olc::Pixel& c) noexcept
+    {
+      // Generate a new background.
+      BackgroundDesc nbg = newColoredBackground(c);
+
+      // Restore the other props.
+      nbg.scale = bg.scale;
+
+      // Swap values.
+      std::swap(bg, nbg);
+    }
+
   }
 }
 

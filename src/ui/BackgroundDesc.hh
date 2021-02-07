@@ -28,6 +28,19 @@ namespace tdef {
     BackgroundDesc
     newColoredBackground(const olc::Pixel& c) noexcept;
 
+    /**
+     * @brief - Used to update the color and highlight color of the
+     *          input background description from the provided new
+     *          one. Allows to keep the scale intact and not expose
+     *          the meaning of the update outside.
+     * @param bg - the bg description to update.
+     * @param c - the new base color to use for this bg desc. The
+     *            highlight color will be computed from it.
+     */
+    void
+    updateFromColor(BackgroundDesc& bg,
+                    const olc::Pixel& c) noexcept;
+
   }
 }
 

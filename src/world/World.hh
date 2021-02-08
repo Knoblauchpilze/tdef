@@ -82,22 +82,18 @@ namespace tdef {
        *          paused. Time based entities and actions
        *          should take actions to correctly resume at
        *          a later time.
-       * @param tDelta - the duration of the last frame in
-       *                 seconds.
        */
       void
-      pause(float tDelta);
+      pause();
 
       /**
        * @brief - Used to indicate that the world should be
        *          resuming its activity. Time based entities
        *          should take actions to be resuming their
        *          pathes, motions, etc.
-       * @param tDelta - the duration of the last frame in
-       *                 seconds.
        */
       void
-      resume(float tDelta);
+      resume();
 
       /**
        * @brief - Used to perform the registration of this
@@ -197,6 +193,16 @@ namespace tdef {
        * @brief - The list of projectiles waiting to do damage.
        */
       std::vector<ProjectileShPtr> m_projectiles;
+
+      /**
+       * @brief - Defines whether this world is paused (i.e.
+       *          internal attributes of the mobs/blocks/etc
+       *          have already been updated to reflect the
+       *          pause status) or not. This allows to react
+       *          to consecutive pause requests and prevent
+       *          weird behaviors to occur.
+       */
+      bool m_paused;
 
       /**
        * @brief - The locator to use to organize objects and

@@ -11,6 +11,7 @@
 # include "Wall.hh"
 # include "Menu.hh"
 # include "GameMenu.hh"
+# include "SimpleMenu.hh"
 
 namespace tdef {
 
@@ -204,20 +205,16 @@ namespace tdef {
       /**
        * @brief - Pause the simulation of the world wrapped
        *          by this game.
-       * @param tDelta - the duration of the last frame in
-       *                 seconds.
        */
       void
-      pause(float tDelta);
+      pause();
 
       /**
        * @brief - Resume the simulation of the world wrapped
        *          by the game.
-       * @param tDelta - the duration of the last frame in
-       *                 seconds.
        */
       void
-      resume(float tDelta);
+      resume();
 
     private:
 
@@ -393,10 +390,10 @@ namespace tdef {
 
         // The menu representing the play action (to start or
         // resume the game).
-        MenuShPtr play;
+        SimpleMenuShPtr play;
 
         // The menu representing the pause action.
-        MenuShPtr pause;
+        SimpleMenuShPtr pause;
 
         // Holds the slot index returned by the world when
         // registering for gold earned update.

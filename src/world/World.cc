@@ -22,6 +22,8 @@ namespace tdef {
     m_mobs(),
     m_projectiles(),
 
+    m_paused(true),
+
     m_loc(nullptr),
 
     onGoldEarned()
@@ -54,6 +56,10 @@ namespace tdef {
 
   void
   World::step(float tDelta) {
+    if (m_paused) {
+      return;
+    }
+
     StepInfo si{
       m_rng,                          // rng
 
@@ -100,8 +106,12 @@ namespace tdef {
   }
 
   void
-  World::pause(float /*tDelta*/) {
-    // Pause each element.
+  World::pause() {
+    // Pause each element if needed.
+    if (m_paused) {
+      return;
+    }
+
     utils::TimeStamp t = utils::now();
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
@@ -115,11 +125,17 @@ namespace tdef {
     for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
       m_projectiles[id]->pause(t);
     }
+
+    m_paused = true;
   }
 
   void
-  World::resume(float /*tDelta*/) {
-    // Resume each element.
+  World::resume() {
+    // Resume each element if needed.
+    if (!m_paused) {
+      return;
+    }
+
     utils::TimeStamp t = utils::now();
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
@@ -133,6 +149,8 @@ namespace tdef {
     for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
       m_projectiles[id]->resume(t);
     }
+
+    m_paused = false;
   }
 
   void
@@ -214,6 +232,8 @@ namespace tdef {
     else {
       loadFromFile(file);
     }
+
+    m_paused = true;
   }
 
   void

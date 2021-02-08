@@ -192,50 +192,18 @@ namespace tdef {
       drawDebug(const RenderDesc& res) = 0;
 
       /**
-       * @brief - Interface method called at each step of the
-       *          application and while the pause has not been
-       *          activated.
-       *          Inheriting classes should implement this to
-       *          provide their own logic.
-       * @param elapsed - the elapsed time since the last call
-       *                  to this method.
-       * @return - `true` in case the program should continue
-       *           running.
+       * @brief - Interface method called at each frame to give
+       *          inheriting classes an occasion to process the
+       *          app logic.
+       *          The return value indicates whether or not the
+       *          game loop should be stopped.
+       * @param fElapsed - the duration in seconds of the last
+       *                   frame.
+       * @return - `true` if the game loop should continue and
+       *           `false` if the app should exit.
        */
       virtual bool
-      onStep(float elapsed) = 0;
-
-      /**
-       * @brief - Interface method called at each frame when
-       *          the pause has been activated.
-       * @param elapsed - the elapsed time since the last call.
-       * @return - `true` in case the program should continue
-       *           running.
-       */
-      virtual bool
-      onPause(float elapsed) = 0;
-
-      /**
-       * @brief - Interface method called at each frame when
-       *          the game is paused. This is usually the case
-       *          right after the `onPause` method has been
-       *          called (only once).
-       * @param elapsed - the elapsed time since the last call.
-       * @return - `true` in case the program shoudl continue
-       *           running.
-       */
-      virtual bool
-      onPaused(float elapsed) = 0;
-
-      /**
-       * @brief - Interface method called at each frame when
-       *          the resume method has been called.
-       * @param elapsed - the elapsed time since the last call.
-       * @return - `true` in case the program should continue
-       *           running.
-       */
-      virtual bool
-      onResume(float elapsed) = 0;
+      onFrame(float fElapsed) = 0;
 
       /**
        * @brief - Interface method called at each frame when
@@ -249,17 +217,6 @@ namespace tdef {
                const CoordinateFrame& cf) = 0;
 
     private:
-
-      /**
-       * @brief - Convenience enumeration describing the state of the
-       *          game. It allows to correctly handle transitions.
-       */
-      enum class State {
-        Running,
-        Pausing,
-        Paused,
-        Resuming
-      };
 
       /**
        * @brief - Used to keep track of the changes in the input
@@ -347,12 +304,6 @@ namespace tdef {
        *          the UI is active or not.
        */
       bool m_uiOn;
-
-      /**
-       * @brief - Indicatesthe current state of the simulation
-       *          supported by this app.
-       */
-      State m_state;
 
       /**
        * @brief - A map to keep track of the state of the controls

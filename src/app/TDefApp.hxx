@@ -82,39 +82,6 @@ namespace tdef {
 
   inline
   void
-  TDefApp::onInputs(const controls::State& c,
-                    const CoordinateFrame& cf)
-  {
-    // Handle menus update and process the
-    // corresponding actions.
-    std::vector<ActionShPtr> actions;
-    bool relevant = false;
-
-    for (unsigned id = 0u ; id < m_menus.size() ; ++id) {
-      menu::InputHandle ih = m_menus[id]->processUserInput(c, actions);
-      relevant = (relevant || ih.relevant);
-    }
-
-    if (m_state != nullptr) {
-      menu::InputHandle ih = m_state->processUserInput(c, actions);
-      relevant = (relevant || ih.relevant);
-    }
-
-    for (unsigned id = 0u ; id < actions.size() ; ++id) {
-      actions[id]->apply(*m_game);
-    }
-
-    bool lClick = (c.buttons[controls::mouse::Left] == controls::ButtonState::Released);
-    if (lClick && !relevant) {
-      olc::vf2d it;
-      olc::vi2d tp = cf.pixelCoordsToTiles(olc::vi2d(c.mPosX, c.mPosY), &it);
-
-      m_game->performAction(tp.x + it.x, tp.y + it.y);
-    }
-  }
-
-  inline
-  void
   TDefApp::drawSprite(const SpriteDesc& t, const CoordinateFrame& cf) {
     olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y, t.loc, t.radius);
 

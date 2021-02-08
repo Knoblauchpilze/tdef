@@ -15,7 +15,6 @@ namespace tdef {
     m_debugOn(true),
     m_uiOn(true),
 
-    m_state(State::Paused),
     m_controls(controls::newState()),
     m_first(true),
 
@@ -72,29 +71,11 @@ namespace tdef {
     // Handle inputs.
     InputChanges ic = handleInputs();
 
-    // Handle game logic if needed.
-    bool quit = false;
-    switch (m_state) {
-      case State::Running:
-        quit = onStep(fElapsedTime);
-        break;
-      case State::Pausing:
-        quit = onPause(fElapsedTime);
-        m_state = State::Paused;
-        break;
-      case State::Resuming:
-        quit = onResume(fElapsedTime);
-        m_state = State::Running;
-        break;
-      case State::Paused:
-        quit = onPaused(fElapsedTime);
-        break;
-      default:
-        break;
-    }
-
     // Handle user inputs.
     onInputs(m_controls, *m_frame);
+
+    // Handle game logic.
+    bool quit = onFrame(fElapsedTime);
 
     // Handle rendering: for each function
     // we will assign the draw target first
@@ -208,6 +189,9 @@ namespace tdef {
     b = GetKey(olc::SPACE);
     m_controls.keys[controls::keys::Space] = b.bPressed || b.bHeld;
 
+    b = GetKey(olc::P);
+    m_controls.keys[controls::keys::P] = b.bPressed || b.bHeld;
+
     b = GetKey(olc::TAB),
     m_controls.tab = b.bReleased;
 
@@ -237,21 +221,6 @@ namespace tdef {
     }
     if (GetKey(olc::U).bReleased) {
       m_uiOn = !m_uiOn;
-    }
-
-    if (GetKey(olc::P).bReleased) {
-      switch (m_state) {
-        case State::Running:
-        case State::Resuming:
-          m_state = State::Pausing;
-          break;
-        case State::Paused:
-          m_state = State::Resuming;
-          break;
-        case State::Pausing:
-        default:
-          break;
-      }
     }
 
     return ic;

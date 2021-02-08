@@ -376,6 +376,35 @@ namespace tdef {
 
       /**
        * @brief - Convenience structure regrouping all the info
+       *          on the status display.
+       */
+      struct StatusDisplay {
+        // The main menu representing the status. Allows to easily
+        // de/activate the whole display.
+        MenuShPtr main;
+
+        // The menu indicating the number of remaining lives
+        // in the game.
+        MenuShPtr lives;
+
+        // The menu indicating the amount of gold available
+        // for this game.
+        MenuShPtr gold;
+
+        // The menu representing the play action (to start or
+        // resume the game).
+        MenuShPtr play;
+
+        // The menu representing the pause action.
+        MenuShPtr pause;
+
+        // Holds the slot index returned by the world when
+        // registering for gold earned update.
+        int goldEarnedSlot;
+      };
+
+      /**
+       * @brief - Convenience structure regrouping all the info
        *          on a tower display.
        */
       struct TowerDisplay {
@@ -544,25 +573,7 @@ namespace tdef {
        *          lives remaining, the amount of gold available
        *          and other information about the game.
        */
-      MenuShPtr m_statusMenu;
-
-      /**
-       * @brief - The menu indicating the number of remaining lives
-       *          in the game.
-       */
-      MenuShPtr m_mLives;
-
-      /**
-       * @brief - The menu indicating the amount of gold available
-       *          for this game.
-       */
-      MenuShPtr m_mGold;
-
-      /**
-       * @brief - Holds the slot index returned by the world when
-       *          registering for gold earned update.
-       */
-      int m_goldEarnedSlot;
+      StatusDisplay m_statusDisplay;
 
       /**
        * @brief - The properties of the tower display menus. This

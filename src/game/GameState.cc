@@ -17,7 +17,7 @@ namespace {
                         const olc::Pixel& color,
                         const olc::vi2d& menuSize = olc::vi2d(350, 200))
   {
-    const olc::vf2d size(std::min(dims.x, menuSize.x), std::min(dims.y, menuSize.y));
+    const olc::vi2d size(std::min(dims.x, menuSize.x), std::min(dims.y, menuSize.y));
     const olc::vi2d pos(dims.x / 2.0f - size.x / 2.0f, dims.y / 2.0f - size.y / 2.0f);
 
     tdef::menu::BackgroundDesc bg = tdef::menu::newColoredBackground(color);
@@ -214,7 +214,7 @@ namespace tdef {
     menu::MenuContentDesc fg = menu::newTextContent("Saved games:", olc::MAGENTA, menu::Alignment::Center);
     MenuShPtr tm = std::make_shared<Menu>(
       olc::vi2d(),
-      olc::vf2d(),
+      olc::vi2d(),
       "load_game_title",
       bg,
       fg,

@@ -8,8 +8,8 @@ namespace tdef {
   inline
   Game::~Game() {
     // Disconnect the gold earned slot.
-    if (m_goldEarnedSlot >= 0) {
-      m_world->onGoldEarned.disconnect(m_goldEarnedSlot);
+    if (m_statusDisplay.goldEarnedSlot >= 0) {
+      m_world->onGoldEarned.disconnect(m_statusDisplay.goldEarnedSlot);
     }
   }
 

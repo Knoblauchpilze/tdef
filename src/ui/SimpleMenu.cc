@@ -4,11 +4,11 @@
 namespace tdef {
 
   SimpleMenu::SimpleMenu(const olc::vi2d& pos,
-                        const olc::vf2d& size,
-                        const menu::BackgroundDesc& bg,
-                        const menu::MenuContentDesc& fg,
-                        const menu::RegisterAction& cb,
-                        Menu* parent):
+                         const olc::vi2d& size,
+                         const menu::BackgroundDesc& bg,
+                         const menu::MenuContentDesc& fg,
+                         const menu::RegisterAction& cb,
+                         Menu* parent):
     Menu(pos, size, "simple_menu", bg, fg, menu::Layout::Horizontal, true, true, parent),
 
     m_callback(cb)

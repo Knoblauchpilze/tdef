@@ -67,7 +67,7 @@ namespace tdef {
        *                 subsystem.
        */
       Menu(const olc::vi2d& pos,
-           const olc::vf2d& size,
+           const olc::vi2d& size,
            const std::string& name,
            const menu::BackgroundDesc& bg,
            const menu::MenuContentDesc& fg,

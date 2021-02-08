@@ -14,7 +14,7 @@ namespace tdef {
                      bool enabled):
     SimpleMenu(
       olc::vi2d(),
-      olc::vf2d(),
+      olc::vi2d(),
       menu::newColoredBackground(enabled ? sk_activeBGColor : sk_disabledBGColor),
       menu::newTextContent(text, enabled ? sk_activeTextColor : sk_disabledTextColor),
       cb,
@@ -36,7 +36,7 @@ namespace tdef {
                      bool enabled):
     SimpleMenu(
       olc::vi2d(),
-      olc::vf2d(),
+      olc::vi2d(),
       bg,
       fg,
       cb,

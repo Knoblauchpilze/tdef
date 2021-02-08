@@ -9,7 +9,8 @@ namespace tdef {
     PGEApp(desc),
 
     m_game(nullptr),
-    m_state(nullptr),
+    m_gameUI(nullptr),
+    m_state(State::Paused),
 
     m_menus(),
 
@@ -18,6 +19,79 @@ namespace tdef {
     m_mPackID(0u),
     m_wPackID(0u)
   {}
+
+  bool
+  TDefApp::onFrame(float fElapsed) {
+    bool quit = false;
+
+    switch (m_state) {
+      case State::Running:
+        quit = onStep(fElapsed);
+        break;
+      case State::Pausing:
+        quit = onPause(fElapsed);
+        m_state = State::Paused;
+        break;
+      case State::Resuming:
+        quit = onResume(fElapsed);
+        m_state = State::Running;
+        break;
+      case State::Paused:
+        quit = onPaused(fElapsed);
+        break;
+      default:
+        break;
+    }
+
+    return quit;
+  }
+
+  void
+  TDefApp::onInputs(const controls::State& c,
+                    const CoordinateFrame& cf)
+  {
+    // Handle menus update and process the
+    // corresponding actions.
+    std::vector<ActionShPtr> actions;
+    bool relevant = false;
+
+    for (unsigned id = 0u ; id < m_menus.size() ; ++id) {
+      menu::InputHandle ih = m_menus[id]->processUserInput(c, actions);
+      relevant = (relevant || ih.relevant);
+    }
+
+    if (m_gameUI != nullptr) {
+      menu::InputHandle ih = m_gameUI->processUserInput(c, actions);
+      relevant = (relevant || ih.relevant);
+    }
+
+    for (unsigned id = 0u ; id < actions.size() ; ++id) {
+      actions[id]->apply(*m_game);
+    }
+
+    bool lClick = (c.buttons[controls::mouse::Left] == controls::ButtonState::Released);
+    if (lClick && !relevant) {
+      olc::vf2d it;
+      olc::vi2d tp = cf.pixelCoordsToTiles(olc::vi2d(c.mPosX, c.mPosY), &it);
+
+      m_game->performAction(tp.x + it.x, tp.y + it.y);
+    }
+
+    if (c.keys[controls::keys::P]) {
+      switch (m_state) {
+        case State::Running:
+        case State::Resuming:
+          m_state = State::Pausing;
+          break;
+        case State::Paused:
+          m_state = State::Resuming;
+          break;
+        case State::Pausing:
+        default:
+          break;
+      }
+    }
+  }
 
   void
   TDefApp::loadWorld() {
@@ -30,7 +104,7 @@ namespace tdef {
 
     // Generate menus and register them.
     m_menus = m_game->generateMenus(dims);
-    m_state = std::make_shared<GameState>(dims, game::Screen::Home);
+    m_gameUI = std::make_shared<GameState>(dims, game::Screen::Home);
 
     // As we're on the home screen at the beginning, disable
     // menus so we can't do anything weird while selecting a
@@ -45,7 +119,7 @@ namespace tdef {
     Clear(olc::VERY_DARK_GREY);
 
     // In case we're not in the game screen, do nothing.
-    if (m_state->getScreen() != game::Screen::Game) {
+    if (m_gameUI->getScreen() != game::Screen::Game) {
       SetPixelMode(olc::Pixel::NORMAL);
       return;
     }
@@ -161,7 +235,7 @@ namespace tdef {
     Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
 
     // In case we're not in the game screen, do nothing.
-    if (m_state->getScreen() != game::Screen::Game) {
+    if (m_gameUI->getScreen() != game::Screen::Game) {
       SetPixelMode(olc::Pixel::NORMAL);
       return;
     }
@@ -244,14 +318,14 @@ namespace tdef {
 
     // Draw the correct screen based on the current
     // state of the game.
-    const game::Screen& s = m_state->getScreen();
+    const game::Screen& s = m_gameUI->getScreen();
     switch (s) {
       case game::Screen::Home:
       case game::Screen::LoadGame:
       case game::Screen::Pause:
       case game::Screen::GameOver:
       case game::Screen::Exit:
-        m_state->render(this);
+        m_gameUI->render(this);
         break;
       case game::Screen::Game:
       default:
@@ -293,7 +367,7 @@ namespace tdef {
     SetPixelMode(olc::Pixel::ALPHA);
     Clear(olc::Pixel(255, 255, 255, alpha::Transparent));
 
-    if (m_state->getScreen() != game::Screen::Game) {
+    if (m_gameUI->getScreen() != game::Screen::Game) {
       SetPixelMode(olc::Pixel::NORMAL);
       return;
     }
@@ -358,13 +432,13 @@ namespace tdef {
 
   bool
   TDefApp::onStep(float elapsed) {
-    if (m_state->getScreen() == game::Screen::Game) {
+    if (m_gameUI->getScreen() == game::Screen::Game) {
       bool gameOver = !m_game->step(elapsed);
 
       // Display the game over menu if needed.
       if (gameOver) {
         m_game->enable(false);
-        m_state->setScreen(game::Screen::GameOver);
+        m_gameUI->setScreen(game::Screen::GameOver);
       }
     }
 

@@ -17,7 +17,10 @@ namespace tdef {
         Up,
         Left,
         Down,
+
         Space,
+
+        P,
 
         KeysCount
       };

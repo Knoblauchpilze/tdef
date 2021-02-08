@@ -25,6 +25,15 @@ namespace tdef {
        */
       ~TDefApp() = default;
 
+    protected:
+
+      bool
+      onFrame(float fElapsed) override;
+
+      void
+      onInputs(const controls::State& c,
+               const CoordinateFrame& cf) override;
+
     private:
 
       /**
@@ -77,21 +86,49 @@ namespace tdef {
       void
       drawDebug(const RenderDesc& res) override;
 
+      /**
+       * @brief - Interface method called at each step of the
+       *          application and while the pause has not been
+       *          activated.
+       * @param elapsed - the elapsed time since the last call
+       *                  to this method.
+       * @return - `true` in case the program should continue
+       *           running.
+       */
       bool
-      onStep(float elapsed) override;
+      onStep(float elapsed);
 
+      /**
+       * @brief - Interface method called at each frame when
+       *          the pause has been activated.
+       * @param elapsed - the elapsed time since the last call.
+       * @return - `true` in case the program should continue
+       *           running.
+       */
       bool
-      onPause(float elapsed) override;
+      onPause(float elapsed);
 
+      /**
+       * @brief - Interface method called at each frame when
+       *          the game is paused. This is usually the case
+       *          right after the `onPause` method has been
+       *          called (only once).
+       * @param elapsed - the elapsed time since the last call.
+       * @return - `true` in case the program shoudl continue
+       *           running.
+       */
       bool
-      onPaused(float elapsed) override;
+      onPaused(float elapsed);
 
+      /**
+       * @brief - Interface method called at each frame when
+       *          the resume method has been called.
+       * @param elapsed - the elapsed time since the last call.
+       * @return - `true` in case the program should continue
+       *           running.
+       */
       bool
-      onResume(float elapsed) override;
-
-      void
-      onInputs(const controls::State& c,
-               const CoordinateFrame& cf) override;
+      onResume(float elapsed);
 
       /**
        * @brief - Used to draw the tile referenced by the input
@@ -135,6 +172,17 @@ namespace tdef {
     private:
 
       /**
+       * @brief - Convenience enumeration describing the state of the
+       *          game. It allows to correctly handle transitions.
+       */
+      enum class State {
+        Running,
+        Pausing,
+        Paused,
+        Resuming
+      };
+
+      /**
        * @brief - The game managed by this application.
        */
       GameShPtr m_game;
@@ -143,7 +191,13 @@ namespace tdef {
        * @brief - The current state of the game: this is used
        *          to adapt what's displayed.
        */
-      GameStateShPtr m_state;
+      GameStateShPtr m_gameUI;
+
+      /**
+       * @brief - Indicatesthe current state of the simulation
+       *          supported by this app.
+       */
+      State m_state;
 
       /**
        * @brief - Defines the list of menus available for

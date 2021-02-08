@@ -65,11 +65,17 @@ namespace tdef {
       }
     ),
 
-    m_statusMenu(nullptr),
-    m_mLives(nullptr),
+    m_statusDisplay(StatusDisplay{
+      nullptr, // main
 
-    m_mGold(nullptr),
-    m_goldEarnedSlot(-1),
+      nullptr, // lives
+      nullptr, // gold
+
+      nullptr, // play
+      nullptr, // pause
+
+      -1       // goldEarnedSlot
+    }),
 
     m_tDisplay(),
     m_mDisplay(),
@@ -92,13 +98,13 @@ namespace tdef {
 
     // Register this item as a listener of the gold
     // earned signal.
-    m_goldEarnedSlot = m_world->onGoldEarned.connect_member<Game>(this, &Game::updateGold);
+    m_statusDisplay.goldEarnedSlot = m_world->onGoldEarned.connect_member<Game>(this, &Game::updateGold);
   }
 
   void
   Game::enable(bool enable) {
-    if (m_statusMenu != nullptr) {
-      m_statusMenu->setVisible(enable);
+    if (m_statusDisplay.main != nullptr) {
+      m_statusDisplay.main->setVisible(enable);
     }
 
     m_state.disabled = !enable;
@@ -320,7 +326,7 @@ namespace tdef {
     m_world->reset(file);
 
     // And reset menus.
-    m_statusMenu->setVisible(true);
+    m_statusDisplay.main->setVisible(true);
     m_buildings->setVisible(true);
 
     m_tDisplay.main->setVisible(false);
@@ -364,12 +370,12 @@ namespace tdef {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
     const olc::vi2d pos;
-    const olc::vf2d size(dims.x, 20);
+    const olc::vi2d size(dims.x, 20);
 
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
 
-    m_statusMenu = std::make_shared<Menu>(pos, size, "sMenu", bg, fg, menu::Layout::Horizontal, false, false);
+    m_statusDisplay.main = std::make_shared<Menu>(pos, size, "sMenu", bg, fg, menu::Layout::Horizontal, false, false);
 
     // Adapt color for the sub menus background.
     const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
@@ -377,20 +383,33 @@ namespace tdef {
 
     // Gold amount.
     fg = menu::newTextContent("Gold: " + std::to_string(m_state.gold));
-    m_mGold = std::make_shared<Menu>(pos, size, "gold", bg, fg, menu::Layout::Horizontal, false, false);
-    m_statusMenu->addMenu(m_mGold);
+    m_statusDisplay.gold = std::make_shared<Menu>(pos, size, "gold", bg, fg, menu::Layout::Horizontal, false, false);
+    m_statusDisplay.main->addMenu(m_statusDisplay.gold);
 
     // Lives status.
     fg = menu::newTextContent("Lives: " + std::to_string(m_state.lives));
-    m_mLives = std::make_shared<Menu>(pos, size, "lives", bg, fg, menu::Layout::Horizontal, false, false);
-    m_statusMenu->addMenu(m_mLives);
+    m_statusDisplay.lives = std::make_shared<Menu>(pos, size, "lives", bg, fg, menu::Layout::Horizontal, false, false);
+    m_statusDisplay.main->addMenu(m_statusDisplay.lives);
 
     // Wave count.
     fg = menu::newTextContent("Wave: 1");
     MenuShPtr sm = std::make_shared<Menu>(pos, size, "wave", bg, fg, menu::Layout::Horizontal, false, false);
-    m_statusMenu->addMenu(sm);
+    m_statusDisplay.main->addMenu(sm);
 
-    return m_statusMenu;
+    // Pause button.
+    olc::vi2d fSize(50, size.y);
+    fg = menu::newTextContent("Pause");
+    fg.expand = false;
+    m_statusDisplay.pause = std::make_shared<Menu>(pos, fSize, "pause", bg, fg, menu::Layout::Horizontal, false, false);
+    m_statusDisplay.main->addMenu(m_statusDisplay.pause);
+
+    // Play button.
+    fg = menu::newTextContent("Play");
+    fg.expand = false;
+    m_statusDisplay.play = std::make_shared<Menu>(pos, fSize, "play", bg, fg, menu::Layout::Horizontal, false, false);
+    m_statusDisplay.main->addMenu(m_statusDisplay.play);
+
+    return m_statusDisplay.main;
   }
 
   MenuShPtr
@@ -398,7 +417,7 @@ namespace tdef {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::Transparent);
     const olc::vi2d pos(0, 20);
-    const olc::vf2d size(50, dims.y - 20);
+    const olc::vi2d size(50, dims.y - 20);
 
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
@@ -482,7 +501,7 @@ namespace tdef {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
     const olc::vi2d pos(dims.x - 250, 20);
-    const olc::vf2d size(250, dims.y - 20 - 50);
+    const olc::vi2d size(250, dims.y - 20 - 50);
 
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
@@ -539,7 +558,7 @@ namespace tdef {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
     const olc::vi2d pos(dims.x - 150, 20);
-    const olc::vf2d size(150, dims.y - 20 - 50);
+    const olc::vi2d size(150, dims.y - 20 - 50);
 
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
@@ -581,7 +600,7 @@ namespace tdef {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
     const olc::vi2d pos(dims.x - 150, 20);
-    const olc::vf2d size(150, dims.y - 20 - 50);
+    const olc::vi2d size(150, dims.y - 20 - 50);
 
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
@@ -611,7 +630,7 @@ namespace tdef {
     // Constants.
     const olc::Pixel bgc(20, 20, 20, alpha::SemiOpaque);
     const olc::vi2d pos(dims.x - 150, 20);
-    const olc::vf2d size(150, dims.y - 20 - 50);
+    const olc::vi2d size(150, dims.y - 20 - 50);
 
     menu::BackgroundDesc bg = menu::newColoredBackground(bgc);
     menu::MenuContentDesc fg = menu::newTextContent("");
@@ -776,10 +795,10 @@ namespace tdef {
   Game::updateUI() {
     // Update status menu.
     int v = static_cast<int>(m_state.lives);
-    m_mLives->setText("Lives: " + std::to_string(v));
+    m_statusDisplay.lives->setText("Lives: " + std::to_string(v));
 
     v = static_cast<int>(m_state.gold);
-    m_mGold->setText("Gold: " + std::to_string(v));
+    m_statusDisplay.gold->setText("Gold: " + std::to_string(v));
 
     // Update display values for visible menus.
     if (m_tDisplay.tower != nullptr) {

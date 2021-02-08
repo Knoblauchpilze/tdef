@@ -37,7 +37,7 @@ namespace tdef {
        *                 subsystem.
        */
       SimpleMenu(const olc::vi2d& pos,
-                 const olc::vf2d& size,
+                 const olc::vi2d& size,
                  const menu::BackgroundDesc& bg,
                  const menu::MenuContentDesc& fg,
                  const menu::RegisterAction& cb,

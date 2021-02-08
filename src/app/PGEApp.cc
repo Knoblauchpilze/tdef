@@ -173,7 +173,9 @@ namespace tdef {
       m_frame->zoomOut(GetMousePos());
     }
 
-    // Handle inputs.
+    // Handle inputs. Note that for keys apart for the
+    // motion keys (or commonly used as so) we want to
+    // react on the released event only.
     olc::HWButton b = GetKey(olc::RIGHT);
     m_controls.keys[controls::keys::Right] = b.bPressed || b.bHeld;
 
@@ -190,7 +192,7 @@ namespace tdef {
     m_controls.keys[controls::keys::Space] = b.bPressed || b.bHeld;
 
     b = GetKey(olc::P);
-    m_controls.keys[controls::keys::P] = b.bPressed || b.bHeld;
+    m_controls.keys[controls::keys::P] = b.bReleased;
 
     b = GetKey(olc::TAB),
     m_controls.tab = b.bReleased;

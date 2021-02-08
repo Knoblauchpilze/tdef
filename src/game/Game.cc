@@ -378,7 +378,7 @@ namespace tdef {
     m_statusDisplay.main = std::make_shared<Menu>(pos, size, "sMenu", bg, fg, menu::Layout::Horizontal, false, false);
 
     // Adapt color for the sub menus background.
-    const olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
+    olc::Pixel smbgc(20, 20, 20, alpha::SemiOpaque);
     bg = menu::newColoredBackground(smbgc);
 
     // Gold amount.
@@ -397,16 +397,39 @@ namespace tdef {
     m_statusDisplay.main->addMenu(sm);
 
     // Pause button.
-    olc::vi2d fSize(50, size.y);
-    fg = menu::newTextContent("Pause");
+    olc::vi2d fSize(25, size.y);
+    bg = menu::newColoredBackground(olc::WHITE);
+    fg = menu::newImageContent("data/img/pause.png", fSize);
     fg.expand = false;
-    m_statusDisplay.pause = std::make_shared<Menu>(pos, fSize, "pause", bg, fg, menu::Layout::Horizontal, false, false);
+    m_statusDisplay.pause = std::make_shared<SimpleMenu>(
+      pos, fSize, bg, fg,
+      [this](std::vector<ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<SimpleAction>(
+            [this](Game& g) {
+              g.pause();
+            }
+          )
+        );
+      }
+    );
     m_statusDisplay.main->addMenu(m_statusDisplay.pause);
 
     // Play button.
-    fg = menu::newTextContent("Play");
+    fg = menu::newImageContent("data/img/play.png", fSize);
     fg.expand = false;
-    m_statusDisplay.play = std::make_shared<Menu>(pos, fSize, "play", bg, fg, menu::Layout::Horizontal, false, false);
+    m_statusDisplay.play = std::make_shared<SimpleMenu>(
+      pos, fSize, bg, fg,
+      [this](std::vector<ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<SimpleAction>(
+            [this](Game& g) {
+              g.resume();
+            }
+          )
+        );
+      }
+    );
     m_statusDisplay.main->addMenu(m_statusDisplay.play);
 
     return m_statusDisplay.main;

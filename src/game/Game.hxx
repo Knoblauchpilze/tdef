@@ -74,14 +74,14 @@ namespace tdef {
 
   inline
   void
-  Game::pause(float tDelta) {
-    m_world->pause(tDelta);
+  Game::pause() {
+    m_world->pause();
   }
 
   inline
   void
-  Game::resume(float tDelta) {
-    m_world->resume(tDelta);
+  Game::resume() {
+    m_world->resume();
   }
 
   inline

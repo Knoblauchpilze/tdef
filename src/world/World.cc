@@ -329,12 +329,12 @@ namespace tdef {
 
   void
   World::generate() {
-    static constexpr int sk_spawners = 3;
-    static constexpr int sk_walls = 2;
-    static constexpr int sk_portals = 1;
-    static constexpr int sk_towers = 4;
+    constexpr int sk_spawners = 3;
+    constexpr int sk_walls = 2;
+    constexpr int sk_portals = 1;
+    constexpr int sk_towers = 4;
 
-    static constexpr int sk_mobs = 1;
+    constexpr int sk_mobs = 1;
 
     // Assume a certain width and height to
     // prevent collision.

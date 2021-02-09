@@ -5,22 +5,22 @@ namespace tdef {
   namespace mobs {
 
     namespace jet {
-      static constexpr bool poisonable = true;
-      static constexpr bool slowable = false;
-      static constexpr bool stunnable = false;
+      constexpr bool poisonable = true;
+      constexpr bool slowable = false;
+      constexpr bool stunnable = false;
 
-      static constexpr float bounty = 1.0f;
-      static constexpr float speed = 1.20f;
-      static constexpr float acceleration = 1.0f;
-      static constexpr float lives = 1.0f;
-      static constexpr float exp = 1.0f;
+      constexpr float bounty = 1.0f;
+      constexpr float speed = 1.20f;
+      constexpr float acceleration = 1.0f;
+      constexpr float lives = 1.0f;
+      constexpr float exp = 1.0f;
 
-      static constexpr float attack = 0.2f;
-      static constexpr float attackSpeed = 0.5f;
+      constexpr float attack = 0.2f;
+      constexpr float attackSpeed = 0.5f;
 
-      static constexpr float health = 0.8f;
-      static constexpr float shield = 0.0f;
-      static constexpr float shieldEfficiency = 0.0f;
+      constexpr float health = 0.8f;
+      constexpr float shield = 0.0f;
+      constexpr float shieldEfficiency = 0.0f;
 
       Mob::MProps
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {

@@ -293,16 +293,19 @@ namespace tdef {
     // Create each option.
     SimpleMenuShPtr m = generateScreenOption("Resume", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
     m->setSimpleAction(
-      [this](Game& /*g*/) {
+      [this](Game& g) {
         setScreen(game::Screen::Game);
+        g.togglePause(false);
       }
     );
     m_pauseScreen->addMenu(m);
 
     m = generateScreenOption("Save game", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
     m->setSimpleAction(
-      [this](Game& /*g*/) {
+      [this](Game& g) {
         setScreen(game::Screen::Game);
+        g.save(getWorldFile());
+        g.togglePause(false);
       }
     );
     m_pauseScreen->addMenu(m);
@@ -310,7 +313,6 @@ namespace tdef {
     m = generateScreenOption("Back to main screen", sk_menuBGColor, sk_menuTextColor, sk_menuTextColorHighlight);
     m->setSimpleAction(
       [this](Game& /*g*/) {
-        // Assign the correct screen and terminate the game.
         setScreen(game::Screen::Home);
       }
     );

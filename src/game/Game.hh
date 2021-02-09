@@ -198,13 +198,14 @@ namespace tdef {
        *          the pause and resume operation for this
        *          game. It will automatically disable the
        *          menu if needed or make it visible again.
-       * @param forceUI - `true` in case the UI shoudl be
-       *                  forced to be visible based on
-       *                  whether or not the game is set
-       *                  to pause.
+       * @param paused - `true` in case the desired state
+       *                 after executing this method is
+       *                 paused and `false` otherwise (i.e.
+       *                 if the desired state is actually
+       *                 running).
        */
       void
-      togglePause(bool forceUI);
+      togglePause(bool paused);
 
       /**
        * @brief - Used to indicate that the world should be
@@ -223,6 +224,15 @@ namespace tdef {
        */
       void
       resume();
+
+      /**
+       * @brief - Used to perform a save operation on this world's
+       *          data to the specified file.
+       * @param file - the name of the file into which the world's
+       *               data should be saved.
+       */
+      void
+      save(const std::string& file) const;
 
     private:
 

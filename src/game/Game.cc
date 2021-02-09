@@ -56,7 +56,7 @@ namespace tdef {
     m_state(
       State{
         true,                  // paused
-        false,                 // disabled
+        true,                  // disabled
         false,                 // terminated
         InfoPanelStatus::None, // infoState
         false,                 // wallBuilding
@@ -88,13 +88,8 @@ namespace tdef {
   {
     setService("game");
 
-    # define WORLD_FROM_FILE
-# ifdef WORLD_FROM_FILE
-    m_world = std::make_shared<World>("data/worlds/level_1.lvl");
-# else
+    // By default a new world is generated.
     m_world = std::make_shared<World>(100);
-# endif
-
     m_loc = m_world->locator();
 
     // Register this item as a listener of the gold
@@ -342,28 +337,33 @@ namespace tdef {
     // the menu.
     bool alive = (m_state.lives > 0);
     if (!alive) {
-      enable(false);
+      togglePause(true);
     }
 
     return alive;
   }
 
   void
-  Game::togglePause(bool forceUI) {
-    // Update paused status.
-    m_state.paused = !m_state.paused;
+  Game::togglePause(bool paused) {
+    // Call the correct method based on the current state
+    // and the desired one. This might mean not changing
+    // the state at all.
+    if (m_state.paused != paused) {
+      if (m_state.paused) {
+        resume();
+      }
+      else {
+        pause();
+      }
+    }
 
-    // Propagate info to the world.
-    if (m_state.paused) {
-      m_world->pause();
-    }
-    else {
-      m_world->resume();
-    }
+    enable(!m_state.paused);
+  }
 
-    if (forceUI) {
-      enable(!m_state.paused);
-    }
+  void
+  Game::save(const std::string& file) const {
+    // TODO: Handle save.
+    log("Should save the world to \"" + file + "\"", utils::Level::Error);
   }
 
   MenuShPtr
@@ -817,31 +817,13 @@ namespace tdef {
 
   void
   Game::enable(bool enable) {
-    if (m_statusDisplay.main != nullptr) {
-      m_statusDisplay.main->setVisible(enable);
-    }
-
     m_state.disabled = !enable;
 
-    // Only reenable menus (i.e. `enable = true`) in
-    // case the information status indicates that it
-    // was indeed displayed.
-    bool st = (enable && !m_state.disabled);
-    if (m_tDisplay.main != nullptr) {
-      m_tDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Tower);
+    if (m_state.disabled) {
+      log("Disabled game UI", utils::Level::Verbose);
     }
-    if (m_mDisplay.main != nullptr) {
-      m_mDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Mob);
-    }
-    if (m_sDisplay.main != nullptr) {
-      m_sDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Spawner);
-    }
-    if (m_wDisplay.main != nullptr) {
-      m_wDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Wall);
-    }
-
-    if (m_buildings != nullptr) {
-      m_buildings->setVisible(st);
+    else {
+      log("Enabled game UI", utils::Level::Verbose);
     }
   }
 

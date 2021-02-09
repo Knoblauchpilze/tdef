@@ -65,8 +65,11 @@ namespace tdef {
     }
 
     if (c.keys[controls::keys::P]) {
-      // Switch screen to pause.
-      m_game->togglePause(true);
+      // Switch screen to pause or back to game
+      // screen.
+      bool paused = (m_gameUI->getScreen() == game::Screen::Pause);
+      m_game->togglePause(!paused);
+      m_gameUI->setScreen(paused ? game::Screen::Game : game::Screen::Pause);
     }
   }
 

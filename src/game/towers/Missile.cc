@@ -15,7 +15,7 @@ namespace tdef {
 
       constexpr float attackSpeed = 0.28f;
       constexpr float rotation = utils::degToRad(45.0f);
-      constexpr float aimSpeed = 12.0f;
+      constexpr float aimSpeed = infinite_aim_speed;
       constexpr float projectileSpeed = 1.8f;
       constexpr float accuracy = 1.0f;
 

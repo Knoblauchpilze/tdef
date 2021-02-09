@@ -10,7 +10,6 @@ namespace tdef {
 
     m_game(nullptr),
     m_gameUI(nullptr),
-    m_state(State::Paused),
 
     m_menus(),
 
@@ -22,28 +21,16 @@ namespace tdef {
 
   bool
   TDefApp::onFrame(float fElapsed) {
-    bool quit = false;
+    if (m_gameUI->getScreen() == game::Screen::Game) {
+      bool gameOver = !m_game->step(fElapsed);
 
-    switch (m_state) {
-      case State::Running:
-        quit = onStep(fElapsed);
-        break;
-      case State::Pausing:
-        quit = onPause(fElapsed);
-        m_state = State::Paused;
-        break;
-      case State::Resuming:
-        quit = onResume(fElapsed);
-        m_state = State::Running;
-        break;
-      case State::Paused:
-        quit = onPaused(fElapsed);
-        break;
-      default:
-        break;
+      // Display the game over menu if needed.
+      if (gameOver) {
+        m_gameUI->setScreen(game::Screen::GameOver);
+      }
     }
 
-    return quit;
+    return m_game->terminated();
   }
 
   void
@@ -78,18 +65,8 @@ namespace tdef {
     }
 
     if (c.keys[controls::keys::P]) {
-      switch (m_state) {
-        case State::Running:
-        case State::Resuming:
-          m_state = State::Pausing;
-          break;
-        case State::Paused:
-          m_state = State::Resuming;
-          break;
-        case State::Pausing:
-        default:
-          break;
-      }
+      // Switch screen to pause.
+      m_game->togglePause(true);
     }
   }
 
@@ -105,11 +82,6 @@ namespace tdef {
     // Generate menus and register them.
     m_menus = m_game->generateMenus(dims);
     m_gameUI = std::make_shared<GameState>(dims, game::Screen::Home);
-
-    // As we're on the home screen at the beginning, disable
-    // menus so we can't do anything weird while selecting a
-    // game.
-    m_game->enable(false);
   }
 
   void
@@ -428,21 +400,6 @@ namespace tdef {
     }
 
     SetPixelMode(olc::Pixel::NORMAL);
-  }
-
-  bool
-  TDefApp::onStep(float elapsed) {
-    if (m_gameUI->getScreen() == game::Screen::Game) {
-      bool gameOver = !m_game->step(elapsed);
-
-      // Display the game over menu if needed.
-      if (gameOver) {
-        m_game->enable(false);
-        m_gameUI->setScreen(game::Screen::GameOver);
-      }
-    }
-
-    return m_game->terminated();
   }
 
 }

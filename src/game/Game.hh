@@ -26,15 +26,6 @@ namespace tdef {
       ~Game();
 
       /**
-       * @brief - Used to enable or disable the menus that
-       *          compose the game. This allows to easily
-       *          hide any game related component.
-       * @param enable - `true` if the menus are enabled.
-       */
-      void
-      enable(bool enable);
-
-      /**
        * @brief - Used to perform the creation of the menus
        *          allowing to control the world wrapped by
        *          this game.
@@ -203,15 +194,32 @@ namespace tdef {
       step(float tDelta);
 
       /**
-       * @brief - Pause the simulation of the world wrapped
-       *          by this game.
+       * @brief - Performs the needed operation to handle
+       *          the pause and resume operation for this
+       *          game. It will automatically disable the
+       *          menu if needed or make it visible again.
+       * @param forceUI - `true` in case the UI shoudl be
+       *                  forced to be visible based on
+       *                  whether or not the game is set
+       *                  to pause.
+       */
+      void
+      togglePause(bool forceUI);
+
+      /**
+       * @brief - Used to indicate that the world should be
+       *          paused. Time based entities and actions
+       *          should take actions to correctly resume at
+       *          a later time.
        */
       void
       pause();
 
       /**
-       * @brief - Resume the simulation of the world wrapped
-       *          by the game.
+       * @brief - Used to indicate that the world should be
+       *          resuming its activity. Time based entities
+       *          should take actions to be resuming their
+       *          pathes, motions, etc.
        */
       void
       resume();
@@ -342,6 +350,15 @@ namespace tdef {
        */
       void
       updateGold(float earned);
+
+      /**
+       * @brief - Used to enable or disable the menus that
+       *          compose the game. This allows to easily
+       *          hide any game related component.
+       * @param enable - `true` if the menus are enabled.
+       */
+      void
+      enable(bool enable);
 
       /**
        * @brief - Used during the step function and by any process
@@ -505,6 +522,14 @@ namespace tdef {
        *          should be interpreted or not.
        */
       struct State {
+        // Defines whether this world is paused (i.e.
+        // internal attributes of the mobs/blocks/etc
+        // have already been updated to reflect the
+        // pause status) or not. This allows to react
+        // to consecutive pause requests and prevent
+        // weird behaviors to occur.
+        bool paused;
+
         // Whether or not the UI is disabled.
         bool disabled;
 

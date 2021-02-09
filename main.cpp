@@ -15,9 +15,7 @@
 
 // TODO: Some mobs seem to have really high speed.
 // TODO: Custom behaviors for towers.
-// TODO: Save and load game from file.
 // TODO: Handle targetting mode.
-// TODO: Create Pause menu.
 // TODO: Attack speed of missiles very slow ??
 
 int main(int /*argc*/, char** /*argv*/) {

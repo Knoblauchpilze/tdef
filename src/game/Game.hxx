@@ -16,6 +16,12 @@ namespace tdef {
   inline
   void
   Game::setTowerType(const towers::Type& type) {
+    // Prevent actions to happen in case the UI is disabled.
+    if (m_state.disabled) {
+      log("Ignoring tower type as game is disabled", utils::Level::Verbose);
+      return;
+    }
+
     log("Set tower type to " + towers::toString(type), utils::Level::Info);
     m_state.tType = std::make_shared<towers::Type>(type);
     m_state.wallBuilding = false;
@@ -24,6 +30,11 @@ namespace tdef {
   inline
   void
   Game::allowWallBuilding() {
+    // Prevent actions to happen in case the UI is disabled.
+    if (m_state.disabled) {
+      return;
+    }
+
     m_state.tType.reset();
     m_state.wallBuilding = true;
   }
@@ -44,21 +55,25 @@ namespace tdef {
   inline
   void
   Game::pause() {
+    // Do nothing in case the game is already paused.
     if (m_state.paused) {
       return;
     }
 
-    togglePause(false);
+    m_world->pause();
+    m_state.paused = true;
   }
 
   inline
   void
   Game::resume() {
+    // Do nothing in case the game is already running.
     if (!m_state.paused) {
       return;
     }
 
-    togglePause(false);
+    m_world->resume();
+    m_state.paused = false;
   }
 
   inline

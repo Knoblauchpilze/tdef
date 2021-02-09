@@ -16,7 +16,6 @@
 // TODO: Some mobs seem to have really high speed.
 // TODO: Custom behaviors for towers.
 // TODO: Handle targetting mode.
-// TODO: Attack speed of missiles very slow ??
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

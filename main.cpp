@@ -17,12 +17,7 @@
 // TODO: Custom behaviors for towers.
 // TODO: Save and load game from file.
 // TODO: Handle targetting mode.
-// TODO: The `Pause`, `Step` and `Resume` mode of
-// the PGEApp are not really suited because the
-// TDefApp can't influence on that which means
-// that as soon as the simulation is started once
-// a new load of another game will also be started.
-// We now only need to add the Pause menu.
+// TODO: Create Pause menu.
 // TODO: Attack speed of missiles very slow ??
 
 int main(int /*argc*/, char** /*argv*/) {

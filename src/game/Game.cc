@@ -55,6 +55,7 @@ namespace tdef {
     m_loc(nullptr),
     m_state(
       State{
+        true,                  // paused
         false,                 // disabled
         false,                 // terminated
         InfoPanelStatus::None, // infoState
@@ -99,36 +100,6 @@ namespace tdef {
     // Register this item as a listener of the gold
     // earned signal.
     m_statusDisplay.goldEarnedSlot = m_world->onGoldEarned.connect_member<Game>(this, &Game::updateGold);
-  }
-
-  void
-  Game::enable(bool enable) {
-    if (m_statusDisplay.main != nullptr) {
-      m_statusDisplay.main->setVisible(enable);
-    }
-
-    m_state.disabled = !enable;
-
-    // Only reenable menus (i.e. `enable = true`) in
-    // case the information status indicates that it
-    // was indeed displayed.
-    bool st = (enable && !m_state.disabled);
-    if (m_tDisplay.main != nullptr) {
-      m_tDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Tower);
-    }
-    if (m_mDisplay.main != nullptr) {
-      m_mDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Mob);
-    }
-    if (m_sDisplay.main != nullptr) {
-      m_sDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Spawner);
-    }
-    if (m_wDisplay.main != nullptr) {
-      m_wDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Wall);
-    }
-
-    if (m_buildings != nullptr) {
-      m_buildings->setVisible(st);
-    }
   }
 
   std::vector<MenuShPtr>
@@ -312,6 +283,7 @@ namespace tdef {
   void
   Game::reset(const std::string& file) {
     // Reset game state.
+    m_state.paused = true;
     m_state.disabled = false;
     // Note that the `terminated` is only set to `true` if the
     // user wants to exit the game so the next line is probably
@@ -344,6 +316,11 @@ namespace tdef {
 
   bool
   Game::step(float tDelta) {
+    // When the game is paused it is not over yet.
+    if (m_state.paused) {
+      return true;
+    }
+
     // Step the world.
     m_world->step(tDelta);
 
@@ -361,8 +338,32 @@ namespace tdef {
     updateUI();
 
     // The game continues as long as there are some
-    // lives left.
-    return m_state.lives > 0;
+    // lives left. In case the game is over, disable
+    // the menu.
+    bool alive = (m_state.lives > 0);
+    if (!alive) {
+      enable(false);
+    }
+
+    return alive;
+  }
+
+  void
+  Game::togglePause(bool forceUI) {
+    // Update paused status.
+    m_state.paused = !m_state.paused;
+
+    // Propagate info to the world.
+    if (m_state.paused) {
+      m_world->pause();
+    }
+    else {
+      m_world->resume();
+    }
+
+    if (forceUI) {
+      enable(!m_state.paused);
+    }
   }
 
   MenuShPtr
@@ -812,6 +813,36 @@ namespace tdef {
 
     // Register the wall as the one being followed.
     m_wDisplay.wall = w;
+  }
+
+  void
+  Game::enable(bool enable) {
+    if (m_statusDisplay.main != nullptr) {
+      m_statusDisplay.main->setVisible(enable);
+    }
+
+    m_state.disabled = !enable;
+
+    // Only reenable menus (i.e. `enable = true`) in
+    // case the information status indicates that it
+    // was indeed displayed.
+    bool st = (enable && !m_state.disabled);
+    if (m_tDisplay.main != nullptr) {
+      m_tDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Tower);
+    }
+    if (m_mDisplay.main != nullptr) {
+      m_mDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Mob);
+    }
+    if (m_sDisplay.main != nullptr) {
+      m_sDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Spawner);
+    }
+    if (m_wDisplay.main != nullptr) {
+      m_wDisplay.main->setVisible(st && m_state.infoState == InfoPanelStatus::Wall);
+    }
+
+    if (m_buildings != nullptr) {
+      m_buildings->setVisible(st);
+    }
   }
 
   void

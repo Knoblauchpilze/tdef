@@ -59,28 +59,6 @@ namespace tdef {
   }
 
   inline
-  bool
-  TDefApp::onPause(float /*elapsed*/) {
-    m_game->pause();
-    m_game->enable(false);
-    return m_game->terminated();
-  }
-
-  inline
-  bool
-  TDefApp::onPaused(float /*elapsed*/) {
-    return m_game->terminated();
-  }
-
-  inline
-  bool
-  TDefApp::onResume(float /*elapsed*/) {
-    m_game->resume();
-    m_game->enable(true);
-    return m_game->terminated();
-  }
-
-  inline
   void
   TDefApp::drawSprite(const SpriteDesc& t, const CoordinateFrame& cf) {
     olc::vf2d p = cf.tileCoordsToPixels(t.x, t.y, t.loc, t.radius);

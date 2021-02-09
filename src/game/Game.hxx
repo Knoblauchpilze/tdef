@@ -42,6 +42,26 @@ namespace tdef {
   }
 
   inline
+  void
+  Game::pause() {
+    if (m_state.paused) {
+      return;
+    }
+
+    togglePause(false);
+  }
+
+  inline
+  void
+  Game::resume() {
+    if (!m_state.paused) {
+      return;
+    }
+
+    togglePause(false);
+  }
+
+  inline
   std::vector<world::ItemEntry>
   Game::getVisible(float xMin,
                    float yMin,
@@ -70,18 +90,6 @@ namespace tdef {
   world::Projectile
   Game::projectile(int id) const noexcept {
     return m_loc->projectile(id);
-  }
-
-  inline
-  void
-  Game::pause() {
-    m_world->pause();
-  }
-
-  inline
-  void
-  Game::resume() {
-    m_world->resume();
   }
 
   inline

@@ -70,6 +70,7 @@ namespace tdef {
     m_minRange(props.minRange),
     m_maxRange(props.maxRange),
     m_aoeRadius(props.aoeRadius),
+    m_targetMode(props.targetting),
 
     m_shooting(
       ShootingData{
@@ -207,6 +208,9 @@ namespace tdef {
     m_minRange = pp.minRange;
     m_maxRange = pp.maxRange;
     m_aoeRadius = pp.aoeRadius;
+
+    in >> i;
+    m_targetMode = static_cast<towers::Targetting>(i);
 
     m_shooting.shootAngle = pp.shootAngle;
     m_shooting.projectileSpeed = pp.projectileSpeed;
@@ -346,14 +350,17 @@ namespace tdef {
 
       if (m_target->isDead()) {
         m_target.reset();
+        m_shooting.aiming = false;
       }
 
       if (m_target != nullptr && m_target->isDeleted()) {
         m_target.reset();
+        m_shooting.aiming = false;
       }
 
       if (d < m_minRange(m_exp.level) || d > m_maxRange(m_exp.level)) {
         m_target.reset();
+        m_shooting.aiming = false;
       }
     }
 
@@ -367,11 +374,13 @@ namespace tdef {
       pd.pos = m_pos;
       pd.minRange = m_minRange(m_exp.level);
       pd.maxRange = m_maxRange(m_exp.level);
+      pd.mode = m_targetMode;
 
       m_target = m_processes.pickMob(info, pd);
 
       if (m_target == nullptr) {
         // No mobs are visible, nothing to do.
+        m_shooting.aiming = false;
         return false;
       }
     }

@@ -223,6 +223,48 @@ namespace tdef {
   }
 
   void
+  Game::toggleTowerTargetMode() {
+    // Make sure there's a tower to update.
+    if (m_tDisplay.tower == nullptr) {
+      log(
+        "Attempting to change target mode with no active tower",
+        utils::Level::Error
+      );
+
+      return;
+    }
+
+    // Determine the next target mode to assign
+    // to the tower.
+    const towers::Targetting& cur = m_tDisplay.tower->getTargetMode();
+    towers::Targetting next = cur;
+
+    switch (cur) {
+      case towers::Targetting::First:
+        next = towers::Targetting::Last;
+        break;
+      case towers::Targetting::Last:
+        next = towers::Targetting::Strongest;
+        break;
+      case towers::Targetting::Strongest:
+        next = towers::Targetting::Weak;
+        break;
+      case towers::Targetting::Weak:
+        next = towers::Targetting::Closest;
+        break;
+      case towers::Targetting::Closest:
+      default:
+        // Make sure to come back to a known value.
+        next = towers::Targetting::First;
+        break;
+    }
+
+    m_tDisplay.tower->setTargetMode(next);
+
+    updateUI();
+  }
+
+  void
   Game::sellTower() {
     // Make sure there's a tower to upgrade.
     if (m_tDisplay.tower == nullptr) {
@@ -564,8 +606,20 @@ namespace tdef {
     m_tDisplay.main->addMenu(m_tDisplay.sell);
 
     fg = menu::newTextContent("Target mode");
-    MenuShPtr sm = std::make_shared<Menu>(pos, size, "prop2", bg, fg);
-    m_tDisplay.main->addMenu(sm);
+    m_tDisplay.targetMode = std::make_shared<SimpleMenu>(
+      pos, size,
+      bg, fg,
+      [](std::vector<ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<SimpleAction>(
+            [](Game& g) {
+              g.toggleTowerTargetMode();
+            }
+          )
+        );
+      }
+    );
+    m_tDisplay.main->addMenu(m_tDisplay.targetMode);
 
     // This menu is hidden until the user clicks on
     // a tower.
@@ -953,6 +1007,10 @@ namespace tdef {
       msg += std::to_string(static_cast<int>(std::round(tc)));
       msg += " gold)";
       m_tDisplay.sell->setText(msg);
+
+      msg = "Target mode: ";
+      msg += towers::toString(m_tDisplay.tower->getTargetMode());
+      m_tDisplay.targetMode->setText(msg);
     }
 
     if (m_mDisplay.mob != nullptr) {

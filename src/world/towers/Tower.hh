@@ -11,19 +11,6 @@ namespace tdef {
   namespace towers {
 
     /**
-     * @brief - Convenience structure defining all props
-     *          needed to perform the custom behaviors
-     *          that can be assigned to a tower. This is
-     *          only relevant for the target picking
-     *          custom data.
-     */
-    struct PickData {
-      utils::Point2f pos;
-      float minRange;
-      float maxRange;
-    };
-
-    /**
      * @brief - Defines a generic function that can be used
      *          to obtain a value for a property for a given
      *          level.
@@ -36,6 +23,115 @@ namespace tdef {
      */
     Upgradable
     buildConstantUpgradable(float value) noexcept;
+
+    /**
+     * @brief - Convenience enumeration defining the types
+     *          of towers available in the game.
+     */
+    enum class Type {
+      Basic,
+      Sniper,
+      Cannon,
+      Freezing,
+      Venom,
+      Splash,
+      Blast,
+      Multishot,
+      Minigun,
+      Antiair,
+      Tesla,
+      Missile,
+    };
+
+    /**
+     * @brief - Converts the input type value to a string
+     *          and to an "Unknown" value if the enum can
+     *          not be interpreted.
+     * @param t - the type to convert.
+     * @return - the string representation of the enum.
+     */
+    std::string
+    toString(const Type& t) noexcept;
+
+    /**
+     * @brief - Convenience enumeration defining the types
+     *          of upgrades that a tower can define.
+     */
+    enum class Upgrade {
+      Range,
+      Damage,
+      RotationSpeed,
+      AttackSpeed,
+      ProjectileSpeed,
+      FreezingPower,
+      FreezingSpeed,
+      FreezingDuration,
+      PoisonDuration,
+      StunChance,
+      StunDuration
+    };
+
+    /**
+     * @brief - Converts the input upgrade value to a string
+     *          and to an "Unknown" value if the enum can
+     *          not be interpreted.
+     * @param u - the upgrade to convert.
+     * @return - the string representation of the enum.
+     */
+    std::string
+    toString(const Upgrade& u) noexcept;
+
+    /**
+     * @brief - Convenience structure to refer to a map of
+     *          upgrades.
+     */
+    using Upgrades = std::map<Upgrade, int>;
+
+    /**
+     * @brief - Convenience enumeration defining the possible
+     *          tragetting mode for a tower.
+     */
+    enum class Targetting {
+      First,
+      Last,
+      Strongest,
+      Weak,
+      Closest
+    };
+
+    /**
+     * @brief - Converts the input targetting value to a string
+     *          and to an "Unknown" value if the enum can not be
+     *          interpreted.
+     * @param t - the targetting mode to convert.
+     * @return - the string representation of the enum.
+     */
+    std::string
+    toString(const Targetting& t) noexcept;
+
+    /**
+     * @brief - Convenience structure defining all props
+     *          needed to perform the custom behaviors
+     *          that can be assigned to a tower. This is
+     *          only relevant for the target picking
+     *          custom data.
+     */
+    struct PickData {
+      // The position of the element picking a target.
+      utils::Point2f pos;
+
+      // The minimum range below which mobs won't be
+      // considered.
+      float minRange;
+
+      // The maximum range above which mobs won't be
+      // considered.
+      float maxRange;
+
+      // The targetting mode to use when selecting a
+      // target.
+      Targetting mode;
+    };
 
     /**
      * @brief - Defines a generic function signature that
@@ -122,69 +218,6 @@ namespace tdef {
       DoDamage damage;
     };
 
-    /**
-     * @brief - Convenience enumeration defining the types
-     *          of towers available in the game.
-     */
-    enum class Type {
-      Basic,
-      Sniper,
-      Cannon,
-      Freezing,
-      Venom,
-      Splash,
-      Blast,
-      Multishot,
-      Minigun,
-      Antiair,
-      Tesla,
-      Missile,
-    };
-
-    /**
-     * @brief - Converts the input type value to a string
-     *          and to an "Unknown" value if the enum can
-     *          not be interpreted.
-     * @param t - the type to convert.
-     * @return - the string representation of the enum.
-     */
-    std::string
-    toString(const Type& t) noexcept;
-
-    /**
-     * @brief - Convenience enumeration defining the types
-     *          of upgrades that a tower can define.
-     */
-    enum class Upgrade {
-      Range,
-      Damage,
-      RotationSpeed,
-      AttackSpeed,
-      ProjectileSpeed,
-      FreezingPower,
-      FreezingSpeed,
-      FreezingDuration,
-      PoisonDuration,
-      StunChance,
-      StunDuration
-    };
-
-    /**
-     * @brief - Converts the input upgrade value to a string
-     *          and to an "Unknown" value if the enum can
-     *          not be interpreted.
-     * @param t - the upgrade to convert.
-     * @return - the string representation of the enum.
-     */
-    std::string
-    toString(const Upgrade& t) noexcept;
-
-    /**
-     * @brief - Convenience structure to refer to a map of
-     *          upgrades.
-     */
-    using Upgrades = std::map<Upgrade, int>;
-
   }
 
   class Tower: public Block {
@@ -225,6 +258,11 @@ namespace tdef {
         // inside the aoe is not configurable and depends on
         // the proximity with the center of the area.
         towers::Upgradable aoeRadius;
+
+        // The target mode for this tower. Defines how the
+        // target will be selected from the list available
+        // in the tower's range.
+        towers::Targetting targetting;
 
         // The aiming speed of the tower. The value is not
         // directly expressing a duration: instead it is used
@@ -338,6 +376,9 @@ namespace tdef {
 
       float
       getAttack() const noexcept;
+
+      const towers::Targetting&
+      getTargetMode() const noexcept;
 
       /**
        * @brief - Fetch the status of upgrades for this tower.
@@ -475,6 +516,17 @@ namespace tdef {
       void
       upgrade(const towers::Upgrade& upgrade,
               int level);
+
+      /**
+       * @brief - Used to define a new target mode for this
+       *          tower. Note that this will reset the data
+       *          for the current target possibly loosing
+       *          the benefit from keeping to target it.
+       * @param mode - the new target mode to assign to the
+       *               tower.
+       */
+      void
+      setTargetMode(const towers::Targetting& mode) noexcept;
 
       std::ostream&
       operator<<(std::ostream& out) const override;
@@ -755,6 +807,13 @@ namespace tdef {
        *          fired by this tower.
        */
       towers::Upgradable m_aoeRadius;
+
+      /**
+       * @brief - The targetting mode for the tower. This will
+       *          help defining the way to select the target
+       *          from the list of mobs picked.
+       */
+      towers::Targetting m_targetMode;
 
       /**
        * @brief - Defines the shooting data for this tower.

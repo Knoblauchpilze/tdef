@@ -50,8 +50,8 @@ namespace tdef {
 
     inline
     std::string
-    toString(const Upgrade& t) noexcept {
-      switch (t) {
+    toString(const Upgrade& u) noexcept {
+      switch (u) {
         case Upgrade::Range:
           return "Range";
         case Upgrade::Damage:
@@ -79,6 +79,25 @@ namespace tdef {
       }
     }
 
+    inline
+    std::string
+    toString(const Targetting& t) noexcept {
+      switch (t) {
+        case Targetting::First:
+          return "First";
+        case Targetting::Last:
+          return "Last";
+        case Targetting::Strongest:
+          return "Strongest";
+        case Targetting::Weak:
+          return "Weak";
+        case Targetting::Closest:
+          return "Closest";
+        default:
+          return "Unknown";
+      }
+    }
+
   }
 
   inline
@@ -99,6 +118,7 @@ namespace tdef {
 
     pp.damage = towers::buildConstantUpgradable(0.2f);
     pp.aoeRadius = towers::buildConstantUpgradable(0.0f);
+    pp.targetting = towers::Targetting::First;
 
     pp.aimSpeed = towers::buildConstantUpgradable(1.0f);
     pp.projectileSpeed = towers::buildConstantUpgradable(1.0f);
@@ -144,6 +164,12 @@ namespace tdef {
   float
   Tower::getAttack() const noexcept {
     return m_attack.damage(m_exp.level);
+  }
+
+  inline
+  const towers::Targetting&
+  Tower::getTargetMode() const noexcept {
+    return m_targetMode;
   }
 
   inline
@@ -237,6 +263,22 @@ namespace tdef {
   }
 
   inline
+  void
+  Tower::setTargetMode(const towers::Targetting& mode) noexcept {
+    // Assign the new target mode and reset the target
+    // data to allow the application of the new mode
+    // right away.
+    log(
+      "Switch target mode from " + towers::toString(m_targetMode) +
+      " to " + towers::toString(mode),
+      utils::Level::Debug
+    );
+
+    m_targetMode = mode;
+    m_target.reset();
+  }
+
+  inline
   std::ostream&
   Tower::operator<<(std::ostream& out) const {
     Block::operator<<(out);
@@ -258,6 +300,8 @@ namespace tdef {
     out << m_maxEnergy;
     out << m_energyRefill;
     out << m_attackCost;
+
+    out << static_cast<int>(m_targetMode);
 
     // Only save part of the properties related to the
     // shooting and damage: the rest can be deduced of

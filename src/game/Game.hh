@@ -77,6 +77,13 @@ namespace tdef {
       upgradeTower(const towers::Upgrade& upgrade);
 
       /**
+       * @brief - Used to trigger a modification of the tower's
+       *          target mode to a new value.
+       */
+      void
+      toggleTowerTargetMode();
+
+      /**
        * @brief - Used to trigger the selling of the tower
        *          currently displayed in the upgrade menu.
        *          The tower will then be removed from the
@@ -442,6 +449,7 @@ namespace tdef {
         MenuShPtr type;
         std::vector<GameMenuShPtr> props;
         MenuShPtr sell;
+        MenuShPtr targetMode;
 
         // `tower` defines a pointer to the tower being displayed.
         // It allows to continuously update the values displayed

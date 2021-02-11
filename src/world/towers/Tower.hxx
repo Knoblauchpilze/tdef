@@ -275,7 +275,7 @@ namespace tdef {
     );
 
     m_targetMode = mode;
-    m_target.reset();
+    m_targets.clear();
   }
 
   inline
@@ -311,8 +311,18 @@ namespace tdef {
     out << m_shooting.aimingCone;
     out << m_shooting.pauseTime;
 
-    // TODO: Handle saving of tower's target.
-    // MobShPtr m_target
+    // The targets picked by a mob will not be saved to
+    // the stream. Indeed in order to be able to reuse
+    // this information when the data is deserialized,
+    // we would need to somehow persist an identifier
+    // of the mob so that we can link it to the tower
+    // again afterwards. There is no simple way as of
+    // now. Moreover, when the game will be resumed as
+    // we restored the mob in the same position as it
+    // was we should obtain the same target selection
+    // with the tower's behavior: the only info that
+    // is lost will be the benefit of the aim time or
+    // acceleration that was already built up.
 
     log("Saved tower at " + m_pos.toString(), utils::Level::Verbose);
 

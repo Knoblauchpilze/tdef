@@ -116,25 +116,25 @@ namespace tdef {
       // process it. This can happen as we allow a
       // projectile to keep targetting a dead target
       // for the aoe.
-      if (m_target->isDeleted()) {
-        log("Mob " + mobs::toString(m_target->getType()) + " is already deleted");
+      if (wounded[id]->isDeleted()) {
+        log("Mob " + mobs::toString(wounded[id]->getType()) + " is already deleted");
         continue;
       }
 
       bool alive = wounded[id]->hit(info, d);
       if (!alive) {
         log(
-          "Killed " + mobs::toString(m_target->getType()) +
-          " at " + m_target->getPos().toString() +
-          ", earned " + std::to_string(m_target->getBounty()) + " coin(s)" +
-          " (deleted: " + std::to_string(m_target->isDead()) + ")"
+          "Killed " + mobs::toString(wounded[id]->getType()) +
+          " at " + wounded[id]->getPos().toString() +
+          ", earned " + std::to_string(wounded[id]->getBounty()) + " coin(s)" +
+          " (deleted: " + std::to_string(wounded[id]->isDead()) + ")"
         );
 
-        info.gold += m_target->getBounty();
+        info.gold += wounded[id]->getBounty();
 
         // Propagate the experience gain.
         if (m_tower != nullptr && !m_tower->isDeleted()) {
-          m_tower->gainExp(m_target->getExpReward());
+          m_tower->gainExp(wounded[id]->getExpReward());
         }
 
         continue;

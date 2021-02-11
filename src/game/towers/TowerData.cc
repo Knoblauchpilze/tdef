@@ -9,9 +9,13 @@ namespace tdef {
 
     std::vector<MobShPtr>
     basicTargetPicking(StepInfo& info, PickData& data) {
-      return std::vector<MobShPtr>{
-        info.frustum->getClosestMob(data.pos, data.maxRange, nullptr)
-      };
+      MobShPtr m = info.frustum->getClosestMob(data.pos, data.maxRange, nullptr);
+
+      if (m == nullptr) {
+        return std::vector<MobShPtr>();
+      }
+
+      return std::vector<MobShPtr>{m};
     }
 
     bool

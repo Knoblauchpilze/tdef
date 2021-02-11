@@ -87,7 +87,8 @@ namespace tdef {
     m_attack(fromProps(props)),
     m_processes(towers::generateData(m_type)),
 
-    m_target(nullptr)
+    // No targets at first.
+    m_targets()
   {
     setService("tower");
 
@@ -223,8 +224,11 @@ namespace tdef {
     m_attack = fromProps(pp);
 
     m_processes = towers::generateData(m_type);
-    // TODO: Restore tower's target.
-    // MobShPtr m_target
+    // As discussed in the serialization function we won't
+    // restore targets of this tower: we assume that the
+    // application of the tower's behavior should result in
+    // picking the same targets.
+    m_targets.clear();
 
     log("Restored tower at " + m_pos.toString(), utils::Level::Verbose);
 
@@ -237,7 +241,7 @@ namespace tdef {
     m_energy = std::min(m_energy + info.elapsed * m_energyRefill, m_maxEnergy);
 
     // Pick and align with the target.
-    if (!pickAndAlignWithTarget(info) || m_target == nullptr) {
+    if (!pickAndAlignWithTarget(info) || m_targets.empty()) {
       // Can't do anything: we didn't find a
       // target or we are not aligned with it
       // yet. The tower is not aiming anymore,
@@ -280,6 +284,7 @@ namespace tdef {
       m_shooting.aimingCone = init_aiming_cone;
     }
 
+    // TODO: Handle starting from here.
     if (m_attack.damage(m_exp.level) > 0.0f) {
       log(
         "Hitting mob " + mobs::toString(m_target->getType()) +
@@ -345,30 +350,53 @@ namespace tdef {
     // If this is the case we will make sure that
     // the distance is still less than the range
     // of the tower (so that we can shoot it).
-    if (m_target != nullptr) {
-      float d = utils::d(m_target->getPos(), getPos());
+    // This process applies to all the targets
+    // selected so far.
+    if (!m_targets.empty()) {
+      std::vector<MobShPtr>::iterator toRm;
+      toRm = std::remove_if(
+        m_targets.begin(), 
+        m_targets.end(),
+        [this](const MobShPtr m) -> bool {
+          // In case the target is already dead we
+          // will try to find a new one.
+          if (m->isDead()) {
+            return true;
+          }
 
-      if (m_target->isDead()) {
-        m_target.reset();
+          // In case the target is already deleted
+          // we will try to find a new one.
+          if (m->isDeleted()) {
+            return true;
+          }
+
+          // In case the target is closer than the
+          // min range or farther than the max range
+          // we will try to find a new one.
+          float d = utils::d(m->getPos(), getPos());
+          if (d < m_minRange(m_exp.level) || d > m_maxRange(m_exp.level)) {
+            return true;
+          }
+
+          // The target is still valid.
+          return false;
+        }
+      );
+
+      // In case at least one target was removed we
+      // will reset the aim flag.
+      if (toRm != m_targets.end()) {
         m_shooting.aiming = false;
       }
 
-      if (m_target != nullptr && m_target->isDeleted()) {
-        m_target.reset();
-        m_shooting.aiming = false;
-      }
-
-      if (d < m_minRange(m_exp.level) || d > m_maxRange(m_exp.level)) {
-        m_target.reset();
-        m_shooting.aiming = false;
-      }
+      m_targets.erase(toRm, m_targets.end());
     }
 
     // The above section might have reset the
     // target: in this case we want to find a
     // new one so that we can still spend the
     // frame trying to face it.
-    if (m_target == nullptr) {
+    if (m_targets.empty()) {
       // Find the closest mob.
       towers::PickData pd;
       pd.pos = m_pos;
@@ -376,22 +404,26 @@ namespace tdef {
       pd.maxRange = m_maxRange(m_exp.level);
       pd.mode = m_targetMode;
 
-      m_target = m_processes.pickMob(info, pd);
+      m_targets = m_processes.pickMob(info, pd);
 
-      if (m_target == nullptr) {
+      if (m_targets.empty()) {
         // No mobs are visible, nothing to do.
         m_shooting.aiming = false;
         return false;
       }
     }
 
-    // We now know that a target *is* set and
-    // that it lies within the range of the
-    // tower. We will try to align with it:
-    // this means rotating the tower until we
-    // are pointing right at the target.
-    float dx = m_target->getPos().x() - getPos().x();
-    float dy = m_target->getPos().y() - getPos().y();
+    // We now know that at least one target *is* set
+    // and that it lies within the range of the tower.
+    // We will try to align with it: this means rotating
+    // the tower until we are pointing right at the
+    // target.
+    // We will pick the first element of the targets'
+    // list to perform the aiming.
+    MobShPtr tgt = m_targets.front();
+
+    float dx = tgt->getPos().x() - getPos().x();
+    float dy = tgt->getPos().y() - getPos().y();
 
     float theta = std::atan2(dy, dx);
 
@@ -432,7 +464,9 @@ namespace tdef {
   }
 
   bool
-  Tower::attack(StepInfo& info) {
+  Tower::attack(StepInfo& info,
+                MobShPtr mob)
+  {
     // We have to distinguish between two main cases:
     //   - the tower has an infinite projectile speed.
     //   - the tower should shoot projectiles.
@@ -462,7 +496,7 @@ namespace tdef {
       ms = static_cast<int>(std::round(m_attack.pDuration(m_exp.level)));
       dd.pDuration = utils::toMilliseconds(ms);
 
-      return m_processes.damage(info, m_target, dd);
+      return m_processes.damage(info, mob, dd);
     }
 
     // Otherwise we need to create a projectile.
@@ -486,7 +520,7 @@ namespace tdef {
     ms = static_cast<int>(std::round(m_attack.pDuration(m_exp.level)));
     pp.poisonDuration = utils::toMilliseconds(ms);
 
-    info.spawnProjectile(std::make_shared<Projectile>(pp, this, m_target));
+    info.spawnProjectile(std::make_shared<Projectile>(pp, this, mob));
 
     // Consider that the projectile won't kill
     // the mob. This is probably false because

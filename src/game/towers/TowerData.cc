@@ -7,9 +7,11 @@
 namespace tdef {
   namespace towers {
 
-    MobShPtr
+    std::vector<MobShPtr>
     basicTargetPicking(StepInfo& info, PickData& data) {
-      return info.frustum->getClosestMob(data.pos, data.maxRange, nullptr);
+      return std::vector<MobShPtr>{
+        info.frustum->getClosestMob(data.pos, data.maxRange, nullptr)
+      };
     }
 
     bool

@@ -1,6 +1,7 @@
 #ifndef    TOWER_DATA_HH
 # define   TOWER_DATA_HH
 
+# include <vector>
 # include "Tower.hh"
 # include "Mob.hh"
 
@@ -49,9 +50,9 @@ namespace tdef {
      *          the closest mob from a position.
      * @param info - the data to use to pick a target.
      * @param data - the data to use to perform picking.
-     * @return - the picked mob.
+     * @return - the picked mobs.
      */
-    MobShPtr
+    std::vector<MobShPtr>
     basicTargetPicking(StepInfo& info, PickData& data);
 
     /**

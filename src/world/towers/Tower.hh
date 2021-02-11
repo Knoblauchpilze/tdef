@@ -135,10 +135,10 @@ namespace tdef {
 
     /**
      * @brief - Defines a generic function signature that
-     *          can be used by a tower to pick a new mob
-     *          to target.
+     *          can be used by a tower to pick new mobs to
+     *          target.
      */
-    using TargetPicker = std::function<MobShPtr(StepInfo&, PickData&)>;
+    using TargetPicker = std::function<std::vector<MobShPtr>(StepInfo&, PickData&)>;
 
     /**
      * @brief - Convenience structure defining all props
@@ -650,18 +650,20 @@ namespace tdef {
 
       /**
        * @brief - Convenience method allowing to perform the attack
-       *          of the current target given the properties of the
+       *          of the provided target given the properties of the
        *          tower.
        *          We don't verify whether the attack is possible
        *          given the current resource level and don't account
        *          for energy usage.
        * @param info - information to be able to spawn projectiles
        *               and generally handle the attack.
+       * @param mob - the mob to attack.
        * @return - the `return` value indicates whether or not the
        *           mob is still alive after the shot.
        */
       bool
-      attack(StepInfo& info);
+      attack(StepInfo& info,
+             MobShPtr mob);
 
     private:
 
@@ -832,11 +834,15 @@ namespace tdef {
       towers::Processes m_processes;
 
       /**
-       * @brief - The target for this tower. Until it is
-       *          destroyed or somehow made unavailable
-       *          we will keep locking and firing on it.
+       * @brief - The targets for this tower. Most of the towers
+       *          have only one target at any time but some others
+       *          can hit multiple enemies at once.
+       *          In case the towers expect only one target but is
+       *          assigned more we will consider this list as some
+       *          priority list where the first element will be
+       *          attacked first (and then the others).
        */
-      MobShPtr m_target;
+      std::vector<MobShPtr> m_targets;
   };
 
   using TowerShPtr = std::shared_ptr<Tower>;

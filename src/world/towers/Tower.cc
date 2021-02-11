@@ -284,41 +284,55 @@ namespace tdef {
       m_shooting.aimingCone = init_aiming_cone;
     }
 
-    // TODO: Handle starting from here.
-    if (m_attack.damage(m_exp.level) > 0.0f) {
+    // Fire a shot at each target.
+    for (unsigned id = 0u ; id < m_targets.size() ; ++id) {
+      MobShPtr m = m_targets[id];
+
+      if (m_attack.damage(m_exp.level) > 0.0f) {
+        log(
+          "Hitting mob " + mobs::toString(m->getType()) +
+          " at " + m->getPos().toString() +
+          " for " + std::to_string(m_attack.damage(m_exp.level)) + " damage" +
+          " (health: " + std::to_string(m->getHealth()) + ", " +
+          " accuracy: " + std::to_string(m_attack.accuracy(m_exp.level)) + ")",
+          utils::Level::Verbose
+        );
+      }
+
+      // Hit the mob with a devastating attack. Note that
+      // in case the attack destroys the mob it will be
+      // marked as deleted automatically. Also, note that
+      // we only want to claim the reward in case the mob
+      // is not already dead but we consider that we do
+      // attack it even if it's dead.
+      m_energy -= m_attackCost;
+      if (m->isDead() || m->isDeleted() || attack(info, m)) {
+        continue;
+      }
+
+      info.gold += m->getBounty();
+      gainExp(m->getExpReward());
+
       log(
-        "Hitting mob " + mobs::toString(m_target->getType()) +
-        " at " + m_target->getPos().toString() +
-        " for " + std::to_string(m_attack.damage(m_exp.level)) + " damage" +
-        " (health: " + std::to_string(m_target->getHealth()) + ", " +
-        " accuracy: " + std::to_string(m_attack.accuracy(m_exp.level)) + ")",
-        utils::Level::Verbose
+        "Killed " + mobs::toString(m->getType()) +
+        " at " + m->getPos().toString() +
+        ", earned " + std::to_string(m->getBounty()) + " coin(s)" +
+        ", exp is now " + std::to_string(m_exp.exp) +
+        " (level: " + std::to_string(m_exp.level) + ")"
       );
     }
 
-    // Hit the mob with a devastating attack. Note that
-    // in case the attack destroys the mob it will be
-    // marked as deleted automatically. Alos, note that
-    // we only want to claim the reward in case the mob
-    // is not already dead.
-    m_energy -= m_attackCost;
-    if (m_target->isDead() || attack(info)) {
-      return;
-    }
-
-    info.gold += m_target->getBounty();
-    gainExp(m_target->getExpReward());
-
-    log(
-      "Killed " + mobs::toString(m_target->getType()) +
-      " at " + m_target->getPos().toString() +
-      ", earned " + std::to_string(m_target->getBounty()) + " coin(s)" +
-      ", exp is now " + std::to_string(m_exp.exp) +
-      " (level: " + std::to_string(m_exp.level) + ")"
+    // Clear dead or removed targets.
+    m_targets.erase(
+      std::remove_if(
+        m_targets.begin(),
+        m_targets.end(),
+        [](const MobShPtr m) -> bool {
+          return m->isDead() || m->isDeleted();
+        }
+      ),
+      m_targets.end()
     );
-
-    // Clear the target.
-    m_target.reset();
   }
 
   void
@@ -355,7 +369,7 @@ namespace tdef {
     if (!m_targets.empty()) {
       std::vector<MobShPtr>::iterator toRm;
       toRm = std::remove_if(
-        m_targets.begin(), 
+        m_targets.begin(),
         m_targets.end(),
         [this](const MobShPtr m) -> bool {
           // In case the target is already dead we

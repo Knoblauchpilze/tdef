@@ -51,7 +51,7 @@ namespace tdef {
        */
       void
       setAction(menu::RegisterAction action);
-      
+
       /**
        * @brief - Used to define a new simple action where the
        *          process would be to push the input callback

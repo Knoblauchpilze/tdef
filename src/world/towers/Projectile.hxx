@@ -39,9 +39,17 @@ namespace tdef {
   Projectile::operator<<(std::ostream& out) const {
     WorldElement::operator<<(out);
 
-    // TODO: Handle target and tower.
+    // TODO: Handle target.
     // m_target;
-    // Tower* m_tower;
+    // We won't save the tower to the file: indeed it
+    // would require to be able to then relink in some
+    // way the re-loaded tower to this projectile. As
+    // of now we don't really have a way to do it. Not
+    // doing it means not being able to credit some XP
+    // to the tower if the projectile kills some mobs.
+    // We consider that it is a small price to pay for
+    // the convenience to not bother relinking towers
+    // and projectiles.
     out << m_speed;
     out << m_damage;
     out << m_aoeRadius;
@@ -65,9 +73,12 @@ namespace tdef {
   Projectile::operator>>(std::istream& in) {
     WorldElement::operator>>(in);
 
-    // TODO: Handle target and tower.
+    // TODO: Handle target.
     // m_target;
-    // Tower* m_tower;
+    // As explained in the serialization operation
+    // we don't save the attached tower: so we will
+    // just assign a null tower.
+    m_tower = nullptr;
     in >> m_speed;
     in >> m_damage;
     in >> m_aoeRadius;

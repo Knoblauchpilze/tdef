@@ -60,6 +60,9 @@ namespace tdef {
           return aoeRadius + 0.04f * level;
         };
 
+        pp.targetting = towers::Targetting::First;
+        pp.persistTargets = true;
+
         pp.rotation = rotation;
         pp.aimSpeed = buildConstantUpgradable(aimSpeed);
         pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);

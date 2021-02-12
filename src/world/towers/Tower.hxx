@@ -119,6 +119,7 @@ namespace tdef {
     pp.damage = towers::buildConstantUpgradable(0.2f);
     pp.aoeRadius = towers::buildConstantUpgradable(0.0f);
     pp.targetting = towers::Targetting::First;
+    pp.persistTargets = true;
 
     pp.aimSpeed = towers::buildConstantUpgradable(1.0f);
     pp.projectileSpeed = towers::buildConstantUpgradable(1.0f);

@@ -264,6 +264,10 @@ namespace tdef {
         // in the tower's range.
         towers::Targetting targetting;
 
+        // Defines whether or not the targets are persistent
+        // or should be refreshed each step.
+        bool persistTargets;
+
         // The aiming speed of the tower. The value is not
         // directly expressing a duration: instead it is used
         // to derive a duration through the following formula:
@@ -816,6 +820,13 @@ namespace tdef {
        *          from the list of mobs picked.
        */
       towers::Targetting m_targetMode;
+
+      /**
+       * @brief - Defines whether or not targets that were picked
+       *          during a step can be persisted or refreshed on
+       *          the next step.
+       */
+      bool m_persistTargets;
 
       /**
        * @brief - Defines the shooting data for this tower.

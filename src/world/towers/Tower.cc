@@ -71,6 +71,7 @@ namespace tdef {
     m_maxRange(props.maxRange),
     m_aoeRadius(props.aoeRadius),
     m_targetMode(props.targetting),
+    m_persistTargets(props.persistTargets),
 
     m_shooting(
       ShootingData{
@@ -322,17 +323,23 @@ namespace tdef {
       );
     }
 
-    // Clear dead or removed targets.
-    m_targets.erase(
-      std::remove_if(
-        m_targets.begin(),
-        m_targets.end(),
-        [](const MobShPtr m) -> bool {
-          return m->isDead() || m->isDeleted();
-        }
-      ),
-      m_targets.end()
-    );
+    // Clear dead or removed targets or all of them
+    // in case the tower does not persist targets.
+    if (m_persistTargets) {
+      m_targets.clear();
+    }
+    else {
+      m_targets.erase(
+        std::remove_if(
+          m_targets.begin(),
+          m_targets.end(),
+          [](const MobShPtr m) -> bool {
+            return m->isDead() || m->isDeleted();
+          }
+        ),
+        m_targets.end()
+      );
+    }
   }
 
   void

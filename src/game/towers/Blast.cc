@@ -58,6 +58,9 @@ namespace tdef {
         pp.damage = buildConstantUpgradable(damage);
         pp.aoeRadius = buildConstantUpgradable(aoeRadius);
 
+        pp.targetting = towers::Targetting::First;
+        pp.persistTargets = false;
+
         pp.rotation = rotation;
         pp.aimSpeed = buildConstantUpgradable(aimSpeed);
         pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);

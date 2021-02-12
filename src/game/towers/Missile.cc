@@ -60,6 +60,9 @@ namespace tdef {
           return aoeRadius + 0.045f * level;
         };
 
+        pp.targetting = towers::Targetting::First;
+        pp.persistTargets = true;
+
         pp.rotation = rotation;
         pp.aimSpeed = [](int level) {
           return aimSpeed + 0.4f * level;

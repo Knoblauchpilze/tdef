@@ -7,8 +7,7 @@ namespace tdef {
                const std::string& name):
     WorldElement(props, name),
 
-    m_orientation(props.orientation),
-    m_rotationSpeed(props.rotation)
+    m_orientation(props.orientation)
   {}
 
 }

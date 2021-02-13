@@ -14,9 +14,6 @@ namespace tdef {
       float
       getOrientation() const noexcept;
 
-      float
-      getRotationSpeed() const noexcept;
-
       std::ostream&
       operator<<(std::ostream& out) const override;
 
@@ -48,7 +45,6 @@ namespace tdef {
        */
       struct BProps: public Block::Props {
         float orientation;
-        float rotation;
       };
 
       static
@@ -77,12 +73,6 @@ namespace tdef {
        *          axis.
        */
       float m_orientation;
-
-      /**
-       * @brief - The rotation speed in radians per second for
-       *          this block.
-       */
-      float m_rotationSpeed;
   };
 
   using BlockShPtr = std::shared_ptr<Block>;

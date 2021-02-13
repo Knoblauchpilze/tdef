@@ -63,7 +63,7 @@ namespace tdef {
         pp.targetting = towers::Targetting::First;
         pp.persistTargets = true;
 
-        pp.rotation = rotation;
+        pp.rotationSpeed = buildConstantUpgradable(rotation);
         pp.aimSpeed = buildConstantUpgradable(aimSpeed);
         pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);
         pp.accuracy = buildConstantUpgradable(accuracy);

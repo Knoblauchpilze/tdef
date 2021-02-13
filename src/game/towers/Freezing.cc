@@ -2,6 +2,7 @@
 # include "Freezing.hh"
 # include <maths_utils/AngleUtils.hh>
 # include "TowerData.hh"
+# include "Locator.hh"
 
 namespace tdef {
   namespace towers {
@@ -34,11 +35,16 @@ namespace tdef {
 
       constexpr float cost = 80.0f;
 
+      std::vector<MobShPtr>
+      targetPicking(StepInfo& info, PickData& data) {
+        return info.frustum->getVisibleMobs(data.pos, data.maxRange, nullptr);
+      }
+
       Processes
       generateData(int /*level*/) noexcept {
         Processes dd;
 
-        dd.pickMob = basicTargetPicking;
+        dd.pickMob = targetPicking;
         dd.damage = basicDamaging;
 
         return dd;
@@ -61,7 +67,7 @@ namespace tdef {
         pp.targetting = towers::Targetting::First;
         pp.persistTargets = false;
 
-        pp.rotation = rotation;
+        pp.rotationSpeed = buildConstantUpgradable(rotation);
         pp.aimSpeed = buildConstantUpgradable(aimSpeed);
         pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);
         pp.accuracy = buildConstantUpgradable(accuracy);

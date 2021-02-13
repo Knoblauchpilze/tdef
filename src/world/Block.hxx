@@ -14,7 +14,6 @@ namespace tdef {
     WorldElement::assignProps(pp, p, owner);
 
     pp.orientation = 0.0f;
-    pp.rotation = 3.1415926535f;
   }
 
   inline
@@ -24,17 +23,10 @@ namespace tdef {
   }
 
   inline
-  float
-  Block::getRotationSpeed() const noexcept {
-    return m_rotationSpeed;
-  }
-
-  inline
   std::ostream&
   Block::operator<<(std::ostream& out) const {
     WorldElement::operator<<(out);
     out << m_orientation;
-    out << m_rotationSpeed;
 
     log("Saved block at " + m_pos.toString(), utils::Level::Verbose);
 
@@ -46,7 +38,6 @@ namespace tdef {
   Block::operator>>(std::istream& in) {
     WorldElement::operator>>(in);
     in >> m_orientation;
-    in >> m_rotationSpeed;
 
     log("Restored block at " + m_pos.toString(), utils::Level::Verbose);
 

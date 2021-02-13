@@ -70,6 +70,7 @@ namespace tdef {
     m_minRange(props.minRange),
     m_maxRange(props.maxRange),
     m_aoeRadius(props.aoeRadius),
+    m_rotationSpeed(props.rotationSpeed),
     m_targetMode(props.targetting),
     m_persistTargets(props.persistTargets),
 
@@ -210,6 +211,7 @@ namespace tdef {
     m_minRange = pp.minRange;
     m_maxRange = pp.maxRange;
     m_aoeRadius = pp.aoeRadius;
+    m_rotationSpeed = pp.rotationSpeed;
 
     in >> i;
     m_targetMode = static_cast<towers::Targetting>(i);
@@ -325,7 +327,7 @@ namespace tdef {
 
     // Clear dead or removed targets or all of them
     // in case the tower does not persist targets.
-    if (m_persistTargets) {
+    if (!m_persistTargets) {
       m_targets.clear();
     }
     else {
@@ -395,7 +397,9 @@ namespace tdef {
           // min range or farther than the max range
           // we will try to find a new one.
           float d = utils::d(m->getPos(), getPos());
-          if (d < m_minRange(m_exp.level) || d > m_maxRange(m_exp.level)) {
+          if (d < m_minRange(fetchUpgradeLevel(towers::Upgrade::Range)) ||
+              d > m_maxRange(fetchUpgradeLevel(towers::Upgrade::Range)))
+          {
             return true;
           }
 
@@ -421,8 +425,8 @@ namespace tdef {
       // Find the closest mob.
       towers::PickData pd;
       pd.pos = m_pos;
-      pd.minRange = m_minRange(m_exp.level);
-      pd.maxRange = m_maxRange(m_exp.level);
+      pd.minRange = m_minRange(fetchUpgradeLevel(towers::Upgrade::Range));
+      pd.maxRange = m_maxRange(fetchUpgradeLevel(towers::Upgrade::Range));
       pd.mode = m_targetMode;
 
       m_targets = m_processes.pickMob(info, pd);
@@ -460,7 +464,7 @@ namespace tdef {
 
     float aDif = std::abs(dif);
 
-    float achieved = std::min(aDif, m_rotationSpeed * info.elapsed);
+    float achieved = std::min(aDif, getRotationSpeed() * info.elapsed);
     achieved = std::copysign(achieved, dif);
 
     m_orientation += achieved;
@@ -496,25 +500,25 @@ namespace tdef {
     // overload the simulation with useless objects.
 
     // Case of an infinite projectile speed.
-    if (hasInfiniteProjectileSpeed(m_shooting.projectileSpeed(m_exp.level))) {
+    if (hasInfiniteProjectileSpeed(getProjectileSpeed())) {
       // Convert to get the current damage values for
       // the tower given its level.
       towers::Damage dd;
-      dd.damage = m_attack.damage(m_exp.level);
+      dd.damage = getAttack();
       dd.accuracy = m_attack.accuracy(m_exp.level);
-      dd.speed = m_attack.speed(m_exp.level);
-      dd.slowdown = m_attack.slowdown(m_exp.level);
-      dd.stunProb = m_attack.stunProb(m_exp.level);
+      dd.speed = m_attack.speed(fetchUpgradeLevel(towers::Upgrade::FreezingPower));
+      dd.slowdown = m_attack.slowdown(fetchUpgradeLevel(towers::Upgrade::FreezingSpeed));
+      dd.stunProb = m_attack.stunProb(fetchUpgradeLevel(towers::Upgrade::StunChance));
       dd.critProb = m_attack.critProb(m_exp.level);
       dd.critMultiplier = m_attack.critMultiplier(m_exp.level);
 
       // Convert durations from raw milliseconds to a
       // usable time data.
-      int ms = static_cast<int>(std::round(m_attack.fDuration(m_exp.level)));
+      int ms = static_cast<int>(std::round(getFreezingDuration()));
       dd.fDuration = utils::toMilliseconds(ms);
-      ms = static_cast<int>(std::round(m_attack.sDuration(m_exp.level)));
+      ms = static_cast<int>(std::round(getStunDuration()));
       dd.sDuration = utils::toMilliseconds(ms);
-      ms = static_cast<int>(std::round(m_attack.pDuration(m_exp.level)));
+      ms = static_cast<int>(std::round(getPoisonDuration()));
       dd.pDuration = utils::toMilliseconds(ms);
 
       return m_processes.damage(info, mob, dd);
@@ -522,23 +526,23 @@ namespace tdef {
 
     // Otherwise we need to create a projectile.
     Projectile::PProps pp = Projectile::newProps(getPos(), getOwner());
-    pp.speed = m_shooting.projectileSpeed(m_exp.level);
+    pp.speed = m_shooting.projectileSpeed(fetchUpgradeLevel(towers::Upgrade::ProjectileSpeed));
 
-    pp.damage = m_attack.damage(m_exp.level);
+    pp.damage = getAttack();
     pp.aoeRadius = m_aoeRadius(m_exp.level);
 
     pp.accuracy = m_attack.accuracy(m_exp.level);
 
-    pp.freezePercent = m_attack.speed(m_exp.level);
-    pp.freezeSpeed = m_attack.slowdown(m_exp.level);
+    pp.freezePercent = m_attack.speed(fetchUpgradeLevel(towers::Upgrade::FreezingPower));
+    pp.freezeSpeed = m_attack.slowdown(fetchUpgradeLevel(towers::Upgrade::FreezingSpeed));
 
-    pp.stunProb = m_attack.stunProb(m_exp.level);
+    pp.stunProb = m_attack.stunProb(fetchUpgradeLevel(towers::Upgrade::StunChance));
 
-    int ms = static_cast<int>(std::round(m_attack.fDuration(m_exp.level)));
+    int ms = static_cast<int>(std::round(getFreezingDuration()));
     pp.freezeDuration = utils::toMilliseconds(ms);
-    ms = static_cast<int>(std::round(m_attack.sDuration(m_exp.level)));
+    ms = static_cast<int>(std::round(getStunDuration()));
     pp.stunDuration = utils::toMilliseconds(ms);
-    ms = static_cast<int>(std::round(m_attack.pDuration(m_exp.level)));
+    ms = static_cast<int>(std::round(getPoisonDuration()));
     pp.poisonDuration = utils::toMilliseconds(ms);
 
     info.spawnProjectile(std::make_shared<Projectile>(pp, this, mob));

@@ -89,7 +89,7 @@ namespace tdef {
         pp.upgrades.push_back(towers::Upgrade::Range);
         pp.upgrades.push_back(towers::Upgrade::Damage);
         pp.upgrades.push_back(towers::Upgrade::AttackSpeed);
-        // TODO: Add accuracy ?
+        pp.upgrades.push_back(towers::Upgrade::Accuracy);
         pp.upgrades.push_back(towers::Upgrade::ProjectileSpeed);
 
         return pp;
@@ -108,6 +108,7 @@ namespace tdef {
           case Upgrade::Range:
           case Upgrade::Damage:
           case Upgrade::AttackSpeed:
+          case Upgrade::Accuracy:
           case Upgrade::ProjectileSpeed:
             return std::round(
               70.9f

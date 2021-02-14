@@ -124,6 +124,7 @@ namespace tdef {
               ),
               42.0f
             );
+          case Upgrade::Accuracy:
           case Upgrade::ProjectileSpeed:
           case Upgrade::FreezingPower:
           case Upgrade::FreezingSpeed:

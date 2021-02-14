@@ -115,6 +115,7 @@ namespace tdef {
               + 8.63f * level * level * level
             );
           case Upgrade::AimSpeed:
+          case Upgrade::Accuracy:
           case Upgrade::ProjectileSpeed:
           case Upgrade::FreezingPower:
           case Upgrade::FreezingSpeed:

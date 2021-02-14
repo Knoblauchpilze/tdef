@@ -62,6 +62,8 @@ namespace tdef {
           return "AttackSpeed";
         case Upgrade::AimSpeed:
           return "AimSpeed";
+        case Upgrade::Accuracy:
+          return "Accuracy";
         case Upgrade::ProjectileSpeed:
           return "ProjectileSpeed";
         case Upgrade::FreezingPower:
@@ -215,6 +217,12 @@ namespace tdef {
   float
   Tower::getAimingSpeed() const noexcept {
     return queryUpgradable(m_shooting.aimSpeed, towers::Upgrade::AimSpeed);
+  }
+
+  inline
+  float
+  Tower::getAccuracy() const noexcept {
+    return queryUpgradable(m_attack.accuracy, towers::Upgrade::Accuracy);
   }
 
   inline

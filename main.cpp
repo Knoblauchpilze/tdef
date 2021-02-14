@@ -23,23 +23,23 @@
 // TODO: Handle application of AttackSpeed.
 // TODO: Handle creation of non-constant upgradable
 // for tower props:
-//  - X pp.minRange
+//  - V pp.minRange
 //  - V pp.maxRange
 //  - X pp.damage
-//  - X pp.aoeRadius
-//  - X pp.rotationSpeed
+//  - V pp.aoeRadius
+//  - V pp.rotationSpeed
 //  - X pp.aimSpeed
 //  - V pp.projectileSpeed
-//  - X pp.accuracy
-//  - X pp.duration
-//  - X pp.shootAngle
-//  - X pp.projectiles
-//  - X pp.acceleration
+//  - V pp.accuracy
+//  - V pp.duration
+//  - V pp.shootAngle
+//  - V pp.projectiles
+//  - V pp.acceleration
 //  - X pp.freezePercent
 //  - X pp.freezeSpeed
 //  - X pp.stunProb
-//  - X pp.critProb
-//  - X pp.critMultiplier
+//  - V pp.critProb
+//  - V pp.critMultiplier
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

@@ -64,7 +64,7 @@ namespace tdef {
         pp.rotationSpeed = buildConstantUpgradable(rotation);
         pp.aimSpeed = buildConstantUpgradable(aimSpeed);
         pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);
-        pp.accuracy = buildConstantUpgradable(accuracy);
+        pp.accuracy = buildQuadraticUpgradable(4.08e-4f, 0.0464f, 0.495f, accuracy);
 
         pp.duration = buildConstantUpgradable(duration);
         pp.shootAngle = buildConstantUpgradable(shootAngle);

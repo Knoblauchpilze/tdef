@@ -22,7 +22,7 @@ namespace tdef {
       constexpr float duration = 0.0f;
       constexpr float shootAngle = utils::degToRad(0.0f);
       constexpr int projectiles = 1;
-      constexpr float acceleration = 18.0f;
+      constexpr float acceleration = 0.18f;
 
       constexpr float freezePercent = no_speed_decrease;
       constexpr float freezeSpeed = 0.0f;
@@ -70,7 +70,7 @@ namespace tdef {
         pp.shootAngle = buildConstantUpgradable(shootAngle);
         pp.projectiles = buildConstantUpgradable(projectiles);
         pp.acceleration = [](int level) {
-          return acceleration + 1.0f * level;
+          return acceleration + 0.01f * level;
         };
 
         pp.freezePercent = buildConstantUpgradable(freezePercent);

@@ -299,7 +299,7 @@ namespace tdef {
           " at " + m->getPos().toString() +
           " for " + std::to_string(getAttack()) + " damage" +
           " (health: " + std::to_string(m->getHealth()) + ", " +
-          " accuracy: " + std::to_string(m_attack.accuracy(0, m_exp.level)) + ")",
+          " accuracy: " + std::to_string(getAccuracy()) + ")",
           utils::Level::Verbose
         );
       }
@@ -511,7 +511,7 @@ namespace tdef {
       towers::Damage dd;
       dd.damage = getAttack();
       // No related upgrade for accuracy.
-      dd.accuracy = m_attack.accuracy(0, m_exp.level);
+      dd.accuracy = getAccuracy();
       dd.speed = queryUpgradable(m_attack.speed, towers::Upgrade::FreezingPower);
       dd.slowdown = queryUpgradable(m_attack.slowdown, towers::Upgrade::FreezingSpeed);
       dd.stunProb = queryUpgradable(m_attack.stunProb, towers::Upgrade::StunChance);
@@ -542,7 +542,7 @@ namespace tdef {
 
     pp.aoeRadius = m_aoeRadius(0, m_exp.level);
 
-    pp.accuracy = m_attack.accuracy(0, m_exp.level);
+    pp.accuracy = getAccuracy();
 
     pp.freezePercent = queryUpgradable(m_attack.speed, towers::Upgrade::FreezingPower);
     pp.freezeSpeed = queryUpgradable(m_attack.slowdown, towers::Upgrade::FreezingSpeed);

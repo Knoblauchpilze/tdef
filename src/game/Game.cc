@@ -925,6 +925,11 @@ namespace tdef {
           case towers::Upgrade::AimSpeed:
             v = m_tDisplay.tower->getAimingSpeed();
             break;
+          case towers::Upgrade::Accuracy:
+            v = 100.0f * m_tDisplay.tower->getAccuracy();
+            intVal = true;
+            unit = "%";
+            break;
           case towers::Upgrade::ProjectileSpeed:
             v = m_tDisplay.tower->getProjectileSpeed();
             intVal = true;

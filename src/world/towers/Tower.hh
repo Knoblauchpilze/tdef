@@ -65,6 +65,7 @@ namespace tdef {
       RotationSpeed,
       AttackSpeed,
       AimSpeed,
+      Accuracy,
       ProjectileSpeed,
       FreezingPower,
       FreezingSpeed,
@@ -436,6 +437,16 @@ namespace tdef {
        */
       float
       getAimingSpeed() const noexcept;
+
+      /**
+       * @brief - Returns the current accuracy of the tower
+       *          based on the upgrade level and experience
+       *          level.
+       * @return - the accuracy level for this tower in the
+       *           range `[0; 1]`.
+       */
+      float
+      getAccuracy() const noexcept;
 
       float
       getProjectileSpeed() const noexcept;

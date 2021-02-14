@@ -128,6 +128,7 @@ namespace tdef {
           case Upgrade::RotationSpeed:
           case Upgrade::AttackSpeed:
           case Upgrade::AimSpeed:
+          case Upgrade::Accuracy:
           case Upgrade::ProjectileSpeed:
           case Upgrade::StunChance:
           case Upgrade::StunDuration:

@@ -21,25 +21,6 @@
 // at once and assign the built paths while we explore
 // nodes.
 // TODO: Handle application of AttackSpeed.
-// TODO: Handle creation of non-constant upgradable
-// for tower props:
-//  - V pp.minRange
-//  - V pp.maxRange
-//  - V pp.damage
-//  - V pp.aoeRadius
-//  - V pp.rotationSpeed
-//  - X pp.aimSpeed
-//  - V pp.projectileSpeed
-//  - V pp.accuracy
-//  - V pp.duration
-//  - V pp.shootAngle
-//  - V pp.projectiles
-//  - V pp.acceleration
-//  - V pp.freezePercent
-//  - V pp.freezeSpeed
-//  - V pp.stunProb
-//  - V pp.critProb
-//  - V pp.critMultiplier
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

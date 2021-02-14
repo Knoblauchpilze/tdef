@@ -24,7 +24,7 @@
 // TODO: Handle creation of non-constant upgradable
 // for tower props:
 //  - X pp.minRange
-//  - X pp.maxRange
+//  - V pp.maxRange
 //  - X pp.damage
 //  - X pp.aoeRadius
 //  - X pp.rotationSpeed

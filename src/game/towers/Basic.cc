@@ -53,7 +53,7 @@ namespace tdef {
         pp.refill = 1.0f;
 
         pp.minRange = buildConstantUpgradable(minRange);
-        pp.maxRange = buildConstantUpgradable(maxRange);
+        pp.maxRange = buildQuadraticUpgradable(-3.5e-4f, 0.0935f, 2.06f, maxRange);
 
         pp.damage = [](int level) {
           return damage * (1.0f + 0.04f * level);

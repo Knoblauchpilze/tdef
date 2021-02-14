@@ -77,8 +77,16 @@ namespace tdef {
         pp.projectiles = buildConstantUpgradable(projectiles);
         pp.acceleration = buildConstantUpgradable(acceleration);
 
-        pp.freezePercent = buildConstantUpgradable(freezePercent);
-        pp.freezeSpeed = buildConstantUpgradable(freezeSpeed);
+        // We will create the expression right here as we need
+        // to convert from the raw value to the freeze percent.
+        pp.freezePercent = [](int upgradeLevel, int /*towerLevel*/) {
+          if (upgradeLevel == 0) {
+            return freezePercent;
+          }
+
+          return freezePercentageToSpeedRatio(2.5f * upgradeLevel + 20.2f);
+        };
+        pp.freezeSpeed = buildLinearUpgradable(0.02f, 0.12f, freezeSpeed);
 
         pp.stunProb = buildConstantUpgradable(stunProb);
 

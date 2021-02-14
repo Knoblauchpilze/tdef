@@ -55,7 +55,7 @@ namespace tdef {
         pp.minRange = buildConstantUpgradable(minRange);
         pp.maxRange = buildQuadraticUpgradable(-1.11e-3f, 0.27f, 3.45f, maxRange);
 
-        pp.damage = buildConstantUpgradable(damage);
+        pp.damage = buildQuadraticUpgradable(2.35f, -9.36f, 12.4f, damage);
         pp.aoeRadius = buildConstantUpgradable(aoeRadius);
 
         pp.targetting = towers::Targetting::First;

@@ -55,8 +55,18 @@ namespace tdef {
         pp.minRange = buildConstantUpgradable(minRange);
         pp.maxRange = buildQuadraticUpgradable(-3.5e-4f, 0.0935f, 2.06f, maxRange);
 
-        pp.damage = [](int level) {
-          return damage * (1.0f + 0.04f * level);
+        // As the damage is updated both based on the upgrade
+        // and tower level we generate the upgradable here.
+        pp.damage = [](int upgradeLevel, int towerLevel) {
+          // Compute base damage based on upgrade level.
+          float dmg = (
+            upgradeLevel == 0 ?
+            damage :
+            0.399f * upgradeLevel * upgradeLevel + 0.926f * upgradeLevel + 7.93f
+          );
+
+          // Update with tower level.
+          return dmg * (1.0f + 0.04f * (towerLevel + 5));
         };
         pp.aoeRadius = buildConstantUpgradable(aoeRadius);
 

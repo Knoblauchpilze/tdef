@@ -55,7 +55,7 @@ namespace tdef {
         pp.minRange = buildConstantUpgradable(minRange);
         pp.maxRange = buildQuadraticUpgradable(8.74e-3f, 0.219f, 4.64f, maxRange);
 
-        pp.damage = buildConstantUpgradable(damage);
+        pp.damage = buildQuadraticUpgradable(2.46f, 6.71f, 35.3f, damage);
         pp.aoeRadius = buildConstantUpgradable(aoeRadius);
 
         pp.targetting = towers::Targetting::First;
@@ -76,11 +76,11 @@ namespace tdef {
 
         pp.stunProb = buildConstantUpgradable(stunProb);
 
-        pp.critProb = [](int level) {
-          return critProb + 0.016f * level;
+        pp.critProb = [](int /*upgradeLevel*/, int towerLevel) {
+          return critProb + 0.016f * towerLevel;
         };
-        pp.critMultiplier = [](int level) {
-          return critMultiplier + 0.05f * level;
+        pp.critMultiplier = [](int /*upgradeLevel*/, int towerLevel) {
+          return critMultiplier + 0.05f * towerLevel;
         };
 
         pp.attackCost = attackSpeed;

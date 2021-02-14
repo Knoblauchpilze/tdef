@@ -10,7 +10,7 @@ namespace tdef {
     inline
     Upgradable
     buildConstantUpgradable(float value) noexcept {
-      return [value](int /*level*/) {
+      return [value](int /*upgradeLevel*/, int /*towerLevel*/) {
         return value;
       };
     }
@@ -159,19 +159,19 @@ namespace tdef {
   inline
   float
   Tower::getRange() const noexcept {
-    return m_maxRange(fetchUpgradeLevel(towers::Upgrade::Range));
+    return queryUpgradable(m_maxRange, towers::Upgrade::Range);
   }
 
   inline
   float
   Tower::getAttack() const noexcept {
-    return m_attack.damage(fetchUpgradeLevel(towers::Upgrade::Damage));
+    return queryUpgradable(m_attack.damage, towers::Upgrade::Damage);
   }
 
   inline
   float
   Tower::getRotationSpeed() const noexcept {
-    return m_rotationSpeed(fetchUpgradeLevel(towers::Upgrade::RotationSpeed));
+    return queryUpgradable(m_rotationSpeed, towers::Upgrade::RotationSpeed);
   }
 
   inline
@@ -215,17 +215,22 @@ namespace tdef {
 
   inline
   float
+  Tower::getAimingSpeed() const noexcept {
+    // TODO: Maybe create a real aiming speed upgrade type ?
+    return queryUpgradable(m_shooting.aimSpeed, towers::Upgrade::AttackSpeed);
+  }
+
+  inline
+  float
   Tower::getProjectileSpeed() const noexcept {
-    return m_shooting.projectileSpeed(
-      fetchUpgradeLevel(towers::Upgrade::ProjectileSpeed)
-    );
+    return queryUpgradable(m_shooting.projectileSpeed, towers::Upgrade::ProjectileSpeed);
   }
 
   inline
   float
   Tower::getFreezingPower() const noexcept {
     return utils::clamp(
-      100.0f * (1.0f - m_attack.speed(fetchUpgradeLevel(towers::Upgrade::FreezingPower))),
+      100.0f * (1.0f - queryUpgradable(m_attack.speed, towers::Upgrade::FreezingPower)),
       0.0f,
       100.0f
     );
@@ -235,7 +240,7 @@ namespace tdef {
   float
   Tower::getFreezingSpeed() const noexcept {
     return utils::clamp(
-      100.0f * m_attack.slowdown(fetchUpgradeLevel(towers::Upgrade::FreezingSpeed)),
+      100.0f * queryUpgradable(m_attack.slowdown, towers::Upgrade::FreezingSpeed),
       0.0f,
       100.0f
     );
@@ -244,20 +249,20 @@ namespace tdef {
   inline
   float
   Tower::getFreezingDuration() const noexcept {
-    return m_attack.fDuration(fetchUpgradeLevel(towers::Upgrade::FreezingDuration));
+    return queryUpgradable(m_attack.fDuration, towers::Upgrade::FreezingDuration);
   }
 
   inline
   float
   Tower::getPoisonDuration() const noexcept {
-    return m_attack.pDuration(fetchUpgradeLevel(towers::Upgrade::PoisonDuration));
+    return queryUpgradable(m_attack.pDuration, towers::Upgrade::PoisonDuration);
   }
 
   inline
   float
   Tower::getStunChance() const noexcept {
     return utils::clamp(
-      100.0f * m_attack.stunProb(fetchUpgradeLevel(towers::Upgrade::StunChance)),
+      100.0f * queryUpgradable(m_attack.stunProb, towers::Upgrade::StunChance),
       0.0f,
       100.0f
     );
@@ -266,7 +271,7 @@ namespace tdef {
   inline
   float
   Tower::getStunDuration() const noexcept {
-    return m_attack.sDuration(fetchUpgradeLevel(towers::Upgrade::StunDuration));
+    return queryUpgradable(m_attack.sDuration, towers::Upgrade::StunDuration);
   }
 
   inline
@@ -361,7 +366,7 @@ namespace tdef {
     // level).
     bool noFreezing = true;
     dd.fDuration = towers::buildConstantUpgradable(0.0f);
-    if (props.freezePercent(0) > 0.0f) {
+    if (props.freezePercent(0, 0) > 0.0f) {
       dd.fDuration = props.duration;
 
       noFreezing = false;
@@ -422,6 +427,14 @@ namespace tdef {
     }
 
     return m_upgrades[id].level;
+  }
+
+  inline
+  float
+  Tower::queryUpgradable(const towers::Upgradable& ug,
+                         const towers::Upgrade& type) const noexcept
+  {
+    return ug(fetchUpgradeLevel(type), m_exp.level);
   }
 
 }

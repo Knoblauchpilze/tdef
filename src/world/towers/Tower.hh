@@ -302,6 +302,10 @@ namespace tdef {
         // The amount of projectiles fired at once by the tower.
         towers::Upgradable projectiles;
 
+        // The rate (in %) of increase of firing speed (expressed
+        // in % of attack speed) per each shot at its target.
+        // Higher acceleration, reduces the time needed to reach
+        // the maximum firing speed.
         towers::Upgradable acceleration;
 
         // Defines the percentage of reduction of the speed
@@ -739,6 +743,11 @@ namespace tdef {
         // somehow prepare the hit. It resets as soon
         // as the target exits the aim cone.
         towers::Upgradable aimSpeed;
+
+        // Defines the percentage of acceleration that
+        // each shot brings to the attack speed relative
+        // to the attack speed.
+        towers::Upgradable acceleration;
 
         // Defines whether or not the tower is aiming
         // right now. This helps determining whether

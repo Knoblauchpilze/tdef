@@ -13,9 +13,11 @@ namespace tdef {
     /**
      * @brief - Defines a generic function that can be used
      *          to obtain a value for a property for a given
-     *          level.
+     *          upgrade level and tower level.
+     * @param first - the upgrade level.
+     * @param second - the tower level.
      */
-    using Upgradable = std::function<float(int)>;
+    using Upgradable = std::function<float(int, int)>;
 
     /**
      * @brief - Defines a constant upgradable which always
@@ -65,6 +67,7 @@ namespace tdef {
       ProjectileSpeed,
       FreezingPower,
       FreezingSpeed,
+      // TODO: This is actually a scam as it does not upgrade anything.
       FreezingDuration,
       PoisonDuration,
       StunChance,
@@ -426,6 +429,16 @@ namespace tdef {
       float
       getAttackSpeed() const noexcept;
 
+      /**
+       * @brief - Returns the duration of the aiming process
+       *          for this tower. The duration is returned as
+       *          a process percentage of increase of the
+       *          aim compared to a base value.
+       * @return - the aiming speed for this tower.
+       */
+      float
+      getAimingSpeed() const noexcept;
+
       float
       getProjectileSpeed() const noexcept;
 
@@ -687,6 +700,18 @@ namespace tdef {
        */
       int
       fetchUpgradeLevel(const towers::Upgrade& upgrade) const noexcept;
+
+      /**
+       * @brief - Used to query the upgradable by supplying the level
+       *          of upgrade for this tower in the specified type and
+       *          giving the current tower's level.
+       * @param ug - the upgradable whose value should be fetched.
+       * @param type - the type of the upgrade to fetch.
+       * @return - the value of the upgradable.
+       */
+      float
+      queryUpgradable(const towers::Upgradable& ug,
+                      const towers::Upgrade& type) const noexcept;
 
     private:
 

@@ -42,8 +42,11 @@ namespace tdef {
                           float b,
                           float min) noexcept
     {
-      return [a, b, min](int level) {
-        return level == 0 ? min : a * level + b;
+      return [a, b, min](int upgradeLevel, int /*towerLevel*/) {
+        return upgradeLevel == 0 ?
+          min :
+          a * upgradeLevel + b
+        ;
       };
     }
 
@@ -53,8 +56,11 @@ namespace tdef {
                              float c,
                              float min) noexcept
     {
-      return [a, b, c, min](int level) {
-        return level == 0 ? min : a * level * level + b * level + c;
+      return [a, b, c, min](int upgradeLevel, int /*towerLevel*/) {
+        return upgradeLevel == 0 ?
+          min :
+          a * upgradeLevel * upgradeLevel + b * upgradeLevel + c
+        ;
       };
     }
 
@@ -65,8 +71,11 @@ namespace tdef {
                          float d,
                          float min) noexcept
     {
-      return [a, b, c, d, min](int level) {
-        return level == 0 ? min : a * level * level * level + b * level * level + c * level + d;
+      return [a, b, c, d, min](int upgradeLevel, int /*towerLevel*/) {
+        return upgradeLevel == 0 ?
+          min :
+          a * upgradeLevel * upgradeLevel * upgradeLevel + b * upgradeLevel * upgradeLevel + c * upgradeLevel + d
+        ;
       };
     }
 

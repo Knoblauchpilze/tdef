@@ -55,18 +55,16 @@ namespace tdef {
         pp.minRange = buildConstantUpgradable(minRange);
         pp.maxRange = buildQuadraticUpgradable(1.4e-3f, 0.281f, 4.65f, maxRange);
 
-        pp.damage = buildConstantUpgradable(damage);
-        pp.aoeRadius = [](int level) {
-          return aoeRadius + 0.045f * level;
+        pp.damage = buildQuadraticUpgradable(3.38f, 5.62f, 40.7f, damage);
+        pp.aoeRadius = [](int /*upgradeLevel*/, int towerLevel) {
+          return aoeRadius + 0.045f * towerLevel;
         };
 
         pp.targetting = towers::Targetting::First;
         pp.persistTargets = true;
 
         pp.rotationSpeed = buildLinearUpgradable(utils::degToRad(4.77f), utils::degToRad(45.7f), rotation);
-        pp.aimSpeed = [](int level) {
-          return aimSpeed + 0.4f * level;
-        };
+        pp.aimSpeed = buildConstantUpgradable(aimSpeed);
         pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);
         pp.accuracy = buildConstantUpgradable(accuracy);
 

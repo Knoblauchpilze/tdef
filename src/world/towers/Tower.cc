@@ -252,7 +252,7 @@ namespace tdef {
       // yet. The tower is not aiming anymore,
       // so reset the props.
       m_shooting.aiming = false;
-      if (!hasInfiniteAimingSpeed(m_shooting.aimSpeed(m_exp.level))) {
+      if (!hasInfiniteAimingSpeed(getAimingSpeed())) {
         m_shooting.aimingCone = init_aiming_cone;
       }
 
@@ -268,7 +268,7 @@ namespace tdef {
     // Determine whether the aiming period is
     // over and adapt the aiming cone to show
     // the current progress.
-    utils::Duration d = aimDuration(m_shooting.aimSpeed(m_exp.level));
+    utils::Duration d = aimDuration(getAimingSpeed());
     if (m_shooting.aimStart + d > info.moment) {
       float e = utils::toMilliseconds(info.moment - m_shooting.aimStart);
       float t = utils::toMilliseconds(d);
@@ -285,7 +285,7 @@ namespace tdef {
 
     // Reset the aiming process as we fired a shot.
     m_shooting.aimStart = info.moment;
-    if (!hasInfiniteAimingSpeed(m_shooting.aimSpeed(m_exp.level))) {
+    if (!hasInfiniteAimingSpeed(getAimingSpeed())) {
       m_shooting.aimingCone = init_aiming_cone;
     }
 
@@ -293,13 +293,13 @@ namespace tdef {
     for (unsigned id = 0u ; id < m_targets.size() ; ++id) {
       MobShPtr m = m_targets[id];
 
-      if (m_attack.damage(m_exp.level) > 0.0f) {
+      if (getAttack() > 0.0f) {
         log(
           "Hitting mob " + mobs::toString(m->getType()) +
           " at " + m->getPos().toString() +
-          " for " + std::to_string(m_attack.damage(m_exp.level)) + " damage" +
+          " for " + std::to_string(getAttack()) + " damage" +
           " (health: " + std::to_string(m->getHealth()) + ", " +
-          " accuracy: " + std::to_string(m_attack.accuracy(m_exp.level)) + ")",
+          " accuracy: " + std::to_string(m_attack.accuracy(0, m_exp.level)) + ")",
           utils::Level::Verbose
         );
       }
@@ -399,8 +399,8 @@ namespace tdef {
           // min range or farther than the max range
           // we will try to find a new one.
           float d = utils::d(m->getPos(), getPos());
-          if (d < m_minRange(fetchUpgradeLevel(towers::Upgrade::Range)) ||
-              d > m_maxRange(fetchUpgradeLevel(towers::Upgrade::Range)))
+          if (d < m_minRange(fetchUpgradeLevel(towers::Upgrade::Range), m_exp.level) ||
+              d > m_maxRange(fetchUpgradeLevel(towers::Upgrade::Range), m_exp.level))
           {
             return true;
           }
@@ -427,8 +427,8 @@ namespace tdef {
       // Find the closest mob.
       towers::PickData pd;
       pd.pos = m_pos;
-      pd.minRange = m_minRange(fetchUpgradeLevel(towers::Upgrade::Range));
-      pd.maxRange = m_maxRange(fetchUpgradeLevel(towers::Upgrade::Range));
+      pd.minRange = queryUpgradable(m_minRange, towers::Upgrade::Range);
+      pd.maxRange = queryUpgradable(m_maxRange, towers::Upgrade::Range);
       pd.mode = m_targetMode;
 
       m_targets = m_processes.pickMob(info, pd);
@@ -487,7 +487,10 @@ namespace tdef {
     // best as we can for this frame. In order to
     // shot at it we need to determine whether it
     // lies within the firing cone.
-    return std::abs(m_orientation - theta) <= m_shooting.shootAngle(m_exp.level);
+    // Note that there isn't any upgrade for the
+    // shooting angle so we'll call the upgradable
+    // directly.
+    return std::abs(m_orientation - theta) <= m_shooting.shootAngle(0, m_exp.level);
   }
 
   bool
@@ -507,12 +510,14 @@ namespace tdef {
       // the tower given its level.
       towers::Damage dd;
       dd.damage = getAttack();
-      dd.accuracy = m_attack.accuracy(m_exp.level);
-      dd.speed = m_attack.speed(fetchUpgradeLevel(towers::Upgrade::FreezingPower));
-      dd.slowdown = m_attack.slowdown(fetchUpgradeLevel(towers::Upgrade::FreezingSpeed));
-      dd.stunProb = m_attack.stunProb(fetchUpgradeLevel(towers::Upgrade::StunChance));
-      dd.critProb = m_attack.critProb(m_exp.level);
-      dd.critMultiplier = m_attack.critMultiplier(m_exp.level);
+      // No related upgrade for accuracy.
+      dd.accuracy = m_attack.accuracy(0, m_exp.level);
+      dd.speed = queryUpgradable(m_attack.speed, towers::Upgrade::FreezingPower);
+      dd.slowdown = queryUpgradable(m_attack.slowdown, towers::Upgrade::FreezingSpeed);
+      dd.stunProb = queryUpgradable(m_attack.stunProb, towers::Upgrade::StunChance);
+      // No upgrade type for crit hits.
+      dd.critProb = m_attack.critProb(0, m_exp.level);
+      dd.critMultiplier = m_attack.critMultiplier(0, m_exp.level);
 
       // Convert durations from raw milliseconds to a
       // usable time data.
@@ -528,17 +533,21 @@ namespace tdef {
 
     // Otherwise we need to create a projectile.
     Projectile::PProps pp = Projectile::newProps(getPos(), getOwner());
-    pp.speed = m_shooting.projectileSpeed(fetchUpgradeLevel(towers::Upgrade::ProjectileSpeed));
+    pp.speed = queryUpgradable(m_shooting.projectileSpeed, towers::Upgrade::ProjectileSpeed);
 
     pp.damage = getAttack();
-    pp.aoeRadius = m_aoeRadius(m_exp.level);
+    if (m_type == towers::Type::Basic) {
+      log("Damage: " + std::to_string(pp.damage));
+    }
 
-    pp.accuracy = m_attack.accuracy(m_exp.level);
+    pp.aoeRadius = m_aoeRadius(0, m_exp.level);
 
-    pp.freezePercent = m_attack.speed(fetchUpgradeLevel(towers::Upgrade::FreezingPower));
-    pp.freezeSpeed = m_attack.slowdown(fetchUpgradeLevel(towers::Upgrade::FreezingSpeed));
+    pp.accuracy = m_attack.accuracy(0, m_exp.level);
 
-    pp.stunProb = m_attack.stunProb(fetchUpgradeLevel(towers::Upgrade::StunChance));
+    pp.freezePercent = queryUpgradable(m_attack.speed, towers::Upgrade::FreezingPower);
+    pp.freezeSpeed = queryUpgradable(m_attack.slowdown, towers::Upgrade::FreezingSpeed);
+
+    pp.stunProb = queryUpgradable(m_attack.stunProb, towers::Upgrade::StunChance);
 
     int ms = static_cast<int>(std::round(getFreezingDuration()));
     pp.freezeDuration = utils::toMilliseconds(ms);

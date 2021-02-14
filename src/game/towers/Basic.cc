@@ -99,6 +99,7 @@ namespace tdef {
         pp.upgrades.push_back(towers::Upgrade::Range);
         pp.upgrades.push_back(towers::Upgrade::Damage);
         pp.upgrades.push_back(towers::Upgrade::RotationSpeed);
+        pp.upgrades.push_back(towers::Upgrade::AttackSpeed);
         pp.upgrades.push_back(towers::Upgrade::ProjectileSpeed);
 
         return pp;
@@ -117,6 +118,7 @@ namespace tdef {
           case Upgrade::Range:
           case Upgrade::Damage:
           case Upgrade::RotationSpeed:
+          case Upgrade::AttackSpeed:
           case Upgrade::ProjectileSpeed:
             return std::round(
                 8.33f
@@ -124,11 +126,9 @@ namespace tdef {
               - 20.7f * level * level
               + 3.16f * level * level * level
             );
-          case Upgrade::AttackSpeed:
+          case Upgrade::AimSpeed:
           case Upgrade::FreezingPower:
           case Upgrade::FreezingSpeed:
-          case Upgrade::FreezingDuration:
-          case Upgrade::PoisonDuration:
           case Upgrade::StunChance:
           case Upgrade::StunDuration:
           default:

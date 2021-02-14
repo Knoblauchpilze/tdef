@@ -114,11 +114,10 @@ namespace tdef {
               - 54.1f * level * level
               + 8.63f * level * level * level
             );
+          case Upgrade::AimSpeed:
           case Upgrade::ProjectileSpeed:
           case Upgrade::FreezingPower:
           case Upgrade::FreezingSpeed:
-          case Upgrade::FreezingDuration:
-          case Upgrade::PoisonDuration:
           case Upgrade::StunChance:
           case Upgrade::StunDuration:
           default:

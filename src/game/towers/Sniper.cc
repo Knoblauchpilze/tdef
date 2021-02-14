@@ -62,7 +62,7 @@ namespace tdef {
         pp.persistTargets = true;
 
         pp.rotationSpeed = buildLinearUpgradable(utils::degToRad(4.13f), utils::degToRad(52.5f), rotation);
-        pp.aimSpeed = buildConstantUpgradable(aimSpeed);
+        pp.aimSpeed = buildQuadraticUpgradable(0.892f, 3.86f, 102.0f, aimSpeed);
         pp.projectileSpeed = buildConstantUpgradable(projectileSpeed);
         pp.accuracy = buildConstantUpgradable(accuracy);
 
@@ -92,6 +92,7 @@ namespace tdef {
         pp.upgrades.push_back(towers::Upgrade::Damage);
         pp.upgrades.push_back(towers::Upgrade::RotationSpeed);
         pp.upgrades.push_back(towers::Upgrade::AttackSpeed);
+        pp.upgrades.push_back(towers::Upgrade::AimSpeed);
 
         return pp;
       }
@@ -110,6 +111,7 @@ namespace tdef {
           case Upgrade::Damage:
           case Upgrade::RotationSpeed:
           case Upgrade::AttackSpeed:
+          case Upgrade::AimSpeed:
             // This formula yields a negative value for
             // the level `0` so we clamp it to get the
             // desired output.
@@ -125,8 +127,6 @@ namespace tdef {
           case Upgrade::ProjectileSpeed:
           case Upgrade::FreezingPower:
           case Upgrade::FreezingSpeed:
-          case Upgrade::FreezingDuration:
-          case Upgrade::PoisonDuration:
           case Upgrade::StunChance:
           case Upgrade::StunDuration:
           default:

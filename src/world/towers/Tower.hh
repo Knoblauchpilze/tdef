@@ -64,12 +64,10 @@ namespace tdef {
       Damage,
       RotationSpeed,
       AttackSpeed,
+      AimSpeed,
       ProjectileSpeed,
       FreezingPower,
       FreezingSpeed,
-      // TODO: This is actually a scam as it does not upgrade anything.
-      FreezingDuration,
-      PoisonDuration,
       StunChance,
       StunDuration
     };

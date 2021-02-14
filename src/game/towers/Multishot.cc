@@ -68,7 +68,7 @@ namespace tdef {
 
         pp.duration = buildConstantUpgradable(duration);
         pp.shootAngle = [](int level) {
-          return shootAngle + 1.0f * level;
+          return shootAngle + utils::degToRad(1.0f) * level;
         };
         pp.projectiles = [](int level) {
           return projectiles + 0.2f * level;

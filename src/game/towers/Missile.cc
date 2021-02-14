@@ -63,7 +63,7 @@ namespace tdef {
         pp.targetting = towers::Targetting::First;
         pp.persistTargets = true;
 
-        pp.rotationSpeed = buildConstantUpgradable(rotation);
+        pp.rotationSpeed = buildLinearUpgradable(utils::degToRad(4.77f), utils::degToRad(45.7f), rotation);
         pp.aimSpeed = [](int level) {
           return aimSpeed + 0.4f * level;
         };

@@ -37,5 +37,15 @@ namespace tdef {
       return mob->hit(info, d);
     }
 
+    towers::Upgradable
+    buildLinearUpgradable(float a,
+                          float b,
+                          float min) noexcept
+    {
+      return [a, b, min](int level) {
+        return level == 0 ? min : a * level + b;
+      };
+    }
+
   }
 }

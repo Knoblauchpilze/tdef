@@ -67,6 +67,22 @@ namespace tdef {
     bool
     basicDamaging(StepInfo& info, MobShPtr mob, Damage& data);
 
+    /**
+     * @brief - Generate an upgradable which has a linear relation
+     *          between the level and the output value. The minimum
+     *          value is clamped to be at least the provided one.
+     * @param a - the linear coefficient of the level.
+     * @param b - origin intercept of the linear function.
+     * @param min - an additional parameter allowing to clamp the
+     *              returned value to be at excatly this one if the
+     *              level is `0`.
+     * @return - the created upgradable.
+     */
+    towers::Upgradable
+    buildLinearUpgradable(float a,
+                          float b,
+                          float min) noexcept;
+
   }
 }
 

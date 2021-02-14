@@ -83,6 +83,44 @@ namespace tdef {
                           float b,
                           float min) noexcept;
 
+    /**
+     * @brief - Generate an upgradable which has a quadratic relation
+     *          between the level and the output value. The minimum
+     *          value is clamped to be at least the provided one.
+     * @param a - the quadratic coefficient of the level.
+     * @param b - the linear coefficient of the level.
+     * @param c - origin intercept of the quadratic function.
+     * @param min - an additional parameter allowing to clamp the
+     *              returned value to be at excatly this one if the
+     *              level is `0`.
+     * @return - the created upgradable.
+     */
+    towers::Upgradable
+    buildQuadraticUpgradable(float a,
+                             float b,
+                             float c,
+                             float min) noexcept;
+
+    /**
+     * @brief - Generate an upgradable which has a quadratic relation
+     *          between the level and the output value. The minimum
+     *          value is clamped to be at least the provided one.
+     * @param a - the cubic coefficient of the level.
+     * @param b - the quadratic coefficient of the level.
+     * @param c - the linear coefficient of the level.
+     * @param d - origin intercept of the quadratic function.
+     * @param min - an additional parameter allowing to clamp the
+     *              returned value to be at excatly this one if the
+     *              level is `0`.
+     * @return - the created upgradable.
+     */
+    towers::Upgradable
+    buildCubicUpgradable(float a,
+                         float b,
+                         float c,
+                         float d,
+                         float min) noexcept;
+
   }
 }
 

@@ -47,5 +47,28 @@ namespace tdef {
       };
     }
 
+    towers::Upgradable
+    buildQuadraticUpgradable(float a,
+                             float b,
+                             float c,
+                             float min) noexcept
+    {
+      return [a, b, c, min](int level) {
+        return level == 0 ? min : a * level * level + b * level + c;
+      };
+    }
+
+    towers::Upgradable
+    buildCubicUpgradable(float a,
+                         float b,
+                         float c,
+                         float d,
+                         float min) noexcept
+    {
+      return [a, b, c, d, min](int level) {
+        return level == 0 ? min : a * level * level * level + b * level * level + c * level + d;
+      };
+    }
+
   }
 }

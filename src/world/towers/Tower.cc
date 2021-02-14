@@ -79,6 +79,7 @@ namespace tdef {
         props.shootAngle,
         props.projectileSpeed,
         props.aimSpeed,
+        props.acceleration,
         false,
         utils::now(),
         0.0f,
@@ -219,6 +220,7 @@ namespace tdef {
     m_shooting.shootAngle = pp.shootAngle;
     m_shooting.projectileSpeed = pp.projectileSpeed;
     m_shooting.aimSpeed = pp.aimSpeed;
+    m_shooting.acceleration = pp.acceleration;
     in >> m_shooting.aiming;
     in >> m_shooting.aimStart;
     in >> m_shooting.aimingCone;

@@ -90,6 +90,7 @@ namespace tdef {
         pp.upgrades.clear();
         pp.upgrades.push_back(towers::Upgrade::Range);
         pp.upgrades.push_back(towers::Upgrade::Damage);
+        pp.upgrades.push_back(towers::Upgrade::AttackSpeed);
         pp.upgrades.push_back(towers::Upgrade::StunChance);
         pp.upgrades.push_back(towers::Upgrade::StunDuration);
 
@@ -108,6 +109,7 @@ namespace tdef {
         switch (upgrade) {
           case Upgrade::Range:
           case Upgrade::Damage:
+          case Upgrade::AttackSpeed:
           case Upgrade::StunChance:
           case Upgrade::StunDuration:
             // This formula yields a negative value for
@@ -123,12 +125,10 @@ namespace tdef {
               34.0f
             );
           case Upgrade::RotationSpeed:
-          case Upgrade::AttackSpeed:
+          case Upgrade::AimSpeed:
           case Upgrade::ProjectileSpeed:
           case Upgrade::FreezingPower:
           case Upgrade::FreezingSpeed:
-          case Upgrade::FreezingDuration:
-          case Upgrade::PoisonDuration:
           default:
             // Default upgrade cost is null.
             return 0.0f;

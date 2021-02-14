@@ -922,6 +922,9 @@ namespace tdef {
           case towers::Upgrade::AttackSpeed:
             v = m_tDisplay.tower->getAttackSpeed();
             break;
+          case towers::Upgrade::AimSpeed:
+            v = m_tDisplay.tower->getAimingSpeed();
+            break;
           case towers::Upgrade::ProjectileSpeed:
             v = m_tDisplay.tower->getProjectileSpeed();
             intVal = true;
@@ -935,18 +938,6 @@ namespace tdef {
             v = m_tDisplay.tower->getFreezingSpeed();
             intVal = true;
             unit = "%";
-            break;
-          case towers::Upgrade::FreezingDuration:
-            // Convert milliseconds to seconds.
-            v = m_tDisplay.tower->getFreezingDuration() / 1000.0f;
-            intVal = true;
-            unit = "s";
-            break;
-          case towers::Upgrade::PoisonDuration:
-            // Convert milliseconds to seconds.
-            v = m_tDisplay.tower->getPoisonDuration() / 1000.0f;
-            intVal = true;
-            unit = "s";
             break;
           case towers::Upgrade::StunChance:
             v = m_tDisplay.tower->getStunChance();

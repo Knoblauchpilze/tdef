@@ -403,7 +403,7 @@ namespace tdef {
        * @brief - Used to define how many upgrades are available
        *          for towers.
        */
-      static constexpr unsigned UPGRADE_COUNT = 4;
+      static constexpr unsigned UPGRADE_COUNT = 5;
 
       /**
        * @brief - Convenience structure regrouping all the info

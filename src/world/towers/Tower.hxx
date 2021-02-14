@@ -60,16 +60,14 @@ namespace tdef {
           return "RotationSpeed";
         case Upgrade::AttackSpeed:
           return "AttackSpeed";
+        case Upgrade::AimSpeed:
+          return "AimSpeed";
         case Upgrade::ProjectileSpeed:
           return "ProjectileSpeed";
         case Upgrade::FreezingPower:
           return "FreezingPower";
         case Upgrade::FreezingSpeed:
           return "FreezingSpeed";
-        case Upgrade::FreezingDuration:
-          return "FreezingDuration";
-        case Upgrade::PoisonDuration:
-          return "PoisonDuration";
         case Upgrade::StunChance:
           return "StunChance";
         case Upgrade::StunDuration:
@@ -216,8 +214,7 @@ namespace tdef {
   inline
   float
   Tower::getAimingSpeed() const noexcept {
-    // TODO: Maybe create a real aiming speed upgrade type ?
-    return queryUpgradable(m_shooting.aimSpeed, towers::Upgrade::AttackSpeed);
+    return queryUpgradable(m_shooting.aimSpeed, towers::Upgrade::AimSpeed);
   }
 
   inline
@@ -249,13 +246,15 @@ namespace tdef {
   inline
   float
   Tower::getFreezingDuration() const noexcept {
-    return queryUpgradable(m_attack.fDuration, towers::Upgrade::FreezingDuration);
+    // No upgrade related to freeze duration.
+    return m_attack.fDuration(0, m_exp.level);
   }
 
   inline
   float
   Tower::getPoisonDuration() const noexcept {
-    return queryUpgradable(m_attack.pDuration, towers::Upgrade::PoisonDuration);
+    // No upgrade related to poison duration.
+    return m_attack.pDuration(0, m_exp.level);
   }
 
   inline

@@ -980,6 +980,7 @@ namespace tdef {
         msg += std::to_string(static_cast<int>(std::round(cost)));
         msg += ")";
 
+        m_tDisplay.props[id]->setVisible(true);
         m_tDisplay.props[id]->setText(msg);
         m_tDisplay.props[id]->enable(m_state.gold >= cost);
 
@@ -991,6 +992,14 @@ namespace tdef {
           "Only interpreted " + std::to_string(id) + " among " + std::to_string(ug.size()) + " available",
           utils::Level::Error
         );
+      }
+      if (id < UPGRADE_COUNT) {
+        // Deactivate elements that are not used.
+        while (id < UPGRADE_COUNT) {
+          m_tDisplay.props[id]->setVisible(false);
+
+          ++id;
+        }
       }
 
       std::string msg = "Sell (";

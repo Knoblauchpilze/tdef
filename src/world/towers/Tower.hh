@@ -241,7 +241,7 @@ namespace tdef {
         // How many energy units are refilled each second.
         // This value usually indicates how fast a tower
         // can fire two consecutive shots.
-        float refill;
+        towers::Upgradable refill;
 
         // The minimum range below which the tower can't
         // fire on a target. This does not mean that existing
@@ -415,6 +415,14 @@ namespace tdef {
        */
       int
       getUpgradeLevel(const towers::Upgrade& upgrade) const noexcept;
+
+      /**
+       * @brief - Returns the energy refill per second for this
+       *          tower.
+       * @return - the energy refill for this tower.
+       */
+      float
+      getEnergyRefill() const noexcept;
 
       /**
        * @brief - Returns an aggregated number measuring the
@@ -848,7 +856,7 @@ namespace tdef {
        *          faster refill rate indicates a tower that
        *          can take more decisions.
        */
-      float m_energyRefill;
+      towers::Upgradable m_energyRefill;
 
       /**
        * @brief - Defines the energy cost of a single attack.

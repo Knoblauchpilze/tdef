@@ -202,13 +202,14 @@ namespace tdef {
     in >> m_exp.exp;
     in >> m_exp.level;
 
+    TProps pp = towers::generateProps(m_type, m_pos);
+
     in >> m_energy;
     in >> m_maxEnergy;
-    in >> m_energyRefill;
+    m_energyRefill = pp.refill;
     in >> m_attackCost;
 
     // Restore properties from the type of the tower.
-    TProps pp = towers::generateProps(m_type, m_pos);
     m_minRange = pp.minRange;
     m_maxRange = pp.maxRange;
     m_aoeRadius = pp.aoeRadius;
@@ -243,7 +244,7 @@ namespace tdef {
   void
   Tower::step(StepInfo& info) {
     // Refilll the energy.
-    m_energy = std::min(m_energy + info.elapsed * m_energyRefill, m_maxEnergy);
+    m_energy = std::min(m_energy + info.elapsed * getEnergyRefill(), m_maxEnergy);
 
     // Pick and align with the target.
     if (!pickAndAlignWithTarget(info) || m_targets.empty()) {

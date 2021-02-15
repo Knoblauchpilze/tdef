@@ -111,7 +111,7 @@ namespace tdef {
 
     pp.energy = 0.5f;
     pp.maxEnergy = 1.0f;
-    pp.refill = 0.1f;
+    pp.refill = towers::buildConstantUpgradable(0.1f);
 
     pp.minRange = towers::buildConstantUpgradable(0.0f);
     pp.maxRange = towers::buildConstantUpgradable(3.0f);
@@ -200,6 +200,12 @@ namespace tdef {
 
   inline
   float
+  Tower::getEnergyRefill() const noexcept {
+    return queryUpgradable(m_energyRefill, towers::Upgrade::AttackSpeed);
+  }
+
+  inline
+  float
   Tower::getAttackSpeed() const noexcept {
     // In case the attack cost is set to `0`, use
     // a null attack speed to indicate that the
@@ -210,7 +216,7 @@ namespace tdef {
 
     // Otherwise the attack speed is computed as the
     // ratio of the energy refill on the attack cost.
-    return m_energyRefill / m_attackCost;
+    return getEnergyRefill() / m_attackCost;
   }
 
   inline
@@ -323,7 +329,6 @@ namespace tdef {
 
     out << m_energy;
     out << m_maxEnergy;
-    out << m_energyRefill;
     out << m_attackCost;
 
     out << static_cast<int>(m_targetMode);

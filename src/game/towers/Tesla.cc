@@ -48,9 +48,9 @@ namespace tdef {
       generateProps(const utils::Point2f& p, int /*level*/) noexcept {
         Tower::TProps pp = Tower::newProps(p, Type::Tesla);
 
-        pp.energy = attackSpeed;
-        pp.maxEnergy = attackSpeed;
-        pp.refill = 1.0f;
+        pp.energy = 1.0f;
+        pp.maxEnergy = 1.0f;
+        pp.refill = buildLinearUpgradable(0.106f, 1.49f, attackSpeed);
 
         pp.minRange = buildConstantUpgradable(minRange);
         pp.maxRange = buildQuadraticUpgradable(3.5e-3f, 0.265f, 3.42f, maxRange);
@@ -79,7 +79,7 @@ namespace tdef {
         pp.critProb = buildConstantUpgradable(critProb);
         pp.critMultiplier = buildConstantUpgradable(critMultiplier);
 
-        pp.attackCost = attackSpeed;
+        pp.attackCost = 1.0f;
 
         pp.cost = cost;
 

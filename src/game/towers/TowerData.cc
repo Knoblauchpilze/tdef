@@ -43,10 +43,7 @@ namespace tdef {
                           float min) noexcept
     {
       return [a, b, min](int upgradeLevel, int /*towerLevel*/) {
-        return upgradeLevel == 0 ?
-          min :
-          a * upgradeLevel + b
-        ;
+        return std::max(min, a * upgradeLevel + b);
       };
     }
 
@@ -57,10 +54,7 @@ namespace tdef {
                              float min) noexcept
     {
       return [a, b, c, min](int upgradeLevel, int /*towerLevel*/) {
-        return upgradeLevel == 0 ?
-          min :
-          a * upgradeLevel * upgradeLevel + b * upgradeLevel + c
-        ;
+        return std::max(min, a * upgradeLevel * upgradeLevel + b * upgradeLevel + c);
       };
     }
 
@@ -72,10 +66,10 @@ namespace tdef {
                          float min) noexcept
     {
       return [a, b, c, d, min](int upgradeLevel, int /*towerLevel*/) {
-        return upgradeLevel == 0 ?
-          min :
+        return std::max(
+          min,
           a * upgradeLevel * upgradeLevel * upgradeLevel + b * upgradeLevel * upgradeLevel + c * upgradeLevel + d
-        ;
+        );
       };
     }
 

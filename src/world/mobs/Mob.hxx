@@ -116,30 +116,36 @@ namespace tdef {
   Mob::operator<<(std::ostream& out) const {
     WorldElement::operator<<(out);
 
-    out << static_cast<int>(m_type);
-    out << m_energy;
-    out << m_maxEnergy;
-    out << m_energyRefill;
-    out << static_cast<int>(m_behavior);
-    out << m_attackCost;
-    out << m_attack;
-    out << m_rArrival;
-    out << m_path;
-    out << m_bounty;
-    out << m_cost;
-    out << m_exp;
+    out << static_cast<int>(m_type) << " ";
+    out << m_energy << " ";
+    out << m_maxEnergy << " ";
+    out << m_energyRefill << " ";
+    // Note that we won't save the behavior nor the path:
+    // indeed as we're not saving the target anyway it
+    // would just need to confusing situation where the
+    // mob would try to go to a position without knowing
+    // if the target is still here. So rather have the
+    // whole thinking process start again and select a
+    // new target.
+    out << m_attackCost << " ";
+    out << m_attack << " ";
+    out << m_rArrival << " ";
+    // Skip path.
+    out << m_bounty << " ";
+    out << m_cost << " ";
+    out << m_exp << " ";
 
     // Defense data.
-    out << m_defense.shield;
-    out << m_defense.shieldEfficiency;
-    out << m_defense.shieldDurability;
-    out << m_defense.poisonable;
-    out << m_defense.slowable;
-    out << m_defense.stunnable;
+    out << m_defense.shield << " ";
+    out << m_defense.shieldEfficiency << " ";
+    out << m_defense.shieldDurability << " ";
+    out << m_defense.poisonable << " ";
+    out << m_defense.slowable << " ";
+    out << m_defense.stunnable << " ";
 
     // Speed data.
-    out << m_speed.bSpeed;
-    out << m_speed.speed;
+    out << m_speed.bSpeed << " ";
+    out << m_speed.speed << " ";
     // In order to save the speed time and duration,
     // we only save the duration. Indeed as we only
     // allow a Mob to be saved when the game is in
@@ -151,16 +157,16 @@ namespace tdef {
     // duration for the freeze time.
     // We apply a similar reasoning for the stun
     // and poison duration.
-    out << utils::toMilliseconds(m_speed.fDuration);
-    out << m_speed.fSpeed;
-    out << m_speed.sDecrease;
-    out << m_speed.sIncrease;
-    out << utils::toMilliseconds(m_speed.sDuration);
+    out << utils::toMilliseconds(m_speed.fDuration) << " ";
+    out << m_speed.fSpeed << " ";
+    out << m_speed.sDecrease << " ";
+    out << m_speed.sIncrease << " ";
+    out << utils::toMilliseconds(m_speed.sDuration) << " ";
 
     // Poison data.
-    out << m_poison.damage;
-    out << m_poison.stack;
-    out << utils::toMilliseconds(m_poison.pDuration);
+    out << m_poison.damage << " ";
+    out << m_poison.stack << " ";
+    out << utils::toMilliseconds(m_poison.pDuration) << " ";
 
     // TODO: Save mob' target.
     // BlockShPtr m_target;
@@ -181,12 +187,14 @@ namespace tdef {
     in >> m_energy;
     in >> m_maxEnergy;
     in >> m_energyRefill;
-    in >> i;
-    m_behavior = static_cast<Behavior>(i);
+    // Assume default behavior: this will trigger
+    // the definition of a new target.
+    m_behavior = Behavior::None;
     in >> m_attackCost;
     in >> m_attack;
     in >> m_rArrival;
-    in >> m_path;
+    // Reset path to the current position.
+    m_path.clear(m_pos);
     in >> m_bounty;
     in >> m_cost;
     in >> m_exp;
@@ -223,8 +231,11 @@ namespace tdef {
     in >> d;
     m_poison.pDuration = utils::toMilliseconds(d);
 
-    // TODO: Restore mob's target.
-    // BlockShPtr m_target;
+    // Do not save the target of the mob: as discussed it would
+    // require to somehow be able to link it back again when the
+    // world is reloaded. We'd rather let the regular thinking
+    // process determine a new one (which would probably be the
+    // same anyway) when this happens.
 
     log("Restored mob at " + m_pos.toString(), utils::Level::Verbose);
 

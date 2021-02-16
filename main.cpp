@@ -20,6 +20,8 @@
 // explore all the starting position (i.e. for mobs)
 // at once and assign the built paths while we explore
 // nodes.
+// TODO: Make sure the UI is restored correctly in
+// case of a world reload.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

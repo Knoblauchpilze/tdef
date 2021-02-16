@@ -222,10 +222,10 @@ namespace tdef {
     m_shooting.projectileSpeed = pp.projectileSpeed;
     m_shooting.aimSpeed = pp.aimSpeed;
     m_shooting.acceleration = pp.acceleration;
-    in >> m_shooting.aiming;
-    in >> m_shooting.aimStart;
-    in >> m_shooting.aimingCone;
-    in >> m_shooting.pauseTime;
+    m_shooting.aiming = false;
+    m_shooting.aimStart = utils::now();
+    m_shooting.aimingCone = init_aiming_cone;
+    m_shooting.pauseTime = utils::now();
 
     m_attack = fromProps(pp);
 

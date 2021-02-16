@@ -118,6 +118,17 @@ namespace tdef {
     private:
 
       /**
+       * @brief - Used to update the tracked destination of the
+       *          projectile from the target if any is defined.
+       *          In case none is defined the destination is left
+       *          unchanged.
+       */
+      void
+      updateTrackedDestination();
+
+    private:
+
+      /**
        * @brief - Defines the distance below which the projectile
        *          is considered to have reach its target.
        */
@@ -130,6 +141,16 @@ namespace tdef {
        *          it hits it.
        */
       MobShPtr m_target;
+
+      /**
+       * @brief - The position followed by this projectile.
+       *          It is updated at each step from the target
+       *          in case it is available (to make the proj
+       *          track an element) or used as is in case the
+       *          target is not defined (typically after the
+       *          projectile has been restored).
+       */
+      utils::Point2f m_dest;
 
       /**
        * @brief - The parent tower of this projectile: it

@@ -51,18 +51,18 @@ namespace tdef {
     Block::operator<<(out);
 
     // Distribution.
-    out << m_distribution.size();
+    out << m_distribution.size() << " ";
     for (unsigned id = 0u ; id < m_distribution.size() ; ++id) {
-      out << m_distribution[id].prob;
-      out << static_cast<int>(m_distribution[id].mob);
+      out << m_distribution[id].prob << " ";
+      out << static_cast<int>(m_distribution[id].mob) << " ";
     }
 
-    out << m_spawnRadius;
-    out << m_stock;
-    out << m_threshold;
-    out << m_refill;
-    out << m_exp;
-    out << static_cast<int>(m_difficulty);
+    out << m_spawnRadius << " ";
+    out << m_stock << " ";
+    out << m_threshold << " ";
+    out << m_refill << " ";
+    out << m_exp << " ";
+    out << static_cast<int>(m_difficulty) << " ";
 
     log("Saved spawner at " + m_pos.toString(), utils::Level::Verbose);
 

@@ -185,30 +185,30 @@ namespace tdef {
   Path::operator<<(std::ostream& out) const {
     // Save properties in order. The vectors will be
     // saved with first the size and then its content.
-    out << m_home.x();
-    out << m_home.y();
+    out << m_home.x() << " ";
+    out << m_home.y() << " ";
 
-    out << m_cur.x();
-    out << m_cur.y();
+    out << m_cur.x() << " ";
+    out << m_cur.y() << " ";
 
-    out << m_seg;
+    out << m_seg << " ";
 
-    out << m_segments.size();
+    out << m_segments.size() << " ";
     for (unsigned id = 0u ; id < m_segments.size() ; ++id) {
-      out << m_segments[id].start.x();
-      out << m_segments[id].start.y();
+      out << m_segments[id].start.x() << " ";
+      out << m_segments[id].start.y() << " ";
 
-      out << m_segments[id].end.x();
-      out << m_segments[id].end.y();
+      out << m_segments[id].end.x() << " ";
+      out << m_segments[id].end.y() << " ";
 
-      out << m_segments[id].xD;
-      out << m_segments[id].yD;
+      out << m_segments[id].xD << " ";
+      out << m_segments[id].yD << " ";
     }
 
-    out << m_cPoints.size();
+    out << m_cPoints.size() << " ";
     for (unsigned id = 0u ; id < m_cPoints.size() ; ++id) {
-      out << m_cPoints[id].x();
-      out << m_cPoints[id].y();
+      out << m_cPoints[id].x() << " ";
+      out << m_cPoints[id].y() << " ";
     }
 
     return out;

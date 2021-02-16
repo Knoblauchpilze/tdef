@@ -156,6 +156,16 @@ namespace tdef {
       void
       updateSavedGamesDisplay();
 
+      /**
+       * @brief - Used to generate a new default name for a new
+       *          world when none is defined.
+       *          Note that use the base name for the world and
+       *          append an integer to differentiate between
+       *          saves.
+       * @return - the generated file name to save the world.
+       */
+      std::string
+      generateSaveFileName() const noexcept;
 
     private:
 
@@ -194,6 +204,17 @@ namespace tdef {
        *          saved games are registered.
        */
       static constexpr const char* sk_savedGamesDir = "data/worlds";
+
+      /**
+       * @brief - Defines a base string to be used when a new
+       *          game should be saved.
+       */
+      static constexpr const char* sk_baseWorldName = "new_world_";
+
+      /**
+       * @brief - Defines the default extension for a world save.
+       */
+      static constexpr const char* sk_saveGameExtension = ".lvl";
 
       /**
        * @brief - Convenience structure regrouping the available

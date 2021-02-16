@@ -404,8 +404,7 @@ namespace tdef {
 
   void
   Game::save(const std::string& file) const {
-    // TODO: Handle save.
-    log("Should save the world to \"" + file + "\"", utils::Level::Error);
+    m_world->save(file);
   }
 
   MenuShPtr

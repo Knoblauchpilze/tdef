@@ -28,7 +28,7 @@ namespace tdef {
   std::ostream&
   Portal::operator<<(std::ostream& out) const {
     Block::operator<<(out);
-    out << m_lives;
+    out << m_lives << " ";
 
     log("Saved portal at " + m_pos.toString(), utils::Level::Verbose);
 

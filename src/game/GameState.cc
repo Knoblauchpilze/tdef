@@ -304,6 +304,15 @@ namespace tdef {
     m->setSimpleAction(
       [this](Game& g) {
         setScreen(game::Screen::Game);
+        // In case the world file is empty, assign a default
+        // in order to save the world.
+        std::string f = getWorldFile();
+        if (f.empty()) {
+          // Generate the name by 
+          f = generateSaveFileName();
+        }
+        setWorldFile(f);
+
         g.save(getWorldFile());
         g.togglePause(false);
       }

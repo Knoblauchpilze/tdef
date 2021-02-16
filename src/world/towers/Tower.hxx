@@ -314,32 +314,30 @@ namespace tdef {
   Tower::operator<<(std::ostream& out) const {
     Block::operator<<(out);
 
-    out << static_cast<int>(m_type);
+    out << static_cast<int>(m_type) << " ";
 
     // Upgrades.
-    out << m_upgrades.size();
+    out << m_upgrades.size() << " ";
     for (unsigned id = 0u ; id < m_upgrades.size() ; ++id) {
-      out << static_cast<int>(m_upgrades[id].type);
-      out << m_upgrades[id].level;
+      out << static_cast<int>(m_upgrades[id].type) << " ";
+      out << m_upgrades[id].level << " ";
     }
 
     // Experience data.
-    out << m_exp.exp;
-    out << m_exp.level;
+    out << m_exp.exp << " ";
+    out << m_exp.level << " ";
 
-    out << m_energy;
-    out << m_maxEnergy;
-    out << m_attackCost;
+    out << m_energy << " ";
+    out << m_maxEnergy << " ";
+    out << m_attackCost << " ";
 
-    out << static_cast<int>(m_targetMode);
+    out << static_cast<int>(m_targetMode) << " ";
 
-    // Only save part of the properties related to the
-    // shooting and damage: the rest can be deduced of
-    // the type of the tower.
-    out << m_shooting.aiming;
-    out << m_shooting.aimStart;
-    out << m_shooting.aimingCone;
-    out << m_shooting.pauseTime;
+    // Do not save any of the shooting nor attack data
+    // as we won't save the target anyway. So no need
+    // to save the aiming start and current value as
+    // we will probably start it all over again when
+    // the tower is deserialized anyway.
 
     // The targets picked by a mob will not be saved to
     // the stream. Indeed in order to be able to reuse

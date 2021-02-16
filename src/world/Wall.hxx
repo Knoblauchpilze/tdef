@@ -28,7 +28,7 @@ namespace tdef {
   std::ostream&
   Wall::operator<<(std::ostream& out) const {
     Block::operator<<(out);
-    out << m_height;
+    out << m_height << " ";
 
     log("Saved wall at " + m_pos.toString(), utils::Level::Verbose);
 

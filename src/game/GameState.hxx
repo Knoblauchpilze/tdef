@@ -24,6 +24,24 @@ namespace tdef {
     m_worldFile = file;
   }
 
+  inline
+  std::string
+  GameState::generateSaveFileName() const noexcept {
+    // Start from the base directory and base name.
+    std::string fn(sk_savedGamesDir);
+    fn += "/";
+    fn += sk_baseWorldName;
+
+    // Add a suffix corresponding to the number of games
+    // currently registered in the directory.
+    fn += std::to_string(m_savedGames.saves.size());
+
+    // Append the extension.
+    fn += sk_saveGameExtension;
+
+    return fn;
+  }
+
 }
 
 #endif    /* GAME_STATE_HXX */

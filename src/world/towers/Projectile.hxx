@@ -39,8 +39,12 @@ namespace tdef {
   Projectile::operator<<(std::ostream& out) const {
     WorldElement::operator<<(out);
 
-    // TODO: Handle target.
-    // m_target;
+    // Only save the destination and not the target:
+    // this will make the project only reach the last
+    // position of the target when it is restored but
+    // it is enough for our purposes.
+    out << m_dest.x() << " " << m_dest.y() << " ";
+
     // We won't save the tower to the file: indeed it
     // would require to be able to then relink in some
     // way the re-loaded tower to this projectile. As
@@ -50,18 +54,18 @@ namespace tdef {
     // We consider that it is a small price to pay for
     // the convenience to not bother relinking towers
     // and projectiles.
-    out << m_speed;
-    out << m_damage;
-    out << m_aoeRadius;
-    out << m_accuracy;
-    out << m_freezePercent;
-    out << m_freezeSpeed;
-    out << m_stunProb;
-    out << m_critProb;
-    out << m_critMultiplier;
-    out << utils::toMilliseconds(m_freezeDuration);
-    out << utils::toMilliseconds(m_stunDuration);
-    out << utils::toMilliseconds(m_poisonDuration);
+    out << m_speed << " ";
+    out << m_damage << " ";
+    out << m_aoeRadius << " ";
+    out << m_accuracy << " ";
+    out << m_freezePercent << " ";
+    out << m_freezeSpeed << " ";
+    out << m_stunProb << " ";
+    out << m_critProb << " ";
+    out << m_critMultiplier << " ";
+    out << utils::toMilliseconds(m_freezeDuration) << " ";
+    out << utils::toMilliseconds(m_stunDuration) << " ";
+    out << utils::toMilliseconds(m_poisonDuration) << " ";
 
     log("Saved projectile at " + m_pos.toString(), utils::Level::Verbose);
 
@@ -73,8 +77,12 @@ namespace tdef {
   Projectile::operator>>(std::istream& in) {
     WorldElement::operator>>(in);
 
-    // TODO: Handle target.
-    // m_target;
+    // Restore only the destination as the target
+    // has not been saved.
+    m_target = nullptr;
+    in >> m_dest.x();
+    in >> m_dest.y();
+
     // As explained in the serialization operation
     // we don't save the attached tower: so we will
     // just assign a null tower.
@@ -129,6 +137,16 @@ namespace tdef {
   void
   Projectile::worldUpdate(LocatorShPtr /*loc*/) {
     // Nothing to do.
+  }
+
+  inline
+  void
+  Projectile::updateTrackedDestination() {
+    // Update the destination from the position of the
+    // target if any is dedined.
+    if (m_target != nullptr) {
+      m_dest = m_target->getPos();
+    }
   }
 
 }

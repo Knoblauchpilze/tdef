@@ -96,16 +96,16 @@ namespace tdef {
   std::ostream&
   WorldElement::operator<<(std::ostream& out) const {
     // Save props in order.
-    out << m_owner;
+    out << m_owner << " ";
 
-    out << m_pos.x();
-    out << m_pos.y();
-    out << m_radius;
+    out << m_pos.x() << " ";
+    out << m_pos.y() << " ";
+    out << m_radius << " ";
 
-    out << m_totalHealth;
-    out << m_health;
+    out << m_totalHealth << " ";
+    out << m_health << " ";
 
-    out << m_deleted;
+    out << m_deleted << " ";
 
     log("Saved world element at " + m_pos.toString(), utils::Level::Verbose);
 

@@ -13,6 +13,7 @@ namespace tdef {
     WorldElement(props, "projectile"),
 
     m_target(mob),
+    m_dest(),
     m_tower(tower),
 
     m_speed(props.speed),
@@ -40,13 +41,13 @@ namespace tdef {
     // Check whether the projectile has arrived to its target.
     // Note that we will try to reach the target even in case
     // it is dead so that we can handle the aoe damage.
-    const utils::Point2f& t = m_target->getPos();
-    float dst = utils::d(getPos(), t);
+    updateTrackedDestination();
+    float dst = utils::d(getPos(), m_dest);
 
     if (dst > sk_arrived) {
       // Move to reach the target.
-      float dx = t.x() - getPos().x();
-      float dy = t.y() - getPos().y();
+      float dx = m_dest.x() - getPos().x();
+      float dy = m_dest.y() - getPos().y();
 
       dx /= dst;
       dy /= dst;
@@ -73,10 +74,11 @@ namespace tdef {
     std::vector<MobShPtr> wounded;
 
     if (m_aoeRadius > 0.0f) {
-      wounded = info.frustum->getVisibleMobs(t, m_aoeRadius, nullptr);
+      // Note that we don't explicitely append the target
+      // to the wounded list as we assume it will also
+      // be found by this function anyway.
+      wounded = info.frustum->getVisibleMobs(m_dest, m_aoeRadius, nullptr);
     }
-
-    wounded.push_back(m_target);
 
     // Give a chance to critical hits.
     float damage = m_damage;
@@ -108,7 +110,7 @@ namespace tdef {
         d.hit = damage;
       }
       else {
-        float far = utils::d(t, wounded[id]->getPos());
+        float far = utils::d(m_dest, wounded[id]->getPos());
         d.hit = std::max(0.0f, damage * far / m_aoeRadius);
       }
 
@@ -142,7 +144,7 @@ namespace tdef {
 
       log(
         "Damaging " + mobs::toString(wounded[id]->getType()) +
-        " at " + std::to_string(utils::d(t, wounded[id]->getPos())) +
+        " at " + std::to_string(utils::d(m_dest, wounded[id]->getPos())) +
         " (target: " + std::to_string(wounded[id] == m_target) + ")" +
         " with " + std::to_string(d.hit) + " damage" +
         ", health: " + std::to_string(wounded[id]->getHealth())

@@ -26,7 +26,7 @@ namespace tdef {
   std::ostream&
   Block::operator<<(std::ostream& out) const {
     WorldElement::operator<<(out);
-    out << m_orientation;
+    out << m_orientation << " ";
 
     log("Saved block at " + m_pos.toString(), utils::Level::Verbose);
 

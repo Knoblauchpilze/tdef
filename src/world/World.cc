@@ -248,10 +248,12 @@ namespace tdef {
       );
     }
 
+    log("Saving world to \"" + file + "\"", utils::Level::Info);
+
     // Indicate that a valid rng was saved for this
     // world and save the corresponding resource.
-    out << true;
-    out << m_rng;
+    out << true << " ";
+    out << m_rng << " ";
 
     int count = 0;
 
@@ -261,7 +263,9 @@ namespace tdef {
         ++count;
       }
     }
-    out << count;
+    out << count << " ";
+    
+    log("Saving " + std::to_string(count) + " tower(s)", utils::Level::Verbose);
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
       if (std::dynamic_pointer_cast<Tower>(m_blocks[id]) != nullptr) {
@@ -276,7 +280,8 @@ namespace tdef {
         ++count;
       }
     }
-    out << count;
+    out << count << " ";
+    log("Saving " + std::to_string(count) + " portal(s)", utils::Level::Verbose);
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
       if (std::dynamic_pointer_cast<Portal>(m_blocks[id]) != nullptr) {
@@ -291,7 +296,8 @@ namespace tdef {
         ++count;
       }
     }
-    out << count;
+    out << count << " ";
+    log("Saving " + std::to_string(count) + " spawner(s)", utils::Level::Verbose);
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
       if (std::dynamic_pointer_cast<Spawner>(m_blocks[id]) != nullptr) {
@@ -306,7 +312,8 @@ namespace tdef {
         ++count;
       }
     }
-    out << count;
+    out << count << " ";
+    log("Saving " + std::to_string(count) + " wall(s)", utils::Level::Verbose);
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
       if (std::dynamic_pointer_cast<Wall>(m_blocks[id]) != nullptr) {
@@ -315,13 +322,17 @@ namespace tdef {
     }
 
     // Save mobs.
-    out << m_mobs.size();
+    log("Saving " + std::to_string(m_mobs.size()) + " mob(s)", utils::Level::Verbose);
+
+    out << m_mobs.size() << " ";
     for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
       out << *m_mobs[id];
     }
 
     // Save projectiles.
-    out << m_projectiles.size();
+    log("Saving " + std::to_string(m_projectiles.size()) + " projectile(s)", utils::Level::Verbose);
+
+    out << m_projectiles.size() << " ";
     for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
       out << *m_projectiles[id];
     }
@@ -513,6 +524,9 @@ namespace tdef {
 
     // Load towers if any.
     in >> count;
+
+    log("Loading " + std::to_string(count) + " tower(s)");
+
     for (int id = 0 ; id < count ; ++id) {
       TowerShPtr e = std::make_shared<Tower>(Tower::newProps(utils::Point2f()));
       in >> *e;
@@ -522,6 +536,9 @@ namespace tdef {
 
     // Load portals.
     in >> count;
+
+    log("Loading " + std::to_string(count) + " portal(s)");
+
     for (int id = 0 ; id < count ; ++id) {
       PortalShPtr e = std::make_shared<Portal>(Portal::newProps(utils::Point2f()));
       in >> *e;
@@ -531,6 +548,9 @@ namespace tdef {
 
     // Load spawners.
     in >> count;
+
+    log("Loading " + std::to_string(count) + " spawner(s)");
+
     for (int id = 0 ; id < count ; ++id) {
       SpawnerShPtr e = std::make_shared<Spawner>(Spawner::newProps(utils::Point2f()));
       in >> *e;
@@ -540,6 +560,9 @@ namespace tdef {
 
     // Load walls.
     in >> count;
+
+    log("Loading " + std::to_string(count) + " wall(s)");
+
     for (int id = 0 ; id < count ; ++id) {
       WallShPtr e = std::make_shared<Wall>(Wall::newProps(utils::Point2f()));
       in >> *e;
@@ -549,6 +572,9 @@ namespace tdef {
 
     // Load mobs if any.
     in >> count;
+
+    log("Loading " + std::to_string(count) + " mob(s)");
+
     for (int id = 0 ; id < count ; ++id) {
       MobShPtr e = std::make_shared<Mob>(Mob::newProps(utils::Point2f()));
       in >> *e;
@@ -558,6 +584,9 @@ namespace tdef {
 
     // Load projectiles.
     in >> count;
+
+    log("Loading " + std::to_string(count) + " projectile(s)");
+
     for (int id = 0 ; id < count ; ++id) {
       ProjectileShPtr e = std::make_shared<Projectile>(
         Projectile::newProps(utils::Point2f()),

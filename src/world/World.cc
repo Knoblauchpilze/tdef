@@ -238,8 +238,12 @@ namespace tdef {
 
   void
   World::save(const std::string& file) const {
-    // Open the file.
-    std::ofstream out(file.c_str());
+    // Open the file. Note that we assume that
+    // the file has already been processed by
+    // the game where info about the game state
+    // has been saved so we need to append the
+    // world's data to the existing content.
+    std::ofstream out(file.c_str(), std::ofstream::ate);
 
     if (!out.good()) {
       error(
@@ -509,6 +513,8 @@ namespace tdef {
         "Failed to open file"
       );
     }
+
+    // TODO: Move to skip the game state.
 
     // First thing is to determine whether a valid
     // rng has been saved.

@@ -329,6 +329,8 @@ namespace tdef {
     m_state.infoState = InfoPanelStatus::None;
     m_state.wallBuilding = false;
     m_state.tType = nullptr;
+
+    // TODO: Load lives and gold from file.
     m_state.lives = BASE_LIVES;
     m_state.gold = BASE_GOLD;
 
@@ -404,6 +406,12 @@ namespace tdef {
 
   void
   Game::save(const std::string& file) const {
+    // Before passing on the file name to the world so
+    // that we can save the relevant data we need to
+    // first serialize the data corresponding to the
+    // game state.
+    // TODO: Handle this.
+
     m_world->save(file);
   }
 

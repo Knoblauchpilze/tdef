@@ -330,11 +330,27 @@ namespace tdef {
     m_state.wallBuilding = false;
     m_state.tType = nullptr;
 
-    // TODO: Load lives and gold from file.
-    m_state.lives = BASE_LIVES;
-    m_state.gold = BASE_GOLD;
+    // Load gold and lives from the save file: in case no file
+    // is provided, use the default values.
+    if (file.empty()) {
+      m_state.lives = BASE_LIVES;
+      m_state.gold = BASE_GOLD;
+    }
+    else {
+      std::ifstream in(file.c_str());
+      if (!in.good()) {
+        error(
+          "Failed to load world from \"" + file + "\"",
+          "Failed to open file"
+        );
+      }
+      in.read(reinterpret_cast<char*>(&m_state.lives), sizeof(float));
+      in.read(reinterpret_cast<char*>(&m_state.gold), sizeof(float));
 
-    m_world->reset(file);
+      in.close();
+    }
+
+    m_world->reset(2u * sizeof(float), file);
 
     // And reset menus.
     m_statusDisplay.main->setVisible(true);
@@ -351,6 +367,9 @@ namespace tdef {
 
     m_wDisplay.main->setVisible(false);
     m_wDisplay.wall = nullptr;
+
+    // And update the UI.
+    updateUI();
   }
 
   bool
@@ -410,7 +429,20 @@ namespace tdef {
     // that we can save the relevant data we need to
     // first serialize the data corresponding to the
     // game state.
-    // TODO: Handle this.
+    std::ofstream out(file.c_str());
+    if (!out.good()) {
+      error(
+        "Failed to save world to \"" + file + "\"",
+        "Failed to open file"
+      );
+    }
+
+    // Save the lives and the gold amount.
+    out.write(reinterpret_cast<const char*>(&m_state.lives), sizeof(float));
+    out.write(reinterpret_cast<const char*>(&m_state.gold), sizeof(float));
+
+    // Close the file so that we save the data.
+    out.close();
 
     m_world->save(file);
   }

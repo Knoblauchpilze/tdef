@@ -44,14 +44,6 @@ namespace tdef {
       World(int seed);
 
       /**
-       * @brief - Build a new world from the file specified in input.
-       *          The file should describe a valid level.
-       * @param file - the name of the file from which the world's
-       *               data should be loaded.
-       */
-      World(const std::string& file);
-
-      /**
        * @brief - Desctruction of the object.
        */
       ~World();
@@ -115,13 +107,19 @@ namespace tdef {
       /**
        * @brief - Used to reset the properties of this world
        *          so that it can be used to start a new game.
+       * @param metadataSize - defines the size of the data
+       *                       existing at the beginning of
+       *                       the file and describing data
+       *                       that is not relevant to the
+       *                       world's data.
        * @param file - the name of the file from which the
        *               world's data should be loaded. In case
        *               the path is empty a new world will be
        *               generated.
        */
       void
-      reset(const std::string& file = std::string());
+      reset(unsigned metadataSize,
+            const std::string& file = std::string());
 
       /**
        * @brief - Used to save the content of the world to
@@ -158,9 +156,15 @@ namespace tdef {
        *          specified in input.
        * @param file - the name of the file from which the
        *               world should be loaded.
+       * @param metadataSize - defines the size of the data
+       *                       existing at the beginning of
+       *                       the file and describing data
+       *                       that is not relevant to the
+       *                       world's data.
        */
       void
-      loadFromFile(const std::string& file);
+      loadFromFile(const std::string& file,
+                   unsigned metadataSize);
 
       /**
        * @brief - Used to perform an update of all elements

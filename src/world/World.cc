@@ -34,26 +34,6 @@ namespace tdef {
     initialize();
   }
 
-  World::World(const std::string& file):
-    utils::CoreObject("world"),
-
-    m_rng(),
-
-    m_blocks(),
-    m_mobs(),
-    m_projectiles(),
-
-    m_loc(nullptr),
-
-    onGoldEarned()
-  {
-    // Check dimensions.
-    setService("world");
-
-    loadFromFile(file);
-    initialize();
-  }
-
   void
   World::step(float tDelta) {
     if (m_paused) {
@@ -219,7 +199,9 @@ namespace tdef {
   }
 
   void
-  World::reset(const std::string& file) {
+  World::reset(unsigned metadataSize,
+               const std::string& file)
+  {
     // Clear all registered elements.
     m_blocks.clear();
     m_mobs.clear();
@@ -230,7 +212,7 @@ namespace tdef {
       generate();
     }
     else {
-      loadFromFile(file);
+      loadFromFile(file, metadataSize);
     }
 
     m_paused = true;
@@ -243,7 +225,7 @@ namespace tdef {
     // the game where info about the game state
     // has been saved so we need to append the
     // world's data to the existing content.
-    std::ofstream out(file.c_str(), std::ofstream::ate);
+    std::ofstream out(file.c_str(), std::ofstream::app);
 
     if (!out.good()) {
       error(
@@ -503,7 +485,9 @@ namespace tdef {
   }
 
   void
-  World::loadFromFile(const std::string& file) {
+  World::loadFromFile(const std::string& file,
+                      unsigned metadataSize)
+  {
     // Open the file.
     std::ifstream in(file.c_str());
 
@@ -514,7 +498,11 @@ namespace tdef {
       );
     }
 
-    // TODO: Move to skip the game state.
+    // We want to skip the metadata corresponding to data
+    // that might not be relevant to the world. We will
+    // just ignore it.
+    std::vector<char> dummy(metadataSize);
+    in.read(dummy.data(), metadataSize);
 
     // First thing is to determine whether a valid
     // rng has been saved.

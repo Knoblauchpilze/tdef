@@ -121,6 +121,8 @@ namespace tdef {
       utils::Level::Verbose
     );
 
+    // TODO: Improve the bounty for the mob.
+
     return std::make_shared<Mob>(props);
   }
 

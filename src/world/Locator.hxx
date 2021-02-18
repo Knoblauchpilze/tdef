@@ -103,6 +103,11 @@ namespace tdef {
 
     md.path = m->getPath();
 
+    mobs::Effects e = m->getEffects();
+    md.freezed = e.freezed;
+    md.poisoned = e.poisoned;
+    md.stunned = e.stunned;
+
     switch (m->getType()) {
       case mobs::Type::Fast:
         md.id = 1;

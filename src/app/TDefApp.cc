@@ -261,6 +261,43 @@ namespace tdef {
       }
     }
 
+    // Fetch mobs to display.
+    ie = world::ItemType::Mob;
+    items = m_game->getVisible(
+      v.p.x,
+      v.p.y,
+      v.p.x + v.dims.x,
+      v.p.y + v.dims.y,
+      &ie,
+      nullptr,
+      world::Sort::ZOrder
+    );
+
+    olc::Pixel fColor = olc::CYAN;
+    olc::Pixel pColor = olc::DARK_GREEN;
+    olc::Pixel sColor = olc::DARK_GREY;
+
+    for (unsigned i = 0 ; i < items.size() ; ++i) {
+      const world::ItemEntry& wi = items[i];
+      world::Mob md = m_game->mob(wi.index);
+
+      // Represent the effects currently applied to
+      // the mob as small circles with an appropriate
+      // color.
+      if (md.freezed) {
+        olc::vf2d p = res.cf.tileCoordsToPixels(md.p.x() - 0.3f, md.p.y());
+        FillCircle(p, 3, fColor);
+      }
+      if (md.poisoned) {
+        olc::vf2d p = res.cf.tileCoordsToPixels(md.p.x() + 0.0f, md.p.y());
+        FillCircle(p, 3, pColor);
+      }
+      if (md.stunned) {
+        olc::vf2d p = res.cf.tileCoordsToPixels(md.p.x() + 0.3f, md.p.y());
+        FillCircle(p, 3, sColor);
+      }
+    }
+
     // Fetch projectiles to display.
     ie = world::ItemType::Projectile;
     items = m_game->getVisible(

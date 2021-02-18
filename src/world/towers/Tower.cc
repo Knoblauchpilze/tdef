@@ -537,10 +537,6 @@ namespace tdef {
     pp.speed = queryUpgradable(m_shooting.projectileSpeed, towers::Upgrade::ProjectileSpeed);
 
     pp.damage = getAttack();
-    if (m_type == towers::Type::Basic) {
-      log("Damage: " + std::to_string(pp.damage));
-    }
-
     pp.aoeRadius = m_aoeRadius(0, m_exp.level);
 
     pp.accuracy = getAccuracy();

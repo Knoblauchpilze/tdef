@@ -105,6 +105,19 @@ namespace tdef {
   }
 
   inline
+  mobs::Effects
+  Mob::getEffects() const noexcept {
+    mobs::Effects e;
+
+    e.freezed = (m_speed.fSpeed != 1.0f);
+    e.poisoned = (m_poison.damage != 0.0f);
+
+    e.stunned = (m_speed.speed == 0.0f);
+
+    return e;
+  }
+
+  inline
   bool
   Mob::isEnRoute() const noexcept {
     return m_path.enRoute(m_rArrival);

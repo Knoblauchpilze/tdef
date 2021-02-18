@@ -384,11 +384,12 @@ namespace tdef {
 
     // Only assign the duration in case the stun prob
     // is not `0` and the freezing percentage indicates
-    // no freezing.
+    // no freezing and the probability of stunning is
+    // not zero for the first level.
     bool noStunning = true;
     dd.stunProb = towers::buildConstantUpgradable(0.0f);
     dd.sDuration = towers::buildConstantUpgradable(0.0f);
-    if (noFreezing) {
+    if (noFreezing && dd.stunProb(0, 0) > 0.0f) {
       dd.stunProb = props.stunProb;
       dd.sDuration = props.duration;
 

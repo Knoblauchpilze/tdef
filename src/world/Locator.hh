@@ -48,10 +48,21 @@ namespace tdef {
      *          properties of a block.
      */
     struct Block {
+      // The position of the block.
       utils::Point2f p;
+
+      // Radius of the block.
       float radius;
+
+      // Health ratio of the block which is a value in the
+      // range `[0; 1]` indicating how much health is left
+      // for the block.
       float health;
+
+      // Orientation of the block in radians or `0` if not
+      // applicable.
       float orientation;
+
       BlockType type;
 
       // The width in radians of the aiming cone for this
@@ -69,11 +80,27 @@ namespace tdef {
      *          properties of a mob.
      */
     struct Mob {
+      // Position of the mob.
       utils::Point2f p;
+
+      // The radius of the mob.
       float radius;
+
+      // The health ratio for this mob: a value in the range
+      // `[0; 1]` which indicates how healthy it is.
       float health;
 
+      // The current path followed by the mob.
       Path path;
+
+      // Whether or not the mob is freezed.
+      bool freezed;
+
+      // Whether or not the mob is poisoned.
+      bool poisoned;
+
+      // Whether or not the mob is stunned.
+      bool stunned;
 
       // The `id` defines a custom value which is interpreted
       // from the `type` of the mob.

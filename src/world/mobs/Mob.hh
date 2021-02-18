@@ -112,6 +112,16 @@ namespace tdef {
       bool stunnable;
     };
 
+    /**
+     * @brief - Convenience status defining whether any
+     *          effects are currently applied to a mob.
+     */
+    struct Effects {
+      bool freezed;
+      bool poisoned;
+      bool stunned;
+    };
+
   }
 
   // Forward declaration of the block class to be able
@@ -227,8 +237,20 @@ namespace tdef {
       float
       getExpReward() const noexcept;
 
+      /**
+       * @brief - Returns the current speed of the mob accounting
+       *          for the motion modifiers (freezing or stun).
+       * @return - the current speed of the mob.
+       */
       float
       getSpeed() const noexcept;
+
+      /**
+       * @brief - Used to fetch the effects currently applied to
+       *          the mob.
+       */
+      mobs::Effects
+      getEffects() const noexcept;
 
       /**
        * @brief - Convenience wrapper to determine whether this

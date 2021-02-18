@@ -72,12 +72,21 @@ namespace tdef {
     // Get all the mobs that are within the `aoe` radius
     // at the moment of the hit.
     std::vector<MobShPtr> wounded;
-
     if (m_aoeRadius > 0.0f) {
       // Note that we don't explicitely append the target
       // to the wounded list as we assume it will also
       // be found by this function anyway.
       wounded = info.frustum->getVisibleMobs(m_dest, m_aoeRadius, nullptr);
+    }
+    else {
+      // In case there's no aoe, at least consider the
+      // target if it is defined.
+      if (m_target == nullptr) {
+        // No target and no aoe, nothing to do.
+        return;
+      }
+
+      wounded.push_back(m_target);
     }
 
     // Give a chance to critical hits.

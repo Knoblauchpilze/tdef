@@ -93,7 +93,8 @@ namespace tdef {
         pp.critProb = buildConstantUpgradable(critProb);
         pp.critMultiplier = buildConstantUpgradable(critMultiplier);
 
-        pp.attackCost = 1.0f;
+        // The attack costs nothing for the freezing tower.
+        pp.attackCost = 0.0f;
 
         pp.cost = cost;
 

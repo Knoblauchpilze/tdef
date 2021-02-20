@@ -56,6 +56,16 @@ namespace tdef {
     basicTargetPicking(StepInfo& info, PickData& data);
 
     /**
+     * @brief - Target picking method which picks all the
+     *          mobs visible in a particular radius.
+     * @param info - the data to use to pick a target.
+     * @param data - the data to use to perform picking.
+     * @return - the picked mobs.
+     */
+    std::vector<MobShPtr>
+    multipleTargetPicking(StepInfo& info, PickData& data);
+
+    /**
      * @brief - Basic damaging function which just applies
      *          the damaga data to the mob.
      * @param info - information to pick random numbers for

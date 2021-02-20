@@ -38,7 +38,7 @@ namespace tdef {
       generateData(int /*level*/) noexcept {
         Processes dd;
 
-        dd.pickMob = basicTargetPicking;
+        dd.pickMob = multipleTargetPicking;
         dd.damage = basicDamaging;
 
         return dd;

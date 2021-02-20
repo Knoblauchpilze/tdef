@@ -18,6 +18,11 @@ namespace tdef {
       return std::vector<MobShPtr>{m};
     }
 
+    std::vector<MobShPtr>
+    multipleTargetPicking(StepInfo& info, PickData& data) {
+      return info.frustum->getVisibleMobs(data.pos, data.maxRange, nullptr);
+    }
+
     bool
     basicDamaging(StepInfo& info, MobShPtr mob, Damage& data) {
       mobs::Damage d;

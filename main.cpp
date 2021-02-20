@@ -39,7 +39,7 @@ int main(int /*argc*/, char** /*argv*/) {
     );
 
     tdef::CoordinateFrameShPtr cf = std::make_shared<tdef::TopViewFrame>(
-      tdef::Viewport{olc::vf2d(-6.6f, -5.0f), olc::vf2d(20.0f, 15.0f)},
+      tdef::Viewport{olc::vf2d(-6.0f, -5.0f), olc::vf2d(20.0f, 15.0f)},
       tdef::Viewport{olc::vf2d(10.0f, 50.0f), olc::vf2d(800.0f, 600.0f)},
       olc::vi2d(64, 64)
     );

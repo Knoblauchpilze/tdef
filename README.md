@@ -24,13 +24,13 @@ The game revolves around endless waves of enemies trying to reach the main porta
 
 Allows to quit the application, create a new game or load a previously loaded one.
 
-[Main menu](main_menu.png)
+![Main menu](main_menu.png)
 
 ## Load menu
 
 Allows to search for previously saved game and load one of them. The directory parsed to load worlds is not yet configurable and corresponds to [data/worlds](https://github.com/Knoblauchpilze/tdef/tree/master/data/worlds). Note that any file registered in here will be visible in the UI which can lead to failure to load the game (and potentially undefined behavior) in case a file that was not save by the application is loaded.
 
-[Load menu](load_game_menu.png)
+![Load menu](load_game_menu.png)
 
 ## Game
 
@@ -38,7 +38,7 @@ Once the user has selected a game (either through loading a save or by creating 
 
 Regularly waves of enemies will spawn from the dedicated game spawners and mobs will come rushing to the portal. The towers should be placed so as to avoid mobs from penetrating the portal.
 
-[Game](game_menu.png)
+![Game](game_menu.png)
 
 ## Pause menu
 
@@ -46,4 +46,4 @@ Whenever the player feels like it they can pause the game either through the ded
 
 If the button within the main UI is chosen, the player can still build towers and potentially use this to react when there's a lot of mobs and the situation is critical.
 
-[Pause menu](pause_menu.png)
+![Pause menu](pause_menu.png)

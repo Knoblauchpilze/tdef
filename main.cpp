@@ -14,7 +14,6 @@
 # include "TDefApp.hh"
 
 // TODO: Some mobs seem to have really high speed.
-// TODO: Custom behaviors for towers.
 // TODO: Maybe in case of A* due a single path with
 // the target as the starting point so that we can
 // explore all the starting position (i.e. for mobs)

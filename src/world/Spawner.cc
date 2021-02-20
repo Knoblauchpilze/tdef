@@ -113,15 +113,15 @@ namespace tdef {
 
     Mob::MProps props = mobs::generateProps(m_distribution[id].mob, utils::Point2f(x, y));
     props.health = m_processes.health(info, m_exp);
+    props.bounty = m_processes.bounty(info, props.health);
 
     log(
       "Spawning " + mobs::toString(props.type) + " at " +
       props.pos.toString() + " with " +
-      std::to_string(props.health) + " health",
+      std::to_string(props.health) + " health and worth " +
+      std::to_string(props.bounty) + " gold",
       utils::Level::Verbose
     );
-
-    // TODO: Improve the bounty for the mob.
 
     return std::make_shared<Mob>(props);
   }

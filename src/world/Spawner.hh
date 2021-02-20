@@ -64,6 +64,13 @@ namespace tdef {
     using HealthFunc = std::function<float(StepInfo&, int)>;
 
     /**
+     * @brief - Convnience define for a function allowing to
+     *          compute the bounty of a mob based on the health
+     *          of the mob.
+     */
+    using BountyFunc = std::function<float(StepInfo&, float)>;
+
+    /**
      * @brief - Convenience structure defining the needed
      *          information to represent the custom info
      *          for a spawner.
@@ -74,6 +81,7 @@ namespace tdef {
     struct Processes {
       WaveFunc wave;
       HealthFunc health;
+      BountyFunc bounty;
     };
 
   }
@@ -85,12 +93,23 @@ namespace tdef {
        * @brief - Definition of new props to define a spawner.
        */
       struct SProps: public Block::BProps {
+        // The radius within which mobs can be spawned around
+        // this object.
         float spawnRadius;
 
+        // The cost to spawn a new wave.
         float threshold;
+
+        // The initial reserve available for the spawner: if
+        // it is less than `threshold` then the spawning will
+        // be delayed.
         float reserve;
+
+        // The amount of stock refilled each second. Defines
+        // how fast a spawner can create new mob waves.
         float refill;
 
+        // The distribution of mobs for this spawner.
         spawners::Distribution mobs;
 
         // The difficulty of the spawner. Allows to generate

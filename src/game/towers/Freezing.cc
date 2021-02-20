@@ -35,16 +35,11 @@ namespace tdef {
 
       constexpr float cost = 80.0f;
 
-      std::vector<MobShPtr>
-      targetPicking(StepInfo& info, PickData& data) {
-        return info.frustum->getVisibleMobs(data.pos, data.maxRange, nullptr);
-      }
-
       Processes
       generateData(int /*level*/) noexcept {
         Processes dd;
 
-        dd.pickMob = targetPicking;
+        dd.pickMob = multipleTargetPicking;
         dd.damage = basicDamaging;
 
         return dd;

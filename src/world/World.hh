@@ -204,6 +204,13 @@ namespace tdef {
       static constexpr int sk_worldSize = 30;
 
       /**
+       * @brief - The variation allowed when choosing the position of
+       *          the spawner. Defined as a percentage of the world
+       *          size.
+       */
+      static constexpr float sk_spawnerRingWidth = 0.05f;
+
+      /**
        * @brief - The random number engine for this world: allows to
        *          make tthe simulation deterministic by gathering all
        *          randomness in a single place.

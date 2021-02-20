@@ -406,6 +406,12 @@ namespace tdef {
       static constexpr unsigned UPGRADE_COUNT = 5;
 
       /**
+       * @brief - Used to define the cost of building a wall in
+       *          the game. This value is hard-coded.
+       */
+      static constexpr int WALL_COST = 45;
+
+      /**
        * @brief - Convenience structure regrouping all the info
        *          on the status display.
        */
@@ -656,6 +662,12 @@ namespace tdef {
        *          player has at any moment.
        */
       TowerMenus m_tMenus;
+
+      /**
+       * @brief - Holds the menu controlling the construction of
+       *          a wall.
+       */
+      GameMenuShPtr m_wMenu;
   };
 
   using GameShPtr = std::shared_ptr<Game>;

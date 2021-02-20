@@ -13,12 +13,12 @@
 # include "coordinates/TopViewFrame.hh"
 # include "TDefApp.hh"
 
-// TODO: Some mobs seem to have really high speed.
 // TODO: Maybe in case of A* due a single path with
 // the target as the starting point so that we can
 // explore all the starting position (i.e. for mobs)
 // at once and assign the built paths while we explore
 // nodes.
+// TODO: Handle a better generation strategy for worlds.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

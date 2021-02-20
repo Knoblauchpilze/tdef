@@ -32,6 +32,17 @@ namespace tdef {
       Count
     };
 
+    /**
+     * @brief - Convenience enumeration defining the difficulty
+     *          of a world: this has an impact on the number of
+     *          spawners and walls that get generated.
+     */
+    enum class Difficulty {
+      Easy,
+      Normal,
+      Hard
+    };
+
   }
 
   class World: public utils::CoreObject {
@@ -116,10 +127,17 @@ namespace tdef {
        *               world's data should be loaded. In case
        *               the path is empty a new world will be
        *               generated.
+       * @param difficulty - the difficulty of the world to
+       *                     generate.
+       *                     This value is ignored in case the
+       *                     input file is valid, in which case
+       *                     the difficulty is just assumed to
+       *                     be described by the world's data.
        */
       void
       reset(unsigned metadataSize,
-            const std::string& file = std::string());
+            const std::string& file = std::string(),
+            const world::Difficulty& difficulty = world::Difficulty::Normal);
 
       /**
        * @brief - Used to save the content of the world to
@@ -135,10 +153,13 @@ namespace tdef {
     private:
 
       /**
-       * @brief - Generate the base layout for this world.
+       * @brief - Generate the base layout for this world
+       *          with the specified difficulty.
+       * @param difficulty - the difficulty of the world
+       *                     to generate.
        */
       void
-      generate();
+      generate(const world::Difficulty& difficulty);
 
       /**
        * @brief - Called after a world has been generated,
@@ -175,6 +196,12 @@ namespace tdef {
       onWorldUpdate();
 
     private:
+
+      /**
+       * @brief - Convenience define to handle the dimension of a newly
+       *          generated world.
+       */
+      static constexpr int sk_worldSize = 30;
 
       /**
        * @brief - The random number engine for this world: allows to

@@ -108,6 +108,8 @@ namespace tdef {
         pp.reserve = 0.9f;
         pp.refill = 0.05f;
 
+        pp.difficulty = spawners::Level::Easy;
+
         return pp;
       }
 
@@ -179,6 +181,8 @@ namespace tdef {
         pp.reserve = 0.9f;
         pp.refill = 0.1f;
 
+        pp.difficulty = spawners::Level::Normal;
+
         return pp;
       }
 
@@ -249,6 +253,8 @@ namespace tdef {
         pp.threshold = 1.0f;
         pp.reserve = 0.9f;
         pp.refill = 0.2f;
+
+        pp.difficulty = spawners::Level::Hard;
 
         return pp;
       }

@@ -30,7 +30,7 @@ namespace tdef {
   {
     setService("world");
 
-    generate();
+    generate(world::Difficulty::Normal);
     initialize();
   }
 
@@ -200,7 +200,8 @@ namespace tdef {
 
   void
   World::reset(unsigned metadataSize,
-               const std::string& file)
+               const std::string& file,
+               const world::Difficulty& difficulty)
   {
     // Clear all registered elements.
     m_blocks.clear();
@@ -209,7 +210,7 @@ namespace tdef {
 
     // Regenerate the world.
     if (file.empty()) {
-      generate();
+      generate(difficulty);
     }
     else {
       loadFromFile(file, metadataSize);
@@ -325,156 +326,91 @@ namespace tdef {
   }
 
   void
-  World::generate() {
-    constexpr int sk_spawners = 3;
-    constexpr int sk_walls = 2;
-    constexpr int sk_portals = 1;
-    constexpr int sk_towers = 4;
-
-    constexpr int sk_mobs = 1;
-
-    // Assume a certain width and height to
-    // prevent collision.
-    unsigned w = 10;
-    unsigned h = 5;
-
-    utils::Point2f p;
-    int key = 0;
+  World::generate(const world::Difficulty& difficulty) {
+    // We want to generate spawners, walls and a single portal
+    // so that mobs try to access it. The number of portals or
+    // walls is dependant on the difficulty.
+    // The portal is always at the center of the world. So that
+    // we don't put a block on top of another we will maintain
+    // an map allowing to keep track of which 'cells' have
+    // alreadt been occupied.
+    float min = -sk_worldSize / 2.0f;
+    float max = sk_worldSize / 2.0f;
+    auto keyGen = [&min](const utils::Point2f& p) {
+      return static_cast<int>((p.y() - min) * sk_worldSize) + static_cast<int>(p.x() - min);
+    };
     std::unordered_set<int> used;
 
-    int id = sk_spawners;
-    while (id > 0) {
-      p.x() = m_rng.rndInt(0.0f, w - 1.0f) + 0.5f;
-      p.y() = m_rng.rndInt(0.0f, h - 1.0f) + 0.5f;
+    utils::Point2f p(0.5f, 0.5f);
+    PortalShPtr b = std::make_shared<Portal>(Portal::newProps(p));
+    log(
+      "Generated portal at " + p.toString() + " with " +
+      std::to_string(b->getLives()) + " live(s)",
+      utils::Level::Verbose
+    );
 
-      key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
+    m_blocks.push_back(b);
+    used.insert(keyGen(p));
+
+    // Determine how many spawners and walls we need.
+    int spawners = 0;
+    int walls = 0;
+
+    switch (difficulty) {
+      case world::Difficulty::Easy:
+        spawners = 1;
+        walls = 50;
+        break;
+      case world::Difficulty::Hard:
+        spawners = 4;
+        walls = 10;
+        break;
+      case world::Difficulty::Normal:
+      default:
+        spawners = 2;
+        walls = 25;
+        break;
+    }
+
+    // Generate spawners: they will be located on the
+    // border of the world so that the mobs have some
+    // distance to traverse before reaching the portal.
+    int id = spawners;
+    spawners::Level lvl = spawners::Level::Normal;
+
+    while (id > 0) {
+      p.x() = m_rng.rndInt(min, max) + 0.5f;
+      p.y() = m_rng.rndInt(min, max) + 0.5f;
+
+      int key = keyGen(p);
 
       if (used.count(key) == 0) {
-        spawners::Level lvl = spawners::Level::Normal;
-
-        log("Generated " + spawners::toString(lvl) + " spawner at " + p.toString(), utils::Level::Verbose);
-
-        Spawner::SProps pp = spawners::generateProps(p, lvl);
-        pp.difficulty = lvl;
-
-        SpawnerShPtr b = std::make_shared<Spawner>(pp);
+        SpawnerShPtr b = std::make_shared<Spawner>(spawners::generateProps(p, lvl));
         m_blocks.push_back(b);
-        --id;
-
         used.insert(key);
+
+        log("Generated " + spawners::toString(lvl) + " spawner at " + p.toString(), utils::Level::Debug);
+
+        --id;
       }
     }
 
-    id = sk_walls;
+    // Generate walls.
+    id = walls;
     while (id > 0) {
-      p.x() = m_rng.rndInt(0.0f, w - 1.0f) + 0.5f;
-      p.y() = m_rng.rndInt(0.0f, h - 1.0f) + 0.5f;
+      p.x() = m_rng.rndInt(min, max) + 0.5f;
+      p.y() = m_rng.rndInt(min, max) + 0.5f;
 
-      key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
+      int key = keyGen(p);
 
       if (used.count(key) == 0) {
-        log("Generated wall at " + p.toString(), utils::Level::Verbose);
-
         WallShPtr b = std::make_shared<Wall>(Wall::newProps(p));
         m_blocks.push_back(b);
-        --id;
-
         used.insert(key);
-      }
-    }
 
-    id = sk_portals;
-    while (id > 0) {
-      p.x() = m_rng.rndInt(0.0f, w - 1.0f) + 0.5f;
-      p.y() = m_rng.rndInt(0.0f, h - 1.0f) + 0.5f;
-
-      key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
-
-      if (used.count(key) == 0) {
-        Portal::PProps pp = Portal::newProps(p);
-        log(
-          "Generated portal at " + p.toString() + " with " +
-          std::to_string(pp.lives) + " live(s)",
-          utils::Level::Verbose
-        );
-
-        PortalShPtr b = std::make_shared<Portal>(pp);
-        m_blocks.push_back(b);
-        --id;
-
-        used.insert(key);
-      }
-    }
-
-    id = sk_towers;
-    while (id > 0) {
-      p.x() = m_rng.rndInt(0.0f, w - 1.0f) + 0.5f;
-      p.y() = m_rng.rndInt(0.0f, h - 1.0f) + 0.5f;
-
-      key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
-
-      if (used.count(key) == 0) {
-        Tower::TProps pp;
-
-        if (id % 4 == 0) {
-          pp = towers::generateProps(towers::Type::Multishot, p);
-        }
-        else if (id % 4 == 1) {
-          pp = towers::generateProps(towers::Type::Sniper, p);
-        }
-        else if (id % 4 == 2) {
-          pp = towers::generateProps(towers::Type::Freezing, p);
-        }
-        else {
-          pp = towers::generateProps(towers::Type::Venom, p);
-        }
-
-        log("Generated tower " + towers::toString(pp.type) + " at " + p.toString(), utils::Level::Verbose);
-
-        TowerShPtr b = std::make_shared<Tower>(pp);
-        m_blocks.push_back(b);
-        --id;
-
-        used.insert(key);
-      }
-    }
-
-    id = sk_mobs;
-    while (id > 0) {
-      p.x() = m_rng.rndInt(0.0f, w - 1.0f);
-      p.y() = m_rng.rndInt(0.0f, h - 1.0f);
-
-      key = static_cast<int>(p.y() * w) + static_cast<int>(p.x());
-
-      Mob::MProps pp;
-
-      if (used.count(key) == 0) {
-        if (id % 4 == 0) {
-          pp = mobs::generateProps(mobs::Type::Regular, p);
-        }
-        else if(id % 4 == 1) {
-          pp = mobs::generateProps(mobs::Type::Fast, p);
-        }
-        else if(id % 4 == 2) {
-          pp = mobs::generateProps(mobs::Type::Strong, p);
-        }
-        else {
-          pp = mobs::generateProps(mobs::Type::Heli, p);
-        }
-
-        MobShPtr m = std::make_shared<Mob>(pp);
-        m_mobs.push_back(m);
-
-        log(
-          "Generated mob " + mobs::toString(pp.type) +
-          " at " + p.toString() +
-          " with radius " + std::to_string(pp.radius),
-          utils::Level::Verbose
-        );
+        log("Generated wall at " + p.toString(), utils::Level::Verbose);
 
         --id;
-
-        used.insert(key);
       }
     }
   }

@@ -18,7 +18,7 @@
 // explore all the starting position (i.e. for mobs)
 // at once and assign the built paths while we explore
 // nodes.
-// TODO: Handle a better generation strategy for worlds.
+// TODO: Allow wall building.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.
@@ -39,7 +39,7 @@ int main(int /*argc*/, char** /*argv*/) {
     );
 
     tdef::CoordinateFrameShPtr cf = std::make_shared<tdef::TopViewFrame>(
-      tdef::Viewport{olc::vf2d(0.0f, 0.0f), olc::vf2d(20.0f, 15.0f)},
+      tdef::Viewport{olc::vf2d(-6.6f, -5.0f), olc::vf2d(20.0f, 15.0f)},
       tdef::Viewport{olc::vf2d(10.0f, 50.0f), olc::vf2d(800.0f, 600.0f)},
       olc::vi2d(64, 64)
     );

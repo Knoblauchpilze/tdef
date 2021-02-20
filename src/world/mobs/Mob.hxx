@@ -181,8 +181,9 @@ namespace tdef {
     out << m_poison.stack << " ";
     out << utils::toMilliseconds(m_poison.pDuration) << " ";
 
-    // TODO: Save mob' target.
-    // BlockShPtr m_target;
+    // Ignore the mob's target as we will reset its
+    // behavior and look for a new target when the
+    // game is deserialized.
 
     log("Saved mob at " + m_pos.toString(), utils::Level::Verbose);
 

@@ -18,7 +18,6 @@
 // explore all the starting position (i.e. for mobs)
 // at once and assign the built paths while we explore
 // nodes.
-// TODO: Allow wall building.
 
 int main(int /*argc*/, char** /*argv*/) {
   // Create the logger.

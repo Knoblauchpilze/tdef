@@ -84,7 +84,8 @@ namespace tdef {
     m_wDisplay(),
 
     m_buildings(nullptr),
-    m_tMenus()
+    m_tMenus(),
+    m_wMenu(nullptr)
   {
     setService("game");
 
@@ -180,11 +181,13 @@ namespace tdef {
     // Spawn a tower or a wall.
     if (m_state.tType != nullptr) {
       spawnTower(p);
+      updateUI();
       return;
     }
 
     if (m_state.wallBuilding) {
       spawnWall(p);
+      updateUI();
       return;
     }
   }
@@ -581,22 +584,20 @@ namespace tdef {
     m_tMenus[towers::Type::Missile] = tm;
     m_buildings->addMenu(tm);
 
-    m_buildings->addMenu(
-      std::make_shared<GameMenu>(
-        "Wall",
-        [](std::vector<ActionShPtr>& actions) {
-          actions.push_back(
-            std::make_shared<SimpleAction>(
-              [](Game& g) {
-                g.allowWallBuilding();
-              }
-            )
-          );
-        },
-        nullptr,
-        false
-      )
+    m_wMenu = std::make_shared<GameMenu>(
+      "Wall",
+      [](std::vector<ActionShPtr>& actions) {
+        actions.push_back(
+          std::make_shared<SimpleAction>(
+            [](Game& g) {
+              g.allowWallBuilding();
+            }
+          )
+        );
+      },
+      nullptr
     );
+    m_buildings->addMenu(m_wMenu);
 
     return m_buildings;
   }
@@ -804,6 +805,8 @@ namespace tdef {
   void
   Game::spawnWall(const utils::Point2f& p) {
     log("Generated wall at " + p.toString());
+
+    m_state.gold -= WALL_COST;
 
     Wall::WProps pp = Wall::newProps(p);
 
@@ -1109,6 +1112,10 @@ namespace tdef {
     m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
     t = towers::Type::Missile;
     m_tMenus[t]->enable(m_state.gold >= towers::getCost(t));
+
+    // Update status for the wall by using the hard
+    // coded cost of building it.
+    m_wMenu->enable(m_state.gold >= WALL_COST);
   }
 
 }

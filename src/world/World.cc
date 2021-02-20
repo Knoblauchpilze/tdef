@@ -379,8 +379,18 @@ namespace tdef {
     spawners::Level lvl = spawners::Level::Normal;
 
     while (id > 0) {
-      p.x() = m_rng.rndInt(min, max) + 0.5f;
-      p.y() = m_rng.rndInt(min, max) + 0.5f;
+      // As we want spawners to be on the edge of the
+      // world, we will work in polar coordinates, by
+      // first generating the radius to be almost as
+      // large as the world's size and then choosing
+      // an angle.
+      float m = max * std::max(0.0f, 1.0f - sk_spawnerRingWidth);
+
+      float r = m_rng.rndFloat(m, max);
+      float theta = m_rng.rndAngle();
+
+      p.x() = r * std::cos(theta);
+      p.y() = r * std::sin(theta);
 
       int key = keyGen(p);
 

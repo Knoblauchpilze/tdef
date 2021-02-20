@@ -389,7 +389,7 @@ namespace tdef {
     bool noStunning = true;
     dd.stunProb = towers::buildConstantUpgradable(0.0f);
     dd.sDuration = towers::buildConstantUpgradable(0.0f);
-    if (noFreezing && dd.stunProb(0, 0) > 0.0f) {
+    if (noFreezing && props.stunProb(0, 0) > 0.0f) {
       dd.stunProb = props.stunProb;
       dd.sDuration = props.duration;
 

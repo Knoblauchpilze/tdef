@@ -4,6 +4,7 @@
  *          game which aims at actually finishing the
  *          features and deliver a working product.
  *          Started on 13/12/2020.
+ *          Finished on 20/02/2021.
  */
 
 # include <core_utils/StdLogger.hh>

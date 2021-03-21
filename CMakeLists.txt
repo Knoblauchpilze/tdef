@@ -25,8 +25,6 @@ add_executable(tdef
   ${SOURCES}
   )
 
-message ("dirs: ${CMAKE_CURRENT_SOURCE_DIR}/app")
-
 target_include_directories (tdef PRIVATE
   )
 

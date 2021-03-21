@@ -138,4 +138,4 @@ namespace tdef {
 
 }
 
-#endif    /* PGE_APP_HXX */
+#endif    /* TDEF_APP_HXX */

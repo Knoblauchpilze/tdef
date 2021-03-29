@@ -251,7 +251,7 @@ namespace tdef {
       }
     }
     out << count << " ";
-    
+
     log("Saving " + std::to_string(count) + " tower(s)", utils::Level::Verbose);
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {

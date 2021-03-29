@@ -308,7 +308,7 @@ namespace tdef {
         // in order to save the world.
         std::string f = getWorldFile();
         if (f.empty()) {
-          // Generate the name by 
+          // Generate a valid name for the world.
           f = generateSaveFileName();
         }
         setWorldFile(f);

@@ -2,7 +2,7 @@
 
 # tdef
 
-Very simple tower defense game with minimalistic graphics and various semi-working towers and enemies. THe goal of this project was to have some game that can actually be played even though it's far from perfect and could still see a lot of improvements.
+Very simple tower defense game with minimalistic graphics and various semi-working towers and enemies. The goal of this project was to have some game that can actually be played even though it's far from perfect and could still see a lot of improvements.
 Allows to create a new game, save it and re-open it later and handle a tower construction mechanism with a gold limit.
 
 # Installation

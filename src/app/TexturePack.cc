@@ -29,16 +29,6 @@ namespace tdef {
     p.sSize = pack.sSize;
     p.layout = pack.layout;
 
-    // Add a warning in case the layout has more than
-    // 1 row: we don't really handle it right now.
-    if (p.layout.y > 1) {
-      log(
-        "Registering pack \"" + pack.file + "\" with layout " +
-        toString(p.layout) + " having more than one row",
-        utils::Level::Warning
-      );
-    }
-
     p.res = new olc::Decal(spr);
 
     unsigned id = m_packs.size();
@@ -65,7 +55,7 @@ namespace tdef {
 
     const Pack& tp = m_packs[s.pack];
 
-    olc::vi2d sCoords = spriteCoords(tp, olc::vi2d(s.sprite, 0), s.id);
+    olc::vi2d sCoords = spriteCoords(tp, s.sprite, s.id);
     pge->DrawPartialDecal(p, tp.res, sCoords, tp.sSize, scale, s.tint);
   }
 

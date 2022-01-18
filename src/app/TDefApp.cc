@@ -128,7 +128,7 @@ namespace tdef {
 
         sd.radius = 1.0f;
 
-        sd.sprite.sprite = 0;
+        sd.sprite.sprite = olc::vi2d(0, 0);
         sd.sprite.tint = olc::DARK_GREY;
 
         drawRect(sd, res.cf);
@@ -156,7 +156,7 @@ namespace tdef {
             break;
           case world::BlockType::Wall:
             sd.sprite.pack = m_wPackID;
-            sd.sprite.sprite = 0;
+            sd.sprite.sprite = olc::vi2d(0, 0);
             sd.sprite.tint = olc::WHITE;
             break;
           case world::BlockType::Portal:
@@ -165,7 +165,7 @@ namespace tdef {
             break;
           case world::BlockType::Tower:
             sd.sprite.pack = m_tPackID;
-            sd.sprite.sprite = t.id;
+            sd.sprite.sprite = olc::vi2d(t.id, 0);
             sd.sprite.tint = olc::WHITE;
             break;
         }
@@ -192,7 +192,7 @@ namespace tdef {
         sd.loc = RelativePosition::Center;
 
         sd.sprite.pack = m_mPackID;
-        sd.sprite.sprite = t.id;
+        sd.sprite.sprite = olc::vi2d(t.id, 0);
         sd.sprite.tint = olc::WHITE;
 
         drawSprite(sd, res.cf);

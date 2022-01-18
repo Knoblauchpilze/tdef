@@ -43,7 +43,7 @@ namespace tdef {
       // The `sprite` defines an identifier for the sprite. The
       // position of the sprite in the resource pack will be
       // computed from this identifier.
-      int sprite;
+      olc::vi2d sprite;
 
       // The `id` allows to select a variant for the sprite. By
       // default this value is `0` meaning the principal display

@@ -558,7 +558,7 @@ namespace tdef {
         bool disabled;
 
         // Used to hold whether or not the game has been shut
-        // down. It usuallu indicates that no simulation will
+        // down. It usually indicates that no simulation will
         // be performed anymore and usually indicates that a
         // termination request has been received.
         bool terminated;

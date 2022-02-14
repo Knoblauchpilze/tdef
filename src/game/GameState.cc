@@ -81,7 +81,7 @@ namespace tdef {
     // Assign a different screen so that we can use the
     // `setScreen` routine to initialize the visibility
     // status of screens.
-    m_screen(screen == game::Screen::Home ? game::Screen::Exit : screen),
+    m_screen(screen == game::Screen::Home ? game::Screen::Exit : game::Screen::Home),
     m_worldFile(),
 
     m_homeScreen(nullptr),

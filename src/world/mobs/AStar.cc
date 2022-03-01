@@ -218,7 +218,7 @@ namespace {
     std::size_t id = hash.find('#');
 
     if (id == std::string::npos) {
-      // This is very weied, assume a default
+      // This is very weird, assume a default
       // node.
       return utils::Point2f(0.5f, 0.5f);
     }

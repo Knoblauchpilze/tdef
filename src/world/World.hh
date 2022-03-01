@@ -212,7 +212,7 @@ namespace tdef {
 
       /**
        * @brief - The random number engine for this world: allows to
-       *          make tthe simulation deterministic by gathering all
+       *          make the simulation deterministic by gathering all
        *          randomness in a single place.
        */
       utils::RNG m_rng;

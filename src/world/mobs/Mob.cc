@@ -272,9 +272,9 @@ namespace tdef {
 
       log(
         "Freeze started at " + utils::timeToString(m_speed.tFreeze) +
-        " for " + utils::durationToString(m_speed.fDuration) +
-        ", " + utils::durationToString(elapsed) + " elapsed, " +
-        utils::durationToString(m_speed.fDuration - elapsed) + " remaining",
+        " for " + utils::durationToMsString(m_speed.fDuration) +
+        ", " + utils::durationToMsString(elapsed) + " elapsed, " +
+        utils::durationToMsString(m_speed.fDuration - elapsed) + " remaining",
         utils::Level::Verbose
       );
 
@@ -287,9 +287,9 @@ namespace tdef {
 
       log(
         "Stun started at " + utils::timeToString(m_speed.tStun) +
-        " for " + utils::durationToString(m_speed.sDuration) +
-        ", " + utils::durationToString(elapsed) + " elapsed, " +
-        utils::durationToString(m_speed.sDuration - elapsed) + " remaining",
+        " for " + utils::durationToMsString(m_speed.sDuration) +
+        ", " + utils::durationToMsString(elapsed) + " elapsed, " +
+        utils::durationToMsString(m_speed.sDuration - elapsed) + " remaining",
         utils::Level::Verbose
       );
 
@@ -302,9 +302,9 @@ namespace tdef {
 
       log(
         "Poison started at " + utils::timeToString(m_poison.tPoison) +
-        " for " + utils::durationToString(m_poison.pDuration) +
-        ", " + utils::durationToString(elapsed) + " elapsed, " +
-        utils::durationToString(m_poison.pDuration - elapsed) + " remaining",
+        " for " + utils::durationToMsString(m_poison.pDuration) +
+        ", " + utils::durationToMsString(elapsed) + " elapsed, " +
+        utils::durationToMsString(m_poison.pDuration - elapsed) + " remaining",
         utils::Level::Verbose
       );
 
@@ -322,21 +322,21 @@ namespace tdef {
     log(
       "Moved speed to start from " + utils::timeToString(m_speed.tFreeze) +
       " to " + utils::timeToString(t) +
-      ", end in " + utils::durationToString(m_speed.fDuration) +
+      ", end in " + utils::durationToMsString(m_speed.fDuration) +
       " at " + utils::timeToString(t + m_speed.fDuration),
       utils::Level::Verbose
     );
     log(
       "Moved stun to start from " + utils::timeToString(m_speed.tStun) +
       " to " + utils::timeToString(t) +
-      ", end in " + utils::durationToString(m_speed.sDuration) +
+      ", end in " + utils::durationToMsString(m_speed.sDuration) +
       " at " + utils::timeToString(t + m_speed.sDuration),
       utils::Level::Verbose
     );
     log(
       "Moved poison to start from " + utils::timeToString(m_poison.tPoison) +
       " to " + utils::timeToString(t) +
-      ", end in " + utils::durationToString(m_poison.pDuration) +
+      ", end in " + utils::durationToMsString(m_poison.pDuration) +
       " at " + utils::timeToString(t + m_poison.pDuration),
       utils::Level::Verbose
     );
@@ -503,7 +503,7 @@ namespace tdef {
     }
 
     log(
-      "Poisoning mob for " + utils::durationToString(d.pDuration) +
+      "Poisoning mob for " + utils::durationToMsString(d.pDuration) +
       " and for " + std::to_string(d.hit) +
       " after " + std::to_string(m_poison.stack) + " stacks(s)" +
       " already " + std::to_string(m_poison.damage) + " registered"

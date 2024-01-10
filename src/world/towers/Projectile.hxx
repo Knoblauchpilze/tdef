@@ -67,7 +67,7 @@ namespace tdef {
     out << utils::toMilliseconds(m_stunDuration) << " ";
     out << utils::toMilliseconds(m_poisonDuration) << " ";
 
-    log("Saved projectile at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Saved projectile at " + m_pos.toString());
 
     return out;
   }
@@ -104,7 +104,7 @@ namespace tdef {
     in >> d;
     m_poisonDuration = utils::toMilliseconds(d);
 
-    log("Restored projectile at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Restored projectile at " + m_pos.toString());
 
     return in;
   }

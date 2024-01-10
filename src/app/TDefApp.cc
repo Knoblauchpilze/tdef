@@ -413,9 +413,8 @@ namespace tdef {
 
       // Be on the safe side.
       if (wi.type != world::ItemType::Mob) {
-        log(
-          "Fetched item with type " + std::to_string(static_cast<int>(wi.type)) + " while requesting only entities",
-          utils::Level::Warning
+        warn(
+          "Fetched item with type " + std::to_string(static_cast<int>(wi.type)) + " while requesting only entities"
         );
 
         continue;

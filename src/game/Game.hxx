@@ -18,11 +18,11 @@ namespace tdef {
   Game::setTowerType(const towers::Type& type) {
     // Prevent actions to happen in case the UI is disabled.
     if (m_state.disabled) {
-      log("Ignoring tower type as game is disabled", utils::Level::Verbose);
+      verbose("Ignoring tower type as game is disabled");
       return;
     }
 
-    log("Set tower type to " + towers::toString(type), utils::Level::Info);
+    info("Set tower type to " + towers::toString(type));
     m_state.tType = std::make_shared<towers::Type>(type);
     m_state.wallBuilding = false;
   }
@@ -42,7 +42,7 @@ namespace tdef {
   inline
   void
   Game::terminate() noexcept {
-    log("Game has been terminated", utils::Level::Info);
+    info("Game has been terminated");
     m_state.terminated = true;
   }
 

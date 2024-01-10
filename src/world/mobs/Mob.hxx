@@ -185,7 +185,7 @@ namespace tdef {
     // behavior and look for a new target when the
     // game is deserialized.
 
-    log("Saved mob at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Saved mob at " + m_pos.toString());
 
     return out;
   }
@@ -251,7 +251,7 @@ namespace tdef {
     // process determine a new one (which would probably be the
     // same anyway) when this happens.
 
-    log("Restored mob at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Restored mob at " + m_pos.toString());
 
     return in;
   }

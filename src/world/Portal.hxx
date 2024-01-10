@@ -30,7 +30,7 @@ namespace tdef {
     Block::operator<<(out);
     out << m_lives << " ";
 
-    log("Saved portal at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Saved portal at " + m_pos.toString());
 
     return out;
   }
@@ -41,7 +41,7 @@ namespace tdef {
     Block::operator>>(in);
     in >> m_lives;
 
-    log("Restored portal at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Restored portal at " + m_pos.toString());
 
     return in;
   }

@@ -64,7 +64,7 @@ namespace tdef {
     out << m_exp << " ";
     out << static_cast<int>(m_difficulty) << " ";
 
-    log("Saved spawner at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Saved spawner at " + m_pos.toString());
 
     return out;
   }

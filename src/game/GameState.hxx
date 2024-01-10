@@ -20,7 +20,7 @@ namespace tdef {
   inline
   void
   GameState::setWorldFile(const std::string& file) {
-    log("Setting world file to \"" + file + "\"");
+    debug("Setting world file to \"" + file + "\"");
     m_worldFile = file;
   }
 

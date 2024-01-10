@@ -268,10 +268,9 @@ namespace tdef {
     openNodes.push_back(0);
 
     if (allowLog) {
-      log(
+      verbose(
         "Starting a* at " + std::to_string(m_start.x()) + "x" + std::to_string(m_start.y()) +
-        " to reach " + std::to_string(m_end.x()) + "x" + std::to_string(m_end.y()),
-        utils::Level::Verbose
+        " to reach " + std::to_string(m_end.x()) + "x" + std::to_string(m_end.y())
       );
     }
 
@@ -301,22 +300,20 @@ namespace tdef {
       openNodes.pop_front();
 
       if (allowLog) {
-        log(
+        verbose(
           "Picked node " + std::to_string(current.p.x()) + "x" + std::to_string(current.p.y()) +
           " with c " + std::to_string(current.c) +
           " h is " + std::to_string(current.h) +
-          " (nodes: " + std::to_string(openNodes.size()) + ")",
-          utils::Level::Verbose
+          " (nodes: " + std::to_string(openNodes.size()) + ")"
         );
       }
 
       // In case we reached the goal, stop there.
       if (current.contains(m_end)) {
         if (allowLog) {
-          log(
+          verbose(
             "Found path to " + std::to_string(m_end.x()) + "x" + std::to_string(m_end.y()) +
-            " with c " + std::to_string(current.c) + ", h " + std::to_string(current.h),
-            utils::Level::Verbose
+            " with c " + std::to_string(current.c) + ", h " + std::to_string(current.h)
           );
         }
 
@@ -344,7 +341,7 @@ namespace tdef {
             valid = (utils::d(m_start, out[id]) < radius);
 
             if (!valid && allowLog) {
-              log(
+              debug(
                 "Distance from start " + std::to_string(m_start.x()) + "x" + std::to_string(m_start.y()) +
                 " to point " + std::to_string(id) + "/" + std::to_string(out.size()) +
                 " " + std::to_string(out[id].x()) + "x" + std::to_string(out[id].y()) +
@@ -444,15 +441,14 @@ namespace tdef {
 
           if (it != associations.end()) {
             if (allowLog) {
-              log(
+              verbose(
                 "Updating " + std::to_string(neighbor.p.x()) + "x" + std::to_string(neighbor.p.y()) +
                 " from c " + std::to_string(nodes[it->second].c) + ", " + std::to_string(nodes[it->second].h) +
                 " (f: " + std::to_string(nodes[it->second].c + nodes[it->second].h) + "," +
                 " parent: " + cameFrom[nodes[it->second].hash()] + ")" +
                 " to c: " + std::to_string(neighbor.c) + " h: " + std::to_string(neighbor.h) +
                 " (f: " + std::to_string(neighbor.c + neighbor.h) + "," +
-                " parent is " + current.hash() + ")",
-                utils::Level::Verbose
+                " parent is " + current.hash() + ")"
               );
             }
 
@@ -460,12 +456,11 @@ namespace tdef {
           }
           else {
             if (allowLog) {
-              log(
+              verbose(
                 "Registering " + std::to_string(neighbor.p.x()) + "x" + std::to_string(neighbor.p.y()) +
                 " with c: " + std::to_string(neighbor.c) + " h: " + std::to_string(neighbor.h) +
                 " (f: " + std::to_string(neighbor.c + neighbor.h) + "," +
-                " parent is " + current.hash() + ")",
-                utils::Level::Verbose
+                " parent is " + current.hash() + ")"
               );
             }
 
@@ -496,11 +491,10 @@ namespace tdef {
       n.p = Node::invertHash(h);
 
       if (allowLog) {
-        log(
+        verbose(
           "Registering point " + std::to_string(n.p.x()) + "x" + std::to_string(n.p.y()) +
           " with hash " + h +
-          ", parent is " + it->second,
-          utils::Level::Verbose
+          ", parent is " + it->second
         );
       }
 
@@ -543,12 +537,11 @@ namespace tdef {
       std::vector<utils::Point2f> dummy;
 
       if (allowLog) {
-        log(
+        verbose(
           "Checking obstruction between " +
           std::to_string(m_start.x()) + "x" + std::to_string(m_start.y()) +
           " and " +
-          std::to_string(path[0].x()) + "x" + std::to_string(path[0].y()),
-          utils::Level::Verbose
+          std::to_string(path[0].x()) + "x" + std::to_string(path[0].y())
         );
       }
 
@@ -559,12 +552,11 @@ namespace tdef {
         );
 
         if (allowLog) {
-          log(
+          verbose(
             "Registering point " + std::to_string(ip.x()) + "x" + std::to_string(ip.y()) +
             " as path from " + std::to_string(m_start.x()) + "x" + std::to_string(m_start.y()) +
             " to " + std::to_string(path[0].x()) + "x" + std::to_string(path[0].y()) +
-            " is obstructed",
-            utils::Level::Verbose
+            " is obstructed"
           );
         }
 
@@ -615,12 +607,11 @@ namespace tdef {
         // The path can be reached in a straight line,
         // we can remove the current point.
         if (allowLog) {
-          log(
+          verbose(
             "Simplified point " + std::to_string(path[id].x()) + "x" + std::to_string(path[id].y()) +
             " as path from " + std::to_string(p.x()) + "x" + std::to_string(p.y()) +
             " to " + std::to_string(c.x()) + "x" + std::to_string(c.y()) +
-            " is unobstructed (obs: " + std::to_string(obs) + ", cont: " + std::to_string(end.contains(o)) + ")",
-            utils::Level::Verbose
+            " is unobstructed (obs: " + std::to_string(obs) + ", cont: " + std::to_string(end.contains(o)) + ")"
           );
         }
 
@@ -630,12 +621,11 @@ namespace tdef {
         // Can't reach the point from the current start.
         // This segment cannot be simplified further.
         if (allowLog) {
-          log(
+          verbose(
             "Can't simplify path from " + std::to_string(p.x()) + "x" + std::to_string(p.y()) +
             " to point " + std::to_string(c.x()) + "x" + std::to_string(c.y()) +
             " (id: " + std::to_string(id) + ", s: " + std::to_string(path.size()) + ")" +
-            " registering " + std::to_string(p.x()) + "x" + std::to_string(p.y()),
-            utils::Level::Verbose
+            " registering " + std::to_string(p.x()) + "x" + std::to_string(p.y())
           );
         }
         out.push_back(p);
@@ -653,10 +643,9 @@ namespace tdef {
 
     if (allowLog) {
       for (unsigned id = 0u ; id < path.size() ; ++id) {
-        log(
+        verbose(
           "Point " + std::to_string(id) + "/" + std::to_string(path.size()) +
-          " at " + std::to_string(path[id].x()) + "x" + std::to_string(path[id].y()),
-            utils::Level::Verbose
+          " at " + std::to_string(path[id].x()) + "x" + std::to_string(path[id].y())
         );
       }
     }

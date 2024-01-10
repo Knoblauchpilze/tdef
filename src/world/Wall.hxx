@@ -30,7 +30,7 @@ namespace tdef {
     Block::operator<<(out);
     out << m_height << " ";
 
-    log("Saved wall at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Saved wall at " + m_pos.toString());
 
     return out;
   }
@@ -41,7 +41,7 @@ namespace tdef {
     Block::operator>>(in);
     in >> m_height;
 
-    log("Restored wall at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Restored wall at " + m_pos.toString());
 
     return in;
   }

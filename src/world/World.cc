@@ -136,7 +136,7 @@ namespace tdef {
   void
   World::spawn(BlockShPtr block) {
     if (block == nullptr) {
-      log("Failed to spawn null block", utils::Level::Error);
+      warn("Failed to spawn null block");
       return;
     }
 
@@ -235,7 +235,7 @@ namespace tdef {
       );
     }
 
-    log("Saving world to \"" + file + "\"", utils::Level::Info);
+    info("Saving world to \"" + file + "\"");
 
     // Indicate that a valid rng was saved for this
     // world and save the corresponding resource.
@@ -252,7 +252,7 @@ namespace tdef {
     }
     out << count << " ";
 
-    log("Saving " + std::to_string(count) + " tower(s)", utils::Level::Verbose);
+    verbose("Saving " + std::to_string(count) + " tower(s)");
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
       if (std::dynamic_pointer_cast<Tower>(m_blocks[id]) != nullptr) {
@@ -268,7 +268,7 @@ namespace tdef {
       }
     }
     out << count << " ";
-    log("Saving " + std::to_string(count) + " portal(s)", utils::Level::Verbose);
+    verbose("Saving " + std::to_string(count) + " portal(s)");
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
       if (std::dynamic_pointer_cast<Portal>(m_blocks[id]) != nullptr) {
@@ -284,7 +284,7 @@ namespace tdef {
       }
     }
     out << count << " ";
-    log("Saving " + std::to_string(count) + " spawner(s)", utils::Level::Verbose);
+    verbose("Saving " + std::to_string(count) + " spawner(s)");
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
       if (std::dynamic_pointer_cast<Spawner>(m_blocks[id]) != nullptr) {
@@ -300,7 +300,7 @@ namespace tdef {
       }
     }
     out << count << " ";
-    log("Saving " + std::to_string(count) + " wall(s)", utils::Level::Verbose);
+    verbose("Saving " + std::to_string(count) + " wall(s)");
 
     for (unsigned id = 0u ; id < m_blocks.size() ; ++id) {
       if (std::dynamic_pointer_cast<Wall>(m_blocks[id]) != nullptr) {
@@ -309,7 +309,7 @@ namespace tdef {
     }
 
     // Save mobs.
-    log("Saving " + std::to_string(m_mobs.size()) + " mob(s)", utils::Level::Verbose);
+    verbose("Saving " + std::to_string(m_mobs.size()) + " mob(s)");
 
     out << m_mobs.size() << " ";
     for (unsigned id = 0u ; id < m_mobs.size() ; ++id) {
@@ -317,7 +317,7 @@ namespace tdef {
     }
 
     // Save projectiles.
-    log("Saving " + std::to_string(m_projectiles.size()) + " projectile(s)", utils::Level::Verbose);
+    verbose("Saving " + std::to_string(m_projectiles.size()) + " projectile(s)");
 
     out << m_projectiles.size() << " ";
     for (unsigned id = 0u ; id < m_projectiles.size() ; ++id) {
@@ -343,10 +343,9 @@ namespace tdef {
 
     utils::Point2f p(0.5f, 0.5f);
     PortalShPtr b = std::make_shared<Portal>(Portal::newProps(p));
-    log(
+    verbose(
       "Generated portal at " + p.toString() + " with " +
-      std::to_string(b->getLives()) + " live(s)",
-      utils::Level::Verbose
+      std::to_string(b->getLives()) + " live(s)"
     );
 
     m_blocks.push_back(b);
@@ -399,7 +398,7 @@ namespace tdef {
         m_blocks.push_back(b);
         used.insert(key);
 
-        log("Generated " + spawners::toString(lvl) + " spawner at " + p.toString(), utils::Level::Debug);
+        debug("Generated " + spawners::toString(lvl) + " spawner at " + p.toString());
 
         --id;
       }
@@ -418,7 +417,7 @@ namespace tdef {
         m_blocks.push_back(b);
         used.insert(key);
 
-        log("Generated wall at " + p.toString(), utils::Level::Verbose);
+        verbose("Generated wall at " + p.toString());
 
         --id;
       }
@@ -452,7 +451,7 @@ namespace tdef {
 
     // First thing is to determine whether a valid
     // rng has been saved.
-    log("Loading rng engine");
+    debug("Loading rng engine");
 
     bool rngDefined;
     in >> rngDefined;
@@ -465,7 +464,7 @@ namespace tdef {
     // Load towers if any.
     in >> count;
 
-    log("Loading " + std::to_string(count) + " tower(s)");
+    debug("Loading " + std::to_string(count) + " tower(s)");
 
     for (int id = 0 ; id < count ; ++id) {
       TowerShPtr e = std::make_shared<Tower>(Tower::newProps(utils::Point2f()));
@@ -477,7 +476,7 @@ namespace tdef {
     // Load portals.
     in >> count;
 
-    log("Loading " + std::to_string(count) + " portal(s)");
+    debug("Loading " + std::to_string(count) + " portal(s)");
 
     for (int id = 0 ; id < count ; ++id) {
       PortalShPtr e = std::make_shared<Portal>(Portal::newProps(utils::Point2f()));
@@ -489,7 +488,7 @@ namespace tdef {
     // Load spawners.
     in >> count;
 
-    log("Loading " + std::to_string(count) + " spawner(s)");
+    debug("Loading " + std::to_string(count) + " spawner(s)");
 
     for (int id = 0 ; id < count ; ++id) {
       SpawnerShPtr e = std::make_shared<Spawner>(Spawner::newProps(utils::Point2f()));
@@ -501,7 +500,7 @@ namespace tdef {
     // Load walls.
     in >> count;
 
-    log("Loading " + std::to_string(count) + " wall(s)");
+    debug("Loading " + std::to_string(count) + " wall(s)");
 
     for (int id = 0 ; id < count ; ++id) {
       WallShPtr e = std::make_shared<Wall>(Wall::newProps(utils::Point2f()));
@@ -513,7 +512,7 @@ namespace tdef {
     // Load mobs if any.
     in >> count;
 
-    log("Loading " + std::to_string(count) + " mob(s)");
+    debug("Loading " + std::to_string(count) + " mob(s)");
 
     for (int id = 0 ; id < count ; ++id) {
       MobShPtr e = std::make_shared<Mob>(Mob::newProps(utils::Point2f()));
@@ -525,7 +524,7 @@ namespace tdef {
     // Load projectiles.
     in >> count;
 
-    log("Loading " + std::to_string(count) + " projectile(s)");
+    debug("Loading " + std::to_string(count) + " projectile(s)");
 
     for (int id = 0 ; id < count ; ++id) {
       ProjectileShPtr e = std::make_shared<Projectile>(

@@ -121,7 +121,7 @@ namespace tdef {
       cost += uc;
     }
 
-    log("Tower cost in total " + std::to_string(cost), utils::Level::Verbose);
+    verbose("Tower cost in total " + std::to_string(cost));
 
     return cost;
   }
@@ -134,11 +134,10 @@ namespace tdef {
     // And update the level.
     m_exp.level = levelFromExperience(m_exp.exp);
 
-    log(
+    verbose(
       "Tower gained " + std::to_string(exp) +
       " xp to reach " + std::to_string(m_exp.exp) +
-      " and level " + std::to_string(m_exp.level),
-      utils::Level::Verbose
+      " and level " + std::to_string(m_exp.level)
     );
   }
 
@@ -154,19 +153,14 @@ namespace tdef {
     }
 
     if (id >= m_upgrades.size()) {
-      log(
-        "Failed to upgrade " + towers::toString(upgrade) + " in tower not defining it",
-        utils::Level::Error
-      );
-
+      warn("Failed to upgrade " + towers::toString(upgrade) + " in tower not defining it");
       return;
     }
 
-    log(
+    info(
       "Upgrading " + towers::toString(upgrade) +
       " from " + std::to_string(m_upgrades[id].level) +
-      " to level " + std::to_string(level),
-      utils::Level::Info
+      " to level " + std::to_string(level)
     );
 
     // Handle the upgrade: this basically consists in
@@ -236,7 +230,7 @@ namespace tdef {
     // picking the same targets.
     m_targets.clear();
 
-    log("Restored tower at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Restored tower at " + m_pos.toString());
 
     return in;
   }
@@ -295,13 +289,12 @@ namespace tdef {
       MobShPtr m = m_targets[id];
 
       if (getAttack() > 0.0f) {
-        log(
+        verbose(
           "Hitting mob " + mobs::toString(m->getType()) +
           " at " + m->getPos().toString() +
           " for " + std::to_string(getAttack()) + " damage" +
           " (health: " + std::to_string(m->getHealth()) + ", " +
-          " accuracy: " + std::to_string(getAccuracy()) + ")",
-          utils::Level::Verbose
+          " accuracy: " + std::to_string(getAccuracy()) + ")"
         );
       }
 
@@ -319,7 +312,7 @@ namespace tdef {
       info.gold += m->getBounty();
       gainExp(m->getExpReward());
 
-      log(
+      debug(
         "Killed " + mobs::toString(m->getType()) +
         " at " + m->getPos().toString() +
         ", earned " + std::to_string(m->getBounty()) + " coin(s)" +

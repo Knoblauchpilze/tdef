@@ -61,7 +61,7 @@ namespace tdef {
     // Generate processes based on the level.
     m_processes = spawners::generateData(m_difficulty);
 
-    log("Restored spawner at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Restored spawner at " + m_pos.toString());
 
     return in;
   }
@@ -115,12 +115,11 @@ namespace tdef {
     props.health = m_processes.health(info, m_exp);
     props.bounty = m_processes.bounty(info, props.health);
 
-    log(
+    verbose(
       "Spawning " + mobs::toString(props.type) + " at " +
       props.pos.toString() + " with " +
       std::to_string(props.health) + " health and worth " +
-      std::to_string(props.bounty) + " gold",
-      utils::Level::Verbose
+      std::to_string(props.bounty) + " gold"
     );
 
     return std::make_shared<Mob>(props);
@@ -134,7 +133,7 @@ namespace tdef {
     // Spawn a new entity and prepare it.
       MobShPtr mob = spawn(info);
       if (mob == nullptr) {
-        log("Spawner generated null entity, discarding it");
+        debug("Spawner generated null entity, discarding it");
         continue;
       }
 

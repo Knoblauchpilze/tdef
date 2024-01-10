@@ -128,13 +128,13 @@ namespace tdef {
       // projectile to keep targetting a dead target
       // for the aoe.
       if (wounded[id]->isDeleted()) {
-        log("Mob " + mobs::toString(wounded[id]->getType()) + " is already deleted");
+        debug("Mob " + mobs::toString(wounded[id]->getType()) + " is already deleted");
         continue;
       }
 
       bool alive = wounded[id]->hit(info, d);
       if (!alive) {
-        log(
+        debug(
           "Killed " + mobs::toString(wounded[id]->getType()) +
           " at " + wounded[id]->getPos().toString() +
           ", earned " + std::to_string(wounded[id]->getBounty()) + " coin(s)" +
@@ -151,7 +151,7 @@ namespace tdef {
         continue;
       }
 
-      log(
+      debug(
         "Damaging " + mobs::toString(wounded[id]->getType()) +
         " at " + std::to_string(utils::d(m_dest, wounded[id]->getPos())) +
         " (target: " + std::to_string(wounded[id] == m_target) + ")" +

@@ -299,10 +299,9 @@ namespace tdef {
     // Assign the new target mode and reset the target
     // data to allow the application of the new mode
     // right away.
-    log(
+    debug(
       "Switch target mode from " + towers::toString(m_targetMode) +
-      " to " + towers::toString(mode),
-      utils::Level::Debug
+      " to " + towers::toString(mode)
     );
 
     m_targetMode = mode;
@@ -352,7 +351,7 @@ namespace tdef {
     // is lost will be the benefit of the aim time or
     // acceleration that was already built up.
 
-    log("Saved tower at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Saved tower at " + m_pos.toString());
 
     return out;
   }

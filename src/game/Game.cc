@@ -117,7 +117,7 @@ namespace tdef {
   Game::performAction(float x, float y) {
     // Only handle actions when the game is not disabled.
     if (m_state.disabled) {
-      log("Ignoring action while menu is disabled");
+      debug("Ignoring action while menu is disabled");
       return;
     }
 
@@ -161,10 +161,9 @@ namespace tdef {
       // Unknown element to display.
       int status;
       std::string et = abi::__cxa_demangle(typeid(*we).name(), 0, 0, &status);
-      log(
+      warn(
         "Failed to display element at " + we->getPos().toString() +
-        " with type \"" + et + "\"",
-        utils::Level::Error
+        " with type \"" + et + "\""
       );
 
       return;
@@ -196,11 +195,7 @@ namespace tdef {
   Game::upgradeTower(const towers::Upgrade& upgrade) {
     // Make sure there's a tower to upgrade.
     if (m_tDisplay.tower == nullptr) {
-      log(
-        "Attempting to upgrade " + towers::toString(upgrade) + " with no active tower",
-        utils::Level::Error
-      );
-
+      warn("Attempting to upgrade " + towers::toString(upgrade) + " with no active tower");
       return;
     }
 
@@ -209,10 +204,9 @@ namespace tdef {
     int level = m_tDisplay.tower->getUpgradeLevel(upgrade);
     float cost = towers::getUpgradeCost(t, upgrade, level);
     if (m_state.gold < cost) {
-      log(
+      warn(
         "Upgrading " + towers::toString(upgrade) + " costs " + std::to_string(cost) +
-        " but only " + std::to_string(m_state.gold) + "available, aborting",
-        utils::Level::Error
+        " but only " + std::to_string(m_state.gold) + "available, aborting"
       );
 
       return;
@@ -220,7 +214,7 @@ namespace tdef {
 
     m_tDisplay.tower->upgrade(upgrade, level + 1);
     m_state.gold -= cost;
-    log("Gold is now " + std::to_string(m_state.gold) + " due to cost " + std::to_string(cost));
+    debug("Gold is now " + std::to_string(m_state.gold) + " due to cost " + std::to_string(cost));
 
     updateUI();
   }
@@ -229,11 +223,7 @@ namespace tdef {
   Game::toggleTowerTargetMode() {
     // Make sure there's a tower to update.
     if (m_tDisplay.tower == nullptr) {
-      log(
-        "Attempting to change target mode with no active tower",
-        utils::Level::Error
-      );
-
+      warn("Attempting to change target mode with no active tower");
       return;
     }
 
@@ -271,18 +261,14 @@ namespace tdef {
   Game::sellTower() {
     // Make sure there's a tower to upgrade.
     if (m_tDisplay.tower == nullptr) {
-      log(
-        "Attempting to sell tower while none is selected",
-        utils::Level::Error
-      );
-
+      warn("Attempting to sell tower while none is selected");
       return;
     }
 
     float cost = m_tDisplay.tower->getTotalCost();
     m_state.gold += cost;
 
-    log(
+    debug(
       "Selling tower " + towers::toString(m_tDisplay.tower->getType()) +
       " for " + std::to_string(cost) +
       ", " + std::to_string(m_state.gold) + " now available"
@@ -779,11 +765,10 @@ namespace tdef {
     // player owns enough gold to do so.
     float c = towers::getCost(*m_state.tType);
     if (m_state.gold < c) {
-      log(
+      warn(
         "Can't afford tower " + towers::toString(*m_state.tType) + " costing " +
         std::to_string(c) + " with only " +
-        std::to_string(m_state.gold) + " gold available",
-        utils::Level::Error
+        std::to_string(m_state.gold) + " gold available"
       );
 
       return;
@@ -793,10 +778,7 @@ namespace tdef {
 
     Tower::TProps pp = towers::generateProps(*m_state.tType, p);
 
-    log(
-      "Generated tower " + towers::toString(*m_state.tType) + " at " + p.toString(),
-      utils::Level::Info
-    );
+    info("Generated tower " + towers::toString(*m_state.tType) + " at " + p.toString());
 
     TowerShPtr t = std::make_shared<Tower>(pp);
     m_world->spawn(t);
@@ -804,7 +786,7 @@ namespace tdef {
 
   void
   Game::spawnWall(const utils::Point2f& p) {
-    log("Generated wall at " + p.toString());
+    debug("Generated wall at " + p.toString());
 
     m_state.gold -= WALL_COST;
 
@@ -916,10 +898,10 @@ namespace tdef {
     m_state.disabled = !enable;
 
     if (m_state.disabled) {
-      log("Disabled game UI", utils::Level::Verbose);
+      verbose("Disabled game UI");
     }
     else {
-      log("Enabled game UI", utils::Level::Verbose);
+      verbose("Enabled game UI");
     }
   }
 
@@ -999,7 +981,7 @@ namespace tdef {
             break;
           default:
             // Unhandled for now.
-            log("Unhandled props " + towers::toString(it->first), utils::Level::Error);
+            warn("Unhandled props " + towers::toString(it->first));
             v = -1.0f;
             break;
         }
@@ -1035,10 +1017,7 @@ namespace tdef {
       }
 
       if (id < ug.size()) {
-        log(
-          "Only interpreted " + std::to_string(id) + " among " + std::to_string(ug.size()) + " available",
-          utils::Level::Error
-        );
+        warn("Only interpreted " + std::to_string(id) + " among " + std::to_string(ug.size()) + " available");
       }
       if (id < UPGRADE_COUNT) {
         // Deactivate elements that are not used.

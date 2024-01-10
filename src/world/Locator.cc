@@ -101,13 +101,12 @@ namespace tdef {
     float t = 0.0f;
 
     if (allowLog) {
-      log(
+      verbose(
         "Start: " + std::to_string(p.x()) + "x" + std::to_string(p.y()) +
         ", end: " + std::to_string(end.x()) + "x" + std::to_string(end.y()) +
         ", l: " + std::to_string(d) +
         ", dir: " + std::to_string(xDir) + "x" + std::to_string(yDir) +
-        ", (norm: " + std::to_string(std::sqrt(xDir * xDir + yDir * yDir)) + ")",
-        utils::Level::Verbose
+        ", (norm: " + std::to_string(std::sqrt(xDir * xDir + yDir * yDir)) + ")"
       );
     }
 
@@ -120,12 +119,11 @@ namespace tdef {
       obstruction = obstructed(p);
 
       if (allowLog) {
-        log(
+        verbose(
           "Considering " + std::to_string(p.x()) + "x" + std::to_string(p.y()) +
           " which " + (obstruction ? "is" : "is not") +
           " obstructed (" + std::to_string(t) + ", " + std::to_string(100.0f * t) +
-          "%, d: " + std::to_string(d) + ")",
-          utils::Level::Verbose
+          "%, d: " + std::to_string(d) + ")"
         );
       }
 
@@ -145,11 +143,10 @@ namespace tdef {
       }
 
       if (allowLog) {
-        log(
+        verbose(
           "Found obstruction at " + std::to_string(p.x()) + "x" + std::to_string(p.y()) +
           " (" + std::to_string(t) + ", " + std::to_string(100.0f * t) +
-          "%, d: " + std::to_string(d) + ")",
-          utils::Level::Verbose
+          "%, d: " + std::to_string(d) + ")"
         );
       }
 
@@ -167,13 +164,12 @@ namespace tdef {
     }
 
     if (allowLog) {
-      log(
+      verbose(
         std::string("") + (obstruction ? "Found" : "Didn't find") +
         " obstruction 2 at " +
         std::to_string(end.x()) + "x" + std::to_string(end.y()) +
         " (" + std::to_string(t) + ", " + std::to_string(100.0f * t) +
-        "%, d: " + std::to_string(d) + ")",
-        utils::Level::Verbose
+        "%, d: " + std::to_string(d) + ")"
       );
     }
 

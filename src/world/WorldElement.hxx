@@ -107,7 +107,7 @@ namespace tdef {
 
     out << m_deleted << " ";
 
-    log("Saved world element at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Saved world element at " + m_pos.toString());
 
     return out;
   }
@@ -127,7 +127,7 @@ namespace tdef {
 
     in >> m_deleted;
 
-    log("Restored world element at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Restored world element at " + m_pos.toString());
 
     return in;
   }

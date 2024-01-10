@@ -28,7 +28,7 @@ namespace tdef {
     WorldElement::operator<<(out);
     out << m_orientation << " ";
 
-    log("Saved block at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Saved block at " + m_pos.toString());
 
     return out;
   }
@@ -39,7 +39,7 @@ namespace tdef {
     WorldElement::operator>>(in);
     in >> m_orientation;
 
-    log("Restored block at " + m_pos.toString(), utils::Level::Verbose);
+    verbose("Restored block at " + m_pos.toString());
 
     return in;
   }

@@ -61,7 +61,7 @@ namespace tdef {
     // hit succeeded through the accuracy.
     float rnd = info.rng.rndFloat(0.0f, 1.0f);
     if (rnd > d.accuracy) {
-      log("Projectile failed to hit (accuracy: " + std::to_string(d.accuracy) + ", trial: " + std::to_string(rnd) + ")");
+      debug("Projectile failed to hit (accuracy: " + std::to_string(d.accuracy) + ", trial: " + std::to_string(rnd) + ")");
       return true;
     }
 
@@ -113,10 +113,9 @@ namespace tdef {
         return;
       }
 
-      log(
+      verbose(
         "Current target at " + m_target->getPos().toString() +
-        " does not exist anymore",
-        utils::Level::Verbose
+        " does not exist anymore"
       );
 
       // The target is either null (weird) or has
@@ -140,7 +139,7 @@ namespace tdef {
         return;
       }
 
-      log("Failed to find portal, trying to find defense", utils::Level::Verbose);
+      verbose("Failed to find portal, trying to find defense");
 
       if (destroyDefenses(info.frustum, np)) {
         std::swap(m_path, np);
@@ -150,7 +149,7 @@ namespace tdef {
       // Failed to locate a portal or a tower or
       // a wall to break. We don't really know
       // what to to here.
-      log("Failed to find a valid target, mob is now stuck", utils::Level::Error);
+      warn("Failed to find a valid target, mob is now stuck");
       return;
     }
     if (m_behavior == Behavior::PortalSeeker) {
@@ -158,7 +157,7 @@ namespace tdef {
       PortalShPtr p = std::dynamic_pointer_cast<Portal>(b);
 
       if (p == nullptr || utils::d(p->getPos(), m_pos) > m_rArrival) {
-        log("Target portal is either missing or too far", utils::Level::Warning);
+        warn("Target portal is either missing or too far");
         m_behavior = Behavior::None;
         m_path.clear(m_pos);
         return;
@@ -168,11 +167,10 @@ namespace tdef {
       p->breach(m_cost);
       markForDeletion(true);
 
-      log(
+      this->info(
         "Mob made it through (health: " +
         std::to_string(getHealth()) + "/" + std::to_string(getTotalHealth()) + ")" +
-        ", lives: " + std::to_string(p->getLives()),
-        utils::Level::Info
+        ", lives: " + std::to_string(p->getLives())
       );
 
       return;
@@ -182,7 +180,7 @@ namespace tdef {
       if (w != nullptr) {
         float d = utils::d(w->getPos(), m_pos);
         if (d > m_rArrival) {
-          log("Target wall is too far (d: " + std::to_string(d) + ")", utils::Level::Warning);
+          warn("Target wall is too far (d: " + std::to_string(d) + ")");
           m_behavior = Behavior::None;
           m_path.clear(m_pos);
           return;
@@ -202,7 +200,7 @@ namespace tdef {
           m_behavior = Behavior::None;
           m_target = nullptr;
 
-          log("Killed wall at " + w->getPos().toString());
+          debug("Killed wall at " + w->getPos().toString());
         }
 
         return;
@@ -212,7 +210,7 @@ namespace tdef {
       if (t != nullptr) {
         float d = utils::d(t->getPos(), m_pos);
         if (d > m_rArrival) {
-          log("Target tower is too far (d: " + std::to_string(d) + ")", utils::Level::Warning);
+          warn("Target tower is too far (d: " + std::to_string(d) + ")");
           m_behavior = Behavior::None;
           m_path.clear(m_pos);
           return;
@@ -232,7 +230,7 @@ namespace tdef {
           m_behavior = Behavior::None;
           m_target = nullptr;
 
-          log("Killed tower " + towers::toString(t->getType()) + " at " + t->getPos().toString());
+          debug("Killed tower " + towers::toString(t->getType()) + " at " + t->getPos().toString());
         }
 
         return;
@@ -240,7 +238,7 @@ namespace tdef {
 
       // Failed to interpret target either as a wall or
       // a tower. This is weird.
-      log("Target element could not be interpreted", utils::Level::Error);
+      warn("Target element could not be interpreted");
       m_behavior = Behavior::None;
       m_path.clear(m_pos);
       m_target = nullptr;
@@ -270,12 +268,11 @@ namespace tdef {
     if (m_speed.fDuration != utils::Duration::zero()) {
       utils::Duration elapsed = t - m_speed.tFreeze;
 
-      log(
+      verbose(
         "Freeze started at " + utils::timeToString(m_speed.tFreeze) +
         " for " + utils::durationToMsString(m_speed.fDuration) +
         ", " + utils::durationToMsString(elapsed) + " elapsed, " +
-        utils::durationToMsString(m_speed.fDuration - elapsed) + " remaining",
-        utils::Level::Verbose
+        utils::durationToMsString(m_speed.fDuration - elapsed) + " remaining"
       );
 
       m_speed.tFreeze = t;
@@ -285,12 +282,11 @@ namespace tdef {
     if (m_speed.sDuration != utils::Duration::zero()) {
       utils::Duration elapsed = t - m_speed.tStun;
 
-      log(
+      verbose(
         "Stun started at " + utils::timeToString(m_speed.tStun) +
         " for " + utils::durationToMsString(m_speed.sDuration) +
         ", " + utils::durationToMsString(elapsed) + " elapsed, " +
-        utils::durationToMsString(m_speed.sDuration - elapsed) + " remaining",
-        utils::Level::Verbose
+        utils::durationToMsString(m_speed.sDuration - elapsed) + " remaining"
       );
 
       m_speed.tStun = t;
@@ -300,12 +296,11 @@ namespace tdef {
     if (m_poison.pDuration != utils::Duration::zero()) {
       utils::Duration elapsed = t - m_poison.tPoison;
 
-      log(
+      verbose(
         "Poison started at " + utils::timeToString(m_poison.tPoison) +
         " for " + utils::durationToMsString(m_poison.pDuration) +
         ", " + utils::durationToMsString(elapsed) + " elapsed, " +
-        utils::durationToMsString(m_poison.pDuration - elapsed) + " remaining",
-        utils::Level::Verbose
+        utils::durationToMsString(m_poison.pDuration - elapsed) + " remaining"
       );
 
       m_poison.tPoison = t;
@@ -319,26 +314,23 @@ namespace tdef {
     // that it really reflects how long the effects
     // should be going on, we just have to offset
     // the timestamps to the current one.
-    log(
+    verbose(
       "Moved speed to start from " + utils::timeToString(m_speed.tFreeze) +
       " to " + utils::timeToString(t) +
       ", end in " + utils::durationToMsString(m_speed.fDuration) +
-      " at " + utils::timeToString(t + m_speed.fDuration),
-      utils::Level::Verbose
+      " at " + utils::timeToString(t + m_speed.fDuration)
     );
-    log(
+    verbose(
       "Moved stun to start from " + utils::timeToString(m_speed.tStun) +
       " to " + utils::timeToString(t) +
       ", end in " + utils::durationToMsString(m_speed.sDuration) +
-      " at " + utils::timeToString(t + m_speed.sDuration),
-      utils::Level::Verbose
+      " at " + utils::timeToString(t + m_speed.sDuration)
     );
-    log(
+    verbose(
       "Moved poison to start from " + utils::timeToString(m_poison.tPoison) +
       " to " + utils::timeToString(t) +
       ", end in " + utils::durationToMsString(m_poison.pDuration) +
-      " at " + utils::timeToString(t + m_poison.pDuration),
-      utils::Level::Verbose
+      " at " + utils::timeToString(t + m_poison.pDuration)
     );
 
     m_speed.tFreeze = t;
@@ -367,14 +359,14 @@ namespace tdef {
       return;
     }
 
-    log("Failed to find portal, trying to find defense", utils::Level::Verbose);
+    verbose("Failed to find portal, trying to find defense");
 
     if (destroyDefenses(loc, np)) {
       std::swap(m_path, np);
       return;
     }
 
-    log("Failed to find a valid target, mob is now stuck", utils::Level::Error);
+    warn("Failed to find a valid target, mob is now stuck");
   }
 
   void
@@ -502,7 +494,7 @@ namespace tdef {
       m_poison.pDuration = d.pDuration;
     }
 
-    log(
+    debug(
       "Poisoning mob for " + utils::durationToMsString(d.pDuration) +
       " and for " + std::to_string(d.hit) +
       " after " + std::to_string(m_poison.stack) + " stacks(s)" +
@@ -618,7 +610,7 @@ namespace tdef {
     if (p != nullptr) {
       bool valid = path.generatePathTo(loc, p->getPos(), true, sk_maxPathFindingDistance);
       if (valid) {
-        log("Found portal at " + p->getPos().toString(), utils::Level::Verbose);
+        verbose("Found portal at " + p->getPos().toString());
         m_behavior = Behavior::PortalSeeker;
         m_target = b;
 
@@ -645,7 +637,7 @@ namespace tdef {
     if (w != nullptr) {
       bool valid = path.generatePathTo(loc, w->getPos(), true, sk_maxPathFindingDistance);
       if (valid) {
-        log("Found wall at " + w->getPos().toString(), utils::Level::Verbose);
+        verbose("Found wall at " + w->getPos().toString());
         m_behavior = Behavior::WallBreaker;
         m_target = b;
 
@@ -660,7 +652,7 @@ namespace tdef {
     if (t != nullptr) {
       bool valid = path.generatePathTo(loc, t->getPos(), true, sk_maxPathFindingDistance);
       if (valid) {
-        log("Found tower at " + t->getPos().toString(), utils::Level::Verbose);
+        verbose("Found tower at " + t->getPos().toString());
         m_behavior = Behavior::WallBreaker;
         m_target = b;
 

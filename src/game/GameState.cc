@@ -388,7 +388,7 @@ namespace tdef {
 
     m_savedGames.saves.clear();
 
-    log("Scanning directory \"" + dir + "\" for saved games", utils::Level::Debug);
+    debug("Scanning directory \"" + dir + "\" for saved games");
     for (; it != end ; ++it) {
       std::filesystem::directory_entry sg = *it;
 
@@ -399,7 +399,7 @@ namespace tdef {
       std::string name = path.substr(dir.size() + 1);
 
       if (name.empty()) {
-        log("Failed to interpret saved game \"" + path + "\"", utils::Level::Error);
+        warn("Failed to interpret saved game \"" + path + "\"");
         continue;
       }
 
@@ -411,7 +411,7 @@ namespace tdef {
     std::sort(m_savedGames.saves.begin(), m_savedGames.saves.end());
 
     for (unsigned id = 0u ; id < m_savedGames.saves.size() ; ++id) {
-      log("Found saved game \"" + m_savedGames.saves[id] + "\"", utils::Level::Debug);
+      debug("Found saved game \"" + m_savedGames.saves[id] + "\"");
     }
   }
 
